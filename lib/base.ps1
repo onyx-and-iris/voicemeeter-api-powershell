@@ -156,10 +156,6 @@ Function DefineVersion {
         }
     }
     $global:layout = $layout
-
-    $button = Buttons
-    $strip = Strips
-    $bus = Buses
 }
 
 
