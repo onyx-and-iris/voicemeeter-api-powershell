@@ -16,29 +16,26 @@ You may have success with many commands in earlier versions but some commands
 - Powershell 5.1
 
 ## Use
-You may use try, finally blocks to ensure you login and logout.
+When you instantiate Remote class you will automatically be logged in. Use a
+try finally block to ensure you logout at the end of your code.
 ```powershell
 . $PSScriptRoot\lib\voicemeeter.ps1
 
 try {
     # pass a Voicemeeter type to class Remote
     $vmr = [Remote]::new('banana')
-    $vmr.Login()
-
-    # Set macrobutton with id 4, mode state to 1
-    $vmr.button[4].state = 1
-    $vmr.button[4].state
 
     # Set strip and bus params
-    $vmr.strip[0].mono = 1
-    $vmr.strip[0].mono
-    $vmr.bus[1].mute = 0
-    $vmr.bus[1].mute
+    $vmr.strip[0].mono = $true
+    $vmr.strip[0].mono  '=> $true'
+    $vmr.bus[1].mute = $false
+    $vmr.bus[1].mute    '=> $false'
+
+    # Set macrobutton with id 4, mode state to 1
+    $vmr.button[4].state = $true
+    $vmr.button[4].state    '=> $true'
 }
-finally
-{
-    $vmr.Logout()
-}
+finally { $vmr.Logout() }
 ```
 
 Voicemeeter type can be one of:
@@ -50,6 +47,25 @@ There is no bounds checking in this wrapper, meaning if you attempt to set a
 parameter that does not exist for that version of Voicemeeter the wrapper will
 throw an error and crash. So make sure what you are settings actually exists.
 
+### Multiple parameters
+Set many strip/bus parameters at once, for Example
+```powershell
+. $PSScriptRoot\lib\voicemeeter.ps1
+try {
+    $hash = @{
+        "Strip[0].Mute" = $true
+        "Strip[1].Mute" = $true
+        "Strip[2].Mute" = $false
+        "Strip[0].Mono" = $true
+        "Strip[1].Mono" = $false
+        "Strip[2].Mono" = $true
+    }
+
+    Param_Set_Multi -HASH $hash
+}
+finally { $vmr.Logout() }
+```
+
 ### Macrobuttons
 Three modes defined: state, stateonly and trigger.
 - State runs associated scripts
@@ -57,11 +73,11 @@ Three modes defined: state, stateonly and trigger.
 - Index range (0, 69)
 
 ```
-$vmr.button[3].state = 1
+$vmr.button[3].state = $true
 
-$vmr.button[4].stateonly = 0
+$vmr.button[4].stateonly = $false
 
-$vmr.button[5].trigger = 1
+$vmr.button[5].trigger = $true
 ```
 
 ### Run tests
