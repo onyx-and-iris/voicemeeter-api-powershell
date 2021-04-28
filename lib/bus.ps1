@@ -21,11 +21,9 @@ class Bus {
 
     hidden $_mono = $($this | Add-Member ScriptProperty 'mono' `
         {
-            # get
             $this.Getter($this.cmd('Mono'))
         }`
         {
-            # set
             param ( [Single]$arg )
             $this._mono = $this.Setter($this.cmd('Mono'), $arg)
         }
@@ -33,11 +31,9 @@ class Bus {
 
     hidden $_mute = $($this | Add-Member ScriptProperty 'mute' `
         {
-            # get
             $this.Getter($this.cmd('Mute'))
         }`
         {
-            # set
             param ( [Single]$arg )
             $this._mute = $this.Setter($this.cmd('Mute'), $arg)
         }
@@ -45,11 +41,9 @@ class Bus {
 
     hidden $_gain = $($this | Add-Member ScriptProperty 'gain' `
         {
-            # get
             $this.Getter($this.cmd('gain'))
         }`
         {
-            # set
             param ( [Single]$arg )
             $this._gain = $this.Setter($this.cmd('gain'), $arg)
         }
@@ -67,20 +61,18 @@ Function Buses {
 if ($MyInvocation.InvocationName -ne '.')
 {
     . .\voicemeeter.ps1
+    try {
+        $vmr = [Remote]::new('potato')
 
-    $vmr = [Remote]::new('potato')
+        $vmr.bus[0].mono = $true
+        $vmr.bus[0].mono
+        $vmr.bus[0].mono = $false
+        $vmr.bus[0].mono
 
-    $vmr.Login()
-
-    $vmr.bus[0].mono = 1
-    $vmr.bus[0].mono
-    $vmr.bus[0].mono = 0
-    $vmr.bus[0].mono
-
-    $vmr.bus[1].gain = 3.2
-    $vmr.bus[1].gain
-    $vmr.bus[2].gain = -2.0
-    $vmr.bus[2].gain
-
-    $vmr.Logout()
+        $vmr.bus[1].gain = 3.2
+        $vmr.bus[1].gain
+        $vmr.bus[2].gain = -2.0
+        $vmr.bus[2].gain
+    }
+    finally { $vmr.Logout() }
 }

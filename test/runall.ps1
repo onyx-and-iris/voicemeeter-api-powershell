@@ -6,13 +6,11 @@ try
 {
     . ..\lib\voicemeeter.ps1
 
-    $vmr = [Remote]::new('banana')
+    $vmr = [Remote]::new('potato')
 
-    $vmr.Login()
-
-    1..$num | ForEach-Object { 
+    1..$num | ForEach-Object {
         Write-Host "Running test $_ of $num"
-        Invoke-Pester -Tag $tag 
+        Invoke-Pester -Tag $tag
     }
 }
 finally

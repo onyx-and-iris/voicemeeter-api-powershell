@@ -10,6 +10,7 @@ class Remote {
     Remote ([String]$type)
     {
         $this.type = $type
+        $this.Login()
     }
 
     [void] Login () {
@@ -24,4 +25,3 @@ class Remote {
         Logout
     }
 }
-

@@ -52,11 +52,12 @@ Function Param_Set_Multi {
         $line = $($line -replace '\s+', ' ')
         $line = $line.TrimEnd()
         $line = $line -replace '\s', '='
+        $line = $line -replace 'True', '1'
+        $line = $line -replace 'False', '0'
 
         $cmd += $line + ';'
     }
     [String]$cmd = $cmd.SubString(1)
-    Write-Host $cmd
 
     $retval = $lib::VBVMR_SetParameters($cmd)
     if($retval) { Throw "ERROR: CAPI return value: $retval" }
@@ -165,7 +166,7 @@ Function Login {
     )
     $retval = $lib::VBVMR_Login()
     if(-not $retval) { Write-Host("LOGGED IN") }
-    elseif($retval -eq 1) { 
+    elseif($retval -eq 1) {
         Write-Host("VB NOT RUNNING")
 
         if($TYPE -eq 'basic') {
@@ -186,7 +187,7 @@ Function Login {
 
     $ptr = 0
     $retval = $lib::VBVMR_GetVoicemeeterType([ref]$ptr)
-    if(-not $retval) { 
+    if(-not $retval) {
         if($ptr -eq 1) { Write-Host("VERSION:[BASIC]") }
         elseif($ptr -eq 2) { Write-Host("VERSION:[BANANA]") }
         elseif($ptr -eq 3) { Write-Host("VERSION:[POTATO]") }
@@ -219,23 +220,23 @@ if ($MyInvocation.InvocationName -ne '.')
     Login
 
     $hash = @{
-        "Strip[0].Mute" = 1
-        "Strip[1].Mute" = 1
-        "Strip[2].Mute" = 1
-        "Strip[0].Mono" = 1
-        "Strip[1].Mono" = 1
-        "Strip[2].Mono" = 1
+        "Strip[0].Mute" = $true
+        "Strip[1].Mute" = $true
+        "Strip[2].Mute" = $true
+        "Strip[0].Mono" = $true
+        "Strip[1].Mono" = $true
+        "Strip[2].Mono" = $true
     }
 
 
     0..10 | ForEach-Object {
         foreach($key in $($hash.keys)){
-        $hash[$key] = 1
+        $hash[$key] = $true
         }
         Param_Set_Multi -HASH $hash
 
         foreach($key in $($hash.keys)){
-        $hash[$key] = 0
+        $hash[$key] = $false
         }
         Param_Set_Multi -HASH $hash
     }
