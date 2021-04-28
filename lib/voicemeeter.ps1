@@ -1,7 +1,4 @@
 . $PSScriptRoot\base.ps1
-. $PSScriptRoot\strip.ps1
-. $PSScriptRoot\bus.ps1
-. $PSScriptRoot\macrobuttons.ps1
 
 class Remote {
     [String]$type

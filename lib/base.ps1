@@ -1,3 +1,7 @@
+. $PSScriptRoot\strip.ps1
+. $PSScriptRoot\bus.ps1
+. $PSScriptRoot\macrobuttons.ps1
+
 $Handles  = @'
     [DllImport(@"C:\Program Files (x86)\VB\Voicemeeter\VoicemeeterRemote64.dll")]
     public static extern int VBVMR_Login();

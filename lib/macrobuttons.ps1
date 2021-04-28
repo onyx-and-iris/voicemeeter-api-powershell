@@ -62,15 +62,18 @@ Function Buttons {
 
 if ($MyInvocation.InvocationName -ne '.')
 {
+    . .\voicemeeter.ps1
 
-    Login
+    $vmr = [Remote]::new('potato')
 
-    $button = Buttons
+    $vmr.Login()
 
-    $button[0].state = 1
-    $button[0].state
-    $button[0].state = 0
-    $button[0].state
+    $vmr.button = Buttons
 
-    Logout
+    $vmr.button[0].state = 1
+    $vmr.button[0].state
+    $vmr.button[0].state = 0
+    $vmr.button[0].state
+
+    $vmr.Logout()
 }

@@ -11,7 +11,7 @@ class Strip {
         Param_Set -PARAM $cmd -VALUE $set
     }
 
-    [int] Getter($cmd) {
+    [Single] Getter($cmd) {
         return Param_Get -PARAM $cmd
     }
 
@@ -150,6 +150,18 @@ class Strip {
             $this._B3 = $this.Setter($this.cmd('B3'), $arg)
         }
     )
+
+    hidden $_gain = $($this | Add-Member ScriptProperty 'gain' `
+        {
+            # get
+            $this.Getter($this.cmd('gain'))
+        }`
+        {
+            # set
+            param ( [Single]$arg )
+            $this._gain = $this.Setter($this.cmd('gain'), $arg)
+        }
+    )
 }
 
 Function Strips {
@@ -162,15 +174,22 @@ Function Strips {
 
 if ($MyInvocation.InvocationName -ne '.')
 {
+    . .\voicemeeter.ps1
 
-    Login
+    $vmr = [Remote]::new('potato')
 
-    $strip = Strips
+    $vmr.Login()
 
-    $strip[1].A1 = 1
-    $strip[1].A1
-    $strip[2].A2 = 0
-    $strip[2].A2
+    $vmr.strip[1].A1 = 1
+    $vmr.strip[1].A1
+    $vmr.strip[2].A2 = 0
+    $vmr.strip[2].A2
 
-    Logout
+
+    $vmr.strip[1].gain = 3.2
+    $vmr.strip[1].gain
+    $vmr.strip[2].gain = -2.0
+    $vmr.strip[2].gain
+
+    $vmr.Logout()
 }
