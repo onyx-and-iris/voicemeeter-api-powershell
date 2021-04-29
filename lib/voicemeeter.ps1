@@ -10,10 +10,10 @@ class Remote {
     Remote ([String]$type)
     {
         $this.type = $type
-        $this.Login()
+        $this.Setup()
     }
 
-    [void] Login () {
+    [void] Setup () {
         Login -TYPE $this.type
 
         $this.button = Buttons
