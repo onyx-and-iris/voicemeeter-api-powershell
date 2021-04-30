@@ -1,7 +1,7 @@
-. $PSScriptRoot\lib\voicemeeter.ps1
+Import-Module Voicemeeter
 
 try {
-    $vmr = [Remote]::new('potato')
+    $vmr = Get-RemoteBanana
 
     $vmr.button[0].state = $true
     $vmr.button[0].state
