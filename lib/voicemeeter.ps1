@@ -24,4 +24,8 @@ class Remote {
     [void] Logout () {
         Logout
     }
+
+    [void] Set_Multi([HashTable]$hash) {
+        Param_Set_Multi -HASH $hash
+    }
 }
