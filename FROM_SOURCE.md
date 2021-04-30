@@ -1,5 +1,5 @@
 #### Direct download:
-All commands remain the same, the only difference when you download from source is how you load scripts.
+The only difference when you download from source is how you load scripts.
 You will need to Import-Module by relative location, for example:
 
 Instead of `Import-Module Voicemeeter` use `Import-Module .\lib\Voicemeeter.psm1` (from repository root)

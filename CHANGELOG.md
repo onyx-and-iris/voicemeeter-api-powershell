@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Before any minor/major patch is released all test units will be run to verify they pass.
 
 ## [Unreleased]
-- [ ]
+- [x] Add gain, comp, limit to Strips
+- [x] Update tests to reflect changes
 
 ## [1.3] - 2021-04-30
 ### Added

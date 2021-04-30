@@ -385,5 +385,229 @@ Describe -Tag 'higher', -TestName 'All Alias Tests' {
                 $vmr.strip[2].B3 | Should -Be $false
             }
         }
+
+        Context 'Strip[i].Gain' {
+            It 'Should set Strip[0].Gain to 3.6' {
+                $vmr.strip[0].gain = 3.6
+                $vmr.strip[0].gain | Should -Be 3.6
+            }
+
+            It 'Should set Strip[0].Gain to -0.2' {
+                $vmr.strip[0].gain = -0.2
+                $vmr.strip[0].gain | Should -Be -0.2
+            }
+
+            It 'Should set Strip[1].Gain to 5.1' {
+                $vmr.strip[1].gain = 5.1
+                $vmr.strip[1].gain | Should -Be 5.1
+            }
+
+            It 'Should set Strip[1].Gain to -0.2' {
+                $vmr.strip[1].gain =-0.2
+                $vmr.strip[1].gain | Should -Be -0.2
+            }
+
+            It 'Should set Strip[2].Gain to 2.7' {
+                $vmr.strip[2].gain = 2.7
+                $vmr.strip[2].gain | Should -Be 2.7
+            }
+
+            It 'Should set Strip[2].Gain to -2.5' {
+                $vmr.strip[2].gain = -2.5
+                $vmr.strip[2].gain | Should -Be -2.5
+            }
+        }
+
+        Context 'Strip[i].Comp' {
+            It 'Should set Strip[0].Comp to 3.6' {
+                $vmr.strip[0].comp = 3.6
+                $vmr.strip[0].comp | Should -Be 3.6
+            }
+
+            It 'Should set Strip[0].Comp to 0.2' {
+                $vmr.strip[0].comp = 0.2
+                $vmr.strip[0].comp | Should -Be 0.2
+            }
+
+            It 'Should set Strip[1].Comp to 5.1' {
+                $vmr.strip[1].comp = 5.1
+                $vmr.strip[1].comp | Should -Be 5.1
+            }
+
+            It 'Should set Strip[1].Comp to 4.2' {
+                $vmr.strip[1].comp = 4.2
+                $vmr.strip[1].comp | Should -Be 4.2
+            }
+
+            It 'Should set Strip[2].Comp to 2.7' {
+                $vmr.strip[2].comp = 2.7
+                $vmr.strip[2].comp | Should -Be 2.7
+            }
+
+            It 'Should set Strip[2].Comp to -2.5' {
+                $vmr.strip[2].comp = 2.5
+                $vmr.strip[2].comp | Should -Be 2.5
+            }
+        }
+
+        Context 'Strip[i].Gate' {
+            It 'Should set Strip[0].Gate to 3.6' {
+                $vmr.strip[0].gate = 3.6
+                $vmr.strip[0].gate | Should -Be 3.6
+            }
+
+            It 'Should set Strip[0].Gate to 0.2' {
+                $vmr.strip[0].gate = 0.2
+                $vmr.strip[0].gate | Should -Be 0.2
+            }
+
+            It 'Should set Strip[1].Gate to 5.1' {
+                $vmr.strip[1].gate = 5.1
+                $vmr.strip[1].gate | Should -Be 5.1
+            }
+
+            It 'Should set Strip[1].Gate to 3.2' {
+                $vmr.strip[1].gate = 3.2
+                $vmr.strip[1].gate | Should -Be 3.2
+            }
+
+            It 'Should set Strip[2].Gate to 2.7' {
+                $vmr.strip[2].gate = 2.7
+                $vmr.strip[2].gate | Should -Be 2.7
+            }
+
+            It 'Should set Strip[2].Gate to 2.5' {
+                $vmr.strip[2].gate = 2.5
+                $vmr.strip[2].gate | Should -Be 2.5
+            }
+        }
+
+        Context 'Strip[i].Limit' {
+            It 'Should set Strip[0].Limit to 3' {
+                $vmr.strip[0].limit = 3
+                $vmr.strip[0].limit | Should -Be 3
+            }
+
+            It 'Should set Strip[0].Limit to 0' {
+                $vmr.strip[0].limit = 0
+                $vmr.strip[0].limit | Should -Be 0
+            }
+
+            It 'Should set Strip[1].Limit to -5' {
+                $vmr.strip[1].limit = -5
+                $vmr.strip[1].limit | Should -Be -5
+            }
+
+            It 'Should set Strip[1].Limit to 0' {
+                $vmr.strip[1].limit = 0
+                $vmr.strip[1].limit | Should -Be 0
+            }
+
+            It 'Should set Strip[2].Limit to 2' {
+                $vmr.strip[2].limit = 2
+                $vmr.strip[2].limit | Should -Be 2
+            }
+
+            It 'Should set Strip[2].Limit to -3' {
+                $vmr.strip[2].limit = -3
+                $vmr.strip[2].limit | Should -Be -3
+            }
+        }
+
+        Context 'Bus[i].Mute' {
+            It 'Should set Bus[0].Mute to 1' {
+                $vmr.bus[0].mute = $true
+                $vmr.bus[0].mute | Should -Be $true
+            }
+
+            It 'Should set Bus[0].Mute to 0' {
+                $vmr.bus[0].mute = $false
+                $vmr.bus[0].mute | Should -Be $false
+            }
+
+            It 'Should set Bus[1].Mute to 1' {
+                $vmr.bus[1].mute = $true
+                $vmr.bus[1].mute | Should -Be $true
+            }
+
+            It 'Should set Bus[1].Mute to 0' {
+                $vmr.bus[1].mute = $false
+                $vmr.bus[1].mute | Should -Be $false
+            }
+
+            It 'Should set Bus[2].Mute to 1' {
+                $vmr.bus[2].mute = $true
+                $vmr.bus[2].mute | Should -Be $true
+            }
+
+            It 'Should set Bus[2].Mute to 0' {
+                $vmr.bus[2].mute = $false
+                $vmr.bus[2].mute | Should -Be $false
+            }
+        }
+
+        Context 'Bus[i].Mono' {
+            It 'Should set Bus[0].Mono to 1' {
+                $vmr.bus[0].mono = $true
+                $vmr.bus[0].mono | Should -Be $true
+            }
+
+            It 'Should set Bus[0].Mono to 0' {
+                $vmr.bus[0].mono = $false
+                $vmr.bus[0].mono | Should -Be $false
+            }
+
+            It 'Should set Bus[1].Mono to 1' {
+                $vmr.bus[1].mono = $true
+                $vmr.bus[1].mono | Should -Be $true
+            }
+
+            It 'Should set Bus[1].Mono to 0' {
+                $vmr.bus[1].mono = $false
+                $vmr.bus[1].mono | Should -Be $false
+            }
+
+            It 'Should set Bus[2].Mono to 1' {
+                $vmr.bus[2].mono = $true
+                $vmr.bus[2].mono | Should -Be $true
+            }
+
+            It 'Should set Bus[2].Mono to 0' {
+                $vmr.bus[2].mono = $false
+                $vmr.bus[2].mono | Should -Be $false
+            }
+        }
+
+        Context 'Bus[i].Gain' {
+            It 'Should set Bus[0].Gain to 3.6' {
+                $vmr.bus[0].gain = 3.6
+                $vmr.bus[0].gain | Should -Be 3.6
+            }
+
+            It 'Should set Bus[0].Gain to -0.2' {
+                $vmr.bus[0].gain = -0.2
+                $vmr.bus[0].gain | Should -Be -0.2
+            }
+
+            It 'Should set Bus[1].Gain to 5.1' {
+                $vmr.bus[1].gain = 5.1
+                $vmr.bus[1].gain | Should -Be 5.1
+            }
+
+            It 'Should set Bus[1].Gain to -0.2' {
+                $vmr.bus[1].gain =-0.2
+                $vmr.bus[1].gain | Should -Be -0.2
+            }
+
+            It 'Should set Bus[2].Gain to 2.7' {
+                $vmr.bus[2].gain = 2.7
+                $vmr.bus[2].gain | Should -Be 2.7
+            }
+
+            It 'Should set Bus[2].Gain to -2.5' {
+                $vmr.bus[2].gain = -2.5
+                $vmr.bus[2].gain | Should -Be -2.5
+            }
+        }
     }
 }

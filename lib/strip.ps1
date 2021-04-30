@@ -131,11 +131,41 @@ class Strip {
 
     hidden $_gain = $($this | Add-Member ScriptProperty 'gain' `
         {
-            $this.Getter($this.cmd('gain'))
+            [math]::Round($this.Getter($this.cmd('gain')), 1)
         }`
         {
             param ( [Single]$arg )
             $this._gain = $this.Setter($this.cmd('gain'), $arg)
+        }
+    )
+
+    hidden $_comp = $($this | Add-Member ScriptProperty 'comp' `
+        {
+            [math]::Round($this.Getter($this.cmd('comp')), 1)
+        }`
+        {
+            param ( [Single]$arg )
+            $this._comp = $this.Setter($this.cmd('comp'), $arg)
+        }
+    )
+
+    hidden $_gate = $($this | Add-Member ScriptProperty 'gate' `
+        {
+            [math]::Round($this.Getter($this.cmd('gate')), 1)
+        }`
+        {
+            param ( [Single]$arg )
+            $this._gate = $this.Setter($this.cmd('gate'), $arg)
+        }
+    )
+
+    hidden $_limit = $($this | Add-Member ScriptProperty 'limit' `
+        {
+            [Int]$this.Getter($this.cmd('limit'))
+        }`
+        {
+            param ( [Single]$arg )
+            $this._limit = $this.Setter($this.cmd('limit'), $arg)
         }
     )
 }

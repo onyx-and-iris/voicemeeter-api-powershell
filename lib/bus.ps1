@@ -41,7 +41,7 @@ class Bus {
 
     hidden $_gain = $($this | Add-Member ScriptProperty 'gain' `
         {
-            $this.Getter($this.cmd('gain'))
+            [math]::Round($this.Getter($this.cmd('gain')), 1)
         }`
         {
             param ( [Single]$arg )

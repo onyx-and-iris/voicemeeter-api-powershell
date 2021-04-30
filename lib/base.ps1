@@ -48,7 +48,7 @@ Function Param_Set_Multi {
     Start-Sleep -m 50
     while(M_Dirty) { Start-Sleep -m 1 }
 
-    [string[]]$params = ($HASH | out-string -stream) -ne '' | select -Skip 2
+    [string[]]$params = ($HASH | out-string -stream) -ne '' | Select-Object -Skip 2
     [String]$cmd = [String]::new(512)
     ForEach ($line in $params) {
         $line = $($line -replace '\s+', ' ')
