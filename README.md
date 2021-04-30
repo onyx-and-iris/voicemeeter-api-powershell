@@ -3,7 +3,7 @@ This wrapper was written in response to a request in the VB-AUDIO discord for
 a way to invoke commands using Powershell. It is designed to be simple to use
 but not every feature is added.
 
-For past/future changes to this project refer to: [CHANGELOG](.\CHANGELOG.md)
+For past/future changes to this project refer to: [CHANGELOG](CHANGELOG.md)
 
 ## Tested against
 - Basic 1.0.7.8
@@ -28,7 +28,7 @@ More info: [PSGallery](https://www.powershellgallery.com/)
 `git clone https://github.com/onyx-and-iris/voicemeeter-api-powershell.git`
 
 All examples in this readme assume you've installed as a module.
-If you decide to direct download see [alternative instructions](.\FROM_SOURCE.md).
+If you decide to direct download see [alternative instructions](FROM_SOURCE.md).
 
 ## Use
 When you instantiate Remote class you will automatically be logged in. Use a
