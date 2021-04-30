@@ -68,6 +68,8 @@ Set many strip/bus parameters at once, for Example
 Import-Module Voicemeeter
 
 try {
+    $vmr = Get-RemoteBanana
+
     $hash = @{
         "Strip[0].Mute" = $true
         "Strip[1].Mute" = $true

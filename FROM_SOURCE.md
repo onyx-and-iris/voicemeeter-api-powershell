@@ -1,24 +1,19 @@
 #### Direct download:
 All commands remain the same, the only difference when you download from source is how you load scripts.
-You will need to dot source the Voicemeeter.ps1 since you won't have it installed as a module
+You will need to Import-Module by relative location, for example:
 
-Instead of `Import-Module Voicemeeter` use `. .\lib\voicemeeter.ps1` (from repository root)
+Instead of `Import-Module Voicemeeter` use `Import-Module .\lib\Voicemeeter.psm1` (from repository root)
 
-and call remote class directly, so: `$vmr = [Remote]::new('banana')`
-
-Where you pass it a Voicemeeter type argument. Type can be one of:
-- basic
-- banana
-- potato
+Everything else remains the same
 
 Simple example if using from source:
 
 ```powershell
-. .\lib\voicemeeter.ps1
+Import-Module .\lib\Voicemeeter.psm1
 
 try {
     # Pass a Voicemeeter type as argument
-    $vmr = [Remote]::new('banana')
+    $vmr = Get-RemoteBanana
 
     # Set strip and bus params
     $vmr.strip[0].mono = $true
