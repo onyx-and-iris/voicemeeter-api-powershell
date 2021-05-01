@@ -9,6 +9,8 @@ Before any minor/major patch is released all test units will be run to verify th
 ## [Unreleased]
 - [x] Add gain, comp, limit to Strips
 - [x] Update tests to reflect changes
+- [x] Add logging + summary for tests
+- [x] Add info to README about powershellget, nuget and psgallery
 
 ## [1.3] - 2021-04-30
 ### Added

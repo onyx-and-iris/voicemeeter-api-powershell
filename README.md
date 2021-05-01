@@ -18,11 +18,23 @@ You may have success with many commands in earlier versions but some commands
 - Powershell 5.1
 
 ## Installation
-#### Powershell:
+#### PowerShellGet:
+In Powershell as admin:
+
 `Install-Module Voicemeeter`
 
-You will need to add PSGallery as a trusted repository source.
-More info: [PSGallery](https://www.powershellgallery.com/)
+In Powershell as current user:
+
+`Install-Module -Name Voicemeeter -Scope CurrentUser`
+
+You may be asked to install NuGet provider required by PowerShellGet if you don't have it already.
+
+When prompted you will need to accept PSGallery as a trusted repository.
+
+More Info:
+- [PowerShellGet](https://docs.microsoft.com/en-us/powershell/scripting/gallery/installing-psget?view=powershell-7.1)
+- [NuGet](https://www.powershellgallery.com/packages/NuGet/1.3.3)
+- [PSGallery](https://docs.microsoft.com/en-gb/powershell/scripting/gallery/overview?view=powershell-7.1)
 
 #### Direct download:
 `git clone https://github.com/onyx-and-iris/voicemeeter-api-powershell.git`
@@ -99,9 +111,7 @@ $vmr.button[5].trigger = $true
 ```
 
 ### Run tests
-Run tests using invoke-pester in powershell console from test directory.
-
-Alternatively you may use .\runall.ps1 which accepts two parameters:
+Run tests using .\runall.ps1 which accepts two parameters:
 - tag Run tests of this type
 - num Run this number of tests
 
@@ -109,3 +119,5 @@ Current test types are 'higher' and 'lower'
 
 Example:
 `.\runall.ps1 -tag 'higher' -num 3`
+
+Results will be logged and summary file written.

@@ -402,9 +402,9 @@ Describe -Tag 'higher', -TestName 'All Alias Tests' {
                 $vmr.strip[1].gain | Should -Be 5.1
             }
 
-            It 'Should set Strip[1].Gain to -0.2' {
-                $vmr.strip[1].gain =-0.2
-                $vmr.strip[1].gain | Should -Be -0.2
+            It 'Should set Strip[1].Gain to -4.2' {
+                $vmr.strip[1].gain = -4.2
+                $vmr.strip[1].gain | Should -Be -4.2
             }
 
             It 'Should set Strip[2].Gain to 2.7' {
@@ -594,9 +594,9 @@ Describe -Tag 'higher', -TestName 'All Alias Tests' {
                 $vmr.bus[1].gain | Should -Be 5.1
             }
 
-            It 'Should set Bus[1].Gain to -0.2' {
-                $vmr.bus[1].gain =-0.2
-                $vmr.bus[1].gain | Should -Be -0.2
+            It 'Should set Bus[1].Gain to -4.2' {
+                $vmr.bus[1].gain = -4.2
+                $vmr.bus[1].gain | Should -Be -4.2
             }
 
             It 'Should set Bus[2].Gain to 2.7' {

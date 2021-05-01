@@ -12,7 +12,7 @@ Simple example if using from source:
 Import-Module .\lib\Voicemeeter.psm1
 
 try {
-    # Pass a Voicemeeter type as argument
+    # Run the factory function for required Voicemeeter type
     $vmr = Get-RemoteBanana
 
     # Set strip and bus params
