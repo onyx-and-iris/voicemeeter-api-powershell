@@ -51,13 +51,10 @@ Function Param_Set_Multi {
     [string[]]$params = ($HASH | out-string -stream) -ne '' | Select-Object -Skip 2
     [String]$cmd = [String]::new(512)
     ForEach ($line in $params) {
-        $line = $($line -replace '\s+', ' ')
-        $line = $line.TrimEnd()
-        $line = $line -replace '\s', '='
-        $line = $line -replace 'True', '1'
-        $line = $line -replace 'False', '0'
-
-        $cmd += $line + ';'
+        if($line.Trim() -Match "(^\w+)\[(\d)\].(\w+)\s+(\w+)") {
+            if($Matches[4] -eq "True") { $val = [String]1 } else { $val = [String]0 }
+            $cmd += "$($Matches[1])[$($Matches[2])].$($Matches[3])=$val;"
+        }
     }
     [String]$cmd = $cmd.SubString(1)
 
@@ -212,7 +209,7 @@ Function Login {
                 'basic' { $vbtype = 1; Break}
                 'banana' { $vbtype = 2; Break}
                 'potato' { $vbtype = 3; Break}
-                Default { throw [LoginError]::new('Unknown Voicemeeter type') } 
+                Default { throw [LoginError]::new('Unknown Voicemeeter type') }
             }
 
             $retval = [Int][Voicemeeter.Remote]::VBVMR_RunVoicemeeter([Int64]$vbtype)
@@ -253,14 +250,4 @@ Function P_Dirty {
 
 Function M_Dirty {
     [Bool][Voicemeeter.Remote]::VBVMR_MacroButton_IsDirty()
-}
-
-
-if ($MyInvocation.InvocationName -ne '.')
-{
-    Login
-
-    Param_Set -PARAM 'garbagevalue' -Value $true
-
-    Logout
 }

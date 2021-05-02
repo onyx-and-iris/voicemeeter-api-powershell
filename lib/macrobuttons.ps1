@@ -59,17 +59,3 @@ Function Buttons {
     }
     $button
 }
-
-if ($MyInvocation.InvocationName -ne '.')
-{
-    . .\voicemeeter.ps1
-    try {
-        $vmr = [Remote]::new('potato')
-
-        $vmr.button[0].state = $true
-        $vmr.button[0].state
-        $vmr.button[0].state = $false
-        $vmr.button[0].state
-    }
-    finally { $vmr.Logout() }
-}

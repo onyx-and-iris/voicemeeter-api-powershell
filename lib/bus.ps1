@@ -57,22 +57,3 @@ Function Buses {
     }
     $bus
 }
-
-if ($MyInvocation.InvocationName -ne '.')
-{
-    . .\voicemeeter.ps1
-    try {
-        $vmr = [Remote]::new('potato')
-
-        $vmr.bus[0].mono = $true
-        $vmr.bus[0].mono
-        $vmr.bus[0].mono = $false
-        $vmr.bus[0].mono
-
-        $vmr.bus[1].gain = 3.2
-        $vmr.bus[1].gain
-        $vmr.bus[2].gain = -2.0
-        $vmr.bus[2].gain
-    }
-    finally { $vmr.Logout() }
-}

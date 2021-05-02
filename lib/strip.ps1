@@ -177,23 +177,3 @@ Function Strips {
     }
     $strip
 }
-
-if ($MyInvocation.InvocationName -ne '.')
-{
-    . .\voicemeeter.ps1
-    try {
-        $vmr = [Remote]::new('potato')
-
-        $vmr.strip[1].A1 = $true
-        $vmr.strip[1].A1
-        $vmr.strip[2].A2 = $false
-        $vmr.strip[2].A2
-
-
-        $vmr.strip[1].gain = 3.2
-        $vmr.strip[1].gain
-        $vmr.strip[2].gain = -2.0
-        $vmr.strip[2].gain
-    }
-    finally { $vmr.Logout() }
-}
