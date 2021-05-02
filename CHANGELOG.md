@@ -11,6 +11,7 @@ Before any minor/major patch is released all test units will be run to verify th
 - [x] Update tests to reflect changes
 - [x] Add logging + summary for tests
 - [x] Add info to README about powershellget, nuget and psgallery
+- [x] Support other types of params in multi_set
 
 ## [1.3] - 2021-04-30
 ### Added

@@ -24,5 +24,21 @@ try {
     }
 
     $vmr.Set_Multi($hash)
+
+    $hash = @{
+        "mb_0.state" = $true
+        "mb_1.state" = $true
+        "mb_2.state" = $true
+    }
+
+    $vmr.Set_Multi($hash)
+
+    $hash = @{
+        "mb_0.state" = $false
+        "mb_1.state" = $false
+        "mb_2.state" = $false
+    }
+
+    $vmr.Set_Multi($hash)
 }
 finally { $vmr.Logout() }
