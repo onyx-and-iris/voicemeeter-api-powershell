@@ -7,11 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Before any minor/major patch is released all test units will be run to verify they pass.
 
 ## [Unreleased]
-- [x] Add gain, comp, limit to Strips
-- [x] Update tests to reflect changes
-- [x] Add logging + summary for tests
-- [x] Add info to README about powershellget, nuget and psgallery
-- [x] Support other types of params in multi_set
+- [ ]
+
+## [1.4] - 2021-05-03
+### Added
+- Add gain, comp, limit to Strips
+- Update tests to reflect changes
+- Add logging + summary for tests
+- Add info to README about powershellget, nuget and psgallery
+- Support other types of params in multi_set
+
+### Changed
+- Multi_Set now accepts nested hash
 
 ## [1.3] - 2021-04-30
 ### Added

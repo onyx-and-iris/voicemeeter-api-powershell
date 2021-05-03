@@ -75,7 +75,7 @@ parameter that does not exist for that version of Voicemeeter the wrapper will
 throw an error. So make sure what you are settings actually exists.
 
 ### Multiple parameters
-Set many strip/bus parameters at once, for Example
+Set many strip/bus/macrobutton parameters at once, for Example
 ```powershell
 Import-Module Voicemeeter
 
@@ -83,12 +83,12 @@ try {
     $vmr = Get-RemoteBanana
 
     $hash = @{
-        "Strip[0].Mute" = $true
-        "Strip[1].Mute" = $true
-        "Strip[2].Mute" = $false
-        "Strip[0].Mono" = $true
-        "Strip[1].Mono" = $false
-        "Strip[2].Mono" = $true
+        strip_0 = @{mute = $true; mono = $true};
+        strip_2 = @{mute = $true; mono = $true};
+        bus_1 = @{mute = $true; mono = $true};
+
+        mb_34 = @{state = $true};
+        mb_12 = @{trigger = $false};
     }
 
     $vmr.Set_Multi($hash)

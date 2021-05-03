@@ -4,39 +4,31 @@ try {
     $vmr = Get-RemoteBanana
 
     $hash = @{
-        "Strip[0].Mute" = $true
-        "Strip[1].Mute" = $true
-        "Strip[2].Mute" = $false
-        "Strip[0].Mono" = $true
-        "Strip[1].Mono" = $false
-        "Strip[2].Mono" = $true
+        strip_0 = @{mute = $true; mono = $true};
+        strip_1 = @{mute = $true; mono = $true};
+        strip_2 = @{mute = $true; mono = $true};
+        bus_0 = @{mute = $true; mono = $true};
+        bus_1 = @{mute = $true; mono = $true};
+        bus_2 = @{mute = $true; mono = $true};
+
+        mb_0 = @{state = $true};
+        mb_1 = @{stateonly = $true};
+        mb_2 = @{trigger = $true}
     }
 
     $vmr.Set_Multi($hash)
 
     $hash = @{
-        "Strip[0].Mute" = $false
-        "Strip[1].Mute" = $false
-        "Strip[2].Mute" = $false
-        "Strip[0].Mono" = $true
-        "Strip[1].Mono" = $true
-        "Strip[2].Mono" = $false
-    }
+        strip_0 = @{mute = $false; mono = $false};
+        strip_1 = @{mute = $false; mono = $false};
+        strip_2 = @{mute = $false; mono = $false};
+        bus_0 = @{mute = $false; mono = $false};
+        bus_1 = @{mute = $false; mono = $false};
+        bus_2 = @{mute = $false; mono = $false};
 
-    $vmr.Set_Multi($hash)
-
-    $hash = @{
-        "mb_0.state" = $true
-        "mb_1.state" = $true
-        "mb_2.state" = $true
-    }
-
-    $vmr.Set_Multi($hash)
-
-    $hash = @{
-        "mb_0.state" = $false
-        "mb_1.state" = $false
-        "mb_2.state" = $false
+        mb_0 = @{state = $false};
+        mb_1 = @{stateonly = $false};
+        mb_2 = @{trigger = $false}
     }
 
     $vmr.Set_Multi($hash)

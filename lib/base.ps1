@@ -47,48 +47,47 @@ Function Param_Set_Multi {
     )
     Start-Sleep -m 50
     while(M_Dirty) { Start-Sleep -m 1 }
-    [string[]]$params = ($HASH | out-string -stream) -ne '' | Select-Object -Skip 2
-    $cmd_channel = [String]::new(512)
-    $cmd_mb = @(
-        ,@()
-    )
-    ForEach ($line in $params) {
-        if($line.Trim() -Match "(^\w+)\[(\d)\].(\w+)\s+(\w+)") {
-            if($Matches[4] -eq "True") { $val = 1 } else { $val = 0 }
-            [String]$cmd_channel += "$($Matches[1])[$($Matches[2])].$($Matches[3])=$val;"
-        }
-        elseif($line.Trim() -Match "mb_(\d+).(\w+)\s+(\w+)") {
-            $id = $Matches[1]
-            if($Matches[2] -eq "state") { $mode = 1 }
-            elseif($Matches[2] -eq "stateonly") { $mode = 2 }
-            elseif($Matches[2] -eq "trigger") { $mode = 3 }
-            if($Matches[3] -eq "True") { $val = 1 } else { $val = 0 }
+    
+    $cmd_strip = [String]::new(512)
+    $cmd_bus = [String]::new(512)
 
-            $cmd_mb += , @($id, $val, $mode)
-        }
-    }
+    $textInfo = (Get-Culture).TextInfo
+    ForEach($key in $HASH.keys) {
+        $identifier = $key.Split("_")[0]
+        $num = $key.Split("_")[1]
+        $val = if($HASH.Item($key).values -eq "True") {1} else {0}
 
-    [HashTable]$cmds = @{}
-    if(![string]::IsNullOrEmpty($cmd_channel)) { $cmds["channel"] = $cmd_channel }
-    if($cmd_mb.count -gt 0) { $cmds["mb"] = $cmd_mb }
-
-    if($cmds.ContainsKey("channel")) {
-        $cmds["channel"] = $cmds["channel"] -replace '[^a-z0-9.\[\]=;]+'
-        if(![string]::IsNullOrEmpty($cmds["channel"])) {
-            try {
-                $retval = [Int][Voicemeeter.Remote]::VBVMR_SetParameters($cmds["channel"])
-                if($retval) { Throw [CAPIError]::new($retval, $MyInvocation.MyCommand) }
+        if($identifier -eq "strip") {
+            ForEach($k in $HASH.Item($key).keys) {
+                    $param = $textInfo.ToTitleCase($k)
+                    $cmd_strip += "Strip[$num].$param=$val;"
+                }
             }
-            catch [CAPIError] {
-                Write-Warning $_.Exception.ErrorMessage()
+        elseif($identifier -eq "bus") {
+            ForEach($k in $HASH.Item($key).keys) {
+                $param = $textInfo.ToTitleCase($k)
+                $cmd_bus += "Bus[$num].$param=$val;"
+            }
+        }
+        elseif($identifier -eq "mb") {
+            ForEach($k in $HASH.Item($key).keys) {
+                if($k -eq "state") { $mode = 1 }
+                elseif($k -eq "stateonly") { $mode = 2 }
+                elseif($k -eq "trigger") { $mode = 3 }
+                $val = if($HASH.Item($key).values -eq "True") {1} else {0}
+
+                MB_Set -ID $num -SET $val -MODE $mode
             }
         }
     }
-    if($cmds.ContainsKey("mb")) {
-        $cmds["mb"] | ForEach-Object {
-            if($_.count -gt 0) {
-                MB_Set -ID $_[0] -SET $_[1] -MODE $_[2]
-            }
+
+    @($cmd_bus, $cmd_strip) | ForEach-Object {
+        try {
+            $retval = [Int][Voicemeeter.Remote]::VBVMR_SetParameters($_.Substring(1))
+            if($retval) { Throw [CAPIError]::new($retval, $MyInvocation.MyCommand) }
+        }
+        catch [CAPIError] {
+            Write-Warning $_.Exception.ErrorMessage()
         }
     }
 }
