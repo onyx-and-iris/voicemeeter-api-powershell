@@ -14,11 +14,14 @@ class Remote {
     }
 
     [void] Setup() {
-        Login -TYPE $this.type
+        if(Setup_DLL) {
+            Login -TYPE $this.type
 
-        $this.button = Buttons
-        $this.strip = Strips
-        $this.bus = Buses
+            $this.button = Buttons
+            $this.strip = Strips
+            $this.bus = Buses
+        }
+        else { Exit }
     }
 
     [void] Logout() {

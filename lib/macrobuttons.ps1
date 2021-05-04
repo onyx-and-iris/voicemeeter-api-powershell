@@ -17,11 +17,9 @@ class MacroButton {
 
     hidden $_state = $($this | Add-Member ScriptProperty 'state' `
         {
-            # get
             $this.Getter(1)
         }`
         {
-            # set
             param ( $arg )
             $this._state = $this.Setter($arg, 1)
         }
@@ -29,11 +27,9 @@ class MacroButton {
 
     hidden $_stateonly = $($this | Add-Member ScriptProperty 'stateonly' `
         {
-            # get
             $this.Getter(2)
         }`
         {
-            # set
             param ( $arg )
             $this._stateonly = $this.Setter($arg, 2)
         }
@@ -41,11 +37,9 @@ class MacroButton {
 
     hidden $_trigger = $($this | Add-Member ScriptProperty 'trigger' `
         {
-            # get
             $this.Getter(3)
         }`
         {
-            # set
             param ( $arg )
             $this._trigger = $this.Setter($arg, 3)
         }

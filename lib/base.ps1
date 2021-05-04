@@ -1,44 +1,68 @@
 . $PSScriptRoot\errors.ps1
+. $PSScriptRoot\inst.ps1
 . $PSScriptRoot\strip.ps1
 . $PSScriptRoot\bus.ps1
 . $PSScriptRoot\macrobuttons.ps1
 
-$Signature = @'
-    [DllImport(@"C:\Program Files (x86)\VB\Voicemeeter\VoicemeeterRemote64.dll")]
+$global:layout = $null
+
+Function Setup_DLL {
+    try {
+        $vb_path = Get_VBPath
+
+        if([string]::IsNullOrWhiteSpace($vb_path)) {
+            throw [VBPathError]::new("ERROR: Couldn't get Voicemeeter path")
+        }
+        else {
+            if([Environment]::Is64BitOperatingSystem) {
+                $dll = Join-Path -Path $vb_path -ChildPath "VoicemeeterRemote64.dll"
+            }
+            else {
+                $dll = Join-Path -Path $vb_path -ChildPath "VoicemeeterRemote.dll"
+            }
+        }
+    }
+    catch [VBPathError] {
+        Write-Warning $_.Exception.ErrorMessage()
+        return $false
+    }
+
+$Signature = @"
+    [DllImport(@"$dll")]
     public static extern int VBVMR_Login();
-    [DllImport(@"C:\Program Files (x86)\VB\Voicemeeter\VoicemeeterRemote64.dll")]
+    [DllImport(@"$dll")]
     public static extern int VBVMR_Logout();
-    [DllImport(@"C:\Program Files (x86)\VB\Voicemeeter\VoicemeeterRemote64.dll")]
+    [DllImport(@"$dll")]
     public static extern int VBVMR_RunVoicemeeter(Int64 run);
-    [DllImport(@"C:\Program Files (x86)\VB\Voicemeeter\VoicemeeterRemote64.dll")]
+    [DllImport(@"$dll")]
     public static extern int VBVMR_GetVoicemeeterType(ref int ptr);
 
-    [DllImport(@"C:\Program Files (x86)\VB\Voicemeeter\VoicemeeterRemote64.dll")]
+    [DllImport(@"$dll")]
     public static extern int VBVMR_MacroButton_IsDirty();
-    [DllImport(@"C:\Program Files (x86)\VB\Voicemeeter\VoicemeeterRemote64.dll")]
+    [DllImport(@"$dll")]
     public static extern int VBVMR_MacroButton_SetStatus(Int64 id, Single state, Int64 mode);
-    [DllImport(@"C:\Program Files (x86)\VB\Voicemeeter\VoicemeeterRemote64.dll")]
+    [DllImport(@"$dll")]
     public static extern int VBVMR_MacroButton_GetStatus(Int64 id, ref float ptr, Int64 mode);
 
-    [DllImport(@"C:\Program Files (x86)\VB\Voicemeeter\VoicemeeterRemote64.dll")]
+    [DllImport(@"$dll")]
     public static extern int VBVMR_IsParametersDirty();
-    [DllImport(@"C:\Program Files (x86)\VB\Voicemeeter\VoicemeeterRemote64.dll")]
+    [DllImport(@"$dll")]
     public static extern int VBVMR_SetParameterFloat(String param, Single value);
-    [DllImport(@"C:\Program Files (x86)\VB\Voicemeeter\VoicemeeterRemote64.dll")]
+    [DllImport(@"$dll")]
     public static extern int VBVMR_GetParameterFloat(String param, ref float ptr);
 
-    [DllImport(@"C:\Program Files (x86)\VB\Voicemeeter\VoicemeeterRemote64.dll")]
+    [DllImport(@"$dll")]
     public static extern int VBVMR_SetParameterStringA(String param, String value);
-    [DllImport(@"C:\Program Files (x86)\VB\Voicemeeter\VoicemeeterRemote64.dll")]
+    [DllImport(@"$dll")]
     public static extern int VBVMR_GetParameterStringA(String param, byte[] buff);
 
-    [DllImport(@"C:\Program Files (x86)\VB\Voicemeeter\VoicemeeterRemote64.dll")]
+    [DllImport(@"$dll")]
     public static extern int VBVMR_SetParameters(String param);
-'@
+"@
 
-Add-Type -MemberDefinition $Signature -Name Remote -Namespace Voicemeeter -PassThru | Out-Null
-
-$global:layout = $null
+    Add-Type -MemberDefinition $Signature -Name Remote -Namespace Voicemeeter -PassThru | Out-Null
+    return $true
+}
 
 
 Function Param_Set_Multi {
@@ -74,7 +98,6 @@ Function Param_Set_Multi {
                 if($k -eq "state") { $mode = 1 }
                 elseif($k -eq "stateonly") { $mode = 2 }
                 elseif($k -eq "trigger") { $mode = 3 }
-                $val = if($HASH.Item($key).values -eq "True") {1} else {0}
 
                 MB_Set -ID $num -SET $val -MODE $mode
             }

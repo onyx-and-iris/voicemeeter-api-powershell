@@ -1,3 +1,15 @@
+class VBPathError : Exception {
+    [String]$msg
+
+    VBPathError([String]$msg) {
+        $this.msg = $msg
+    }
+
+    [String] ErrorMessage() {
+        return $this.msg
+    }
+}
+
 class LoginError : Exception {
     [String]$msg
 

@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Before any minor/major patch is released all test units will be run to verify they pass.
 
 ## [Unreleased]
-- [ ]
+- [x] Fetch dll path through registry (support for 32 and 64 bit)
 
 ## [1.4] - 2021-05-03
 ### Added
