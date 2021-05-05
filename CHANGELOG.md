@@ -8,6 +8,9 @@ Before any minor/major patch is released all test units will be run to verify th
 
 ## [Unreleased]
 - [x] Fetch dll path through registry (support for 32 and 64 bit)
+- [x] Add strip/bus commands section to README
+- [ ] Add label/device name commands to Strips
+- [ ] Add vban commands
 
 ## [1.4] - 2021-05-03
 ### Added

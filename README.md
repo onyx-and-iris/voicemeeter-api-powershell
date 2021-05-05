@@ -95,6 +95,19 @@ try {
 }
 finally { $vmr.Logout() }
 ```
+### Strip|Bus
+The following strip/bus commands are available:
+- mute
+- mono
+- solo
+- A1-A5
+- B1-B3
+- limit
+- gain
+- comp
+- gate
+
+A,B commands depend on Voicemeeter type.
 
 ### Macrobuttons
 Three modes defined: state, stateonly and trigger.
