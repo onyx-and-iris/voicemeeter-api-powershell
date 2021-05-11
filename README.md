@@ -123,6 +123,28 @@ $vmr.button[4].stateonly = $false
 $vmr.button[5].trigger = $true
 ```
 
+### VBAN
+For each vban in/out stream the following parameters are defined:
+- on: boolean
+- name: string
+- ip: string
+- port: int from 1024 - 65535
+- sr: int (11025, 16000, 22050, 24000, 32000, 44100, 48000, 64000, 88200, 96000)
+- channel: int from 1 to 8
+- bit: int 16 or 24
+- quality: int from 0 to 4
+- route: int from 0 to 8
+
+SR, channel and bit are defined as readonly for instreams. Attempting to write
+to those parameters will throw an error. They are read and write for outstreams.
+
+example:
+```powershell
+$vmr.vban_in[0].on = $true
+$vmr.vban_in[2].port = 6990
+$vmr.vban_out[3].bit = 16
+```
+
 ### Run tests
 Run tests using .\runall.ps1 which accepts two parameters:
 - tag Run tests of this type
