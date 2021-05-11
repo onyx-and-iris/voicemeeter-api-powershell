@@ -1,21 +1,30 @@
 class Strip {
     [int32]$id
+    [Array]$stringparams
 
     # Constructor
     Strip ([Int]$id)
     {
         $this.id = $id
+        $this.stringparams = @('label')
     }
 
     [void] Setter($cmd, $set) {
-        Param_Set -PARAM $cmd -VALUE $set
+        if( $this.stringparams.Contains($cmd.Split('.')[1]) ) { 
+            Param_Set_String -PARAM $cmd -VALUE $set 
+        }
+        else { Param_Set -PARAM $cmd -VALUE $set }
     }
 
     [Single] Getter($cmd) {
         return Param_Get -PARAM $cmd
     }
 
-    [string] cmd ($arg) {
+    [String] Getter_String($cmd) {
+        return Param_Get_String -PARAM $cmd
+    }
+
+    [String] cmd ($arg) {
         return "Strip[" + $this.id + "].$arg"
     }
 
@@ -166,6 +175,16 @@ class Strip {
         {
             param ( [Single]$arg )
             $this._limit = $this.Setter($this.cmd('limit'), $arg)
+        }
+    )
+
+    hidden $_label = $($this | Add-Member ScriptProperty 'label' `
+        {
+            [String]$this.Getter_String($this.cmd('label'))
+        }`
+        {
+            param ( [String]$arg )
+            $this._label = $this.Setter($this.cmd('label'), $arg)
         }
     )
 }

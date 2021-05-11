@@ -7,10 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Before any minor/major patch is released all test units will be run to verify they pass.
 
 ## [Unreleased]
-- [x] Fetch dll path through registry (support for 32 and 64 bit)
-- [x] Add strip/bus commands section to README
-- [ ] Add label/device name commands to Strips
-- [ ] Add vban commands
+- [x] Add vban commands
+- [x] Update tests to reflect changes
+
+## [1.5] - 2021-05-11
+### Added
+- Fetch dll path through registry (support for 32 and 64 bit)
+- Add strip/bus commands section to README
+- Add label name command to Strips
 
 ## [1.4] - 2021-05-03
 ### Added

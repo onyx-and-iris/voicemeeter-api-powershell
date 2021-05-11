@@ -3,6 +3,7 @@
 . $PSScriptRoot\strip.ps1
 . $PSScriptRoot\bus.ps1
 . $PSScriptRoot\macrobuttons.ps1
+. $PSScriptRoot\vban.ps1
 
 $global:layout = $null
 
@@ -224,18 +225,24 @@ Function DefineVersion {
         $layout = @{
            "strip" = 3
            "bus" = 2
+           "vban_in" = 4
+           "vban_out" = 4
         }
     }
     elseif($TYPE -eq 2) {
         $layout = @{
            "strip" = 5
            "bus" = 5
+           "vban_in" = 8
+           "vban_out" = 8
         }
     }
     elseif($TYPE -eq 3) {
         $layout = @{
            "strip" = 8
            "bus" = 8
+           "vban_in" = 8
+           "vban_out" = 8
         }
     }
     $global:layout = $layout
