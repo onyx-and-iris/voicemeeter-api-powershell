@@ -1,17 +1,67 @@
 class Strip {
     [int32]$id
-    [Array]$stringparams
+    [Array]$string_params
+    [Array]$float_params
+    [Array]$bool_params
+
+    hidden AddPublicMembers() {
+        [HashTable]$Signatures = @{}
+        @($this.bool_params, $this.string_params, $this.float_params) | ForEach-Object {
+            ForEach($param in $_) {
+                if($this.bool_params.Contains($param)) {
+                    # Define getter
+                    $Signatures["Getter"] = "`$this.Getter(`$this.cmd('{0}'))" -f $param
+                    # Define setter
+                    $Signatures["Setter"] = "param ( [Single]`$arg )`n`$this.Setter(`$this.cmd('{0}'), `$arg)"  `
+                    -f $param
+                }
+                elseif($this.float_params.Contains($param)) {
+                    # Define getter
+                    if($param -eq "limit") {
+                        $Signatures["Getter"] = "[Int]`$this.Getter(`$this.cmd('{0}'))" -f $param
+                    } else {
+                        $Signatures["Getter"] = "[math]::Round(`$this.Getter(`$this.cmd('{0}')), 1)" -f $param
+                    }
+                    # Define setter
+                    $Signatures["Setter"] = "param ( [Single]`$arg )`n`$this.Setter(`$this.cmd('{0}'), `$arg)" `
+                    -f $param
+                }
+                elseif($this.string_params.Contains($param)) {
+                    # Define getter
+                    $Signatures["Getter"] = "[String]`$this.Getter_String(`$this.cmd('{0}'))" -f $param
+                    # Define setter
+                    $Signatures["Setter"] = "param ( [String]`$arg )`n`$this.Setter(`$this.cmd('{0}'), `$arg)" `
+                    -f $param
+                }
+
+                $GetterScriptBlock = [ScriptBlock]::Create($Signatures["Getter"])
+                $SetterScriptBlock = [ScriptBlock]::Create($Signatures["Setter"])
+                $AddMemberParams = @{
+                    Name = $param
+                    MemberType = 'ScriptProperty'
+                    Value = $GetterScriptBlock
+                    SecondValue = $SetterScriptBlock
+                }
+                $this | Add-Member @AddMemberParams
+            }
+        }
+    }
 
     # Constructor
     Strip ([Int]$id)
     {
         $this.id = $id
-        $this.stringparams = @('label')
+        $this.string_params = @('label')
+        $this.bool_params = @('mono', 'solo', 'mute',
+        'A1', 'A2', 'A3', 'A4', 'A5',
+        'B1', 'B2', 'B3')
+        $this.float_params = @('gain', 'comp', 'gate', 'limit')
+        $this.AddPublicMembers()
     }
 
     [void] Setter($cmd, $set) {
-        if( $this.stringparams.Contains($cmd.Split('.')[1]) ) { 
-            Param_Set_String -PARAM $cmd -VALUE $set 
+        if( $this.string_params.Contains($cmd.Split('.')[1]) ) {
+            Param_Set_String -PARAM $cmd -VALUE $set
         }
         else { Param_Set -PARAM $cmd -VALUE $set }
     }
@@ -27,166 +77,6 @@ class Strip {
     [String] cmd ($arg) {
         return "Strip[" + $this.id + "].$arg"
     }
-
-    hidden $_mono = $($this | Add-Member ScriptProperty 'mono' `
-        {
-            $this.Getter($this.cmd('Mono'))
-        }`
-        {
-            param ( [Single]$arg )
-            $this._mono = $this.Setter($this.cmd('Mono'), $arg)
-        }
-    )
-
-    hidden $_solo = $($this | Add-Member ScriptProperty 'solo' `
-        {
-            $this.Getter($this.cmd('Solo'))
-        }`
-        {
-            param ( [Single]$arg )
-            $this._solo = $this.Setter($this.cmd('Solo'), $arg)
-        }
-    )
-
-    hidden $_mute = $($this | Add-Member ScriptProperty 'mute' `
-        {
-            $this.Getter($this.cmd('Mute'))
-        }`
-        {
-            param ( [Single]$arg )
-            $this._mute = $this.Setter($this.cmd('Mute'), $arg)
-        }
-    )
-
-    hidden $_A1 = $($this | Add-Member ScriptProperty 'A1' `
-        {
-            $this.Getter($this.cmd('A1'))
-        }`
-        {
-            param ( [Single]$arg )
-            $this._A1 = $this.Setter($this.cmd('A1'), $arg)
-        }
-    )
-
-    hidden $_A2 = $($this | Add-Member ScriptProperty 'A2' `
-        {
-            $this.Getter($this.cmd('A2'))
-        }`
-        {
-            param ( [Single]$arg )
-            $this._A2 = $this.Setter($this.cmd('A2'), $arg)
-        }
-    )
-
-    hidden $_A3 = $($this | Add-Member ScriptProperty 'A3' `
-        {
-            $this.Getter($this.cmd('A3'))
-        }`
-        {
-            param ( [Single]$arg )
-            $this._A3 = $this.Setter($this.cmd('A3'), $arg)
-        }
-    )
-
-    hidden $_A4 = $($this | Add-Member ScriptProperty 'A4' `
-        {
-            $this.Getter($this.cmd('A4'))
-        }`
-        {
-            param ( [Single]$arg )
-            $this._A4 = $this.Setter($this.cmd('A4'), $arg)
-        }
-    )
-
-    hidden $_A5 = $($this | Add-Member ScriptProperty 'A5' `
-        {
-            $this.Getter($this.cmd('A5'))
-        }`
-        {
-            param ( [Single]$arg )
-            $this._A5 = $this.Setter($this.cmd('A5'), $arg)
-        }
-    )
-
-    hidden $_B1 = $($this | Add-Member ScriptProperty 'B1' `
-        {
-            $this.Getter($this.cmd('B1'))
-        }`
-        {
-            param ( [Single]$arg )
-            $this._B1 = $this.Setter($this.cmd('B1'), $arg)
-        }
-    )
-
-    hidden $_B2 = $($this | Add-Member ScriptProperty 'B2' `
-        {
-            $this.Getter($this.cmd('B2'))
-        }`
-        {
-            param ( [Single]$arg )
-            $this._B2 = $this.Setter($this.cmd('B2'), $arg)
-        }
-    )
-
-    hidden $_B3 = $($this | Add-Member ScriptProperty 'B3' `
-        {
-            $this.Getter($this.cmd('B3'))
-        }`
-        {
-            param ( [Single]$arg )
-            $this._B3 = $this.Setter($this.cmd('B3'), $arg)
-        }
-    )
-
-    hidden $_gain = $($this | Add-Member ScriptProperty 'gain' `
-        {
-            [math]::Round($this.Getter($this.cmd('gain')), 1)
-        }`
-        {
-            param ( [Single]$arg )
-            $this._gain = $this.Setter($this.cmd('gain'), $arg)
-        }
-    )
-
-    hidden $_comp = $($this | Add-Member ScriptProperty 'comp' `
-        {
-            [math]::Round($this.Getter($this.cmd('comp')), 1)
-        }`
-        {
-            param ( [Single]$arg )
-            $this._comp = $this.Setter($this.cmd('comp'), $arg)
-        }
-    )
-
-    hidden $_gate = $($this | Add-Member ScriptProperty 'gate' `
-        {
-            [math]::Round($this.Getter($this.cmd('gate')), 1)
-        }`
-        {
-            param ( [Single]$arg )
-            $this._gate = $this.Setter($this.cmd('gate'), $arg)
-        }
-    )
-
-    hidden $_limit = $($this | Add-Member ScriptProperty 'limit' `
-        {
-            [Int]$this.Getter($this.cmd('limit'))
-        }`
-        {
-            param ( [Single]$arg )
-            $this._limit = $this.Setter($this.cmd('limit'), $arg)
-        }
-    )
-
-    hidden $_label = $($this | Add-Member ScriptProperty 'label' `
-        {
-            [String]$this.Getter_String($this.cmd('label'))
-        }`
-        {
-            param ( [String]$arg )
-            $this._label = $this.Setter($this.cmd('label'), $arg)
-        }
-    )
 }
 
 Function Strips {

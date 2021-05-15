@@ -10,6 +10,7 @@ Before any minor/major patch is released all test units will be run to verify th
 - [x] Add vban commands
 - [x] Update tests to reflect changes
 - [x] Add vban section to README
+- [x] Added meta functions for bus/strip attrs
 
 ## [1.5] - 2021-05-11
 ### Added

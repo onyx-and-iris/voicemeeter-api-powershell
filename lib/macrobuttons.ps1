@@ -1,6 +1,6 @@
 class MacroButton {
     [int32]$id
-
+    
     # Constructor
     MacroButton ([Int]$id)
     {

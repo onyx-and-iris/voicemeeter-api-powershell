@@ -1,10 +1,47 @@
 class Bus {
     [int32]$id
+    [Array]$bool_params
+    [Array]$float_params
+
+    hidden AddPublicMembers() {
+        [HashTable]$Signatures = @{}
+        @($this.bool_params, $this.float_params) | ForEach-Object {
+            ForEach($param in $_) {
+                if($this.bool_params.Contains($param)) {
+                    # Define getter
+                    $Signatures["Getter"] = "`$this.Getter(`$this.cmd('{0}'))" -f $param
+                    # Define setter
+                    $Signatures["Setter"] = "param ( [Single]`$arg )`n`$this.Setter(`$this.cmd('{0}'), `$arg)"  `
+                    -f $param
+                }
+                elseif($this.float_params.Contains($param)) {
+                    # Define getter
+                    $Signatures["Getter"] = "[math]::Round(`$this.Getter(`$this.cmd('{0}')), 1)" -f $param
+                    # Define setter
+                    $Signatures["Setter"] = "param ( [Single]`$arg )`n`$this.Setter(`$this.cmd('{0}'), `$arg)" `
+                    -f $param
+                }
+
+                $GetterScriptBlock = [ScriptBlock]::Create($Signatures["Getter"])
+                $SetterScriptBlock = [ScriptBlock]::Create($Signatures["Setter"])
+                $AddMemberParams = @{
+                    Name = $param
+                    MemberType = 'ScriptProperty'
+                    Value = $GetterScriptBlock
+                    SecondValue = $SetterScriptBlock
+                }
+                $this | Add-Member @AddMemberParams
+            }
+        }
+    }
 
     # Constructor
     Bus ([Int]$id)
     {
         $this.id = $id
+        $this.bool_params = @('mono', 'mute')
+        $this.float_params = @('gain')
+        $this.AddPublicMembers()
     }
 
     [void] Setter($cmd, $set) {
@@ -18,36 +55,6 @@ class Bus {
     [string] cmd ($arg) {
         return "Bus[" + $this.id + "].$arg"
     }
-
-    hidden $_mono = $($this | Add-Member ScriptProperty 'mono' `
-        {
-            $this.Getter($this.cmd('Mono'))
-        }`
-        {
-            param ( [Single]$arg )
-            $this._mono = $this.Setter($this.cmd('Mono'), $arg)
-        }
-    )
-
-    hidden $_mute = $($this | Add-Member ScriptProperty 'mute' `
-        {
-            $this.Getter($this.cmd('Mute'))
-        }`
-        {
-            param ( [Single]$arg )
-            $this._mute = $this.Setter($this.cmd('Mute'), $arg)
-        }
-    )
-
-    hidden $_gain = $($this | Add-Member ScriptProperty 'gain' `
-        {
-            [math]::Round($this.Getter($this.cmd('gain')), 1)
-        }`
-        {
-            param ( [Single]$arg )
-            $this._gain = $this.Setter($this.cmd('gain'), $arg)
-        }
-    )
 }
 
 Function Buses {
