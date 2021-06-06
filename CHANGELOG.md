@@ -7,19 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Before any minor/major patch is released all test units will be run to verify they pass.
 
 ## [Unreleased]
-- [ ]
+- [x]
 
 ## [1.6] - 2021-06-06
 ### Added
-- [x] Add vban commands
-- [x] Added meta functions for bus/strip attrs
+- Add vban commands
+- Added meta functions for bus/strip attrs
 
 ### Changed
-- [x] Update tests to reflect changes
-- [x] Add vban section to README
+- Update tests to reflect changes
+- Add vban section to README
 
 ### Fixed
-- [x] Run 64bit exe for potato version if on 64bit OS
+- Run 64bit exe for potato version if on 64bit OS
 
 ## [1.5] - 2021-05-11
 ### Added
