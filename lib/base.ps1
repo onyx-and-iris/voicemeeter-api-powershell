@@ -72,7 +72,7 @@ Function Param_Set_Multi {
     )
     Start-Sleep -m 50
     while(M_Dirty) { Start-Sleep -m 1 }
-    
+
     $cmd_strip = [String]::new(512)
     $cmd_bus = [String]::new(512)
 
@@ -263,7 +263,12 @@ Function Login {
             Switch($TYPE) {
                 'basic' { $vbtype = 1; Break}
                 'banana' { $vbtype = 2; Break}
-                'potato' { $vbtype = 3; Break}
+                'potato' {
+                    if ([Environment]::Is64BitOperatingSystem) {
+                            $vbtype = 6
+                        } else { $vbtype = 3 }
+                    Break
+                }
                 Default { throw [LoginError]::new('Unknown Voicemeeter type') }
             }
 

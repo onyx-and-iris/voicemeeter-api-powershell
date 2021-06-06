@@ -11,6 +11,7 @@ Before any minor/major patch is released all test units will be run to verify th
 - [x] Update tests to reflect changes
 - [x] Add vban section to README
 - [x] Added meta functions for bus/strip attrs
+- [x] Run 64bit exe for potato version if on 64bit OS
 
 ## [1.5] - 2021-05-11
 ### Added
