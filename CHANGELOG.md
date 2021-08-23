@@ -9,6 +9,18 @@ Before any minor/major patch is released all test units will be run to verify th
 ## [Unreleased]
 - [x]
 
+
+
+## [1.8] - 2021-08-23
+### Added
+- Added special commands
+
+### Changed
+- Add special section to README
+
+### Fixed
+- Removed unneeded console output
+
 ## [1.6] - 2021-06-06
 ### Added
 - Add vban commands

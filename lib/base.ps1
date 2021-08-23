@@ -4,6 +4,7 @@
 . $PSScriptRoot\bus.ps1
 . $PSScriptRoot\macrobuttons.ps1
 . $PSScriptRoot\vban.ps1
+. $PSScriptRoot\special.ps1
 
 $global:layout = $null
 

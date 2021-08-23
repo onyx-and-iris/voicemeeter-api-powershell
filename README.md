@@ -145,6 +145,15 @@ $vmr.vban_in[2].port = 6990
 $vmr.vban_out[3].bit = 16
 ```
 
+### Special
+Certain 'special' commands are defined by the API as performing actions rather than setting values. You may invoke them with the following commands:
+```powershell
+$vmr.command.show
+$vmr.command.restart
+$vmr.command.showvbanchat
+$vmr.command.shutdown
+```
+
 ### Run tests
 Run tests using .\runall.ps1 which accepts two parameters:
 - tag Run tests of this type

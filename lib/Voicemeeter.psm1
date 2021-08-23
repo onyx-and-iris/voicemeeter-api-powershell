@@ -7,6 +7,7 @@ class Remote {
     [System.Collections.ArrayList]$bus
     [System.Collections.ArrayList]$vban_in
     [System.Collections.ArrayList]$vban_out
+    $command
 
     # Constructor
     Remote ([String]$type)
@@ -24,6 +25,7 @@ class Remote {
             $this.bus = Buses
             $this.vban_in = Vban_In
             $this.vban_out = Vban_Out
+            $this.command = Special
         }
         else { Exit }
     }
