@@ -2,7 +2,7 @@ class Special {
     hidden AddPublicMembers($commands) { 
         $commands | ForEach-Object {
             # Define getter
-            # $GetterSignature = "`$this.Getter(`$this.cmd('{0}'))" -f $_
+            $GetterSignature = "`$this.Getter(`$this.cmd('{0}'))" -f $_
             # Define setter
             $SetterSignature = "`$this.Setter(`$this.cmd('{0}'))" -f $_
 
@@ -10,7 +10,7 @@ class Special {
                 Name = $_
                 MemberType = 'ScriptProperty'
                 Value = [ScriptBlock]::Create($SetterSignature)
-                SecondValue = [ScriptBlock]::Create($SetterSignature)
+                SecondValue = [ScriptBlock]::Create($GetterSignature)
             }
             $this | Add-Member @AddMemberParams
         }
@@ -39,7 +39,7 @@ class Special {
             $this._showvbanchat = $this.Setter($this.cmd('DialogShow.VBANCHAT'))
         }`
         {
-            $this._showvbanchat = $this.Setter($this.cmd('DialogShow.VBANCHAT'))
+            $this._showvbanchat = $this.Getter($this.cmd('DialogShow.VBANCHAT'))
         }
     )
 }
