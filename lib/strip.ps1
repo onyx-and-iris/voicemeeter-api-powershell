@@ -1,51 +1,11 @@
+. $PSScriptRoot\meta.ps1
+
 class Strip {
     [int32]$id
     [Array]$string_params
     [Array]$float_params
     [Array]$bool_params
-
-    hidden AddPublicMembers() {
-        [HashTable]$Signatures = @{}
-        @($this.bool_params, $this.string_params, $this.float_params) | ForEach-Object {
-            ForEach($param in $_) {
-                if($this.bool_params.Contains($param)) {
-                    # Define getter
-                    $Signatures["Getter"] = "`$this.Getter(`$this.cmd('{0}'))" -f $param
-                    # Define setter
-                    $Signatures["Setter"] = "param ( [Single]`$arg )`n`$this.Setter(`$this.cmd('{0}'), `$arg)"  `
-                    -f $param
-                }
-                elseif($this.float_params.Contains($param)) {
-                    # Define getter
-                    if($param -eq "limit") {
-                        $Signatures["Getter"] = "[Int]`$this.Getter(`$this.cmd('{0}'))" -f $param
-                    } else {
-                        $Signatures["Getter"] = "[math]::Round(`$this.Getter(`$this.cmd('{0}')), 1)" -f $param
-                    }
-                    # Define setter
-                    $Signatures["Setter"] = "param ( [Single]`$arg )`n`$this.Setter(`$this.cmd('{0}'), `$arg)" `
-                    -f $param
-                }
-                elseif($this.string_params.Contains($param)) {
-                    # Define getter
-                    $Signatures["Getter"] = "[String]`$this.Getter_String(`$this.cmd('{0}'))" -f $param
-                    # Define setter
-                    $Signatures["Setter"] = "param ( [String]`$arg )`n`$this.Setter(`$this.cmd('{0}'), `$arg)" `
-                    -f $param
-                }
-
-                $GetterScriptBlock = [ScriptBlock]::Create($Signatures["Getter"])
-                $SetterScriptBlock = [ScriptBlock]::Create($Signatures["Setter"])
-                $AddMemberParams = @{
-                    Name = $param
-                    MemberType = 'ScriptProperty'
-                    Value = $GetterScriptBlock
-                    SecondValue = $SetterScriptBlock
-                }
-                $this | Add-Member @AddMemberParams
-            }
-        }
-    }
+    [Array]$int_params
 
     # Constructor
     Strip ([Int]$id)
@@ -55,8 +15,9 @@ class Strip {
         $this.bool_params = @('mono', 'solo', 'mute',
         'A1', 'A2', 'A3', 'A4', 'A5',
         'B1', 'B2', 'B3')
-        $this.float_params = @('gain', 'comp', 'gate', 'limit')
-        $this.AddPublicMembers()
+        $this.float_params = @('gain', 'comp', 'gate')
+        $this.int_params = @('limit')
+        AddPublicMembers($this)
     }
 
     [void] Setter($cmd, $set) {
