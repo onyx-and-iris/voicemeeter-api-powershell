@@ -1,39 +1,9 @@
+. $PSScriptRoot\meta.ps1
+
 class Bus {
     [int32]$id
     [Array]$bool_params
     [Array]$float_params
-
-    hidden AddPublicMembers() {
-        [HashTable]$Signatures = @{}
-        @($this.bool_params, $this.float_params) | ForEach-Object {
-            ForEach($param in $_) {
-                if($this.bool_params.Contains($param)) {
-                    # Define getter
-                    $Signatures["Getter"] = "`$this.Getter(`$this.cmd('{0}'))" -f $param
-                    # Define setter
-                    $Signatures["Setter"] = "param ( [Single]`$arg )`n`$this.Setter(`$this.cmd('{0}'), `$arg)"  `
-                    -f $param
-                }
-                elseif($this.float_params.Contains($param)) {
-                    # Define getter
-                    $Signatures["Getter"] = "[math]::Round(`$this.Getter(`$this.cmd('{0}')), 1)" -f $param
-                    # Define setter
-                    $Signatures["Setter"] = "param ( [Single]`$arg )`n`$this.Setter(`$this.cmd('{0}'), `$arg)" `
-                    -f $param
-                }
-
-                $GetterScriptBlock = [ScriptBlock]::Create($Signatures["Getter"])
-                $SetterScriptBlock = [ScriptBlock]::Create($Signatures["Setter"])
-                $AddMemberParams = @{
-                    Name = $param
-                    MemberType = 'ScriptProperty'
-                    Value = $GetterScriptBlock
-                    SecondValue = $SetterScriptBlock
-                }
-                $this | Add-Member @AddMemberParams
-            }
-        }
-    }
 
     # Constructor
     Bus ([Int]$id)
@@ -41,7 +11,7 @@ class Bus {
         $this.id = $id
         $this.bool_params = @('mono', 'mute')
         $this.float_params = @('gain')
-        $this.AddPublicMembers()
+        AddPublicMembers($this)
     }
 
     [void] Setter($cmd, $set) {
@@ -55,6 +25,16 @@ class Bus {
     [string] cmd ($arg) {
         return "Bus[" + $this.id + "].$arg"
     }
+
+    hidden $_eq = $($this | Add-Member ScriptProperty 'eq' `
+        {
+            $this.Getter($this.cmd('EQ.on'))
+        }`
+        {
+            param ( $arg )
+            $this._eq = $this.Setter($this.cmd('EQ.on'), $arg)
+        }
+    )
 }
 
 Function Buses {
