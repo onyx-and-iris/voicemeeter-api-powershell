@@ -5,8 +5,7 @@ class Remote {
     [System.Collections.ArrayList]$button
     [System.Collections.ArrayList]$strip
     [System.Collections.ArrayList]$bus
-    [System.Collections.ArrayList]$vban_in
-    [System.Collections.ArrayList]$vban_out
+    [PSCustomObject]$vban
     $command
 
     # Constructor
@@ -23,8 +22,7 @@ class Remote {
             $this.button = Buttons
             $this.strip = Strips
             $this.bus = Buses
-            $this.vban_in = Vban_In
-            $this.vban_out = Vban_Out
+            $this.vban = Vban
             $this.command = Special
         }
         else { Exit }
