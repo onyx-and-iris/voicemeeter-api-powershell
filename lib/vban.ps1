@@ -4,10 +4,8 @@ class Vban {
     [Array]$stringparams
 
     # Constructor
-    Vban ([Int]$id, [String]$direction)
+    Vban()
     {
-        $this.id = $id
-        $this.direction = $direction
         $this.stringparams = @('name', 'ip')
     }
 
@@ -169,18 +167,40 @@ class Vban {
     )
 }
 
-Function Vban_In {
-    [System.Collections.ArrayList]$vban_in = @()
-    0..$($layout.vban_in-1) | ForEach-Object {
-        [void]$vban_in.Add([Vban]::new($_, "in"))
+
+class VbanInstream : Vban {
+    # Constructor
+    VbanInstream ($id)
+    {
+        $this.id = $id
+        $this.direction = "in"
     }
-    $vban_in
 }
 
-Function Vban_Out {
-    [System.Collections.ArrayList]$vban_out = @()
-    0..$($layout.vban_out-1) | ForEach-Object {
-        [void]$vban_out.Add([Vban]::new($_, "out"))
+
+class VbanOutstream : Vban {
+    # Constructor
+    VbanOutstream ($id)
+    {
+        $this.id = $id
+        $this.direction = "out"
     }
-    $vban_out
+}
+
+Function Vban {
+    [System.Collections.ArrayList]$instream = @()
+    [System.Collections.ArrayList]$outstream = @()
+
+    0..$($layout.vban_in-1) | ForEach-Object {
+        [void]$instream.Add([VbanInstream]::new($_))
+    }
+    0..$($layout.vban_out-1) | ForEach-Object {
+        [void]$outstream.Add([VbanOutstream]::new($_))
+    }
+
+    $obj = [PSCustomObject]@{
+        instream = $instream
+        outstream = $outstream
+    }
+    return $obj
 }
