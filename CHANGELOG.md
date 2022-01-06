@@ -9,7 +9,19 @@ Before any minor/major patch is released all test units will be run to verify th
 ## [Unreleased]
 - [x]
 
+## [2.0] - 2021-01-06
+### Added
+- README and CHANGELOG updated to reflect latest changes.
+- Version 2.0 added to PSGAllery
 
+### Changed
+- Moved meta functions into own module
+- Vban class now custom object comprising of two arrays of subclasses for each stream type
+- Major version bumped due to changes to vban class
+- Pester tests updated to reflect changes.
+
+### Fixed
+- Special commands now throw write only error on read attempt.
 
 ## [1.8] - 2021-08-23
 ### Added
