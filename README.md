@@ -6,9 +6,9 @@ but not every feature is added.
 For past/future changes to this project refer to: [CHANGELOG](CHANGELOG.md)
 
 ## Tested against
-- Basic 1.0.7.8
-- Banana 2.0.5.8
-- Potato 3.0.1.8
+- Basic 1.0.8.1
+- Banana 2.0.6.1
+- Potato 3.0.2.1
 
 You may have success with many commands in earlier versions but some commands
 (example Macrobuttons) were only added to the API in later releases.
@@ -140,9 +140,9 @@ to those parameters will throw an error. They are read and write for outstreams.
 
 example:
 ```powershell
-$vmr.vban_in[0].on = $true
-$vmr.vban_in[2].port = 6990
-$vmr.vban_out[3].bit = 16
+$vmr.vban.instream[0].on = $true
+$vmr.vban.instream[2].port = 6990
+$vmr.vban.outstream[3].bit = 16
 ```
 
 ### Special
