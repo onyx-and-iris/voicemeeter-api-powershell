@@ -644,227 +644,227 @@ Describe -Tag 'higher', -TestName 'All Alias Tests' {
     }
 
     Describe 'VBAN Command Tests' {
-        Context 'vban_in[i].on' {
-            It 'Should set vban_in[0].on to 1' {
-                $vmr.vban_in[0].on = $true
-                $vmr.vban_in[0].on | Should -Be $true
+        Context 'vban.instream[i].on' {
+            It 'Should set vban.instream[0].on to 1' {
+                $vmr.vban.instream[0].on = $true
+                $vmr.vban.instream[0].on | Should -Be $true
             }
 
-            It 'Should set vban_in[0].on to 0' {
-                $vmr.vban_in[0].on = $true
-                $vmr.vban_in[0].on | Should -Be $true
+            It 'Should set vban.instream[0].on to 0' {
+                $vmr.vban.instream[0].on = $true
+                $vmr.vban.instream[0].on | Should -Be $true
             }
 
-            It 'Should set vban_in[1].on to 1' {
-                $vmr.vban_in[1].on = $true
-                $vmr.vban_in[1].on | Should -Be $true
+            It 'Should set vban.instream[1].on to 1' {
+                $vmr.vban.instream[1].on = $true
+                $vmr.vban.instream[1].on | Should -Be $true
             }
 
-            It 'Should set vban_in[1].on to 0' {
-                $vmr.vban_in[1].on = $true
-                $vmr.vban_in[1].on | Should -Be $true
+            It 'Should set vban.instream[1].on to 0' {
+                $vmr.vban.instream[1].on = $true
+                $vmr.vban.instream[1].on | Should -Be $true
             }
 
-            It 'Should set vban_in[2].on to 1' {
-                $vmr.vban_in[2].on = $true
-                $vmr.vban_in[2].on | Should -Be $true
+            It 'Should set vban.instream[2].on to 1' {
+                $vmr.vban.instream[2].on = $true
+                $vmr.vban.instream[2].on | Should -Be $true
             }
 
-            It 'Should set vban_in[2].on to 0' {
-                $vmr.vban_in[2].on = $true
-                $vmr.vban_in[2].on | Should -Be $true
-            }
-        }
-
-        Context 'vban_in[i].name' {
-            It 'Should set vban_in[0].name to test0' {
-                $vmr.vban_in[0].name = 'test0'
-                $vmr.vban_in[0].name | Should -Be 'test0'
-            }
-
-            It 'Should set vban_in[0].name to test1' {
-                $vmr.vban_in[0].name = 'test1'
-                $vmr.vban_in[0].name | Should -Be 'test1'
-            }
-
-            It 'Should set vban_in[1].name to test0' {
-                $vmr.vban_in[1].name = 'test2'
-                $vmr.vban_in[1].name | Should -Be 'test2'
-            }
-
-            It 'Should set vban_in[1].name to test1' {
-                $vmr.vban_in[1].name = 'test3'
-                $vmr.vban_in[1].name | Should -Be 'test3'
-            }
-
-            It 'Should set vban_in[2].name to test0' {
-                $vmr.vban_in[2].name = 'test4'
-                $vmr.vban_in[2].name | Should -Be 'test4'
-            }
-
-            It 'Should set vban_in[2].name to test1' {
-                $vmr.vban_in[2].name = 'test5'
-                $vmr.vban_in[2].name | Should -Be 'test5'
+            It 'Should set vban.instream[2].on to 0' {
+                $vmr.vban.instream[2].on = $true
+                $vmr.vban.instream[2].on | Should -Be $true
             }
         }
 
-        Context 'vban_in[i].ip' {
-            It 'Should set vban_in[0].ip to test0' {
-                $vmr.vban_in[0].ip = '0.0.0.0'
-                $vmr.vban_in[0].ip | Should -Be '0.0.0.0'
+        Context 'vban.instream[i].name' {
+            It 'Should set vban.instream[0].name to test0' {
+                $vmr.vban.instream[0].name = 'test0'
+                $vmr.vban.instream[0].name | Should -Be 'test0'
             }
 
-            It 'Should set vban_in[0].ip to test1' {
-                $vmr.vban_in[0].ip = '127.0.0.1'
-                $vmr.vban_in[0].ip | Should -Be '127.0.0.1'
+            It 'Should set vban.instream[0].name to test1' {
+                $vmr.vban.instream[0].name = 'test1'
+                $vmr.vban.instream[0].name | Should -Be 'test1'
             }
 
-            It 'Should set vban_in[1].ip to test0' {
-                $vmr.vban_in[1].ip = '0.0.0.0'
-                $vmr.vban_in[1].ip | Should -Be '0.0.0.0'
+            It 'Should set vban.instream[1].name to test0' {
+                $vmr.vban.instream[1].name = 'test2'
+                $vmr.vban.instream[1].name | Should -Be 'test2'
             }
 
-            It 'Should set vban_in[1].ip to test1' {
-                $vmr.vban_in[1].ip = '127.0.0.1'
-                $vmr.vban_in[1].ip | Should -Be '127.0.0.1'
+            It 'Should set vban.instream[1].name to test1' {
+                $vmr.vban.instream[1].name = 'test3'
+                $vmr.vban.instream[1].name | Should -Be 'test3'
             }
 
-            It 'Should set vban_in[2].ip to test0' {
-                $vmr.vban_in[2].ip = '0.0.0.0'
-                $vmr.vban_in[2].ip | Should -Be '0.0.0.0'
+            It 'Should set vban.instream[2].name to test0' {
+                $vmr.vban.instream[2].name = 'test4'
+                $vmr.vban.instream[2].name | Should -Be 'test4'
             }
 
-            It 'Should set vban_in[2].ip to test1' {
-                $vmr.vban_in[2].ip = '127.0.0.1'
-                $vmr.vban_in[2].ip | Should -Be '127.0.0.1'
-            }
-        }
-
-        Context 'vban_out[i].sr' {
-            It 'Should set vban_out[0].sr to 44100' {
-                $vmr.vban_out[0].sr = 44100
-                $vmr.vban_out[0].sr | Should -Be 44100
-            }
-
-            It 'Should set vban_out[0].sr to 48000' {
-                $vmr.vban_out[0].sr = 48000
-                $vmr.vban_out[0].sr | Should -Be 48000
-            }
-
-            It 'Should set vban_out[1].sr to 44100' {
-                $vmr.vban_out[1].sr = 44100
-                $vmr.vban_out[1].sr | Should -Be 44100
-            }
-
-            It 'Should set vban_out[1].sr to 48000' {
-                $vmr.vban_out[1].sr = 48000
-                $vmr.vban_out[1].sr | Should -Be 48000
-            }
-
-            It 'Should set vban_out[2].sr to 44100' {
-                $vmr.vban_out[2].sr = 44100
-                $vmr.vban_out[2].sr | Should -Be 44100
-            }
-
-            It 'Should set vban_out[2].sr to 48000' {
-                $vmr.vban_out[2].sr = 48000
-                $vmr.vban_out[2].sr | Should -Be 48000
+            It 'Should set vban.instream[2].name to test1' {
+                $vmr.vban.instream[2].name = 'test5'
+                $vmr.vban.instream[2].name | Should -Be 'test5'
             }
         }
 
-        Context 'vban_out[i].channel' {
-            It 'Should set vban_out[0].channel to 1' {
-                $vmr.vban_out[0].channel = 1
-                $vmr.vban_out[0].channel | Should -Be 1
+        Context 'vban.instream[i].ip' {
+            It 'Should set vban.instream[0].ip to test0' {
+                $vmr.vban.instream[0].ip = '0.0.0.0'
+                $vmr.vban.instream[0].ip | Should -Be '0.0.0.0'
             }
 
-            It 'Should set vban_out[0].channel to 2' {
-                $vmr.vban_out[0].channel = 2
-                $vmr.vban_out[0].channel | Should -Be 2
+            It 'Should set vban.instream[0].ip to test1' {
+                $vmr.vban.instream[0].ip = '127.0.0.1'
+                $vmr.vban.instream[0].ip | Should -Be '127.0.0.1'
             }
 
-            It 'Should set vban_out[1].channel to 3' {
-                $vmr.vban_out[1].channel = 3
-                $vmr.vban_out[1].channel | Should -Be 3
+            It 'Should set vban.instream[1].ip to test0' {
+                $vmr.vban.instream[1].ip = '0.0.0.0'
+                $vmr.vban.instream[1].ip | Should -Be '0.0.0.0'
             }
 
-            It 'Should set vban_out[1].channel to 4' {
-                $vmr.vban_out[1].channel = 4
-                $vmr.vban_out[1].channel | Should -Be 4
+            It 'Should set vban.instream[1].ip to test1' {
+                $vmr.vban.instream[1].ip = '127.0.0.1'
+                $vmr.vban.instream[1].ip | Should -Be '127.0.0.1'
             }
 
-            It 'Should set vban_out[2].channel to 5' {
-                $vmr.vban_out[2].channel = 5
-                $vmr.vban_out[2].channel | Should -Be 5
+            It 'Should set vban.instream[2].ip to test0' {
+                $vmr.vban.instream[2].ip = '0.0.0.0'
+                $vmr.vban.instream[2].ip | Should -Be '0.0.0.0'
             }
 
-            It 'Should set vban_out[2].channel to 6' {
-                $vmr.vban_out[2].channel = 6
-                $vmr.vban_out[2].channel | Should -Be 6
-            }
-        }
-
-        Context 'vban_out[i].bit' {
-            It 'Should set vban_out[0].bit to 16' {
-                $vmr.vban_out[0].bit = 16
-                $vmr.vban_out[0].bit | Should -Be 16
-            }
-
-            It 'Should set vban_out[0].bit to 24' {
-                $vmr.vban_out[0].bit = 24
-                $vmr.vban_out[0].bit | Should -Be 24
-            }
-
-            It 'Should set vban_out[1].bit to 16' {
-                $vmr.vban_out[1].bit = 16
-                $vmr.vban_out[1].bit | Should -Be 16
-            }
-
-            It 'Should set vban_out[1].bit to 24' {
-                $vmr.vban_out[1].bit = 24
-                $vmr.vban_out[1].bit | Should -Be 24
-            }
-
-            It 'Should set vban_out[2].bit to 16' {
-                $vmr.vban_out[2].bit = 16
-                $vmr.vban_out[2].bit | Should -Be 16
-            }
-
-            It 'Should set vban_out[2].bit to 24' {
-                $vmr.vban_out[2].bit = 24
-                $vmr.vban_out[2].bit | Should -Be 24
+            It 'Should set vban.instream[2].ip to test1' {
+                $vmr.vban.instream[2].ip = '127.0.0.1'
+                $vmr.vban.instream[2].ip | Should -Be '127.0.0.1'
             }
         }
 
-        Context 'vban_out[i].route' {
-            It 'Should set vban_out[0].route to 0' {
-                $vmr.vban_out[0].route = 0
-                $vmr.vban_out[0].route | Should -Be 0
+        Context 'vban.outstream[i].sr' {
+            It 'Should set vban.outstream[0].sr to 44100' {
+                $vmr.vban.outstream[0].sr = 44100
+                $vmr.vban.outstream[0].sr | Should -Be 44100
             }
 
-            It 'Should set vban_out[0].route to 1' {
-                $vmr.vban_out[0].route = 1
-                $vmr.vban_out[0].route | Should -Be 1
+            It 'Should set vban.outstream[0].sr to 48000' {
+                $vmr.vban.outstream[0].sr = 48000
+                $vmr.vban.outstream[0].sr | Should -Be 48000
             }
 
-            It 'Should set vban_out[1].route to 2' {
-                $vmr.vban_out[1].route = 2
-                $vmr.vban_out[1].route | Should -Be 2
+            It 'Should set vban.outstream[1].sr to 44100' {
+                $vmr.vban.outstream[1].sr = 44100
+                $vmr.vban.outstream[1].sr | Should -Be 44100
             }
 
-            It 'Should set vban_out[1].route to 3' {
-                $vmr.vban_out[1].route = 3
-                $vmr.vban_out[1].route | Should -Be 3
+            It 'Should set vban.outstream[1].sr to 48000' {
+                $vmr.vban.outstream[1].sr = 48000
+                $vmr.vban.outstream[1].sr | Should -Be 48000
             }
 
-            It 'Should set vban_out[2].route to 4' {
-                $vmr.vban_out[2].route = 4
-                $vmr.vban_out[2].route | Should -Be 4
+            It 'Should set vban.outstream[2].sr to 44100' {
+                $vmr.vban.outstream[2].sr = 44100
+                $vmr.vban.outstream[2].sr | Should -Be 44100
             }
 
-            It 'Should set vban_out[2].route to 5' {
-                $vmr.vban_out[2].route = 5
-                $vmr.vban_out[2].route | Should -Be 5
+            It 'Should set vban.outstream[2].sr to 48000' {
+                $vmr.vban.outstream[2].sr = 48000
+                $vmr.vban.outstream[2].sr | Should -Be 48000
+            }
+        }
+
+        Context 'vban.outstream[i].channel' {
+            It 'Should set vban.outstream[0].channel to 1' {
+                $vmr.vban.outstream[0].channel = 1
+                $vmr.vban.outstream[0].channel | Should -Be 1
+            }
+
+            It 'Should set vban.outstream[0].channel to 2' {
+                $vmr.vban.outstream[0].channel = 2
+                $vmr.vban.outstream[0].channel | Should -Be 2
+            }
+
+            It 'Should set vban.outstream[1].channel to 3' {
+                $vmr.vban.outstream[1].channel = 3
+                $vmr.vban.outstream[1].channel | Should -Be 3
+            }
+
+            It 'Should set vban.outstream[1].channel to 4' {
+                $vmr.vban.outstream[1].channel = 4
+                $vmr.vban.outstream[1].channel | Should -Be 4
+            }
+
+            It 'Should set vban.outstream[2].channel to 5' {
+                $vmr.vban.outstream[2].channel = 5
+                $vmr.vban.outstream[2].channel | Should -Be 5
+            }
+
+            It 'Should set vban.outstream[2].channel to 6' {
+                $vmr.vban.outstream[2].channel = 6
+                $vmr.vban.outstream[2].channel | Should -Be 6
+            }
+        }
+
+        Context 'vban.outstream[i].bit' {
+            It 'Should set vban.outstream[0].bit to 16' {
+                $vmr.vban.outstream[0].bit = 16
+                $vmr.vban.outstream[0].bit | Should -Be 16
+            }
+
+            It 'Should set vban.outstream[0].bit to 24' {
+                $vmr.vban.outstream[0].bit = 24
+                $vmr.vban.outstream[0].bit | Should -Be 24
+            }
+
+            It 'Should set vban.outstream[1].bit to 16' {
+                $vmr.vban.outstream[1].bit = 16
+                $vmr.vban.outstream[1].bit | Should -Be 16
+            }
+
+            It 'Should set vban.outstream[1].bit to 24' {
+                $vmr.vban.outstream[1].bit = 24
+                $vmr.vban.outstream[1].bit | Should -Be 24
+            }
+
+            It 'Should set vban.outstream[2].bit to 16' {
+                $vmr.vban.outstream[2].bit = 16
+                $vmr.vban.outstream[2].bit | Should -Be 16
+            }
+
+            It 'Should set vban.outstream[2].bit to 24' {
+                $vmr.vban.outstream[2].bit = 24
+                $vmr.vban.outstream[2].bit | Should -Be 24
+            }
+        }
+
+        Context 'vban.outstream[i].route' {
+            It 'Should set vban.outstream[0].route to 0' {
+                $vmr.vban.outstream[0].route = 0
+                $vmr.vban.outstream[0].route | Should -Be 0
+            }
+
+            It 'Should set vban.outstream[0].route to 1' {
+                $vmr.vban.outstream[0].route = 1
+                $vmr.vban.outstream[0].route | Should -Be 1
+            }
+
+            It 'Should set vban.outstream[1].route to 2' {
+                $vmr.vban.outstream[1].route = 2
+                $vmr.vban.outstream[1].route | Should -Be 2
+            }
+
+            It 'Should set vban.outstream[1].route to 3' {
+                $vmr.vban.outstream[1].route = 3
+                $vmr.vban.outstream[1].route | Should -Be 3
+            }
+
+            It 'Should set vban.outstream[2].route to 4' {
+                $vmr.vban.outstream[2].route = 4
+                $vmr.vban.outstream[2].route | Should -Be 4
+            }
+
+            It 'Should set vban.outstream[2].route to 5' {
+                $vmr.vban.outstream[2].route = 5
+                $vmr.vban.outstream[2].route | Should -Be 5
             }
         }
     }
