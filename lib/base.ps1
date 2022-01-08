@@ -26,9 +26,6 @@ Function Setup_DLL {
         return $false
     }
 
-    
-
-
 $Signature = @"
     [DllImport(@"$dll")]
     public static extern int VBVMR_Login();

@@ -1,6 +1,6 @@
-Function AddPublicMembers($this) {
+Function AddPublicMembers($obj) {
     [HashTable]$Signatures = @{}
-    ForEach($param in $this.bool_params) {
+    ForEach($param in $obj.bool_params) {
         # Define getter
         $Signatures["Getter"] = "`$this.Getter(`$this.cmd('{0}'))" -f $param
         # Define setter
@@ -10,7 +10,7 @@ Function AddPublicMembers($this) {
         Addmember
     }
 
-    ForEach($param in $this.float_params) {
+    ForEach($param in $obj.float_params) {
         # Define getter
         $Signatures["Getter"] = "[math]::Round(`$this.Getter(`$this.cmd('{0}')), 1)" -f $param
         # Define setter
@@ -20,7 +20,7 @@ Function AddPublicMembers($this) {
         Addmember
     }
     
-    ForEach($param in $this.int_params) {
+    ForEach($param in $obj.int_params) {
         # Define getter
         $Signatures["Getter"] = "[Int]`$this.Getter(`$this.cmd('{0}'))" -f $param
         # Define setter
@@ -30,7 +30,7 @@ Function AddPublicMembers($this) {
         Addmember
     }
 
-    ForEach($param in $this.string_params) {
+    ForEach($param in $obj.string_params) {
         # Define getter
         $Signatures["Getter"] = "[String]`$this.Getter_String(`$this.cmd('{0}'))" -f $param
         # Define setter
@@ -48,5 +48,5 @@ Function Addmember{
         Value = [ScriptBlock]::Create($Signatures["Getter"])
         SecondValue = [ScriptBlock]::Create($Signatures["Setter"])
     }
-    $this | Add-Member @AddMemberParams
+    $obj | Add-Member @AddMemberParams
 }

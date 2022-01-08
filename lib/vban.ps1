@@ -171,8 +171,7 @@ class Vban {
 
 class VbanInstream : Vban {
     # Constructor
-    VbanInstream ([int]$id) : base ($id)
-    {
+    VbanInstream ([int]$id) : base ($id){
         $this.direction = "in"
     }
 }
@@ -180,8 +179,7 @@ class VbanInstream : Vban {
 
 class VbanOutstream : Vban {
     # Constructor
-    VbanOutstream ([int]$id) : base ($id)
-    {
+    VbanOutstream ([int]$id) : base ($id){
         $this.direction = "out"
     }
 }
