@@ -4,8 +4,9 @@ class Vban {
     [Array]$stringparams
 
     # Constructor
-    Vban()
+    Vban($id)
     {
+        $this.id = $id
         $this.stringparams = @('name', 'ip')
     }
 
@@ -170,9 +171,8 @@ class Vban {
 
 class VbanInstream : Vban {
     # Constructor
-    VbanInstream ($id)
+    VbanInstream ([int]$id) : base ($id)
     {
-        $this.id = $id
         $this.direction = "in"
     }
 }
@@ -180,9 +180,8 @@ class VbanInstream : Vban {
 
 class VbanOutstream : Vban {
     # Constructor
-    VbanOutstream ($id)
+    VbanOutstream ([int]$id) : base ($id)
     {
-        $this.id = $id
         $this.direction = "out"
     }
 }
@@ -198,9 +197,8 @@ Function Vban {
         [void]$outstream.Add([VbanOutstream]::new($_))
     }
 
-    $obj = [PSCustomObject]@{
+    [PSCustomObject]@{
         instream = $instream
         outstream = $outstream
     }
-    return $obj
 }
