@@ -1,23 +1,27 @@
 . $PSScriptRoot\meta.ps1
 
 class Strip {
-    [int32]$id
+    [Int]$id
     [Array]$string_params
     [Array]$float_params
     [Array]$bool_params
     [Array]$int_params
+    [Int]$num_strip
+    [Int]$num_bus
 
     # Constructor
-    Strip ([Int]$id)
+    Strip ([Int]$id, [Int]$num_strip, [Int]$num_bus)
     {
         $this.id = $id
+        $this.num_strip = $num_strip
+        $this.num_bus = $num_bus
         $this.string_params = @('label')
-        $this.bool_params = @('mono', 'solo', 'mute',
-        'A1', 'A2', 'A3', 'A4', 'A5',
-        'B1', 'B2', 'B3')
+        $this.bool_params = @('mono', 'solo', 'mute')
         $this.float_params = @('gain', 'comp', 'gate')
         $this.int_params = @('limit')
-        AddPublicMembers($this)
+
+        $this.SetChannelLayout()
+        AddPublicMembers($this)   
     }
 
     [void] Setter($cmd, $set) {
@@ -38,12 +42,23 @@ class Strip {
     [String] cmd ($arg) {
         return "Strip[" + $this.id + "].$arg"
     }
+
+    SetChannelLayout() {
+        $this.bool_params
+        0..($this.num_strip -1) | ForEach-Object {
+            $this.bool_params += "A{0}" -f $_
+        }
+        0..($this.num_bus -1) | ForEach-Object {
+            $this.bool_params += "B{0}" -f $_
+        }
+    }
 }
+
 
 Function Strips {
     [System.Collections.ArrayList]$strip = @()
     0..$($layout.Strip-1) | ForEach-Object {
-        [void]$strip.Add([Strip]::new($_))
+        [void]$strip.Add([Strip]::new($_, $layout.Strip, $layout.Bus))
     }
     $strip
 }

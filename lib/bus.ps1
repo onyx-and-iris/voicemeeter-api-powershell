@@ -1,7 +1,7 @@
 . $PSScriptRoot\meta.ps1
 
 class Bus {
-    [int32]$id
+    [Int]$id
     [Array]$bool_params
     [Array]$float_params
 
