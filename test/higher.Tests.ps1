@@ -651,8 +651,8 @@ Describe -Tag 'higher', -TestName 'All Alias Tests' {
             }
 
             It 'Should set vban.instream[0].on to 0' {
-                $vmr.vban.instream[0].on = $true
-                $vmr.vban.instream[0].on | Should -Be $true
+                $vmr.vban.instream[0].on = $false
+                $vmr.vban.instream[0].on | Should -Be $false
             }
 
             It 'Should set vban.instream[1].on to 1' {
@@ -661,8 +661,8 @@ Describe -Tag 'higher', -TestName 'All Alias Tests' {
             }
 
             It 'Should set vban.instream[1].on to 0' {
-                $vmr.vban.instream[1].on = $true
-                $vmr.vban.instream[1].on | Should -Be $true
+                $vmr.vban.instream[1].on = $false
+                $vmr.vban.instream[1].on | Should -Be $false
             }
 
             It 'Should set vban.instream[2].on to 1' {
@@ -671,8 +671,8 @@ Describe -Tag 'higher', -TestName 'All Alias Tests' {
             }
 
             It 'Should set vban.instream[2].on to 0' {
-                $vmr.vban.instream[2].on = $true
-                $vmr.vban.instream[2].on | Should -Be $true
+                $vmr.vban.instream[2].on = $false
+                $vmr.vban.instream[2].on | Should -Be $false
             }
         }
 
@@ -737,6 +737,38 @@ Describe -Tag 'higher', -TestName 'All Alias Tests' {
             It 'Should set vban.instream[2].ip to test1' {
                 $vmr.vban.instream[2].ip = '127.0.0.1'
                 $vmr.vban.instream[2].ip | Should -Be '127.0.0.1'
+            }
+        }
+
+        Context 'vban.outstream[i].on' {
+            It 'Should set vban.outstream[0].on to 1' {
+                $vmr.vban.outstream[0].on = $true
+                $vmr.vban.outstream[0].on | Should -Be $true
+            }
+
+            It 'Should set vban.outstream[0].on to 0' {
+                $vmr.vban.outstream[0].on = $false
+                $vmr.vban.outstream[0].on | Should -Be $false
+            }
+
+            It 'Should set vban.outstream[1].on to 1' {
+                $vmr.vban.outstream[1].on = $true
+                $vmr.vban.outstream[1].on | Should -Be $true
+            }
+
+            It 'Should set vban.outstream[1].on to 0' {
+                $vmr.vban.outstream[1].on = $false
+                $vmr.vban.outstream[1].on | Should -Be $false
+            }
+
+            It 'Should set vban.outstream[2].on to 1' {
+                $vmr.vban.outstream[2].on = $true
+                $vmr.vban.outstream[2].on | Should -Be $true
+            }
+
+            It 'Should set vban.outstream[2].on to 0' {
+                $vmr.vban.outstream[2].on = $false
+                $vmr.vban.outstream[2].on | Should -Be $false
             }
         }
 
