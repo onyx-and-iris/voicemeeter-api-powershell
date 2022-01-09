@@ -23,11 +23,11 @@ class Special {
     }
 
     [String] Getter($param) {
-        return Write-Warning("ERROR: " + $param + " is a write only parameter")
+        return Write-Warning("ERROR: Usage: $param")
     }
 
-    [void] Setter($param) {
-        Param_Set -PARAM $param -VALUE 1
+    [void] Setter($param, $val = $true) {
+        Param_Set -PARAM $param -VALUE $(if ($val) {1} else {0})
     }    
 
     [String] cmd ($arg) {
@@ -36,10 +36,21 @@ class Special {
 
     hidden $_showvbanchat = $($this | Add-Member ScriptProperty 'showvbanchat' `
         {
-            $this._showvbanchat = $this.Setter($this.cmd('DialogShow.VBANCHAT'))
+            $this.Getter($this.cmd('DialogShow.VBANCHAT'))
         }`
         {
-            $this._showvbanchat = $this.Getter($this.cmd('DialogShow.VBANCHAT'))
+            param( [bool]$arg )
+            $this._showvbanchat = $this.Setter($this.cmd('DialogShow.VBANCHAT'), $arg)
+        }
+    )
+
+    hidden $_lock = $($this | Add-Member ScriptProperty 'lock' `
+        {
+            $this._lock = $this.Getter($this.cmd('lock'))
+        }`
+        {
+            param( [bool]$arg )
+            $this._lock = $this.Setter($this.cmd('lock'), $arg)
         }
     )
 }
