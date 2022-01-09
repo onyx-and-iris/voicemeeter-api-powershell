@@ -900,4 +900,26 @@ Describe -Tag 'higher', -TestName 'All Alias Tests' {
             }
         }
     }
+
+    Describe 'Special Commands Test' {
+        Context 'command.showvbanchat' {
+            It 'Should set showvbanchat to 1' {
+                $vmr.command.showvbanchat = $true
+            }
+
+            It 'Should set showvbanchat to 0' {
+                $vmr.command.showvbanchat = $false
+            }
+        }
+
+        Context 'command.lock' {
+            It 'Should set command.lock to 1' {
+                $vmr.command.lock = $true
+            }
+
+            It 'Should set command.lock to 0' {
+                $vmr.command.lock = $false
+            }
+        }
+    }
 }
