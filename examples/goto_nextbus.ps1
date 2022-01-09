@@ -5,10 +5,11 @@
     Credits go to @bobsupercow
 #>
 
-# 1) Loop through an array of buses. Toggle mute for first unmuted bus
-# 2) If next bus in array exists, unmute it
-# 3) else unmute the first bus specified in array.
-# 4) If every bus in array is muted, unmute the first bus specified in array.
+# 1) Loop through an array of buses. 
+# 2) Mute first unmuted bus
+# 3) If next bus in array exists, unmute it
+# 4) else unmute the first bus specified in array.
+# 5) If every bus in array is muted, unmute the first bus specified in array.
 
 Import-Module Voicemeeter
 
@@ -19,24 +20,23 @@ try {
     $unmutedIndex = $null
     [int32[]]$buses = @(1,2,4,6)
 
+    # 1)
     0..($buses.Length -1) | ForEach-Object {
-        # 1)
-        if (-not $vmr.bus[$buses[$_]].mute){
+        # 2)
+        if ( -not $vmr.bus[$buses[$_]].mute ){
             $unmutedIndex = $_
             $vmr.bus[$buses[$unmutedIndex]].mute = $true
 
-            # 2)
-            if ($unmutedIndex -lt ($buses.Length -1)){
-                $vmr.bus[$buses[++$unmutedIndex]].mute = $false
+            # 3)
+            if ( $buses[++$unmutedIndex] ){
+                $vmr.bus[$buses[$unmutedIndex]].mute = $false
                 break
             }
-            # 3)
-            else {
-                $vmr.bus[$buses[0]].mute = $false
-            }
+            # 4)
+            else { $vmr.bus[$buses[0]].mute = $false }
         }
     }   
-    # 4)
-    if ($null -eq $unmutedIndex) { $vmr.bus[$buses[0]].mute = -not $vmr.bus[$buses[0]].mute }
+    # 5)
+    if ( $null -eq $unmutedIndex ) { $vmr.bus[$buses[0]].mute = $false }
 
 } finally { $vmr.Logout() }
