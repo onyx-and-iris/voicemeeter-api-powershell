@@ -37,10 +37,21 @@ class Bus {
     )
 }
 
+class PhysicalBus : Bus {
+    PhysicalBus ([Int]$id) : base ($id) {
+    }
+}
+
+class VirtualBus : Bus {
+    VirtualBus ([Int]$id) : base ($id) {
+    }
+}
+
 Function Buses {
     [System.Collections.ArrayList]$bus = @()
-    0..$($layout.Bus-1) | ForEach-Object {
-        [void]$bus.Add([Bus]::new($_))
+    0..$($layout.p_out + $layout.v_out -1) | ForEach-Object {
+        if ($_ -lt $layout.p_out) { [void]$bus.Add([PhysicalBus]::new($_)) }
+        else { [void]$bus.Add([VirtualBus]::new($_)) }
     }
     $bus
 }

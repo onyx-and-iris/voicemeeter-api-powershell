@@ -4,23 +4,28 @@ class Strip {
     [Int]$id
     [Array]$string_params
     [Array]$float_params
-    [Array]$bool_params
+    [System.Collections.ArrayList]$bool_params
     [Array]$int_params
-    [Int]$num_strip
-    [Int]$num_bus
+
+    hidden SetChannelLayout($num_A, $num_B) {
+        1..$num_A | ForEach-Object {
+            $this.bool_params.Add("A{0}" -f $_)
+        }
+        1..$num_B | ForEach-Object {
+            $this.bool_params.Add("B{0}" -f $_)
+        }
+    }
 
     # Constructor
-    Strip ([Int]$id, [Int]$num_strip, [Int]$num_bus)
+    Strip ([Int]$id, [Int]$num_A, [Int]$num_B)
     {
         $this.id = $id
-        $this.num_strip = $num_strip
-        $this.num_bus = $num_bus
         $this.string_params = @('label')
-        $this.bool_params = @('mono', 'solo', 'mute')
         $this.float_params = @('gain', 'comp', 'gate')
         $this.int_params = @('limit')
+        $this.bool_params = @('mono', 'solo', 'mute')
+        $this.SetChannelLayout($num_A, $num_B)
 
-        $this.SetChannelLayout()
         AddPublicMembers($this)   
     }
 
@@ -43,22 +48,43 @@ class Strip {
         return "Strip[" + $this.id + "].$arg"
     }
 
-    SetChannelLayout() {
-        $this.bool_params
-        0..($this.num_strip -1) | ForEach-Object {
-            $this.bool_params += "A{0}" -f $_
+    hidden $_device = $($this | Add-Member ScriptProperty 'device' `
+        {
+            $this.Getter_String($this.cmd('device.name'))
+        }`
+        {
+            return Write-Warning("ERROR: " + $this.cmd('device.name') +  " is read only")
         }
-        0..($this.num_bus -1) | ForEach-Object {
-            $this.bool_params += "B{0}" -f $_
+    )
+
+    hidden $_sr = $($this | Add-Member ScriptProperty 'sr' `
+        {
+            $this.Getter_String($this.cmd('device.sr'))
+        }`
+        {
+            return Write-Warning("ERROR: " + $this.cmd('device.sr') +  " is read only")
         }
+    )
+}
+
+class PhysicalStrip : Strip {
+    PhysicalStrip ([Int]$id, [Int]$num_A, [Int]$num_B) : base ($id, $num_A, $num_B) {
+    }
+}
+
+class VirtualStrip : Strip {
+    VirtualStrip ([Int]$id, [Int]$num_A, [Int]$num_B) : base ($id, $num_A, $num_B) {
     }
 }
 
 
 Function Strips {
     [System.Collections.ArrayList]$strip = @()
-    0..$($layout.Strip-1) | ForEach-Object {
-        [void]$strip.Add([Strip]::new($_, $layout.Strip, $layout.Bus))
+    0..$($layout.p_in + $layout.v_in - 1) | ForEach-Object {
+        if ($_ -lt $layout.p_in) { 
+            [void]$strip.Add([PhysicalStrip]::new($_, $layout.p_out, $layout.v_out)) 
+        }
+        else { [void]$strip.Add([VirtualStrip]::new($_, $layout.p_out, $layout.v_out)) }
     }
     $strip
 }
