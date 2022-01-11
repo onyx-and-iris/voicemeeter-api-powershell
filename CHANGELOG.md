@@ -9,6 +9,20 @@ Before any minor/major patch is released all test units will be run to verify th
 ## [Unreleased]
 - [x]
 
+## [2.1] - 2021-01-11
+### Added
+- Special command lock
+- Special command showvbanchat
+- vban.enable command added (toggle vban)
+- README and CHANGELOG updated to reflect latest changes.
+- Version 2.1 added to PSGAllery
+
+### Changed
+- Subclass strip and bus classes into physical/virtual buses.
+
+### Fixed
+- Special command showvbanchat now accepts boolean
+
 ## [2.0] - 2021-01-06
 ### Added
 - README and CHANGELOG updated to reflect latest changes.
