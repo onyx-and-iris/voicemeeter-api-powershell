@@ -124,6 +124,9 @@ $vmr.button[5].trigger = $true
 ```
 
 ### VBAN
+#### vmr.vban.enable
+
+Toggle VBAN on or off. Accepts a boolean value.
 For each vban in/out stream the following parameters are defined:
 - on: boolean
 - name: string
@@ -140,18 +143,30 @@ to those parameters will throw an error. They are read and write for outstreams.
 
 example:
 ```powershell
+$vmr.vban.enable = $true
+
 $vmr.vban.instream[0].on = $true
 $vmr.vban.instream[2].port = 6990
 $vmr.vban.outstream[3].bit = 16
 ```
 
 ### Special
-Certain 'special' commands are defined by the API as performing actions rather than setting values. You may invoke them with the following commands:
+Certain 'special' commands are defined by the API as performing actions rather than setting values.
+
+The following methods are available:
+- show
+- restart
+- shutdown
+
+The following properties are write only and accept boolean values:
+- showvbanchat
+- lock
+
+example:
 ```powershell
 $vmr.command.show
-$vmr.command.restart
-$vmr.command.showvbanchat
-$vmr.command.shutdown
+
+$vmr.command.lock = $true
 ```
 
 ### Run tests
