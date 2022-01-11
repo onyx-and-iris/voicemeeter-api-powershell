@@ -184,6 +184,7 @@ class VbanOutstream : Vban {
     }
 }
 
+
 Function Vban {
     [System.Collections.ArrayList]$instream = @()
     [System.Collections.ArrayList]$outstream = @()
@@ -195,8 +196,19 @@ Function Vban {
         [void]$outstream.Add([VbanOutstream]::new($_))
     }
 
-    [PSCustomObject]@{
+    $CustomObject = [PSCustomObject]@{
         instream = $instream
         outstream = $outstream
+    } 
+    
+    $CustomObject | Add-Member ScriptProperty 'enable' `
+    {
+        return Write-Warning("ERROR: vban.enable is write only")
+    }`
+    {
+        param( [bool]$arg )
+        Param_Set -PARAM 'vban.Enable' -VALUE $(if ($arg) {1} else {0})
     }
+
+    $CustomObject
 }
