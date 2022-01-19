@@ -87,8 +87,11 @@ try {
         strip_2 = @{mute = $true; mono = $true};
         bus_1 = @{mute = $true; mono = $true};
 
-        mb_34 = @{state = $true};
-        mb_12 = @{trigger = $false};
+        button_34 = @{state = $true};
+        button_12 = @{trigger = $false};
+
+        vban_instream_3 = @{name = 'streamname'};
+        vban_outstream_0 = @{on = $false};
     }
 
     $vmr.Set_Multi($hash)
@@ -124,9 +127,8 @@ $vmr.button[5].trigger = $true
 ```
 
 ### VBAN
-#### vmr.vban.enable
+- vmr.vban.enable: Toggle VBAN on or off. Accepts a boolean value.
 
-Toggle VBAN on or off. Accepts a boolean value.
 For each vban in/out stream the following parameters are defined:
 - on: boolean
 - name: string

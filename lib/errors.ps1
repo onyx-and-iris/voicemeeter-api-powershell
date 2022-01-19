@@ -1,7 +1,7 @@
-class VBPathError : Exception {
+class VMRemoteErrors : Exception {
     [String]$msg
 
-    VBPathError([String]$msg) {
+    VMRemoteErrors([String]$msg) {
         $this.msg = $msg
     }
 
@@ -10,19 +10,12 @@ class VBPathError : Exception {
     }
 }
 
-class LoginError : Exception {
-    [String]$msg
-
-    LoginError([String]$msg) {
-        $this.msg = $msg
-    }
-
-    [String] ErrorMessage() {
-        return $this.msg
+class LoginError : VMRemoteErrors {
+    LoginError([String]$msg) : Base([String]$msg) {
     }
 }
 
-class CAPIError : Exception {
+class CAPIError : VMRemoteErrors {
     [Int]$retval
     [String]$caller
 

@@ -13,7 +13,7 @@ Function Setup_DLL {
         $vb_path = Get_VBPath
 
         if([string]::IsNullOrWhiteSpace($vb_path)) {
-            throw [VBPathError]::new("ERROR: Couldn't get Voicemeeter path")
+            throw [VMRemoteErrors]::new("ERROR: Couldn't get Voicemeeter path")
         }
         else {
             $dll = Join-Path -Path $vb_path -ChildPath ("VoicemeeterRemote" + `
@@ -21,7 +21,7 @@ Function Setup_DLL {
             ".dll")
         }
     }
-    catch [VBPathError] {
+    catch [VMRemoteErrors] {
         Write-Warning $_.Exception.ErrorMessage()
         return $false
     }
@@ -63,7 +63,6 @@ $Signature = @"
     return $true
 }
 
-
 Function Param_Set_Multi {
     param(
         [HashTable]$HASH
@@ -71,45 +70,21 @@ Function Param_Set_Multi {
     Start-Sleep -m 50
     while(M_Dirty) { Start-Sleep -m 1 }
 
-    $cmd_strip = [String]::new(512)
-    $cmd_bus = [String]::new(512)
+    foreach ($key in $HASH.keys) { 
+        $classobj , $m2, $m3 = $key.Split("_")
+        if ($m2 -match "^\d+$") {$index = [int]$m2} else {$index = [int]$m3}
 
-    $textInfo = (Get-Culture).TextInfo
-    ForEach($key in $HASH.keys) {
-        $identifier = $key.Split("_")[0]
-        $num = $key.Split("_")[1]
-        $val = if($HASH.Item($key).values -eq "True") {1} else {0}
+        foreach ($h in $HASH[$key].GetEnumerator()) {
+            $property = $h.Name
+            $value = $h.Value
+            if ($value -in ('False', 'True')) { [System.Convert]::ToBoolean($value) }
 
-        if($identifier -eq "strip") {
-            ForEach($k in $HASH.Item($key).keys) {
-                    $param = $textInfo.ToTitleCase($k)
-                    $cmd_strip += "Strip[$num].$param=$val;"
-                }
+            Switch($classobj) {
+                'strip' { $this.strip[$index].$property = $value }
+                'bus' { $this.bus[$index].$property = $value }
+                {($_ -eq 'button') -or ($_ -eq 'mb')} { $this.button[$index].$property = $value }
+                'vban' { $this.vban.$m2[$index].$property = $value }
             }
-        elseif($identifier -eq "bus") {
-            ForEach($k in $HASH.Item($key).keys) {
-                $param = $textInfo.ToTitleCase($k)
-                $cmd_bus += "Bus[$num].$param=$val;"
-            }
-        }
-        elseif($identifier -eq "mb") {
-            ForEach($k in $HASH.Item($key).keys) {
-                if($k -eq "state") { $mode = 1 }
-                elseif($k -eq "stateonly") { $mode = 2 }
-                elseif($k -eq "trigger") { $mode = 3 }
-
-                MB_Set -ID $num -SET $val -MODE $mode
-            }
-        }
-    }
-
-    @($cmd_bus, $cmd_strip) | ForEach-Object {
-        try {
-            $retval = [Int][Voicemeeter.Remote]::VBVMR_SetParameters($_.Substring(1))
-            if($retval) { Throw [CAPIError]::new($retval, $MyInvocation.MyCommand) }
-        }
-        catch [CAPIError] {
-            Write-Warning $_.Exception.ErrorMessage()
         }
     }
 }
@@ -264,25 +239,27 @@ Function Login {
         $retval = [Int][Voicemeeter.Remote]::VBVMR_Login()
         if(-not $retval) { Write-Host("LOGGED IN") }
         elseif($retval -eq 1) {
-            Write-Host("VB NOT RUNNING")
-            New-Variable -Name vbtype -Value 0
+            Write-Host("VM NOT RUNNING")
+            New-Variable -Name kind -Value 0
 
             Switch($TYPE) {
-                'basic' { $vbtype = 1; Break}
-                'banana' { $vbtype = 2; Break}
+                'basic' { $kind = 1; Break}
+                'banana' { $kind = 2; Break}
                 'potato' {
                     if ([Environment]::Is64BitOperatingSystem) {
-                            $vbtype = 6
-                        } else { $vbtype = 3 }
+                            $kind = 6
+                        } else { $kind = 3 }
                     Break
                 }
                 Default { throw [LoginError]::new('Unknown Voicemeeter type') }
             }
 
-            $retval = [Int][Voicemeeter.Remote]::VBVMR_RunVoicemeeter([Int64]$vbtype)
-            if(-not $retval) { Write-Host("STARTING VB") }
+            $retval = [Int][Voicemeeter.Remote]::VBVMR_RunVoicemeeter([Int64]$kind)
+            if(-not $retval) { Write-Host("STARTING VOICEMEETER") }
             else { Throw [CAPIError]::new($retval, $MyInvocation.MyCommand) }
             Start-Sleep -s 1
+        } elseif ($retval -eq -2) { 
+            throw [LoginError]::new('Login may only be called once per session')
         } else { Exit }
     }
     catch [LoginError], [CAPIError] {
