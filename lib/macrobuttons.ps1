@@ -7,12 +7,12 @@ class MacroButton {
         $this.id = $id
     }
 
-    [void] Setter($set, $mode) {
-        MB_Set -ID $this.id -SET $set -MODE $mode
-    }
-
     [int] Getter($mode) {
         return MB_Get -ID $this.id -MODE $mode
+    }
+
+    [void] Setter($set, $mode) {
+        MB_Set -ID $this.id -SET $set -MODE $mode
     }
 
     hidden $_state = $($this | Add-Member ScriptProperty 'state' `
@@ -46,7 +46,7 @@ class MacroButton {
     )
 }
 
-Function Buttons {
+Function Make_Buttons {
     [System.Collections.ArrayList]$button = @()
     0..69 | ForEach-Object {
         [void]$button.Add([MacroButton]::new($_))

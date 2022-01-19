@@ -1,25 +1,10 @@
+. $PSScriptRoot\meta.ps1
+
 class Special {
-    hidden AddPublicMembers($commands) { 
-        $commands | ForEach-Object {
-            # Define getter
-            $GetterSignature = "`$this.Getter(`$this.cmd('{0}'))" -f $_
-            # Define setter
-            $SetterSignature = "`$this.Setter(`$this.cmd('{0}'))" -f $_
-
-            $AddMemberParams = @{
-                Name = $_
-                MemberType = 'ScriptProperty'
-                Value = [ScriptBlock]::Create($SetterSignature)
-                SecondValue = [ScriptBlock]::Create($GetterSignature)
-            }
-            $this | Add-Member @AddMemberParams
-        }
-    }
-
     # Constructor
     Special()
     {
-        $this.AddPublicMembers(@('restart', 'shutdown', 'show'))
+        AddCommandMembers -PARAMS @('restart', 'shutdown', 'show')
     }
 
     [String] Getter($param) {

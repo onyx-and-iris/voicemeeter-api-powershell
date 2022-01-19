@@ -1,28 +1,23 @@
 class Vban {
     [int32]$id
     [String]$direction
-    [Array]$stringparams
 
     # Constructor
     Vban($id)
     {
         $this.id = $id
-        $this.stringparams = @('name', 'ip')
-    }
-
-    [void] Setter($cmd, $set) {
-        if( $this.stringparams.Contains($cmd.Split('.')[2]) ) { 
-            Param_Set_String -PARAM $cmd -VALUE $set 
-        }
-        else { Param_Set -PARAM $cmd -VALUE $set }
     }
 
     [Single] Getter($cmd) {
-        return Param_Get -PARAM $cmd
+        return Param_Get -PARAM $cmd -IS_STRING $false
     }
 
     [String] Getter_String($cmd) {
-        return Param_Get_String -PARAM $cmd
+        return Param_Get -PARAM $cmd -IS_STRING $true
+    }
+
+    [void] Setter($cmd, $set) {
+        Param_Set -PARAM $cmd -VALUE $set
     }
 
     [String] cmd ($arg) {
@@ -185,7 +180,7 @@ class VbanOutstream : Vban {
 }
 
 
-Function Vban {
+Function Make_Vban {
     [System.Collections.ArrayList]$instream = @()
     [System.Collections.ArrayList]$outstream = @()
 
