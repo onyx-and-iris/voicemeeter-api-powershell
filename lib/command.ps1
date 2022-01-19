@@ -55,6 +55,6 @@ class Special {
     )
 }
 
-Function Special {
+Function Make_Command {
     return [Special]::new()
 }
