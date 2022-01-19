@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Before any minor/major patch is released all test units will be run to verify they pass.
 
 ## [Unreleased]
-- [x]
+- [x] Add VMRemoteErrors class and subclass other error classes.
+- [x] Rework set many parameters so class properties are set through the wrapper instead by VBVMR_SetParameters
+- [x] Expose lower level setters and getters as well as polling parameters through Remote class.
+- [x] Add throw LoginError if multiple login attempts are made.
+- [x] Update pester tests to reflect latest changes
 
 ## [2.1] - 2021-01-11
 ### Added

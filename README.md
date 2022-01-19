@@ -74,30 +74,6 @@ There is no bounds checking in this wrapper, meaning if you attempt to set a
 parameter that does not exist for that version of Voicemeeter the wrapper will
 throw an error. So make sure what you are settings actually exists.
 
-### Multiple parameters
-Set many strip/bus/macrobutton/vban parameters at once, for Example
-```powershell
-Import-Module Voicemeeter
-
-try {
-    $vmr = Get-RemoteBanana
-
-    $hash = @{
-        strip_0 = @{mute = $true; mono = $true};
-        strip_2 = @{mute = $true; mono = $true};
-        bus_1 = @{mute = $true; mono = $true};
-
-        button_34 = @{state = $true};
-        button_12 = @{trigger = $false};
-
-        vban_instream_3 = @{name = 'streamname'};
-        vban_outstream_0 = @{on = $false};
-    }
-
-    $vmr.Set_Multi($hash)
-}
-finally { $vmr.Logout() }
-```
 ### Strip|Bus
 The following strip/bus commands are available:
 - mute
@@ -171,6 +147,31 @@ $vmr.command.show
 $vmr.command.lock = $true
 ```
 
+### Multiple parameters
+Set many strip/bus/macrobutton/vban parameters at once, for Example
+```powershell
+Import-Module Voicemeeter
+
+try {
+    $vmr = Get-RemoteBanana
+
+    $hash = @{
+        strip_0 = @{mute = $true; mono = $true};
+        strip_2 = @{mute = $true; mono = $true};
+        bus_1 = @{mute = $true; mono = $true};
+
+        button_34 = @{state = $true};
+        button_12 = @{trigger = $false};
+
+        vban_instream_3 = @{name = 'streamname'};
+        vban_outstream_0 = @{on = $false};
+    }
+
+    $vmr.Set_Multi($hash)
+}
+finally { $vmr.Logout() }
+```
+
 ### Run tests
 Run tests using .\runall.ps1 which accepts two parameters:
 - tag Run tests of this type
@@ -182,3 +183,6 @@ Example:
 `.\runall.ps1 -tag 'higher' -num 3`
 
 Results will be logged and summary file written.
+
+### Official Documentation
+- [Voicemeeter Remote C API](https://forum.vb-audio.com/viewtopic.php?f=8&t=346)
