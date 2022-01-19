@@ -358,52 +358,52 @@ Describe -Tag 'lower', -TestName 'All Tests' {
     Describe 'Set and Get Param String Tests' {
         Context 'Strip[i].Label test0' {
             It 'Should set Strip[0].Label to test0' {
-                Param_Set_String -PARAM "Strip[0].Label" -VALUE 'test0'
-                Param_Get_String -PARAM "Strip[0].Label" | Should -Be 'test0'
+                Param_Set -PARAM "Strip[0].Label" -VALUE 'test0'
+                Param_Get -PARAM "Strip[0].Label"  -IS_STRING $true | Should -Be 'test0'
             }
 
             It 'Should set Strip[1].Label to test0' {
-                Param_Set_String -PARAM "Strip[1].Label" -VALUE 'test0'
-                Param_Get_String -PARAM "Strip[1].Label" | Should -Be 'test0'
+                Param_Set -PARAM "Strip[1].Label" -VALUE 'test0'
+                Param_Get -PARAM "Strip[1].Label" -IS_STRING $true | Should -Be 'test0'
             }
 
             It 'Should set Strip[2].Label to test0' {
-                Param_Set_String -PARAM "Strip[2].Label" -VALUE 'test0'
-                Param_Get_String -PARAM "Strip[2].Label" | Should -Be 'test0'
+                Param_Set -PARAM "Strip[2].Label" -VALUE 'test0'
+                Param_Get -PARAM "Strip[2].Label" -IS_STRING $true | Should -Be 'test0'
             }
         }
 
         Context 'Strip[i].Label test1' {
             It 'Should set Strip[0].Label to test1' {
-                Param_Set_String -PARAM "Strip[0].Label" -VALUE 'test1'
-                Param_Get_String -PARAM "Strip[0].Label" | Should -Be 'test1'
+                Param_Set -PARAM "Strip[0].Label" -VALUE 'test1'
+                Param_Get -PARAM "Strip[0].Label" -IS_STRING $true | Should -Be 'test1'
             }
 
             It 'Should set Strip[1].Label to test1' {
-                Param_Set_String -PARAM "Strip[1].Label" -VALUE 'test1'
-                Param_Get_String -PARAM "Strip[1].Label" | Should -Be 'test1'
+                Param_Set -PARAM "Strip[1].Label" -VALUE 'test1'
+                Param_Get -PARAM "Strip[1].Label" -IS_STRING $true | Should -Be 'test1'
             }
 
             It 'Should set Strip[2].Label to test1' {
-                Param_Set_String -PARAM "Strip[2].Label" -VALUE 'test1'
-                Param_Get_String -PARAM "Strip[2].Label" | Should -Be 'test1'
+                Param_Set -PARAM "Strip[2].Label" -VALUE 'test1'
+                Param_Get -PARAM "Strip[2].Label" -IS_STRING $true | Should -Be 'test1'
             }
         }
 
         Context 'Strip[i].Label test2' {
             It 'Should set Strip[0].Label to test2' {
-                Param_Set_String -PARAM "Strip[0].Label" -VALUE 'test2'
-                Param_Get_String -PARAM "Strip[0].Label" | Should -Be 'test2'
+                Param_Set -PARAM "Strip[0].Label" -VALUE 'test2'
+                Param_Get -PARAM "Strip[0].Label" -IS_STRING $true | Should -Be 'test2'
             }
 
             It 'Should set Strip[1].Label to test2' {
-                Param_Set_String -PARAM "Strip[1].Label" -VALUE 'test2'
-                Param_Get_String -PARAM "Strip[1].Label" | Should -Be 'test2'
+                Param_Set -PARAM "Strip[1].Label" -VALUE 'test2'
+                Param_Get -PARAM "Strip[1].Label" -IS_STRING $true | Should -Be 'test2'
             }
 
             It 'Should set Strip[2].Label to test2' {
-                Param_Set_String -PARAM "Strip[2].Label" -VALUE 'test2'
-                Param_Get_String -PARAM "Strip[2].Label" | Should -Be 'test2'
+                Param_Set -PARAM "Strip[2].Label" -VALUE 'test2'
+                Param_Get -PARAM "Strip[2].Label" -IS_STRING $true | Should -Be 'test2'
             }
         }
     }
