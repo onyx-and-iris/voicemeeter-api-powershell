@@ -1,29 +1,29 @@
 . $PSScriptRoot\base.ps1
 
 class Remote {
-    [String]$type
-    [System.Collections.ArrayList]$button
+    [String]$kind
     [System.Collections.ArrayList]$strip
     [System.Collections.ArrayList]$bus
+    [System.Collections.ArrayList]$button
     [PSCustomObject]$vban
     $command
 
     # Constructor
-    Remote ([String]$type)
+    Remote ([String]$kind)
     {
-        $this.type = $type
+        $this.kind = $kind
         $this.Setup()
     }
 
     [void] Setup() {
         if(Setup_DLL) {
-            Login -TYPE $this.type
+            Login -KIND $this.kind
 
-            $this.button = Buttons
-            $this.strip = Strips
-            $this.bus = Buses
-            $this.vban = Vban
-            $this.command = Special
+            $this.strip = Make_Strips
+            $this.bus = Make_Buses
+            $this.button = Make_Buttons
+            $this.vban = Make_Vban
+            $this.command = Make_Command
         }
         else { Exit }
     }
@@ -31,10 +31,26 @@ class Remote {
     [void] Logout() {
         Logout
     }
+
+    [Single] Getter([String]$param) {
+        return Param_Get -PARAM $param
+    }
+
+    [String] Getter_String([String]$param) {
+        return Param_Get -PARAM $param -IS_STRING $true
+    }
+
+    [void] Setter([String]$param, [Object]$value) {
+        Param_Set -PARAM $param -VALUE $value
+    }
     
     [void] Set_Multi([HashTable]$hash) {
         Param_Set_Multi -HASH $hash
     }
+
+    [void] PDirty() { P_Dirty }
+
+    [void] MDirty() { M_Dirty }
 }
 
 Function Get-RemoteBasic {
