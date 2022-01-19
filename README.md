@@ -172,6 +172,24 @@ try {
 finally { $vmr.Logout() }
 ```
 
+### Remote class
+Access to lower level Getters and Setters are provided with these functions:
+- `$vmr.Getter(param)`: For getting the value of a parameter expected to return a value other than string.
+- `$vmr.Getter_String(param)`: For getting the value of any parameter expected to return a string.
+- `$vmr.Setter(param, value)`: For setting the value of any parameter.
+
+Access to lower level polling functions are provided with these functions:
+- `$vmr.PDirty`: Returns true if a parameter has been updated.
+- `$vmr.MDirty`: Returns true if a macrobutton has been updated.
+
+example:
+```powershell
+$vmr.Getter('Strip[2].Mute')
+$vmr.Getter_String('Bus[1].Label')
+$vmr.Setter('Strip[4].Label', 'stripname')
+$vmr.Setter('Strip[0].Gain', -3.6)
+```
+
 ### Run tests
 Run tests using .\runall.ps1 which accepts two parameters:
 - tag Run tests of this type

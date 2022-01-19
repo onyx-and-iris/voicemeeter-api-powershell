@@ -7,11 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Before any minor/major patch is released all test units will be run to verify they pass.
 
 ## [Unreleased]
-- [x] Add VMRemoteErrors class and subclass other error classes.
-- [x] Rework set many parameters so class properties are set through the wrapper instead by VBVMR_SetParameters
-- [x] Expose lower level setters and getters as well as polling parameters through Remote class.
-- [x] Add throw LoginError if multiple login attempts are made.
-- [x] Update pester tests to reflect latest changes
+- [x] 
+
+## [2.2] - 2021-01-19
+### Added
+- Add VMRemoteErrors class and subclass other error classes.
+- Expose lower level setters and getters as well as polling parameters through Remote class.
+- README and CHANGELOG updated to reflect latest changes.
+- Version 2.2 added to PSGAllery
+
+### Changed
+- Rework set many parameters so class properties are set through the wrapper instead by VBVMR_SetParameters
+- Rework meta module. Separate functions for each member type.
+- Update pester tests to reflect latest changes
+- Add throw LoginError if multiple login attempts are made. In testing the session was still crashing, however.
 
 ## [2.1] - 2021-01-11
 ### Added
