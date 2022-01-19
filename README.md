@@ -75,7 +75,7 @@ parameter that does not exist for that version of Voicemeeter the wrapper will
 throw an error. So make sure what you are settings actually exists.
 
 ### Multiple parameters
-Set many strip/bus/macrobutton parameters at once, for Example
+Set many strip/bus/macrobutton/vban parameters at once, for Example
 ```powershell
 Import-Module Voicemeeter
 
@@ -152,7 +152,7 @@ $vmr.vban.instream[2].port = 6990
 $vmr.vban.outstream[3].bit = 16
 ```
 
-### Special
+### Command
 Certain 'special' commands are defined by the API as performing actions rather than setting values.
 
 The following methods are available:
