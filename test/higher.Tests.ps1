@@ -109,12 +109,18 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             }            
         }
 
-        Context 'Bus, one physical, one virtual' -ForEach @(
-            @{ Index = 0; Offset = 30 }, @{ Index = 4; Offset = -3 }
-        ){
-            It "Should set Strip[$index].Gain to $($value - $offset)" {
-                $vmr.bus[$index].gain = $($value - $offset)
-                $vmr.bus[$index].gain | Should -Be $($value - $offset)
+        Describe 'Bus tests' {
+            Context 'one physical, one virtual' -ForEach @(
+                @{ Index = 0 }, @{ Index = 4 }
+            ){
+                Context 'gain' -ForEach @(
+                    @{ Value = 5.2; Expected = 5.2 }, @{ Value = -38.2; Expected = -38.2 }
+                ){
+                    It "Should set Bus[$index].Gain to $value" {
+                        $vmr.bus[$index].gain = $value
+                        $vmr.bus[$index].gain | Should -Be $expected
+                    }                    
+                }
             }
         }
     }

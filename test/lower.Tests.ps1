@@ -33,7 +33,7 @@ Describe -Tag 'lower', -TestName 'All Lower Tests' {
             ){
                 It "Should set Strip[0].$param to 1" {
                     Param_Set -PARAM "Strip[$index].$param" -VALUE $value
-                    Param_Get -PARAM "Strip[$index].$param" | Should -Be $value
+                    Param_Get -PARAM "Strip[$index].$param" | Should -Be $expected 
                 }
             }
         }
@@ -48,7 +48,7 @@ Describe -Tag 'lower', -TestName 'All Lower Tests' {
         ){
             It "Should set Strip[$index].Label to $value" {
                 Param_Set -PARAM "Strip[$index].Label" -VALUE $value
-                Param_Get -PARAM "Strip[$index].Label" -IS_STRING $true | Should -Be $value
+                Param_Get -PARAM "Strip[$index].Label" -IS_STRING $true | Should -Be $expected 
             }
         }
     }
