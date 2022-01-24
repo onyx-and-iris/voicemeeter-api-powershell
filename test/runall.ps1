@@ -1,6 +1,5 @@
 Param([String]$tag, [Int]$num=1)
 Import-Module ..\lib\Voicemeeter.psm1
-. ..\lib\base.ps1
 
 Function ParseLog {
     Param([String]$logfile)
@@ -34,7 +33,7 @@ Function ParseLog {
 
 try
 {
-    $vmr = Get-RemotePotato
+    $vmr = Get-RemoteBanana
 
     $logfile = "_results.log"
     if (Test-Path $logfile) { Clear-Content $logfile }
