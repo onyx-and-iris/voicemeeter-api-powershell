@@ -9,8 +9,8 @@ class Strip {
         $this.id = $id
 
         AddBoolMembers -PARAMS @('mono', 'solo', 'mute')
-        AddFloatMembers -PARAMS @('gain', 'comp', 'gate')
         AddIntMembers -PARAMS @('limit')
+        AddFloatMembers -PARAMS @('gain')
         AddStringMembers -PARAMS @('label')
 
         AddChannelMembers
@@ -31,7 +31,13 @@ class Strip {
     [String] cmd ($arg) {
         return "Strip[" + $this.id + "].$arg"
     }
+}
 
+class PhysicalStrip : Strip {
+    PhysicalStrip ([Int]$id) : base ($id) {
+        AddFloatMembers -PARAMS @('comp', 'gate')
+    }
+    
     hidden $_device = $($this | Add-Member ScriptProperty 'device' `
         {
             $this.Getter_String($this.cmd('device.name'))
@@ -49,11 +55,6 @@ class Strip {
             return Write-Warning("ERROR: " + $this.cmd('device.sr') +  " is read only")
         }
     )
-}
-
-class PhysicalStrip : Strip {
-    PhysicalStrip ([Int]$id) : base ($id) {
-    }
 }
 
 class VirtualStrip : Strip {

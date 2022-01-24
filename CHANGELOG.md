@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Before any minor/major patch is released all test units will be run to verify they pass.
 
 ## [Unreleased]
-- [x] 
+- [x] Refactor Pester tests.
+- [x] Add more strip/bus properties.
+- [x] Ability to load custom profiles
 
 ## [2.2] - 2021-01-19
 ### Added

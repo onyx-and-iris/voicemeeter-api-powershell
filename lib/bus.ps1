@@ -9,6 +9,7 @@ class Bus {
         $this.id = $id
 
         AddBoolMembers -PARAMS @('mono', 'mute')
+        AddStringMembers -PARAMS @('label')
         AddFloatMembers -PARAMS @('gain')
     }
 
@@ -42,6 +43,23 @@ class Bus {
 class PhysicalBus : Bus {
     PhysicalBus ([Int]$id) : base ($id) {
     }
+    hidden $_device = $($this | Add-Member ScriptProperty 'device' `
+        {
+            $this.Getter_String($this.cmd('device.name'))
+        }`
+        {
+            return Write-Warning("ERROR: " + $this.cmd('device.name') +  " is read only")
+        }
+    )
+
+    hidden $_sr = $($this | Add-Member ScriptProperty 'sr' `
+        {
+            $this.Getter($this.cmd('device.sr'))
+        }`
+        {
+            return Write-Warning("ERROR: " + $this.cmd('device.sr') +  " is read only")
+        }
+    )
 }
 
 class VirtualBus : Bus {
