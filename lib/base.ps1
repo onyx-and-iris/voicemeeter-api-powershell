@@ -174,7 +174,7 @@ Function DefineVersion {
 
     if($TYPE -eq 1) {
         $layout = @{
-            "version" = "basic"
+            "name" = "basic"
             "p_in" = 2
             "v_in" = 1
             "p_out" = 1
@@ -185,7 +185,7 @@ Function DefineVersion {
     }
     elseif($TYPE -eq 2) {
         $layout = @{
-            "version" = "banana"
+            "name" = "banana"
             "p_in" = 3
             "v_in" = 2
             "p_out" = 3
@@ -196,7 +196,7 @@ Function DefineVersion {
     }
     elseif($TYPE -eq 3) {
         $layout = @{
-            "version" = "potato"
+            "name" = "potato"
             "p_in" = 5
             "v_in" = 3
             "p_out" = 5
@@ -206,6 +206,47 @@ Function DefineVersion {
         }
     }
     $global:layout = $layout
+}
+
+Function Get_Profiles {
+    $basepath = Join-Path -Path $(Split-Path -Path $PSScriptRoot) -ChildPath "profiles"
+    if (Test-Path $basepath) {
+        $fullpath = Join-Path -Path $basepath -ChildPath $layout.name
+    } else {return $null}
+    $filenames = @(Get-ChildItem -Path $fullpath -Filter *.psd1 -Recurse -File)
+
+    if($filenames) {
+        [System.Collections.ArrayList]$configfiles = @()
+        $filenames | ForEach-Object {
+            $file = (Join-Path -Path $fullpath -ChildPath $_)
+            $configfiles.Add($file)
+        }
+
+        [HashTable]$data = @{}
+        $configfiles | ForEach-Object {
+            $filename = [System.IO.Path]::GetFileNameWithoutExtension($_)
+            Write-Host ("Importing profile " + $layout.name + "/" + $filename)
+            $data[$filename] = Import-PowerShellDataFile -Path $_
+        }
+        return $data        
+    }
+    return $null
+}
+
+Function Set_Profile {
+    param(
+        [Object]$DATA, [String]$CONF
+    )
+    try {
+        if($null -eq $DATA -or -not $DATA.$CONF) {
+            throw [VMRemoteErrors]::new("No profile named $CONF was loaded")
+        }
+        Param_Set_Multi -HASH $DATA.$CONF
+        Start-Sleep -m 1        
+    }
+    catch [VMRemoteErrors] {
+        Write-Warning $_.Exception.ErrorMessage()
+    }
 }
 
 Function Login {

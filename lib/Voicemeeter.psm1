@@ -6,7 +6,8 @@ class Remote {
     [System.Collections.ArrayList]$bus
     [System.Collections.ArrayList]$button
     [PSCustomObject]$vban
-    $command
+    [Object]$command
+    [Object]$profiles
 
     # Constructor
     Remote ([String]$kind)
@@ -18,7 +19,8 @@ class Remote {
     [void] Setup() {
         if(Setup_DLL) {
             Login -KIND $this.kind
-
+            
+            $this.profiles = Get_Profiles
             $this.strip = Make_Strips
             $this.bus = Make_Buses
             $this.button = Make_Buttons
@@ -30,6 +32,10 @@ class Remote {
 
     [void] Logout() {
         Logout
+    }
+
+    [void] Set_Profile([String]$config) {
+        Set_Profile -DATA $this.profiles -CONF $config
     }
 
     [Single] Getter([String]$param) {
