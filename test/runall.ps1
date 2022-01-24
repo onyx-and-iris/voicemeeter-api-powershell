@@ -1,4 +1,4 @@
-Param([String]$tag, [Int]$num=1)
+Param([String]$tag, [Int]$num=1, [switch]$log)
 Import-Module ..\lib\Voicemeeter.psm1
 
 Function ParseLog {
@@ -39,11 +39,17 @@ try
     if (Test-Path $logfile) { Clear-Content $logfile }
 
     1..$num | ForEach-Object {
-        "Running test $_ of $num" | Tee-Object -FilePath $logfile -Append
-        Invoke-Pester -Tag $tag -PassThru | Tee-Object -FilePath $logfile -Append
+        if ($log) { 
+            "Running test $_ of $num" | Tee-Object -FilePath $logfile -Append
+            Invoke-Pester -Tag $tag -PassThru | Tee-Object -FilePath $logfile -Append
+        }
+        else { 
+            "Running test $_ of $num"
+            Invoke-Pester -Tag $tag -PassThru
+        }
     }
 
-    Parselog -logfile $logfile
+    if($log) { Parselog -logfile $logfile }
 }
 finally
 {
