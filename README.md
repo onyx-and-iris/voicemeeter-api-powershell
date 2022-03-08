@@ -186,6 +186,7 @@ The following methods are available:
 - record
 - ff
 - rw
+
 The following properties accept boolean values.
 - loop
 - A1 - A5
