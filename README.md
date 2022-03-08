@@ -96,7 +96,9 @@ $vmr.strip[5].gainlayer1 = -8.3
 ```
 
 A,B commands depend on Voicemeeter type.
+
 gainlayers defined for Potato version only.
+
 mc, k for virtual strips only.
 
 ### Bus
@@ -117,7 +119,6 @@ $vmr.button[3].mode_repeat = $true
 ```
 
 A,B commands depend on Voicemeeter type.
-gainlayers defined for Potato version only.
 
 ### Macrobuttons
 Three modes defined: state, stateonly and trigger.
