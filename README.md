@@ -89,6 +89,7 @@ The following strip commands are available:
 - gate: float, from 0 to 10
 - gainlayer0-gainlayer7: float
 for example:
+
 ```
 $vmr.strip[5].gainlayer1 = -8.3
 ```
@@ -108,10 +109,11 @@ The following strip commands are available:
 @('normal', 'amix', 'bmix', 'repeat', 'composite', 'tvmix', 'upmix21',
         'upmix41', 'upmix61', 'centeronly', 'lfeonly', 'rearonly')
 
-        for example:
-        ```
-        $vmr.button[3].mode_repeat = $true
-        ```
+for example:
+
+```
+$vmr.button[3].mode_repeat = $true
+```
 
 A,B commands depend on Voicemeeter type.
 gainlayers defined for Potato version only.
