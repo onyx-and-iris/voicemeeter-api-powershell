@@ -4,20 +4,32 @@ class Special {
     # Constructor
     Special()
     {
-        AddCommandMembers -PARAMS @('restart', 'shutdown', 'show')
+        AddActionMembers -PARAMS @('restart', 'shutdown', 'show')
     }
 
-    [String] Getter($param) {
-        return Write-Warning("ERROR: Usage: $param")
+    [Single] Getter($cmd) {
+        return Param_Get -PARAM $cmd -IS_STRING $false
     }
 
-    [void] Setter($param, $val = $true) {
-        Param_Set -PARAM $param -VALUE $(if ($val) {1} else {0})
-    }    
+    [void] Setter($param, $val) {
+        if ($val -is [Boolean]) {
+            Param_Set -PARAM $param -VALUE $(if ($val) {1} else {0})
+        }
+        else {
+            Param_Set -PARAM $param -VALUE $val
+        }
+    }
 
     [String] cmd ($arg) {
         return "Command.$arg"
     }
+
+    hidden $_hide = $($this | Add-Member ScriptProperty 'hide' `
+        {
+            $this._hide = $this.Setter($this.cmd('show'), $false)
+        }`
+        {}
+    )
 
     hidden $_showvbanchat = $($this | Add-Member ScriptProperty 'showvbanchat' `
         {
