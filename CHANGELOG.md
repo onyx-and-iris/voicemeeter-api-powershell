@@ -7,9 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Before any minor/major patch is released all test units will be run to verify they pass.
 
 ## [Unreleased]
-- [x] Refactor Pester tests.
-- [x] Add more strip/bus properties.
-- [x] Ability to load custom profiles
+- [x]
+
+
+## [2.3] - 2021-03-08
+### Added
+- mc, k properties added to virtual strips.
+- gainlayer properties added to all strips
+- busmode and eq_ab properties added to all buses.
+- Added ability to load custom profiles in psd1 format.
+- Added hide command to Command class
+- Added recorder module
+- Added recorder tests to higher.tests
+- README and CHANGELOG updated to reflect latest changes.
+- Version 2.3 added to PSGAllery
+
+### Changed
+- Pester tests refactored
+
+### Fixed
+- eq, eq_ab getters now return boolean values
+- fixed bug with command action props
 
 ## [2.2] - 2021-01-19
 ### Added
