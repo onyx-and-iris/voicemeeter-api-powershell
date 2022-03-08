@@ -7,6 +7,7 @@ class Remote {
     [System.Collections.ArrayList]$button
     [PSCustomObject]$vban
     [Object]$command
+    [Object]$recorder
     [Object]$profiles
 
     # Constructor
@@ -26,6 +27,7 @@ class Remote {
             $this.button = Make_Buttons
             $this.vban = Make_Vban
             $this.command = Make_Command
+            $this.recorder = Make_Recorder
         }
         else { Exit }
     }

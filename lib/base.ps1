@@ -5,6 +5,7 @@
 . $PSScriptRoot\macrobuttons.ps1
 . $PSScriptRoot\vban.ps1
 . $PSScriptRoot\command.ps1
+. $PSScriptRoot\recorder.ps1
 
 $global:layout = $null
 
