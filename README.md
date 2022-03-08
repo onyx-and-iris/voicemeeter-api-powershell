@@ -102,7 +102,7 @@ gainlayers defined for Potato version only.
 mc, k for virtual strips only.
 
 ### Bus
-The following strip commands are available:
+The following bus commands are available:
 - mute: bool
 - mono: bool
 - eq: bool
@@ -115,7 +115,7 @@ The following strip commands are available:
 for example:
 
 ```
-$vmr.button[3].mode_repeat = $true
+$vmr.bus[3].mode_repeat = $true
 ```
 
 ### Macrobuttons
@@ -176,6 +176,26 @@ example:
 $vmr.command.show
 
 $vmr.command.lock = $true
+```
+
+### Recorder
+The following methods are available:
+- play
+- stop
+- pause
+- record
+- ff
+- rw
+The following properties accept boolean values.
+- loop
+- A1 - A5
+- B1 - B3
+
+example:
+```powershell
+$vmr.recorder.play
+
+$vmr.recorder.loop = $true
 ```
 
 ### Multiple parameters
