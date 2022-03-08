@@ -118,8 +118,6 @@ for example:
 $vmr.button[3].mode_repeat = $true
 ```
 
-A,B commands depend on Voicemeeter type.
-
 ### Macrobuttons
 Three modes defined: state, stateonly and trigger.
 - State runs associated scripts
