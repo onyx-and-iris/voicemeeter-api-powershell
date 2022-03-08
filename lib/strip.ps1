@@ -3,7 +3,6 @@
 class Strip {
     [Int]$id
 
-    # Constructor
     Strip ([Int]$id)
     {
         $this.id = $id
@@ -14,6 +13,7 @@ class Strip {
         AddStringMembers -PARAMS @('label')
 
         AddChannelMembers
+        AddGainlayerMembers
     }
 
     [Single] Getter($cmd) {
@@ -59,6 +59,8 @@ class PhysicalStrip : Strip {
 
 class VirtualStrip : Strip {
     VirtualStrip ([Int]$id) : base ($id) {
+        AddBoolMembers -PARAMS @('mc')
+        AddIntMembers -PARAMS @('k')
     }
 }
 

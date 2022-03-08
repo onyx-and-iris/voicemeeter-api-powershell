@@ -62,16 +62,16 @@ Function AddStringMembers() {
     }    
 }
 
-Function AddCommandMembers() { 
+Function AddActionMembers() { 
     param(
         [String[]]$PARAMS
     )
     [HashTable]$Signatures = @{}
     ForEach($param in $PARAMS) {
         # Define getter
-        $Signatures["Getter"] = "`$this.Getter(`$this.cmd('{0}'))" -f $_
+        $Signatures["Getter"] = "`$this.Setter(`$this.cmd('{0}'), `$true)" -f $param
         # Define setter
-        $Signatures["Setter"] = "`$this.Setter(`$this.cmd('{0}'))" -f $_
+        $Signatures["Setter"] = ""
 
         Addmember
     }
@@ -87,6 +87,37 @@ Function AddChannelMembers() {
     }
 
     AddBoolMembers -PARAMS $channels
+}
+
+Function AddGainlayerMembers() {
+    [HashTable]$Signatures = @{}
+    0..7 | ForEach-Object {
+        # Define getter
+        $Signatures["Getter"] = "`$this.Getter(`$this.cmd('gainlayer[{0}]'))" -f $_
+        # Define setter
+        $Signatures["Setter"] = "param ( [Single]`$arg )`n`$this.Setter(`$this.cmd('gainlayer[{0}]'), `$arg)" `
+        -f $_
+        $param = "gainlayer{0}" -f $_
+
+        Addmember
+    }
+}
+
+Function AddBusModeMembers() {
+    param(
+        [String[]]$PARAMS
+    )
+    [HashTable]$Signatures = @{}
+    ForEach($param in $PARAMS) {
+        # Define getter
+        $Signatures["Getter"] = "[bool]`$this.Getter(`$this.cmd('mode.{0}'))" -f $param
+        # Define setter
+        $Signatures["Setter"] = "param ( [Single]`$arg )`n`$this.Setter(`$this.cmd('mode.{0}'), `$arg)"  `
+        -f $param
+        $param = "mode_{0}" -f $param
+
+        Addmember
+    }
 }
 
 Function Addmember{

@@ -11,6 +11,9 @@ class Bus {
         AddBoolMembers -PARAMS @('mono', 'mute')
         AddStringMembers -PARAMS @('label')
         AddFloatMembers -PARAMS @('gain')
+
+        AddBusModeMembers -PARAMS @('normal', 'amix', 'bmix', 'repeat', 'composite', 'tvmix', 'upmix21',
+        'upmix41', 'upmix61', 'centeronly', 'lfeonly', 'rearonly')
     }
 
     [Single] Getter($cmd) {
@@ -31,11 +34,21 @@ class Bus {
 
     hidden $_eq = $($this | Add-Member ScriptProperty 'eq' `
         {
-            $this.Getter($this.cmd('EQ.on'))
+            [bool]$this.Getter($this.cmd('EQ.on'))
         }`
         {
             param ( $arg )
             $this._eq = $this.Setter($this.cmd('EQ.on'), $arg)
+        }
+    )
+
+    hidden $_eq_ab = $($this | Add-Member ScriptProperty 'eq_ab' `
+        {
+            [bool]$this.Getter($this.cmd('eq.ab'))
+        }`
+        {
+            param ( $arg )
+            $this._eq = $this.Setter($this.cmd('eq.ab'), $arg)
         }
     )
 }
