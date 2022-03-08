@@ -88,6 +88,7 @@ The following strip commands are available:
 - comp: float, from 0 to 10
 - gate: float, from 0 to 10
 - gainlayer0-gainlayer7: float
+
 for example:
 
 ```
