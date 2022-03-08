@@ -70,10 +70,6 @@ Voicemeeter factory function can be:
 - Get-RemoteBanana
 - Get-RemotePotato
 
-There is no bounds checking in this wrapper, meaning if you attempt to set a
-parameter that does not exist for that version of Voicemeeter the wrapper will
-throw an error. So make sure what you are settings actually exists.
-
 ### Strip
 The following strip commands are available:
 - mute: bool
