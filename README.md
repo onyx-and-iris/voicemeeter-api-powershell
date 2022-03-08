@@ -74,19 +74,47 @@ There is no bounds checking in this wrapper, meaning if you attempt to set a
 parameter that does not exist for that version of Voicemeeter the wrapper will
 throw an error. So make sure what you are settings actually exists.
 
-### Strip|Bus
-The following strip/bus commands are available:
-- mute
-- mono
-- solo
-- A1-A5
-- B1-B3
-- limit
-- gain
-- comp
-- gate
+### Strip
+The following strip commands are available:
+- mute: bool
+- mono: bool
+- mc: bool
+- k: int, from 0 to 4
+- solo: bool
+- A1-A5: bool
+- B1-B3: bool
+- limit: int, from -40 to 12
+- gain: float, from -60 to 12
+- comp: float, from 0 to 10
+- gate: float, from 0 to 10
+- gainlayer0-gainlayer7: float
+for example:
+```
+$vmr.strip[5].gainlayer1 = -8.3
+```
 
 A,B commands depend on Voicemeeter type.
+gainlayers defined for Potato version only.
+mc, k for virtual strips only.
+
+### Bus
+The following strip commands are available:
+- mute: bool
+- mono: bool
+- eq: bool
+- limit: int, from -40 to 12
+- gain: float, from -60 to 12
+- mode_: bool, any of the following:
+@('normal', 'amix', 'bmix', 'repeat', 'composite', 'tvmix', 'upmix21',
+        'upmix41', 'upmix61', 'centeronly', 'lfeonly', 'rearonly')
+
+        for example:
+        ```
+        $vmr.button[3].mode_repeat = $true
+        ```
+
+A,B commands depend on Voicemeeter type.
+gainlayers defined for Potato version only.
 
 ### Macrobuttons
 Three modes defined: state, stateonly and trigger.
@@ -133,6 +161,7 @@ Certain 'special' commands are defined by the API as performing actions rather t
 
 The following methods are available:
 - show
+- hide
 - restart
 - shutdown
 
