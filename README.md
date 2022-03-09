@@ -1,7 +1,6 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 # Powershell Wrapper for Voicemeeter API
-This wrapper was written in response to a request in the VB-AUDIO discord for
-a way to invoke commands using Powershell. It is designed to be simple to use
-but not every feature is added.
+A simple wrapper in Powershell to the Voicemeeter API.
 
 For past/future changes to this project refer to: [CHANGELOG](CHANGELOG.md)
 
