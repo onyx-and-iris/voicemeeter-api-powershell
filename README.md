@@ -1,4 +1,4 @@
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/onyx-and-iris/voicemeeter-api-powershell/blob/dev/LICENSE)
 # Powershell Wrapper for Voicemeeter API
 A simple wrapper in Powershell to the Voicemeeter API.
 
