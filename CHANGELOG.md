@@ -10,8 +10,8 @@ Before any minor/major patch is released all test units will be run to verify th
 ## [Unreleased] These changes have not been added to PSGallery yet
 
 -   [x] fix number of macrobuttons
--   [] Add fadeto, fadeby methods for strips/buses
--   [] Move kinds, profiles into their own modules.
+-   [ ] Add fadeto, fadeby methods for strips/buses
+-   [ ] Move kinds, profiles into their own modules.
 
 ## [2.3.0] - 2021-03-08
 
