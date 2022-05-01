@@ -13,7 +13,7 @@ Before any major/minor/patch patch is released all test units will be run to ver
 -   [ ] Add fadeto, fadeby methods for strips/buses
 -   [ ] Move kinds, profiles into their own modules.
 
-## [2.3.0] - 2021-03-08
+## [2.3.0] - 2022-03-08
 
 ### Added
 
@@ -36,7 +36,7 @@ Before any major/minor/patch patch is released all test units will be run to ver
 -   eq, eq_ab getters now return boolean values
 -   fixed bug with command action props
 
-## [2.2.0] - 2021-01-19
+## [2.2.0] - 2022-01-19
 
 ### Added
 
@@ -52,7 +52,7 @@ Before any major/minor/patch patch is released all test units will be run to ver
 -   Update pester tests to reflect latest changes
 -   Add throw LoginError if multiple login attempts are made. In testing the session was still crashing, however.
 
-## [2.1.0] - 2021-01-11
+## [2.1.0] - 2022-01-11
 
 ### Added
 
@@ -70,7 +70,7 @@ Before any major/minor/patch patch is released all test units will be run to ver
 
 -   Special command showvbanchat now accepts boolean
 
-## [2.0.0] - 2021-01-06
+## [2.0.0] - 2022-01-06
 
 ### Added
 
