@@ -3,7 +3,7 @@ class Vban {
     [String]$direction
 
     # Constructor
-    Vban($id) {
+    Vban([Int]$id) {
         $this.id = $id
     }
 
@@ -165,7 +165,7 @@ class Vban {
 
 class VbanInstream : Vban {
     # Constructor
-    VbanInstream ([int]$id) : base ($id) {
+    VbanInstream ([Int]$id) : base ($id) {
         $this.direction = "in"
     }
 }
@@ -173,20 +173,20 @@ class VbanInstream : Vban {
 
 class VbanOutstream : Vban {
     # Constructor
-    VbanOutstream ([int]$id) : base ($id) {
+    VbanOutstream ([Int]$id) : base ($id) {
         $this.direction = "out"
     }
 }
 
 
-Function Make_Vban {
+Function Make_Vban([Object]$remote) {
     [System.Collections.ArrayList]$instream = @()
     [System.Collections.ArrayList]$outstream = @()
 
-    0..$($layout.vban_in - 1) | ForEach-Object {
+    0..$($remote.kind.vban_in - 1) | ForEach-Object {
         [void]$instream.Add([VbanInstream]::new($_))
     }
-    0..$($layout.vban_out - 1) | ForEach-Object {
+    0..$($remote.kind.vban_out - 1) | ForEach-Object {
         [void]$outstream.Add([VbanOutstream]::new($_))
     }
 
@@ -201,7 +201,7 @@ Function Make_Vban {
     }`
     {
         param( [bool]$arg )
-        Param_Set -PARAM 'vban.Enable' -VALUE $(if ($arg) { 1 } else { 0 })
+        Param_Set -PARAM 'vban.Enable' -Value $(if ($arg) { 1 } else { 0 })
     }
 
     $CustomObject

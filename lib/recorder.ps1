@@ -1,8 +1,11 @@
 . $PSScriptRoot\meta.ps1
 
 class Recorder {
+    [Object]$remote
     # Constructor
-    Recorder() {
+    Recorder([Object]$remote) {
+        $this.remote = $remote
+        
         AddActionMembers -PARAMS @('play', 'stop', 'pause', 'replay', 'record', 'ff', 'rew')
         AddChannelMembers
     }
@@ -34,11 +37,11 @@ class Recorder {
         }
     )
 
-    [void] load([String]$filename) {
+    [void] Load([String]$filename) {
         $this.Setter($this.cmd('load'), $filename)
     }
 }
 
-Function Make_Recorder {
-    return [Recorder]::new()
+Function Make_Recorder([Object]$remote) {
+    return [Recorder]::new($remote)
 }

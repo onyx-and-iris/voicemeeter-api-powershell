@@ -125,6 +125,18 @@ for example:
 $vmr.bus[3].mode_repeat = $true
 ```
 
+### Strip|Bus
+- `FadeTo(amount, time)` : float, int
+- `FadeBy(amount, time)` : float, int
+Modify gain to or by the selected amount in db over a time interval in ms.
+
+for example:
+
+```
+$vmr.strip[3].FadeTo(-18.7, 1000)
+$vmr.bus[0].FadeBy(-10, 500)
+```
+
 ### Macrobuttons
 
 Three modes defined: state, stateonly and trigger.
@@ -301,4 +313,4 @@ Results will be logged and summary file written.
 
 ### Official Documentation
 
--   [Voicemeeter Remote C API](https://forum.vb-audio.com/viewtopic.php?f=8&t=346)
+-   [Voicemeeter Remote C API](https://github.com/onyx-and-iris/Voicemeeter-SDK/blob/main/VoicemeeterRemoteAPI.pdf)

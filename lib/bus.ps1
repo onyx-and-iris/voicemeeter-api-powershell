@@ -2,10 +2,12 @@
 
 class Bus {
     [Int]$id
+    [Object]$remote
 
     # Constructor
-    Bus ([Int]$id) {
+    Bus ([Int]$id, [Object]$remote) {
         $this.id = $id
+        $this.remote = $remote
 
         AddBoolMembers -PARAMS @('mono', 'mute')
         AddStringMembers -PARAMS @('label')
@@ -50,10 +52,18 @@ class Bus {
             $this._eq = $this.Setter($this.cmd('eq.ab'), $arg)
         }
     )
+
+    [void] FadeTo([Single]$target, [int]$time) {
+        $this.Setter($this.cmd('FadeTo'), "($target, $time)")
+    }
+
+    [void] FadeBy([Single]$target, [int]$time) {
+        $this.Setter($this.cmd('FadeBy'), "($target, $time)")
+    }
 }
 
 class PhysicalBus : Bus {
-    PhysicalBus ([Int]$id) : base ($id) {
+    PhysicalBus ([Int]$id, [Object]$remote) : base ($id, $remote) {
     }
     hidden $_device = $($this | Add-Member ScriptProperty 'device' `
         {
@@ -75,15 +85,15 @@ class PhysicalBus : Bus {
 }
 
 class VirtualBus : Bus {
-    VirtualBus ([Int]$id) : base ($id) {
+    VirtualBus ([Int]$id, [Object]$remote) : base ($id, $remote) {
     }
 }
 
-Function Make_Buses {
+Function Make_Buses([Object]$remote) {
     [System.Collections.ArrayList]$bus = @()
-    0..$($layout.p_out + $layout.v_out - 1) | ForEach-Object {
-        if ($_ -lt $layout.p_out) { [void]$bus.Add([PhysicalBus]::new($_)) }
-        else { [void]$bus.Add([VirtualBus]::new($_)) }
+    0..$($remote.kind.p_out + $remote.kind.v_out - 1) | ForEach-Object {
+        if ($_ -lt $remote.kind.p_out) { [void]$bus.Add([PhysicalBus]::new($_, $remote)) }
+        else { [void]$bus.Add([VirtualBus]::new($_, $remote)) }
     }
     $bus
 }

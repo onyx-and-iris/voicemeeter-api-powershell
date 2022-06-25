@@ -2,9 +2,11 @@
 
 class Strip {
     [Int]$id
+    [Object]$remote
 
-    Strip ([Int]$id) {
+    Strip ([Int]$id, [Object]$remote) {
         $this.id = $id
+        $this.remote = $remote
 
         AddBoolMembers -PARAMS @('mono', 'solo', 'mute')
         AddIntMembers -PARAMS @('limit')
@@ -23,17 +25,25 @@ class Strip {
         return Param_Get -PARAM $cmd -IS_STRING $true
     }
 
-    [void] Setter($cmd, $set) {
-        Param_Set -PARAM $cmd -VALUE $set
+    [void] Setter($cmd, $val) {
+        Param_Set -PARAM $cmd -VALUE $val
     }
 
     [String] cmd ($arg) {
         return "Strip[" + $this.id + "].$arg"
     }
+
+    [void] FadeTo([Single]$target, [int]$time) {
+        $this.Setter($this.cmd('FadeTo'), "($target, $time)")
+    }
+
+    [void] FadeBy([Single]$target, [int]$time) {
+        $this.Setter($this.cmd('FadeBy'), "($target, $time)")
+    }
 }
 
 class PhysicalStrip : Strip {
-    PhysicalStrip ([Int]$id) : base ($id) {
+    PhysicalStrip ([Int]$id, [Object]$remote) : base ($id, $remote) {
         AddFloatMembers -PARAMS @('comp', 'gate')
     }
     
@@ -57,20 +67,20 @@ class PhysicalStrip : Strip {
 }
 
 class VirtualStrip : Strip {
-    VirtualStrip ([Int]$id) : base ($id) {
+    VirtualStrip ([Int]$id, [Object]$remote) : base ($id, $remote) {
         AddBoolMembers -PARAMS @('mc')
         AddIntMembers -PARAMS @('k')
     }
 }
 
 
-Function Make_Strips {
+Function Make_Strips([Object]$remote) {
     [System.Collections.ArrayList]$strip = @()
-    0..$($layout.p_in + $layout.v_in - 1) | ForEach-Object {
-        if ($_ -lt $layout.p_in) { 
-            [void]$strip.Add([PhysicalStrip]::new($_)) 
+    0..$($remote.kind.p_in + $remote.kind.v_in - 1) | ForEach-Object {
+        if ($_ -lt $remote.kind.p_in) { 
+            [void]$strip.Add([PhysicalStrip]::new($_, $remote)) 
         }
-        else { [void]$strip.Add([VirtualStrip]::new($_)) }
+        else { [void]$strip.Add([VirtualStrip]::new($_, $remote)) }
     }
     $strip
 }

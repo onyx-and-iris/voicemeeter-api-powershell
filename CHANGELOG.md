@@ -9,9 +9,25 @@ Before any major/minor/patch is released all test units will be run to verify th
 
 ## [Unreleased] These changes have not been added to PSGallery yet
 
--   [x] fix number of macrobuttons
--   [ ] Add fadeto, fadeby methods for strips/buses
--   [ ] Move kinds, profiles into their own modules.
+-   [x]
+
+## [2.4.0] - 2022-06-25
+
+### Added
+
+-   fadeto, fadeby methods for strips/buses
+-   README and CHANGELOG updated to reflect latest changes.
+-   Version 2.4 added to PSGAllery
+
+### Changed
+
+-   Move kinds, profiles into their own modules.
+-   remove global variable layout. added GetKind() to kinds.
+-   link to official documentation in readme now points to SDK repo.
+
+### Fixed
+
+-   number of macrobuttons
 
 ## [2.3.0] - 2022-03-08
 

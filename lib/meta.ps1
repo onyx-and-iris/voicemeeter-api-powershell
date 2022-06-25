@@ -78,8 +78,8 @@ Function AddActionMembers() {
 }
 
 Function AddChannelMembers() {
-    $num_A = $layout.p_out
-    $num_B = $layout.v_out
+    $num_A = $this.remote.kind.p_out
+    $num_B = $this.remote.kind.v_out
 
     [System.Collections.ArrayList]$channels = @()
     1..$($num_A + $num_B) | ForEach-Object {

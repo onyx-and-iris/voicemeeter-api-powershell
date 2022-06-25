@@ -1,7 +1,8 @@
+. $PSScriptRoot\kinds.ps1
 . $PSScriptRoot\base.ps1
 
 class Remote {
-    [String]$kind
+    [Hashtable]$kind
     [System.Collections.ArrayList]$strip
     [System.Collections.ArrayList]$bus
     [System.Collections.ArrayList]$button
@@ -11,22 +12,21 @@ class Remote {
     [Object]$profiles
 
     # Constructor
-    Remote ([String]$kind) {
-        $this.kind = $kind
+    Remote ([String]$kind_id) {
+        $this.kind = GetKind($kind_id)
         $this.Setup()
     }
 
     [void] Setup() {
         if (Setup_DLL) {
-            Login -KIND $this.kind
-            
-            $this.profiles = Get_Profiles
-            $this.strip = Make_Strips
-            $this.bus = Make_Buses
+            Login -KIND $this.kind.name
+            $this.profiles = Get_Profiles($this.kind.name)
+            $this.strip = Make_Strips($this)
+            $this.bus = Make_Buses($this)
             $this.button = Make_Buttons
-            $this.vban = Make_Vban
+            $this.vban = Make_Vban($this)
             $this.command = Make_Command
-            $this.recorder = Make_Recorder
+            $this.recorder = Make_Recorder($this)
         }
         else { Exit }
     }
