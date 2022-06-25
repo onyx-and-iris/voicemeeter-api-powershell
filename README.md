@@ -126,8 +126,10 @@ $vmr.bus[3].mode_repeat = $true
 ```
 
 ### Strip|Bus
-- `FadeTo(amount, time)` : float, int
-- `FadeBy(amount, time)` : float, int
+
+-   `FadeTo(amount, time)` : float, int
+-   `FadeBy(amount, time)` : float, int
+
 Modify gain to or by the selected amount in db over a time interval in ms.
 
 for example:
