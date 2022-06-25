@@ -2,9 +2,8 @@
 
 class Recorder {
     # Constructor
-    Recorder()
-    {
-        AddActionMembers -PARAMS @('play', 'stop', 'pause', 'replay', 'record', 'ff', 'rw')
+    Recorder() {
+        AddActionMembers -PARAMS @('play', 'stop', 'pause', 'replay', 'record', 'ff', 'rew')
         AddChannelMembers
     }
 
@@ -14,7 +13,7 @@ class Recorder {
 
     [void] Setter($param, $val) {
         if ($val -is [Boolean]) {
-            Param_Set -PARAM $param -VALUE $(if ($val) {1} else {0})
+            Param_Set -PARAM $param -VALUE $(if ($val) { 1 } else { 0 })
         }
         else {
             Param_Set -PARAM $param -VALUE $val
@@ -27,7 +26,7 @@ class Recorder {
 
     hidden $_loop = $($this | Add-Member ScriptProperty 'loop' `
         {
-            return Write-Warning("ERROR: " + $this.cmd('mode.loop') +  " is write only")
+            return Write-Warning("ERROR: " + $this.cmd('mode.loop') + " is write only")
         }`
         {
             param( [bool]$arg )

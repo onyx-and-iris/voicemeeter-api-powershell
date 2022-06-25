@@ -3,8 +3,7 @@ class Vban {
     [String]$direction
 
     # Constructor
-    Vban($id)
-    {
+    Vban($id) {
         $this.id = $id
     }
 
@@ -60,7 +59,7 @@ class Vban {
         }`
         {
             param ( [String]$arg )
-            if($arg -In 1024..65535) {
+            if ($arg -In 1024..65535) {
                 $this._port = $this.Setter($this.cmd('port'), $arg)
             }
             else {
@@ -75,10 +74,10 @@ class Vban {
         }`
         {
             param ( [Int]$arg )
-            if($this.direction -eq "in") { Write-Warning('Error, read only value') }
+            if ($this.direction -eq "in") { Write-Warning('Error, read only value') }
             else {
                 $opts = @(11025, 16000, 22050, 24000, 32000, 44100, 48000, 64000, 88200, 96000)
-                if($opts.Contains($arg)) {
+                if ($opts.Contains($arg)) {
                     $this._port = $this.Setter($this.cmd('sr'), $arg)
                 }
                 else {
@@ -94,9 +93,9 @@ class Vban {
         }`
         {
             param ( [Int]$arg )
-            if($this.direction -eq "in") { Write-Warning('Error, read only value') }
+            if ($this.direction -eq "in") { Write-Warning('Error, read only value') }
             else {
-                if($arg -In 1..8) {
+                if ($arg -In 1..8) {
                     $this._channel = $this.Setter($this.cmd('channel'), $arg)
                 }
                 else {
@@ -108,15 +107,15 @@ class Vban {
 
     hidden $_bit = $($this | Add-Member ScriptProperty 'bit' `
         {
-            $val = if($this.Getter($this.cmd('bit')) -eq 1) {16} else {24}
+            $val = if ($this.Getter($this.cmd('bit')) -eq 1) { 16 } else { 24 }
             return $val
         }`
         {
             param ( [Int]$arg )
-            if($this.direction -eq "in") { Write-Warning('Error, read only value') }
+            if ($this.direction -eq "in") { Write-Warning('Error, read only value') }
             else {
-                if(@(16,24).Contains($arg)) {
-                    $val = if($arg -eq 16) {1} else {2}
+                if (@(16, 24).Contains($arg)) {
+                    $val = if ($arg -eq 16) { 1 } else { 2 }
                     $this._bit = $this.Setter($this.cmd('bit'), $val)
                 }
                 else {
@@ -132,9 +131,9 @@ class Vban {
         }`
         {
             param ( [Int]$arg )
-            if($this.direction -eq "in") { Write-Warning('Error, read only value') }
+            if ($this.direction -eq "in") { Write-Warning('Error, read only value') }
             else {
-                if($arg -In 0..4) {
+                if ($arg -In 0..4) {
                     $this._quality = $this.Setter($this.cmd('quality'), $arg)
                 }
                 else {
@@ -150,9 +149,9 @@ class Vban {
         }`
         {
             param ( [Int]$arg )
-            if($this.direction -eq "in") { Write-Warning('Error, read only value') }
+            if ($this.direction -eq "in") { Write-Warning('Error, read only value') }
             else {
-                if($arg -In 0..8) {
+                if ($arg -In 0..8) {
                     $this._route = $this.Setter($this.cmd('route'), $arg)
                 }
                 else {
@@ -166,7 +165,7 @@ class Vban {
 
 class VbanInstream : Vban {
     # Constructor
-    VbanInstream ([int]$id) : base ($id){
+    VbanInstream ([int]$id) : base ($id) {
         $this.direction = "in"
     }
 }
@@ -174,7 +173,7 @@ class VbanInstream : Vban {
 
 class VbanOutstream : Vban {
     # Constructor
-    VbanOutstream ([int]$id) : base ($id){
+    VbanOutstream ([int]$id) : base ($id) {
         $this.direction = "out"
     }
 }
@@ -184,15 +183,15 @@ Function Make_Vban {
     [System.Collections.ArrayList]$instream = @()
     [System.Collections.ArrayList]$outstream = @()
 
-    0..$($layout.vban_in-1) | ForEach-Object {
+    0..$($layout.vban_in - 1) | ForEach-Object {
         [void]$instream.Add([VbanInstream]::new($_))
     }
-    0..$($layout.vban_out-1) | ForEach-Object {
+    0..$($layout.vban_out - 1) | ForEach-Object {
         [void]$outstream.Add([VbanOutstream]::new($_))
     }
 
     $CustomObject = [PSCustomObject]@{
-        instream = $instream
+        instream  = $instream
         outstream = $outstream
     } 
     
@@ -202,7 +201,7 @@ Function Make_Vban {
     }`
     {
         param( [bool]$arg )
-        Param_Set -PARAM 'vban.Enable' -VALUE $(if ($arg) {1} else {0})
+        Param_Set -PARAM 'vban.Enable' -VALUE $(if ($arg) { 1 } else { 0 })
     }
 
     $CustomObject

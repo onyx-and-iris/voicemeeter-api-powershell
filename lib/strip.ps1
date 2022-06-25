@@ -3,8 +3,7 @@
 class Strip {
     [Int]$id
 
-    Strip ([Int]$id)
-    {
+    Strip ([Int]$id) {
         $this.id = $id
 
         AddBoolMembers -PARAMS @('mono', 'solo', 'mute')
@@ -43,7 +42,7 @@ class PhysicalStrip : Strip {
             $this.Getter_String($this.cmd('device.name'))
         }`
         {
-            return Write-Warning("ERROR: " + $this.cmd('device.name') +  " is read only")
+            return Write-Warning("ERROR: " + $this.cmd('device.name') + " is read only")
         }
     )
 
@@ -52,7 +51,7 @@ class PhysicalStrip : Strip {
             $this.Getter($this.cmd('device.sr'))
         }`
         {
-            return Write-Warning("ERROR: " + $this.cmd('device.sr') +  " is read only")
+            return Write-Warning("ERROR: " + $this.cmd('device.sr') + " is read only")
         }
     )
 }

@@ -4,8 +4,7 @@ class Bus {
     [Int]$id
 
     # Constructor
-    Bus ([Int]$id)
-    {
+    Bus ([Int]$id) {
         $this.id = $id
 
         AddBoolMembers -PARAMS @('mono', 'mute')
@@ -13,7 +12,7 @@ class Bus {
         AddFloatMembers -PARAMS @('gain')
 
         AddBusModeMembers -PARAMS @('normal', 'amix', 'bmix', 'repeat', 'composite', 'tvmix', 'upmix21',
-        'upmix41', 'upmix61', 'centeronly', 'lfeonly', 'rearonly')
+            'upmix41', 'upmix61', 'centeronly', 'lfeonly', 'rearonly')
     }
 
     [Single] Getter($cmd) {
@@ -61,7 +60,7 @@ class PhysicalBus : Bus {
             $this.Getter_String($this.cmd('device.name'))
         }`
         {
-            return Write-Warning("ERROR: " + $this.cmd('device.name') +  " is read only")
+            return Write-Warning("ERROR: " + $this.cmd('device.name') + " is read only")
         }
     )
 
@@ -70,7 +69,7 @@ class PhysicalBus : Bus {
             $this.Getter($this.cmd('device.sr'))
         }`
         {
-            return Write-Warning("ERROR: " + $this.cmd('device.sr') +  " is read only")
+            return Write-Warning("ERROR: " + $this.cmd('device.sr') + " is read only")
         }
     )
 }
@@ -82,7 +81,7 @@ class VirtualBus : Bus {
 
 Function Make_Buses {
     [System.Collections.ArrayList]$bus = @()
-    0..$($layout.p_out + $layout.v_out -1) | ForEach-Object {
+    0..$($layout.p_out + $layout.v_out - 1) | ForEach-Object {
         if ($_ -lt $layout.p_out) { [void]$bus.Add([PhysicalBus]::new($_)) }
         else { [void]$bus.Add([VirtualBus]::new($_)) }
     }

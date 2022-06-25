@@ -11,14 +11,13 @@ class Remote {
     [Object]$profiles
 
     # Constructor
-    Remote ([String]$kind)
-    {
+    Remote ([String]$kind) {
         $this.kind = $kind
         $this.Setup()
     }
 
     [void] Setup() {
-        if(Setup_DLL) {
+        if (Setup_DLL) {
             Login -KIND $this.kind
             
             $this.profiles = Get_Profiles

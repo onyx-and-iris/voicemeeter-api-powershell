@@ -2,8 +2,7 @@
 
 class Special {
     # Constructor
-    Special()
-    {
+    Special() {
         AddActionMembers -PARAMS @('restart', 'shutdown', 'show')
     }
 
@@ -13,7 +12,7 @@ class Special {
 
     [void] Setter($param, $val) {
         if ($val -is [Boolean]) {
-            Param_Set -PARAM $param -VALUE $(if ($val) {1} else {0})
+            Param_Set -PARAM $param -VALUE $(if ($val) { 1 } else { 0 })
         }
         else {
             Param_Set -PARAM $param -VALUE $val

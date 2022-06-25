@@ -203,7 +203,7 @@ The following methods are available:
 -   pause
 -   record
 -   ff
--   rw
+-   rew
 
 The following properties accept boolean values.
 

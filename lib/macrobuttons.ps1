@@ -2,8 +2,7 @@ class MacroButton {
     [int32]$id
     
     # Constructor
-    MacroButton ([Int]$id)
-    {
+    MacroButton ([Int]$id) {
         $this.id = $id
     }
 
