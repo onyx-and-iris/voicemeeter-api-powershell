@@ -260,6 +260,23 @@ try {
 finally { $vmr.Logout() }
 ```
 
+### Config Files
+
+`$vmr.Set_Profile(<configname>)`
+
+You may load config files in psd1 format. An example profile has been included with the package. Remember to save current settings before loading a profile. To test simply rename \_profiles directory to profiles. It will be loaded into memory but not set. To set one you may do:
+
+```powershell
+Import-Module Voicemeeter
+try {
+    $vmr = Get-RemoteBanana
+    $vmr.Set_Profile("config")
+}
+finally { $vmr.Logout() }
+```
+
+will load a config file at profiles/banana/config.psd1 for Voicemeeter Banana.
+
 ### Remote class
 
 Access to lower level Getters and Setters are provided with these functions:
@@ -281,23 +298,6 @@ $vmr.Getter_String('Bus[1].Label')
 $vmr.Setter('Strip[4].Label', 'stripname')
 $vmr.Setter('Strip[0].Gain', -3.6)
 ```
-
-### Config Files
-
-`$vmr.Set_Profile('config')`
-
-You may load config files in psd1 format. An example profile has been included with the package. Remember to save current settings before loading a profile. To test simply rename \_profiles directory to profiles. It will be loaded into memory but not set. To set one you may do:
-
-```powershell
-Import-Module Voicemeeter
-try {
-    $vmr = Get-RemoteBanana
-    $vmr.Set_Profile("config")
-}
-finally { $vmr.Logout() }
-```
-
-will load a config file at profiles/banana/config.psd1 for Voicemeeter Banana.
 
 ### Run tests
 
