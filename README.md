@@ -89,9 +89,12 @@ The following strip commands are available:
 -   A1-A5: bool
 -   B1-B3: bool
 -   limit: int, from -40 to 12
--   gain: float, from -60 to 12
--   comp: float, from 0 to 10
--   gate: float, from 0 to 10
+-   gain: float, from -60.0 to 12.0
+-   comp: float, from 0.0 to 10.0
+-   gate: float, from 0.0 to 10.0
+-   label: string
+-   device: string
+-   sr: int
 -   gainlayer0-gainlayer7: float
 
 for example:
@@ -114,7 +117,10 @@ The following bus commands are available:
 -   mono: bool
 -   eq: bool
 -   limit: int, from -40 to 12
--   gain: float, from -60 to 12
+-   gain: float, from -60.0 to 12.0
+-   label: string
+-   device: string
+-   sr: int
 -   mode\_: bool, any of the following:
     @('normal', 'amix', 'bmix', 'repeat', 'composite', 'tvmix', 'upmix21',
     'upmix41', 'upmix61', 'centeronly', 'lfeonly', 'rearonly')
