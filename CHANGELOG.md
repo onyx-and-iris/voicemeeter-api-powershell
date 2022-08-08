@@ -9,7 +9,8 @@ Before any major/minor/patch is released all test units will be run to verify th
 
 ## [Unreleased] These changes have not been added to PSGallery yet
 
--   [x]
+-   [ ] make tests more flexible (different kinds)
+-   [ ] add xy parameters to strip/bus
 
 ## [2.4.0] - 2022-06-25
 
