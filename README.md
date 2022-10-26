@@ -48,6 +48,8 @@ If you decide to direct download see [alternative instructions](FROM_SOURCE.md).
 
 ## Use
 
+#### As a script file
+
 When you instantiate Remote class you will automatically be logged in. Use a
 try finally block to ensure you logout at the end of your code.
 
@@ -76,6 +78,27 @@ Voicemeeter factory function can be:
 -   Get-RemoteBasic
 -   Get-RemoteBanana
 -   Get-RemotePotato
+
+#### As a CLI
+
+As well as storing scripts into files and running them you can invoke expressions straight through Powershell. A quick note, since you cannot Login more than
+once in a single session you ought to run any commands through a subshell. Assuming you have installed as a module you could run this command:
+
+```powershell
+powershell { $vmr = Get-RemoteBasic; $vmr.strip[0].mute=$true; $vmr.Logout() }
+```
+
+Getters should also work, for example:
+
+```powershell
+# Print the value of strip 0 mute to console
+powershell { $vmr = Get-RemoteBasic; Write-Host "Strip 0 mute =", $vmr.strip[0].mute; $vmr.Logout() }
+
+# Toggle strip 0 mute
+powershell { $vmr = Get-RemoteBasic; $vmr.strip[0].mute=!$vmr.strip[0].mute; $vmr.Logout() }
+```
+
+So you essentialy have a CLI.
 
 ### Strip
 
