@@ -48,7 +48,7 @@ If you decide to direct download see [alternative instructions](FROM_SOURCE.md).
 
 ## Use
 
-#### As a script file
+#### `As a script file`
 
 When you instantiate Remote class you will automatically be logged in. Use a
 try finally block to ensure you logout at the end of your code.
@@ -79,7 +79,7 @@ Voicemeeter factory function can be:
 -   Get-RemoteBanana
 -   Get-RemotePotato
 
-#### As a CLI
+#### `As a CLI`
 
 As well as storing scripts into files and running them you can invoke expressions straight through Powershell. A quick note, since you cannot Login more than
 once in a single session you ought to run any commands through a subshell. Assuming you have installed as a module you could run this command:
