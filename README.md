@@ -81,21 +81,21 @@ Voicemeeter factory function can be:
 
 #### `As a CLI`
 
-As well as storing scripts into files and running them you can invoke expressions straight through Powershell. A quick note, since you cannot Login more than
+As well as storing scripts into files and running them you can invoke script blocks straight through Powershell. A quick note, since you cannot Login more than
 once in a single session you ought to run any commands through a subshell. Assuming you have installed as a module you could run this command:
 
 ```powershell
-powershell { $vmr = Get-RemoteBasic; $vmr.strip[0].mute=$true; $vmr.Logout() }
+powershell { $vmr = Get-RemoteBanana; $vmr.strip[0].mute=$true; $vmr.Logout() }
 ```
 
 Getters should also work, for example:
 
 ```powershell
 # Print the value of strip 0 mute to console
-powershell { $vmr = Get-RemoteBasic; Write-Host "Strip 0 mute =", $vmr.strip[0].mute; $vmr.Logout() }
+powershell { $vmr = Get-RemoteBanana; Write-Host "Strip 0 mute =", $vmr.strip[0].mute; $vmr.Logout() }
 
 # Toggle strip 0 mute
-powershell { $vmr = Get-RemoteBasic; $vmr.strip[0].mute=!$vmr.strip[0].mute; $vmr.Logout() }
+powershell { $vmr = Get-RemoteBanana; $vmr.strip[0].mute=!$vmr.strip[0].mute; $vmr.Logout() }
 ```
 
 So you essentialy have a CLI.
