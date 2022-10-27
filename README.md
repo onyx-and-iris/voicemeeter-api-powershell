@@ -48,7 +48,7 @@ If you decide to direct download see [alternative instructions](FROM_SOURCE.md).
 
 ## Use
 
-#### `As a script file`
+#### `Script files`
 
 When you instantiate Remote class you will automatically be logged in. Use a
 try finally block to ensure you logout at the end of your code.
@@ -79,26 +79,22 @@ Voicemeeter factory function can be:
 -   Get-RemoteBanana
 -   Get-RemotePotato
 
-#### `As a CLI`
+#### `Through the Shell`
 
-As well as storing scripts into files and running them you can invoke script blocks straight through Powershell. A quick note, since you cannot Login more than
-once in a single session you ought to run any commands through a subshell. Assuming you have installed as a module you could run this command:
+One liners should be run through a subshell
 
 ```powershell
 powershell { $vmr = Get-RemoteBanana; $vmr.strip[0].mute=$true; $vmr.Logout() }
 ```
 
-Getters should also work, for example:
+You may also save the object returned by a factory function to a local variable, then invoke any commands through the shell, for example:
 
 ```powershell
-# Print the value of strip 0 mute to console
-powershell { $vmr = Get-RemoteBanana; Write-Host "Strip 0 mute =", $vmr.strip[0].mute; $vmr.Logout() }
-
-# Toggle strip 0 mute
-powershell { $vmr = Get-RemoteBanana; $vmr.strip[0].mute=!$vmr.strip[0].mute; $vmr.Logout() }
+$vmr = Get-RemoteBanana
+$vmr.strip[0].mute=1
+$vmr.strip[0].mute
+$vmr.Logout()
 ```
-
-So you essentialy have a CLI.
 
 ### Strip
 
@@ -118,6 +114,20 @@ The following strip commands are available:
 -   label: string
 -   device: string
 -   sr: int
+-   reverb: float, from 0.0 to 10.0
+-   delay: float, from 0.0 to 10.0
+-   fx1: float, from 0.0 to 10.0
+-   fx2: float, from 0.0 to 10.0
+-   pan_x: float, from -0.5 to 0.5
+-   pan_y: float, from 0.0 to 1.0
+-   color_x: float, from -0.5 to 0.5
+-   color_y: float, from 0.0 to 1.0
+-   fx_x: float, from -0.5 to 0.5
+-   fx_y: float, from 0.0 to 1.0
+-   postreverb: boolean
+-   postdelay: boolean
+-   postfx1: boolean
+-   postfx2: boolean
 -   gainlayer0-gainlayer7: float
 
 for example:
@@ -139,11 +149,16 @@ The following bus commands are available:
 -   mute: bool
 -   mono: bool
 -   eq: bool
+-   eq_ab: bool
 -   limit: int, from -40 to 12
 -   gain: float, from -60.0 to 12.0
 -   label: string
 -   device: string
 -   sr: int
+-   returnreverb: float, from 0.0 to 10.0
+-   returndelay: float, from 0.0 to 10.0
+-   returnfx1: float, from 0.0 to 10.0
+-   returnfx2: float, from 0.0 to 10.0
 -   mode\_: bool, any of the following:
     @('normal', 'amix', 'bmix', 'repeat', 'composite', 'tvmix', 'upmix21',
     'upmix41', 'upmix61', 'centeronly', 'lfeonly', 'rearonly')
@@ -314,18 +329,24 @@ Access to lower level Getters and Setters are provided with these functions:
 -   `$vmr.Getter_String(param)`: For getting the value of any parameter expected to return a string.
 -   `$vmr.Setter(param, value)`: For setting the value of any parameter.
 
-Access to lower level polling functions are provided with these functions:
-
--   `$vmr.PDirty`: Returns true if a parameter has been updated.
--   `$vmr.MDirty`: Returns true if a macrobutton has been updated.
-
-example:
-
 ```powershell
 $vmr.Getter('Strip[2].Mute')
 $vmr.Getter_String('Bus[1].Label')
 $vmr.Setter('Strip[4].Label', 'stripname')
 $vmr.Setter('Strip[0].Gain', -3.6)
+```
+
+Access to lower level polling functions are provided with these functions:
+
+-   `$vmr.PDirty`: Returns true if a parameter has been updated.
+-   `$vmr.MDirty`: Returns true if a macrobutton has been updated.
+
+-   `$vmr.SendText`: Set paramters by script
+
+example:
+
+```powershell
+ $vmr.SendText("strip[0].mute=1;strip[2].gain=3.8;bus[1].eq.On=1")
 ```
 
 ### Run tests

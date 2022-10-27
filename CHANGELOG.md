@@ -9,8 +9,28 @@ Before any major/minor/patch is released all test units will be run to verify th
 
 ## [Unreleased] These changes have not been added to PSGallery yet
 
--   [ ] make tests more flexible (different kinds)
--   [ ] add xy parameters to strip/bus
+-   [ ]
+
+## [2.5.0] - 2022-10-27
+
+### Added
+
+-   xy parameters added to strip/bus
+-   fx parameters added to strip/bus
+-   GetType, GetVersion added to Remote class.
+-   SendText implemented (set parameters by script), added to Remote class.
+-   CLI example added
+-   README and CHANGELOG updated to reflect latest changes.
+
+### Changed
+
+-   pester tests now support all kinds.
+-   GoToNextBus example refactored
+-   Previous console output now written to Debug stream.
+
+### Removed
+
+-   setmulti, setandget and special examples.
 
 ## [2.4.0] - 2022-06-25
 
