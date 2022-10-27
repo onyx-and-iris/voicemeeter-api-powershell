@@ -4,7 +4,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         @{ Value = $false; Expected = $false }
     ){
         Context 'Strip, one physical one virtual' -ForEach @(
-            @{ Index = 0 }, @{ Index = 3 }
+            @{ Index = $phys_in }, @{ Index = $virt_in }
         ){
             It "Should set and get Strip[$index].Mute" {
                 $vmr.strip[$index].mute = $value
@@ -16,21 +16,21 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.strip[$index].solo | Should -Be $expected
             }
 
-            It "Should set and get Strip[$index].A3" {
-                $vmr.strip[$index].A3 = $value
-                $vmr.strip[$index].A3 | Should -Be $expected
+            It "Should set and get Strip[$index].A1" {
+                $vmr.strip[$index].A1 = $value
+                $vmr.strip[$index].A1 | Should -Be $expected
             }
 
-            It "Should set and get Strip[$index].B2" {
-                $vmr.strip[$index].B2 = $value
-                $vmr.strip[$index].B2 | Should -Be $expected
+            It "Should set and get Strip[$index].B1" {
+                $vmr.strip[$index].B1 = $value
+                $vmr.strip[$index].B1 | Should -Be $expected
             }
         }
 
         Context 'Bus, one physical one virtual' -ForEach @(
-            @{ Index = 2 }, @{ Index = 4 }
+            @{ Index = $phys_out }, @{ Index = $virt_out }
         ){
-            It "Should set and get Bus[$index].Eq" {
+            It "Should set and get Bus[$index].Eq" -Skip:$ifBasic {
                 $vmr.bus[$index].eq = $value
                 $vmr.bus[$index].eq | Should -Be $expected
             }
@@ -40,12 +40,12 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.bus[$index].mono | Should -Be $expected
             }
 
-            It "Should set and get Bus[$index].mode_amix" {
+            It "Should set and get Bus[$index].mode_amix" -Skip:$ifBasic {
                 $vmr.bus[$index].mode_amix = $value
                 $vmr.bus[$index].mode_amix | Should -Be $expected
             }
 
-            It "Should set and get Bus[$index].mode_centeronly" {
+            It "Should set and get Bus[$index].mode_centeronly" -Skip:$ifBasic {
                 $vmr.bus[$index].mode_centeronly = $value
                 $vmr.bus[$index].mode_centeronly | Should -Be $expected
             }
@@ -61,7 +61,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
 
         Context 'Vban instream' -ForEach @(
-            @{ Index = 0 }, @{ Index = 4 }
+            @{ Index = $vban_in }
         ){
             It "Should set vban.instream[$index].on" {
                 $vmr.vban.instream[$index].on = $value
@@ -70,7 +70,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
 
         Context 'Vban outstream' -ForEach @(
-            @{ Index = 3 }, @{ Index = 7 }
+            @{ Index = $vban_out }
         ){
             It "Should set vban.outstream[$index].on" {
                 $vmr.vban.outstream[$index].on = $value
@@ -78,7 +78,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             }
         }
 
-        Context 'Recorder' {
+        Context 'Recorder' -Skip:$ifBasic {
             It "Should set and get Recorder.A3" {
                 $vmr.recorder.A3 = $value
                 $vmr.recorder.A3 | Should -Be $expected
@@ -104,7 +104,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
     Describe 'Float Tests' {
         Describe 'Strip tests' {
             Context 'one physical, one virtual' -ForEach @(
-                @{ Index = 0 }, @{ Index = 4 }
+                @{ Index = $phys_in }, @{ Index = $virt_in }
             ){
                 Context 'gain' -ForEach @(
                     @{ Value = 3.6; Expected = 3.6 }, @{ Value = -8.2; Expected = -8.2 }
@@ -116,8 +116,8 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 }
             }
 
-            Context 'physical only' -ForEach @(
-                @{ Index = 0 }, @{ Index = 1 }
+            Context 'physical only' -Skip:$ifBasic -ForEach @(
+                @{ Index = $phys_in }
             ){
                 Context 'comp, gate' -ForEach @(
                     @{ Value = 8.3; Expected = 8.3 }, @{ Value = 5.1; Expected = 5.1 }
@@ -137,7 +137,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
 
         Describe 'Bus tests' {
             Context 'one physical, one virtual' -ForEach @(
-                @{ Index = 0 }, @{ Index = 4 }
+                @{ Index = $phys_out }, @{ Index = $virt_out }
             ){
                 Context 'gain' -ForEach @(
                     @{ Value = 5.2; Expected = 5.2 }, @{ Value = -38.2; Expected = -38.2 }
@@ -152,9 +152,9 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
     }
 
     Describe 'Int Tests' -ForEach @(
-        @{ Index = 0 }, @{ Index = 4 }
+        @{ Index = $phys_in }, @{ Index = $virt_in }
     ){
-        Context 'Strip, one physical, one virtual' -ForEach @(
+        Context 'Strip, one physical, one virtual' -Skip:$ifBasic -ForEach @(
             @{ Value = 3; Expected = 3 }
             @{ Value = -6; Expected = -6 }
         ){
@@ -189,7 +189,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
 
     Describe 'String Tests' {
         Context 'Strip, one physical, one virtual' -ForEach @(
-            @{ Index = 0 }, @{ Index = 4 }
+            @{ Index = $phys_in }, @{ Index = $virt_in }
         ){
             It "Should set Strip[$index].Label" -ForEach @(
                 @{ Value = "test0"; Expected = "test0" }
@@ -201,7 +201,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
 
         Context 'Bus, one physical, one virtual' -ForEach @(
-            @{ Index = 0 }, @{ Index = 4 }
+            @{ Index = $phys_out }, @{ Index = $virt_out }
         ){
             It "Should set Bus[$index].Label" -ForEach @(
                 @{ Value = "test0"; Expected = "test0" }
@@ -213,7 +213,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
 
         Describe 'Vban' -ForEach @(
-            @{ Index = 0 }, @{ Index = 4 }
+            @{ Index = $vban_in }
         ){
             Context 'instream' {
                 Context 'ip' -ForEach @(

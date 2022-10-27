@@ -26,7 +26,7 @@ Describe -Tag 'lower', -TestName 'All Lower Tests' {
         @{ Value = 0; Expected = 0 }
     ){
         Context 'Strip, one physical one virtual' -ForEach @(
-            @{ Index = 0 }, @{ Index = 4 }
+            @{ Index = $phys_in }, @{ Index = $virt_in }
         ){
             Context 'mute, mono, A1, B2' -ForEach @(
                 @{ param = "mute" }, @{ param = "A1" }
@@ -44,7 +44,7 @@ Describe -Tag 'lower', -TestName 'All Lower Tests' {
         @{ Value = 'test1'; Expected = 'test1' }
     ){
         Context 'Strip, one physical one virtual' -ForEach @(
-            @{ Index = 0 }, @{ Index = 4 }
+            @{ Index = $phys_in }, @{ Index = $virt_in }
         ){
             It "Should set Strip[$index].Label to $value" {
                 Param_Set -PARAM "Strip[$index].Label" -VALUE $value
