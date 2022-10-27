@@ -338,8 +338,6 @@ $vmr.Setter('Strip[0].Gain', -3.6)
 
 -   `$vmr.SendText`: Set parameters by script
 
-example:
-
 ```powershell
  $vmr.SendText("strip[0].mute=1;strip[2].gain=3.8;bus[1].eq.On=1")
 ```
