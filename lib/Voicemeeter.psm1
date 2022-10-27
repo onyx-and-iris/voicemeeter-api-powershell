@@ -18,21 +18,33 @@ class Remote {
     }
 
     [void] Setup() {
-        if (Setup_DLL) {
-            Login -KIND $this.kind.name
-            $this.profiles = Get_Profiles($this.kind.name)
-            $this.strip = Make_Strips($this)
-            $this.bus = Make_Buses($this)
-            $this.button = Make_Buttons
-            $this.vban = Make_Vban($this)
-            $this.command = Make_Command
-            $this.recorder = Make_Recorder($this)
+        if (!(Setup_DLL)) {
+            Exit
         }
-        else { Exit }
+        Login -KIND $this.kind.name
+        $this.profiles = Get_Profiles($this.kind.name)
+        $this.strip = Make_Strips($this)
+        $this.bus = Make_Buses($this)
+        $this.button = Make_Buttons
+        $this.vban = Make_Vban($this)
+        $this.command = Make_Command
+        $this.recorder = Make_Recorder($this)
+    }
+
+    [string] ToString() {
+        return "Voicemeeter " + $this.kind.name.substring(0,1).toupper() + $this.kind.name.substring(1)
     }
 
     [void] Logout() {
         Logout
+    }
+
+    [void] GetType() {
+        VmType
+    }
+
+    [String] GetVersion() {
+        return Version
     }
 
     [void] Set_Profile([String]$config) {
@@ -53,6 +65,10 @@ class Remote {
     
     [void] Set_Multi([HashTable]$hash) {
         Param_Set_Multi -HASH $hash
+    }
+
+    [void] SendText([String]$script) {
+        Set_By_Script -SCRIPT $script
     }
 
     [void] PDirty() { P_Dirty }

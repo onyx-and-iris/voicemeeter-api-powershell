@@ -28,6 +28,6 @@ $KindMap = @{
     };
 }
 
-Function GetKind([string]$kind_id) {
+function GetKind ([string]$kind_id) {
     $KindMap[$kind_id]
 }

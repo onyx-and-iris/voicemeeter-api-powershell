@@ -1,4 +1,4 @@
-Function Setup_DLL {
+function Setup_DLL {
     try {
         $vb_path = Get_VBPath
 
@@ -7,7 +7,7 @@ Function Setup_DLL {
         }
         else {
             $dll = Join-Path -Path $vb_path -ChildPath ("VoicemeeterRemote" + `
-                (& { If ([Environment]::Is64BitOperatingSystem) { "64" } Else { "" } }) + `
+                (& { if ([Environment]::Is64BitOperatingSystem) { "64" } else { "" } }) + `
                     ".dll")
         }
     }
@@ -25,6 +25,8 @@ Function Setup_DLL {
     public static extern int VBVMR_RunVoicemeeter(Int64 run);
     [DllImport(@"$dll")]
     public static extern int VBVMR_GetVoicemeeterType(ref int ptr);
+    [DllImport(@"$dll")]
+    public static extern int VBVMR_GetVoicemeeterVersion(ref int ptr);
 
     [DllImport(@"$dll")]
     public static extern int VBVMR_MacroButton_IsDirty();

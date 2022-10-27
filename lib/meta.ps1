@@ -1,25 +1,25 @@
-Function AddBoolMembers() {
+function AddBoolMembers () {
     param(
         [String[]]$PARAMS
     )
-    [HashTable]$Signatures = @{}
-    ForEach ($param in $PARAMS) {
+    [hashtable]$Signatures = @{}
+    foreach ($param in $PARAMS) {
         # Define getter
         $Signatures["Getter"] = "[bool]`$this.Getter(`$this.cmd('{0}'))" -f $param
         # Define setter
-        $Signatures["Setter"] = "param ( [Single]`$arg )`n`$this.Setter(`$this.cmd('{0}'), `$arg)"  `
+        $Signatures["Setter"] = "param ( [Single]`$arg )`n`$this.Setter(`$this.cmd('{0}'), `$arg)" `
             -f $param
 
         Addmember
     }
 }
 
-Function AddFloatMembers() {
+function AddFloatMembers () {
     param(
         [String[]]$PARAMS
     )
-    [HashTable]$Signatures = @{}
-    ForEach ($param in $PARAMS) {
+    [hashtable]$Signatures = @{}
+    foreach ($param in $PARAMS) {
         # Define getter
         $Signatures["Getter"] = "[math]::Round(`$this.Getter(`$this.cmd('{0}')), 1)" -f $param
         # Define setter
@@ -30,12 +30,12 @@ Function AddFloatMembers() {
     }
 }
 
-Function AddIntMembers() {
+function AddIntMembers () {
     param(
         [String[]]$PARAMS
     )
-    [HashTable]$Signatures = @{}
-    ForEach ($param in $PARAMS) {
+    [hashtable]$Signatures = @{}
+    foreach ($param in $PARAMS) {
         # Define getter
         $Signatures["Getter"] = "[Int]`$this.Getter(`$this.cmd('{0}'))" -f $param
         # Define setter
@@ -46,12 +46,12 @@ Function AddIntMembers() {
     }
 }
 
-Function AddStringMembers() {
+function AddStringMembers () {
     param(
         [String[]]$PARAMS
     )
-    [HashTable]$Signatures = @{}
-    ForEach ($param in $PARAMS) {
+    [hashtable]$Signatures = @{}
+    foreach ($param in $PARAMS) {
         # Define getter
         $Signatures["Getter"] = "[String]`$this.Getter_String(`$this.cmd('{0}'))" -f $param
         # Define setter
@@ -59,15 +59,15 @@ Function AddStringMembers() {
             -f $param
 
         Addmember
-    }    
+    }
 }
 
-Function AddActionMembers() { 
+function AddActionMembers () {
     param(
         [String[]]$PARAMS
     )
-    [HashTable]$Signatures = @{}
-    ForEach ($param in $PARAMS) {
+    [hashtable]$Signatures = @{}
+    foreach ($param in $PARAMS) {
         # Define getter
         $Signatures["Getter"] = "`$this.Setter(`$this.cmd('{0}'), `$true)" -f $param
         # Define setter
@@ -77,7 +77,7 @@ Function AddActionMembers() {
     }
 }
 
-Function AddChannelMembers() {
+function AddChannelMembers () {
     $num_A = $this.remote.kind.p_out
     $num_B = $this.remote.kind.v_out
 
@@ -89,8 +89,8 @@ Function AddChannelMembers() {
     AddBoolMembers -PARAMS $channels
 }
 
-Function AddGainlayerMembers() {
-    [HashTable]$Signatures = @{}
+function AddGainlayerMembers () {
+    [hashtable]$Signatures = @{}
     0..7 | ForEach-Object {
         # Define getter
         $Signatures["Getter"] = "`$this.Getter(`$this.cmd('gainlayer[{0}]'))" -f $_
@@ -98,21 +98,22 @@ Function AddGainlayerMembers() {
         $Signatures["Setter"] = "param ( [Single]`$arg )`n`$this.Setter(`$this.cmd('gainlayer[{0}]'), `$arg)" `
             -f $_
         $param = "gainlayer{0}" -f $_
+        $null = $param
 
         Addmember
     }
 }
 
-Function AddBusModeMembers() {
+function AddBusModeMembers () {
     param(
         [String[]]$PARAMS
     )
-    [HashTable]$Signatures = @{}
-    ForEach ($param in $PARAMS) {
+    [hashtable]$Signatures = @{}
+    foreach ($param in $PARAMS) {
         # Define getter
         $Signatures["Getter"] = "[bool]`$this.Getter(`$this.cmd('mode.{0}'))" -f $param
         # Define setter
-        $Signatures["Setter"] = "param ( [Single]`$arg )`n`$this.Setter(`$this.cmd('mode.{0}'), `$arg)"  `
+        $Signatures["Setter"] = "param ( [Single]`$arg )`n`$this.Setter(`$this.cmd('mode.{0}'), `$arg)" `
             -f $param
         $param = "mode_{0}" -f $param
 
@@ -120,12 +121,12 @@ Function AddBusModeMembers() {
     }
 }
 
-Function Addmember {
+function Addmember {
     $AddMemberParams = @{
         Name        = $param
         MemberType  = 'ScriptProperty'
-        Value       = [ScriptBlock]::Create($Signatures["Getter"])
-        SecondValue = [ScriptBlock]::Create($Signatures["Setter"])
+        Value       = [scriptblock]::Create($Signatures["Getter"])
+        SecondValue = [scriptblock]::Create($Signatures["Setter"])
     }
     $this | Add-Member @AddMemberParams
 }
