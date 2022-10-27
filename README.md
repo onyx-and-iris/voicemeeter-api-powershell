@@ -336,18 +336,18 @@ $vmr.Setter('Strip[4].Label', 'stripname')
 $vmr.Setter('Strip[0].Gain', -3.6)
 ```
 
-Access to lower level polling functions are provided with these functions:
-
--   `$vmr.PDirty`: Returns true if a parameter has been updated.
--   `$vmr.MDirty`: Returns true if a macrobutton has been updated.
-
--   `$vmr.SendText`: Set paramters by script
+-   `$vmr.SendText`: Set parameters by script
 
 example:
 
 ```powershell
  $vmr.SendText("strip[0].mute=1;strip[2].gain=3.8;bus[1].eq.On=1")
 ```
+
+Access to lower level polling functions are provided with these functions:
+
+-   `$vmr.PDirty`: Returns true if a parameter has been updated.
+-   `$vmr.MDirty`: Returns true if a macrobutton has been updated.
 
 ### Run tests
 
