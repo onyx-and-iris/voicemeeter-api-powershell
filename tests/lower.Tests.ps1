@@ -1,5 +1,5 @@
 BeforeAll { 
-    . ..\lib\base.ps1
+    . .\lib\base.ps1
 }
 
 Describe -Tag 'lower', -TestName 'All Lower Tests' {

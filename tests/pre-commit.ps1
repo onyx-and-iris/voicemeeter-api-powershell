@@ -1,5 +1,5 @@
-Param([String]$tag, [Int]$num=1, [switch]$log, [string]$kind)
-Import-Module ..\lib\Voicemeeter.psm1
+Param([String]$tag, [Int]$num=1, [switch]$log, [string]$kind="potato")
+Import-Module .\lib\Voicemeeter.psm1
 
 Function ParseLog {
     Param([String]$logfile)
