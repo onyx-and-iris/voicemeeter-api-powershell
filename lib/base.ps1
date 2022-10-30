@@ -41,10 +41,11 @@ function Login {
         elseif ($retval -eq -2) {
             throw [LoginError]::new('Login may only be called once per session')
         }
-        else { exit }
+        else { throw [CAPIError]::new($retval, $MyInvocation.MyCommand) }
     }
     catch [LoginError], [CAPIError] {
         Write-Warning $_.Exception.ErrorMessage()
+        exit
     }
 
     while (P_Dirty -or M_Dirty) { Start-Sleep -m 1 }
