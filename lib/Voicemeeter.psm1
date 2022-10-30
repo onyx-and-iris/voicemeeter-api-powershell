@@ -32,15 +32,15 @@ class Remote {
     }
 
     [string] ToString() {
-        return "Voicemeeter " + $this.kind.name.substring(0,1).toupper() + $this.kind.name.substring(1)
+        return "Voicemeeter " + $this.kind.name.substring(0, 1).toupper() + $this.kind.name.substring(1)
     }
 
     [void] Logout() {
         Logout
     }
 
-    [void] GetType() {
-        VmType
+    [string] GetType() {
+        return VmType
     }
 
     [String] GetVersion() {
