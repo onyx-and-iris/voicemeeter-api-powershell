@@ -1,6 +1,6 @@
 ## About
 
-A simple voicemeeter-cli program. Offers ability to toggle, get and set parameters.
+A simple voicemeeter-cli script. Offers ability to toggle, get and set parameters.
 
 ## Use
 
@@ -8,7 +8,7 @@ Toggle with `!` prefix, get by excluding `=` and set by including `=`. Mix and m
 
 You may pass the following optional flags:
 
--   -v: (-verbose) to toggle console output.
+-   -o: (-output) to toggle console output.
 -   -i: (-interactive) to toggle interactive mode.
 -   -k: (-kind) to set the kind of Voicemeeter. Defaults to banana.
 
@@ -28,4 +28,4 @@ Setting bus[2].eq.on=1
 Setting command.lock=1
 ```
 
-If running in interactive mode enter `<Enter>` to exit.
+If running in interactive mode press `<Enter>` to exit.
