@@ -15,7 +15,7 @@ For past/future changes to this project refer to: [CHANGELOG](CHANGELOG.md)
 ## Requirements
 
 -   [Voicemeeter](https://voicemeeter.com/)
--   Powershell 5.1
+-   Powershell 5.1+ or Powershell 7.2+
 
 ## Installation
 
