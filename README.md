@@ -349,15 +349,16 @@ Access to lower level polling functions are provided with these functions:
 
 ### Run tests
 
-Run tests using .\runall.ps1 which accepts two parameters:
+Run tests using .\tests\pre-commit.ps1 which accepts the following parameters:
 
--   tag Run tests of this type
--   num Run this number of tests
+-   `kind`: Run tests of this kind
+-   `tag`: Run tests tagged with this marker (currently `higher` or `lower`)
+-   `num`: Run this number of tests
 
-Current test types are 'higher' and 'lower'
+Run tests from repository root in a subshell like so:
 
 Example:
-`.\runall.ps1 -tag 'higher' -num 3`
+`powershell .\tests\pre-commit.ps1 -k "potato" -t "higher"3`
 
 Results will be logged and summary file written.
 
