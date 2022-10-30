@@ -11,6 +11,7 @@ You may pass the following optional flags:
 -   -o: (-output) to toggle console output.
 -   -i: (-interactive) to toggle interactive mode.
 -   -k: (-kind) to set the kind of Voicemeeter. Defaults to banana.
+-   -s: (script) a string array, one string for each command.
 
 for example:
 
