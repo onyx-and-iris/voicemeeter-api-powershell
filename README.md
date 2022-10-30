@@ -354,12 +354,11 @@ Run tests using .\tests\pre-commit.ps1 which accepts the following parameters:
 -   `kind`: Run tests of this kind
 -   `tag`: Run tests tagged with this marker (currently `higher` or `lower`)
 -   `num`: Run this number of tests
+-   `log`: Write summary log file
 
-Run tests from repository root in a subshell like so:
+Run tests from repository root in a subshell and write logs, like so:
 
-`powershell .\tests\pre-commit.ps1 -k "potato" -t "higher"`
-
-Results will be logged and summary file written.
+`powershell .\tests\pre-commit.ps1 -k "potato" -t "higher" -log`
 
 ### Official Documentation
 

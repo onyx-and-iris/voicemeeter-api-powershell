@@ -3,7 +3,7 @@ Import-Module .\lib\Voicemeeter.psm1
 
 Function ParseLog {
     Param([String]$logfile)
-    $summary_file = "_summary.log"
+    $summary_file = Join-Path $PSScriptRoot "_summary.log"
     if (Test-Path $summary_file) { Clear-Content $summary_file }
 
     $PASSED_PATTERN = "^PassedCount\s+:\s(\d+)"
@@ -57,7 +57,7 @@ function main() {
         $ifNotBanana = $vmr.kind.name -ne "banana"
         $ifNotPotato = $vmr.kind.name -ne "potato"
 
-        $logfile = "_results.log"
+        $logfile = Join-Path $PSScriptRoot "_results.log"
         if (Test-Path $logfile) { Clear-Content $logfile }
 
         1..$num | ForEach-Object {
