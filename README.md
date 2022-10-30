@@ -357,8 +357,7 @@ Run tests using .\tests\pre-commit.ps1 which accepts the following parameters:
 
 Run tests from repository root in a subshell like so:
 
-Example:
-`powershell .\tests\pre-commit.ps1 -k "potato" -t "higher"3`
+`powershell .\tests\pre-commit.ps1 -k "potato" -t "higher"`
 
 Results will be logged and summary file written.
 
