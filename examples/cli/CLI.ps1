@@ -1,8 +1,7 @@
 param(
     [switch]$interactive,
     [switch]$output,
-    [Parameter(Mandatory)]
-    [String]$kind,
+    [String]$kind="banana",
     [String[]]$script = @()
 )
 
