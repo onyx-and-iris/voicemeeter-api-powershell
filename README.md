@@ -81,10 +81,10 @@ Voicemeeter factory function can be:
 
 #### `Through the Shell`
 
-One liners should be run through a subshell
+One liners should be run through a subshell, you may pipe the Remote object to a script block, for example:
 
 ```powershell
-powershell { $vmr = Get-RemoteBanana; $vmr.strip[0].mute=$true; $vmr.Logout() }
+powershell { Get-RemoteBanana | % { $_.strip[0].mute=$true; $_.Logout() } }
 ```
 
 You may also save the object returned by a factory function to a local variable, then invoke any commands through the shell, for example:
