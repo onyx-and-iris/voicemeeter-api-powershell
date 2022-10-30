@@ -1,5 +1,6 @@
 param(
     [switch]$interactive,
+    [switch]$output,
     [Parameter(Mandatory)]
     [String]$kind,
     [String[]]$script = @()
@@ -22,23 +23,24 @@ function msgHandler {
     param([object]$vmr, [string]$line)
     $line + " passed to handler" | Write-Debug
     if ($line[0] -eq "!") {
+        if ($output) { "Toggling " + $line.substring(1) | Write-Host }
         $retval = get-value -vmr $vmr -line $line.substring(1)
         $vmr.Setter($line.substring(1), 1 - $retval)
     }
     elseif ($line.Contains("=")) { 
-        "Setting value $line" | Write-Debug
+        if ($output) { "Setting $line" | Write-Host }
         $vmr.SendText($line)
     }
     else {
-        "Getting value $line" | Write-Debug
+        if ($output) { "Getting $line" | Write-Host }
         $retval = get-value -vmr $vmr -line $line
         $line + " = " + $retval | Write-Host
     }
 }
 
-function read-hostuntilflag {
+function read-hostuntilempty {
     param([object]$vmr)
-    while (($line = Read-Host) -cne [string]::Empty) { msgHandler -vmr $vmr -line $line }
+    while (($line = Read-Host) -cne[string]::Empty) { msgHandler -vmr $vmr -line $line }
 }
 
 
@@ -54,7 +56,7 @@ function main {
     
         if ($interactive) {
             "Press <Enter> to exit" | Write-Host
-            read-hostuntilflag -vmr $vmr
+            read-hostuntilempty -vmr $vmr
             return
         }
         $script | ForEach-Object {
