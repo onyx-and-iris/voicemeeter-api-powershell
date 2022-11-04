@@ -9,7 +9,8 @@ Demonstrates how to sync Voicemeeter states with OBS scene switches.
 
 ## Use
 
-This example assumes your OBS connection info saved in `config.psd1`, placed next to `Vm-Obs-Sync.ps1`:
+This example assumes the following:
+-   OBS connection info saved in `config.psd1`, placed next to `Vm-Obs-Sync.ps1`:
 
 ```psd1
 @{
@@ -18,5 +19,7 @@ This example assumes your OBS connection info saved in `config.psd1`, placed nex
     password = "mystrongpassword"
 }
 ```
+
+-   OBS scenes named `START`, `BRB`, `END` and `LIVE`
 
 Simply run the script and change current OBS scene.

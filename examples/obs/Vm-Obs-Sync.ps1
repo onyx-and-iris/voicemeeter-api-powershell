@@ -18,7 +18,7 @@ function CurrentProgramSceneChanged($data) {
         "BRB" { $vmr.strip[0].gain = -8.3 }
         "END" { $vmr.strip[0].mono = $true }
         "LIVE" { $vmr.strip[0].color_x = 0.3 }
-        default { "Expected START, BRB, END or LIVE scene" | Write-Host }
+        default { "Expected START, BRB, END or LIVE scene" | Write-Warning; return }
     }
     $info[$data.SceneName] | Write-Host
 }
@@ -33,6 +33,9 @@ function main {
         $vmr = Get-RemoteBasic
         $conn = ConnFromFile
         $r_client = Get-OBSRequest -hostname $conn.hostname -port $conn.port -pass $conn.password
+        $resp = $r_client.getVersion()
+        "obs version:" + $resp.obsVersion | Write-Host
+        "websocket version:" + $resp.obsWebSocketVersion | Write-Host
 
         $e_client = Get-OBSEvent -hostname $conn.hostname -port $conn.port -pass $conn.password
         $callbacks = @("CurrentProgramSceneChanged", ${function:CurrentProgramSceneChanged})
