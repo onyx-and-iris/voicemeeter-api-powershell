@@ -53,6 +53,10 @@ class Special {
             $this._lock = $this.Setter($this.cmd('lock'), $arg)
         }
     )
+
+    [void] Load ([string]$filename) {
+        $this.Setter($this.cmd('load'), $filename)
+    }
 }
 
 function Make_Command {

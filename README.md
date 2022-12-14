@@ -8,9 +8,9 @@ For past/future changes to this project refer to: [CHANGELOG](CHANGELOG.md)
 
 ## Tested against
 
--   Basic 1.0.8.4
--   Banana 2.0.6.4
--   Potato 3.0.2.4
+-   Basic 1.0.8.8
+-   Banana 2.0.6.8
+-   Potato 3.0.2.8
 
 ## Requirements
 
@@ -238,6 +238,7 @@ The following methods are available:
 -   hide
 -   restart
 -   shutdown
+-   Load(<filepath>)
 
 The following properties are write only and accept boolean values:
 
@@ -250,6 +251,9 @@ example:
 $vmr.command.show
 
 $vmr.command.lock = $true
+
+
+$vmr.command.Load("<path/to/filename.xml>")
 ```
 
 ### Recorder
@@ -362,4 +366,4 @@ Run tests from repository root in a subshell and write logs, like so:
 
 ### Official Documentation
 
--   [Voicemeeter Remote C API](https://github.com/onyx-and-iris/Voicemeeter-SDK/blob/main/VoicemeeterRemoteAPI.pdf)
+-   [Voicemeeter Remote C API](https://github.com/onyx-and-iris/Voicemeeter-SDK/blob/update-docs/VoicemeeterRemoteAPI.pdf)

@@ -9,7 +9,8 @@ Before any major/minor/patch is released all test units will be run to verify th
 
 ## [Unreleased] These changes have not been added to PSGallery yet
 
--   [ ]
+-   [x] Implement command.load
+-   [ ] Implement comp/gate parameters introduced in v3.0.2.8 of api.
 
 ## [2.5.0] - 2022-10-27
 
