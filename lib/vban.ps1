@@ -1,70 +1,76 @@
-class Vban {
+class IVban {
     [int32]$index
     [string]$direction
 
-    # Constructor
-    Vban ([int]$index) {
+    IVban ([int]$index, [string]$direction) {
         $this.index = $index
+        $this.direction = $direction
+    }
+
+    [string] identifier () {
+        return "vban." + $this.direction + "stream[" + $this.index + "]"
     }
 
     [string] ToString() {
         return $this.GetType().Name + $this.index
     }
 
-    [single] Getter ($cmd) {
-        return Param_Get -PARAM $cmd -IS_STRING $false
+    [single] Getter ($param) {
+        return Param_Get -PARAM "$($this.identifier()).$param" -IS_STRING $false
     }
 
-    [string] Getter_String ($cmd) {
-        return Param_Get -PARAM $cmd -IS_STRING $true
+    [string] Getter_String ($param) {
+        return Param_Get -PARAM "$($this.identifier()).$param" -IS_STRING $true
     }
 
-    [void] Setter ($cmd, $set) {
-        Param_Set -PARAM $cmd -Value $set
+    [void] Setter ($param, $val) {
+        Param_Set -PARAM "$($this.identifier()).$param" -Value $val
     }
+}
 
-    [string] cmd ($arg) {
-        return "vban." + $this.direction + "stream[" + $this.index + "].$arg"
+class Vban : IVban {
+    # Constructor
+    Vban ([int]$index, [string]$direction) : base ($index, $direction) {
     }
 
     hidden $_on = $($this | Add-Member ScriptProperty 'on' `
         {
-            $this.Getter($this.cmd('on'))
+            $this.Getter('on')
         } `
         {
             param([bool]$arg)
-            $this._on = $this.Setter($this.cmd('on'), $arg)
+            $this._on = $this.Setter('on', $arg)
         }
     )
 
     hidden $_name = $($this | Add-Member ScriptProperty 'name' `
         {
-            $this.Getter_String($this.cmd('name'))
+            $this.Getter_String('name')
         } `
         {
             param([string]$arg)
-            $this._name = $this.Setter($this.cmd('name'), $arg)
+            $this._name = $this.Setter('name', $arg)
         }
     )
 
     hidden $_ip = $($this | Add-Member ScriptProperty 'ip' `
         {
-            $this.Getter_String($this.cmd('ip'))
+            $this.Getter_String('ip')
         } `
         {
             param([string]$arg)
-            $this._ip = $this.Setter($this.cmd('ip'), $arg)
+            $this._ip = $this.Setter('ip', $arg)
         }
     )
 
     hidden $_port = $($this | Add-Member ScriptProperty 'port' `
         {
-            $this.Getter($this.cmd('port'))
+            $this.Getter('port')
         } `
         {
             param([string]$arg)
             if ($arg -in 1024..65535) {
-                $this._port = $this.Setter($this.cmd('port'), $arg)
+                $this._port = $this.Setter('port', $arg)
             }
             else {
                 Write-Warning ('Expected value from 1024 to 65535')
@@ -74,7 +80,7 @@ class Vban {
 
     hidden $_sr = $($this | Add-Member ScriptProperty 'sr' `
         {
-            $this.Getter($this.cmd('sr'))
+            $this.Getter('sr')
         } `
         {
             param([int]$arg)
@@ -82,7 +88,7 @@ class Vban {
             else {
                 $opts = @(11025, 16000, 22050, 24000, 32000, 44100, 48000, 64000, 88200, 96000)
                 if ($opts.Contains($arg)) {
-                    $this._port = $this.Setter($this.cmd('sr'), $arg)
+                    $this._port = $this.Setter('sr', $arg)
                 }
                 else {
                     Write-Warning ('Expected one of', $opts)
@@ -93,14 +99,14 @@ class Vban {
 
     hidden $_channel = $($this | Add-Member ScriptProperty 'channel' `
         {
-            $this.Getter($this.cmd('channel'))
+            $this.Getter('channel')
         } `
         {
             param([int]$arg)
             if ($this.direction -eq "in") { Write-Warning ('Error, read only value') }
             else {
                 if ($arg -in 1..8) {
-                    $this._channel = $this.Setter($this.cmd('channel'), $arg)
+                    $this._channel = $this.Setter('channel', $arg)
                 }
                 else {
                     Write-Warning ('Expected value from 1 to 8')
@@ -111,7 +117,7 @@ class Vban {
 
     hidden $_bit = $($this | Add-Member ScriptProperty 'bit' `
         {
-            $val = if ($this.Getter($this.cmd('bit')) -eq 1) { 16 } else { 24 }
+            $val = if ($this.Getter('bit') -eq 1) { 16 } else { 24 }
             return $val
         } `
         {
@@ -120,7 +126,7 @@ class Vban {
             else {
                 if (@(16, 24).Contains($arg)) {
                     $val = if ($arg -eq 16) { 1 } else { 2 }
-                    $this._bit = $this.Setter($this.cmd('bit'), $val)
+                    $this._bit = $this.Setter('bit', $val)
                 }
                 else {
                     Write-Warning ('Expected value 16 or 24')
@@ -131,14 +137,14 @@ class Vban {
 
     hidden $_quality = $($this | Add-Member ScriptProperty 'quality' `
         {
-            $this.Getter($this.cmd('quality'))
+            $this.Getter('quality')
         } `
         {
             param([int]$arg)
             if ($this.direction -eq "in") { Write-Warning ('Error, read only value') }
             else {
                 if ($arg -in 0..4) {
-                    $this._quality = $this.Setter($this.cmd('quality'), $arg)
+                    $this._quality = $this.Setter('quality', $arg)
                 }
                 else {
                     Write-Warning ('Expected value from 0 to 4')
@@ -149,14 +155,14 @@ class Vban {
 
     hidden $_route = $($this | Add-Member ScriptProperty 'route' `
         {
-            $this.Getter($this.cmd('route'))
+            $this.Getter('route')
         } `
         {
             param([int]$arg)
             if ($this.direction -eq "in") { Write-Warning ('Error, read only value') }
             else {
                 if ($arg -in 0..8) {
-                    $this._route = $this.Setter($this.cmd('route'), $arg)
+                    $this._route = $this.Setter('route', $arg)
                 }
                 else {
                     Write-Warning ('Expected value from 0 to 8')
@@ -169,16 +175,14 @@ class Vban {
 
 class VbanInstream : Vban {
     # Constructor
-    VbanInstream ([int]$index) : base ($index) {
-        $this.direction = "in"
+    VbanInstream ([int]$index, [string]$direction) : base ($index, $direction) {
     }
 }
 
 
 class VbanOutstream : Vban {
     # Constructor
-    VbanOutstream ([int]$index) : base ($index) {
-        $this.direction = "out"
+    VbanOutstream ([int]$index, [string]$direction) : base ($index, $direction) {
     }
 }
 
@@ -188,10 +192,10 @@ function Make_Vban ([Object]$remote) {
     [System.Collections.ArrayList]$outstream = @()
 
     0..$($remote.kind.vban_in - 1) | ForEach-Object {
-        [void]$instream.Add([VbanInstream]::new($_))
+        [void]$instream.Add([VbanInstream]::new($_, "in"))
     }
     0..$($remote.kind.vban_out - 1) | ForEach-Object {
-        [void]$outstream.Add([VbanOutstream]::new($_))
+        [void]$outstream.Add([VbanOutstream]::new($_, "out"))
     }
 
     $CustomObject = [pscustomobject]@{
