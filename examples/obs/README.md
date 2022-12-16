@@ -5,11 +5,12 @@ Demonstrates how to sync Voicemeeter states with OBS scene switches.
 ## Requirements
 
 -   [OBS Studio 28+](https://obsproject.com/)
--   [OBSWebSocket for Powershell](https://github.com/onyx-and-iris/OBSWebSocket-Powershell)
+-   [OBS-Powershell](https://github.com/StartAutomating/obs-powershell)
 
 ## Use
 
 This example assumes the following:
+
 -   OBS connection info saved in `config.psd1`, placed next to `Vm-Obs-Sync.ps1`:
 
 ```psd1

@@ -7,7 +7,7 @@
     Credits go to @bobsupercow
 #>
 
-Import-Module Voicemeeter
+Import-Module ..\..\lib\Voicemeeter.psm1
 
 try {
     $vmr = Get-RemotePotato
@@ -20,7 +20,7 @@ try {
         $bus = $_
         # 2)
         if (-not $bus.mute) {
-            "bus " + $bus.index  + " is unmuted... muting it" | Write-Host
+            "bus " + $bus.index + " is unmuted... muting it" | Write-Host
             $unmutedIndex = $buses.IndexOf($bus)
             $bus.mute = $true
 

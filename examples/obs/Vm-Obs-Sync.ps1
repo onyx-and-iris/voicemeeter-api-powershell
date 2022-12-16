@@ -1,26 +1,43 @@
-Import-Module Voicemeeter
-Import-Module OBSWebSocket
+Import-Module ..\..\lib\Voicemeeter.psm1
+Import-Module obs-powershell
 
 $VerbosePreference = "Continue"
 
-$info = @{
-    START = "Toggling Strip 0 mute"
-    BRB = "Setting Strip 0 gain to -8.3"
-    END = "Setting Strip 0 mono to `$false"
-    LIVE = "Setting Strip 0 color_x to 0.3"
-}
+function CurrentProgramSceneChanged {
+    param([System.Object]$data)
+    Write-Host "Switched to scene", $data.sceneName
 
-function CurrentProgramSceneChanged($data) {
-    "Switched to scene " + $data.sceneName | Write-Host
-    
-    switch ($data.SceneName) {
-        "START" { $vmr.strip[0].mute = !$vmr.strip[0].mute }
-        "BRB" { $vmr.strip[0].gain = -8.3 }
-        "END" { $vmr.strip[0].mono = $true }
-        "LIVE" { $vmr.strip[0].color_x = 0.3 }
+    switch ($data.sceneName) {
+        "START" { 
+            $vmr.strip[0].mute = !$vmr.strip[0].mute
+            "Toggling Strip 0 mute"
+        }
+        "BRB" { 
+            $vmr.strip[0].gain = -8.3
+            "Setting Strip 0 gain to -8.3"
+        }
+        "END" { 
+            $vmr.strip[0].mono = $true
+            "Setting Strip 0 mono to `$false"
+        }
+        "LIVE" { 
+            $vmr.strip[0].color_x = 0.3
+            "Setting Strip 0 color_x to 0.3"
+        }
         default { "Expected START, BRB, END or LIVE scene" | Write-Warning; return }
     }
-    $info[$data.SceneName] | Write-Host
+}
+
+function ExitStarted {
+    param([System.Object]$data)
+    "OBS closing has begun!" | Write-Host
+    break
+}
+
+function eventHandler($data) {
+    if (Get-Command $data.eventType -ErrorAction SilentlyContinue) {
+        & $data.eventType -data $data.eventData
+    }
 }
 
 function ConnFromFile {
@@ -29,22 +46,26 @@ function ConnFromFile {
 }
 
 function main {
-    try {
-        $vmr = Get-RemoteBasic
-        $conn = ConnFromFile
-        $r_client = Get-OBSRequest -hostname $conn.hostname -port $conn.port -pass $conn.password
-        $resp = $r_client.getVersion()
-        "obs version:" + $resp.obsVersion | Write-Host
-        "websocket version:" + $resp.obsWebSocketVersion | Write-Host
+    $vmr = Connect-Voicemeeter -Kind "basic"
 
-        $e_client = Get-OBSEvent -hostname $conn.hostname -port $conn.port -pass $conn.password
-        $callbacks = @("CurrentProgramSceneChanged", ${function:CurrentProgramSceneChanged})
-        $e_client.Register($callbacks)
-    } finally { 
-        $r_client.TearDown()
-        $e_client.TearDown()
-        $vmr.Logout()
+    $conn = ConnFromFile
+    $job = Watch-OBS -WebSocketURI "ws://$($conn.host):$($conn.port)" -WebSocketToken $conn.password
+
+    try {
+        while ($true) {
+            Receive-Job -Job $job | ForEach-Object {
+                $data = $_.MessageData
+
+                if ($data.op -eq 5) {
+                    eventHandler($data.d)
+                }
+            }        
+        }
     }
+    finally { 
+        Disconnect-OBS 
+        Disconnect-Voicemeeter
+    }    
 }
 
 if ($MyInvocation.InvocationName -ne '.') { main }

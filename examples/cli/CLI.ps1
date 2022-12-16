@@ -1,11 +1,11 @@
 param(
     [switch]$interactive,
     [switch]$output,
-    [String]$kind="banana",
+    [String]$kind = "banana",
     [String[]]$script = @()
 )
 
-Import-Module Voicemeeter
+Import-Module ..\..\lib\Voicemeeter.psm1
 
 function get-value {
     param([object]$vmr, [string]$line)
@@ -39,7 +39,7 @@ function msgHandler {
 
 function read-hostuntilempty {
     param([object]$vmr)
-    while (($line = Read-Host) -cne[string]::Empty) { msgHandler -vmr $vmr -line $line }
+    while (($line = Read-Host) -cne [string]::Empty) { msgHandler -vmr $vmr -line $line }
 }
 
 
@@ -47,11 +47,7 @@ function main {
     [object]$vmr
 
     try {
-        switch ($kind) {
-            "basic" { $vmr = Get-RemoteBasic }
-            "banana" { $vmr = Get-RemoteBanana }
-            "potato" { $vmr = Get-RemotePotato }
-        }
+        $vmr = Connect-Voicemeeter -Kind $kind
     
         if ($interactive) {
             "Press <Enter> to exit" | Write-Host
@@ -62,7 +58,7 @@ function main {
             msgHandler -vmr $vmr -line $_
         }
     }
-    finally { $vmr.Logout() }
+    finally { Disconnect-Voicemeeter }
 }
 
 if ($MyInvocation.InvocationName -ne '.') { main }
