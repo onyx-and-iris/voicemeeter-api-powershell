@@ -109,11 +109,7 @@ The following strip commands are available:
 -   B1-B3: bool
 -   limit: int, from -40 to 12
 -   gain: float, from -60.0 to 12.0
--   comp: float, from 0.0 to 10.0
--   gate: float, from 0.0 to 10.0
 -   label: string
--   device: string
--   sr: int
 -   reverb: float, from 0.0 to 10.0
 -   delay: float, from 0.0 to 10.0
 -   fx1: float, from 0.0 to 10.0
@@ -142,19 +138,52 @@ gainlayers defined for Potato version only.
 
 mc, k for virtual strips only.
 
+#### comp
+
+The following strip.comp commands are available:
+
+-   knob: float, from 0.0 to 10.0
+-   gainin: float, from -24.0 to 24.0
+-   ratio: float, from 1.0 to 8.0
+-   threshold: float, from -40.0 to -3.0
+-   attack: float, from 0.0 to 200.0
+-   release: float, from 0.0 to 5000.0
+-   knee: float, 0.0 to 1.0
+-   gainout: float, from -24.0 to 24.0
+-   makeup: boolean
+
+#### gate
+
+The following strip.gate commands are available:
+
+-   knob: float, from 0.0 to 10.0
+-   threshold: float, from -60.0 to -10.0
+-   damping: float, from -60.0 to -10.0
+-   bpsidechain: int, from 100 to 4000
+-   attack: float, from 0.0 to 1000.0
+-   hold: float, from 0.0 to 5000.0
+-   release: float, from 0.0 to 5000.0
+
+#### denoiser
+
+The following strip.denoiser commands are available:
+
+-   knob: float, from 0.0 to 10.0
+
+#### AppGain | AppMute
+
+-   `AppGain(amount, gain)` : string, float
+-   `AppMute(amount, mutestate)` : string, boolean
+
 ### Bus
 
 The following bus commands are available:
 
 -   mute: bool
 -   mono: bool
--   eq: bool
--   eq_ab: bool
 -   limit: int, from -40 to 12
 -   gain: float, from -60.0 to 12.0
 -   label: string
--   device: string
--   sr: int
 -   returnreverb: float, from 0.0 to 10.0
 -   returndelay: float, from 0.0 to 10.0
 -   returnfx1: float, from 0.0 to 10.0
@@ -170,6 +199,22 @@ $vmr.bus[3].mode_repeat = $true
 ```
 
 ### Strip|Bus
+
+#### device
+
+The following strip.device | bus.device commands are available:
+
+-   name: string
+-   sr: int
+
+#### eq
+
+The following strip.eq | bus.eq commands are available:
+
+-   on: boolean
+-   ab: boolean
+
+#### FadeTo | FadeBy
 
 -   `FadeTo(amount, time)` : float, int
 -   `FadeBy(amount, time)` : float, int
