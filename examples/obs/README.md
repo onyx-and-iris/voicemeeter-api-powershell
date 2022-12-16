@@ -24,3 +24,5 @@ This example assumes the following:
 -   OBS scenes named `START`, `BRB`, `END` and `LIVE`
 
 Simply run the script and change current OBS scene.
+
+Closing OBS will end the script.
