@@ -20,7 +20,7 @@ class MacroButton {
 
     hidden $_state = $($this | Add-Member ScriptProperty 'state' `
         {
-            $this.Getter(1)
+            [bool]$this.Getter(1)
         } `
         {
             param($arg)
@@ -30,7 +30,7 @@ class MacroButton {
 
     hidden $_stateonly = $($this | Add-Member ScriptProperty 'stateonly' `
         {
-            $this.Getter(2)
+            [bool]$this.Getter(2)
         } `
         {
             param($arg)
@@ -40,7 +40,7 @@ class MacroButton {
 
     hidden $_trigger = $($this | Add-Member ScriptProperty 'trigger' `
         {
-            $this.Getter(3)
+            [bool]$this.Getter(3)
         } `
         {
             param($arg)
