@@ -10,39 +10,39 @@ class Recorder {
         AddChannelMembers
     }
 
+    [string] identifier () {
+        return "Recorder"
+    }
+
     [string] ToString() {
         return $this.GetType().Name
     }
 
-    [single] Getter ($cmd) {
-        return Param_Get -PARAM $cmd -IS_STRING $false
+    [single] Getter ($param) {
+        return Param_Get -PARAM "$($this.identifier()).$param" -IS_STRING $false
     }
 
     [void] Setter ($param, $val) {
         if ($val -is [Boolean]) {
-            Param_Set -PARAM $param -Value $(if ($val) { 1 } else { 0 })
+            Param_Set -PARAM "$($this.identifier()).$param" -Value $(if ($val) { 1 } else { 0 })
         }
         else {
-            Param_Set -PARAM $param -Value $val
+            Param_Set -PARAM "$($this.identifier()).$param" -Value $val
         }
-    }
-
-    [string] cmd ($arg) {
-        return "Recorder.$arg"
     }
 
     hidden $_loop = $($this | Add-Member ScriptProperty 'loop' `
         {
-            return Write-Warning ("ERROR: " + $this.cmd('mode.loop') + " is write only")
+            return Write-Warning ("ERROR: $($this.identifier()).mode.loop is write only")
         } `
         {
             param([bool]$arg)
-            $this._loop = $this.Setter($this.cmd('mode.loop'), $arg)
+            $this._loop = $this.Setter('mode.loop', $arg)
         }
     )
 
     [void] Load ([string]$filename) {
-        $this.Setter($this.cmd('load'), $filename)
+        $this.Setter('load', $filename)
     }
 }
 
