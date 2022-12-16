@@ -238,7 +238,7 @@ The following methods are available:
 -   hide
 -   restart
 -   shutdown
--   Load(<filepath>)
+-   Load(filepath)
 
 The following properties are write only and accept boolean values:
 
@@ -252,8 +252,7 @@ $vmr.command.show
 
 $vmr.command.lock = $true
 
-
-$vmr.command.Load("<path/to/filename.xml>")
+$vmr.command.Load("path/to/filename.xml")
 ```
 
 ### Recorder
