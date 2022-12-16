@@ -10,7 +10,36 @@ Before any major/minor/patch is released all test units will be run to verify th
 ## [Unreleased] These changes have not been added to PSGallery yet
 
 -   [x] Implement command.load
--   [ ] Implement comp/gate parameters introduced in v3.0.2.8 of the api.
+-   [x] Implement comp/gate parameters introduced in v3.0.2.8 of the api.
+-   [ ] Add unit tests for new classes.
+-   [ ] Update README with changes to Strip/Bus classes.
+
+## [3.0.0]
+
+v3 introduces some breaking changes. They are as follows:
+
+-   Strip[i].comp now references [Comp] class. (see README for details on settings strip.comp paramters)
+-   Strip[i].gate now references [Gate] class. (see README for details on settings strip.gate paramters)
+-   Strip[i].eq now references [Eq] class. (see README for details on settings strip.eq paramters)
+-   Strip[i].device now references [Device] class. (see README for details on settings strip.device paramters)
+
+-   Bus[i].eq now references [Eq] class. (see README for details on settings bus.eq paramters)
+
+### Changed
+
+-   meta functions refactored, they now use identifier() functions.
+
+### Added
+
+-   Entry/exit points Connect-Voicemeeter, Disconnect-Voicemeeter added to module.
+-   Comp, Gate, Denoiser, Eq and Device classes added to PhysicalStrip
+-   AppGain(), AppMute() methods added to VirtualStrip
+-   eq added to Bus
+-   interface classes IBus, IStrip and IVban added. getters/setters moved into interface classes.
+
+### Fixed
+
+-   Button getters return boolean values.
 
 ## [2.5.0] - 2022-10-27
 
