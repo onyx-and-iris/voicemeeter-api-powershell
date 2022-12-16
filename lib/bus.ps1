@@ -1,89 +1,100 @@
 . $PSScriptRoot\meta.ps1
 
-class Bus {
+class IBus {
     [int]$index
     [Object]$remote
-
-    # Constructor
-    Bus ([int]$index, [Object]$remote) {
+    
+    IBus ([int]$index, [Object]$remote) {
         $this.index = $index
         $this.remote = $remote
+    }
 
-        AddBoolMembers -PARAMS @('mono', 'mute')
-        AddStringMembers -PARAMS @('label')
-        AddFloatMembers -PARAMS @('gain', 'returnreverb', 'returndelay', 'returnfx1', 'returnfx2')
-
-        AddBusModeMembers -PARAMS @('normal', 'amix', 'bmix', 'repeat', 'composite', 'tvmix', 'upmix21')
-        AddBusModeMembers -PARAMS @('upmix41', 'upmix61', 'centeronly', 'lfeonly', 'rearonly')
+    [string] identifier () {
+        return "Bus[" + $this.index + "]"
     }
 
     [string] ToString() {
         return $this.GetType().Name + $this.index
     }
 
-    [single] Getter ($cmd) {
-        return Param_Get -PARAM $cmd -IS_STRING $false
+    [single] Getter ($param) {
+        return Param_Get -PARAM "$($this.identifier()).$param" -IS_STRING $false
     }
 
-    [string] Getter_String ($cmd) {
-        return Param_Get -PARAM $cmd -IS_STRING $true
+    [string] Getter_String ($param) {
+        return Param_Get -PARAM "$($this.identifier()).$param" -IS_STRING $true
     }
 
-    [void] Setter ($cmd, $set) {
-        Param_Set -PARAM $cmd -Value $set
+    [void] Setter ($param, $set) {
+        Param_Set -PARAM "$($this.identifier()).$param" -Value $set
     }
+}
 
-    [string] cmd ($arg) {
-        return "Bus[" + $this.index + "].$arg"
+class Bus : IBus {
+    [Object]$eq
+
+    # Constructor
+    Bus ([int]$index, [Object]$remote) : base ($index, $remote) {
+        AddBoolMembers -PARAMS @('mono', 'mute')
+        AddStringMembers -PARAMS @('label')
+        AddFloatMembers -PARAMS @('gain', 'returnreverb', 'returndelay', 'returnfx1', 'returnfx2')
+
+        AddBusModeMembers -PARAMS @('normal', 'amix', 'bmix', 'repeat', 'composite', 'tvmix', 'upmix21')
+        AddBusModeMembers -PARAMS @('upmix41', 'upmix61', 'centeronly', 'lfeonly', 'rearonly')
+
+        $this.eq = [Eq]::new($index, $remote)
     }
-
-    hidden $_eq = $($this | Add-Member ScriptProperty 'eq' `
-        {
-            [bool]$this.Getter($this.cmd('EQ.on'))
-        } `
-        {
-            param($arg)
-            $this._eq = $this.Setter($this.cmd('EQ.on'), $arg)
-        }
-    )
-
-    hidden $_eq_ab = $($this | Add-Member ScriptProperty 'eq_ab' `
-        {
-            [bool]$this.Getter($this.cmd('eq.ab'))
-        } `
-        {
-            param($arg)
-            $this._eq = $this.Setter($this.cmd('eq.ab'), $arg)
-        }
-    )
 
     [void] FadeTo ([single]$target, [int]$time) {
-        $this.Setter($this.cmd('FadeTo'), "($target, $time)")
+        $this.Setter('FadeTo', "($target, $time)")
     }
 
     [void] FadeBy ([single]$target, [int]$time) {
-        $this.Setter($this.cmd('FadeBy'), "($target, $time)")
+        $this.Setter('FadeBy', "($target, $time)")
+    }
+}
+
+class Eq : IBus {
+    Eq ([int]$index, [Object]$remote) : base ($index, $remote) {
+        AddBoolMembers -PARAMS @('on', 'ab')
+    }
+
+    [string] identifier () {
+        return "Bus[" + $this.index + "].EQ"
     }
 }
 
 class PhysicalBus : Bus {
+    [Object]$device
+
     PhysicalBus ([int]$index, [Object]$remote) : base ($index, $remote) {
+        $this.device = [Device]::new($index, $remote)
     }
-    hidden $_device = $($this | Add-Member ScriptProperty 'device' `
+}
+
+class Device : IBus {
+    Device ([int]$index, [Object]$remote) : base ($index, $remote) {
+    }
+
+    [string] identifier () {
+        return "Bus[" + $this.index + "].Device"
+    }
+
+    hidden $_name = $($this | Add-Member ScriptProperty 'name' `
         {
-            $this.Getter_String($this.cmd('device.name'))
+            $this.Getter_String('name')
         } `
         {
-            return Write-Warning ("ERROR: " + $this.cmd('device.name') + " is read only")
+            return Write-Warning ("ERROR: $($this.identifier()).name is read only")
         }
     )
 
     hidden $_sr = $($this | Add-Member ScriptProperty 'sr' `
         {
-            $this.Getter($this.cmd('device.sr'))
+            $this.Getter('sr')
         } `
         {
-            return Write-Warning ("ERROR: " + $this.cmd('device.sr') + " is read only")
+            return Write-Warning ("ERROR: $($this.identifier()).sr is read only")
         }
     )
 }
