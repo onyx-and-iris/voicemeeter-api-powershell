@@ -88,4 +88,30 @@ Function Get-RemotePotato {
     return [Remote]::new('potato')
 }
 
-Export-ModuleMember -Function Get-RemoteBasic, Get-RemoteBanana, Get-RemotePotato
+Function Connect-Voicemeeter {
+    param([String]$Kind)
+    try {
+        switch ($Kind) {
+            "basic" { 
+                return Get-RemoteBasic
+            }
+            "banana" { 
+                return Get-RemoteBanana
+            }
+            "potato" { 
+                return Get-RemotePotato
+            }
+            default { throw [LoginError]::new('Unknown Voicemeeter kind') }
+        }        
+    }
+    catch [LoginError] {
+        Write-Warning $_.Exception.ErrorMessage()
+        Exit
+    }
+}
+
+Function Disconnect-Voicemeeter {
+    Logout
+}
+
+Export-ModuleMember -Function Get-RemoteBasic, Get-RemoteBanana, Get-RemotePotato, Connect-Voicemeeter, Disconnect-Voicemeeter
