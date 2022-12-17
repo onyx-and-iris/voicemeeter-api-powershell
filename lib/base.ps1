@@ -45,7 +45,7 @@ function Login {
     }
     catch [LoginError], [CAPIError] {
         Write-Warning $_.Exception.ErrorMessage()
-        exit
+        throw
     }
 
     while (P_Dirty -or M_Dirty) { Start-Sleep -m 1 }

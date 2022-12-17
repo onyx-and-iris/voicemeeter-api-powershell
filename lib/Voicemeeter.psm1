@@ -105,7 +105,7 @@ Function Connect-Voicemeeter {
     }
     catch [LoginError] {
         Write-Warning $_.Exception.ErrorMessage()
-        Exit
+        throw
     }
 }
 

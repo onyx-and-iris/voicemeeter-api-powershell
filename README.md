@@ -79,6 +79,19 @@ Voicemeeter factory function can be:
 -   Get-RemoteBanana
 -   Get-RemotePotato
 
+Added in v3 you may also use the following entry/exit points:
+
+-   Connect-Voicemeeter
+-   Disconnect-Voicemeeter
+
+`Connect-Voicemeeter` takes a single parameter `Kind`.
+
+for example:
+
+```powershell
+$vmr = Connect-Voicemeeter -Kind "potato"
+```
+
 #### `Through the Shell`
 
 One liners should be run through a subshell, you may pipe the Remote object to a script block, for example:
@@ -173,7 +186,7 @@ The following strip.gate commands are available:
 for example:
 
 ```powershell
-$vmr.strip[3].gate.knob = 3.3
+$vmr.strip[3].gate.threshold = -40.5
 ```
 
 #### denoiser

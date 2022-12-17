@@ -30,6 +30,7 @@ v3 introduces some breaking changes. They are as follows:
 
 -   meta functions refactored, they now use identifier() functions.
 -   OBS example reworked, now using obs-powershell module.
+-   Rethrow LoginError for unknown kind exceptions, let the consumer handle it from there.
 
 ### Added
 
@@ -46,7 +47,7 @@ v3 introduces some breaking changes. They are as follows:
 
 ### Removed
 
--   Bus[i].mode\_{param} parameters removed. Replaced with Bus[i].mode.
+-   Bus[i].mode\_{param} members removed. Replaced with Bus[i].mode.{param}
 
 ## [2.5.0] - 2022-10-27
 
