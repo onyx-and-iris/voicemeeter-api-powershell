@@ -12,7 +12,7 @@ Before any major/minor/patch is released all test units will be run to verify th
 -   [x] Implement command.load
 -   [x] Implement comp/gate parameters introduced in v3.0.2.8 of the api.
 -   [x] Add unit tests for new classes.
--   [ ] Update README with changes to Strip/Bus classes.
+-   [x] Update README with changes to Strip/Bus classes.
 
 ## [3.0.0]
 
@@ -24,15 +24,18 @@ v3 introduces some breaking changes. They are as follows:
 -   Strip[i].device now references [Device] class. (see README for details on settings strip.device paramters)
 
 -   Bus[i].eq now references [Eq] class. (see README for details on settings bus.eq paramters)
+-   Bus[i].mode now implemented as its own class.
 
 ### Changed
 
 -   meta functions refactored, they now use identifier() functions.
+-   OBS example reworked, now using obs-powershell module.
 
 ### Added
 
 -   Entry/exit points Connect-Voicemeeter, Disconnect-Voicemeeter added to module.
--   Comp, Gate, Denoiser, Eq and Device classes added to PhysicalStrip
+-   Comp, Gate, Denoiser and Eq classes added to PhysicalStrip
+-   Device class added to PhysicalStrip/PhysicalBus
 -   AppGain(), AppMute() methods added to VirtualStrip
 -   eq added to Bus
 -   interface classes IBus, IStrip and IVban added. getters/setters moved into interface classes.
@@ -40,6 +43,10 @@ v3 introduces some breaking changes. They are as follows:
 ### Fixed
 
 -   Button getters return boolean values.
+
+### Removed
+
+-   Bus[i].mode\_{param} parameters removed. Replaced with Bus[i].mode.
 
 ## [2.5.0] - 2022-10-27
 

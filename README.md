@@ -100,13 +100,13 @@ $vmr.Logout()
 
 The following strip commands are available:
 
--   mute: bool
--   mono: bool
--   mc: bool
+-   mute: boolean
+-   mono: boolean
+-   mc: boolean
 -   k: int, from 0 to 4
--   solo: bool
--   A1-A5: bool
--   B1-B3: bool
+-   solo: boolean
+-   A1-A5: boolean
+-   B1-B3: boolean
 -   limit: int, from -40 to 12
 -   gain: float, from -60.0 to 12.0
 -   label: string
@@ -152,6 +152,12 @@ The following strip.comp commands are available:
 -   gainout: float, from -24.0 to 24.0
 -   makeup: boolean
 
+for example:
+
+```
+$vmr.strip[3].comp.attack = 8.5
+```
+
 #### gate
 
 The following strip.gate commands are available:
@@ -164,16 +170,35 @@ The following strip.gate commands are available:
 -   hold: float, from 0.0 to 5000.0
 -   release: float, from 0.0 to 5000.0
 
+for example:
+
+```
+$vmr.strip[3].gate.knob = 3.3
+```
+
 #### denoiser
 
 The following strip.denoiser commands are available:
 
 -   knob: float, from 0.0 to 10.0
 
+for example:
+
+```
+$vmr.strip[3].denoiser.knob = 5
+```
+
 #### AppGain | AppMute
 
 -   `AppGain(amount, gain)` : string, float
 -   `AppMute(amount, mutestate)` : string, boolean
+
+for example:
+
+```
+$vmr.strip[5].AppGain("Spotify", 0.5)
+$vmr.strip[5].AppMute("Spotify", $true)
+```
 
 ### Bus
 
@@ -188,14 +213,40 @@ The following bus commands are available:
 -   returndelay: float, from 0.0 to 10.0
 -   returnfx1: float, from 0.0 to 10.0
 -   returnfx2: float, from 0.0 to 10.0
--   mode\_: bool, any of the following:
-    @('normal', 'amix', 'bmix', 'repeat', 'composite', 'tvmix', 'upmix21',
-    'upmix41', 'upmix61', 'centeronly', 'lfeonly', 'rearonly')
 
 for example:
 
 ```
 $vmr.bus[3].mode_repeat = $true
+```
+
+#### modes
+
+The following bus.mode members are available:
+
+-   normal: boolean
+-   amix: boolean
+-   bmix: boolean
+-   repeat: boolean
+-   composite: boolean
+-   tvmix: boolean
+-   upmix21: boolean
+-   upmix41: boolean
+-   upmix61: boolean
+-   centeronly: boolean
+-   lfeonly: boolean
+-   rearonly: boolean
+
+The following bus.mode commands are available:
+
+-   Get(): returns the current bus mode.
+
+for example:
+
+```
+$vmr.bus[0].mode.centeronly = $true
+
+$vmr.bus[0].mode.Get()
 ```
 
 ### Strip|Bus
@@ -206,6 +257,20 @@ The following strip.device | bus.device commands are available:
 
 -   name: string
 -   sr: int
+-   wdm: string
+-   ks: string
+-   mme: string
+-   asio: string
+
+for example:
+
+```
+$vmr.strip[0].device.wdm = "Mic|Line|Instrument 1 (Audient EVO4)"
+$vmr.bus[0].device.name
+```
+
+name, sr are defined as read only.
+wdm, ks, mme, asio are defined as write only.
 
 #### eq
 
