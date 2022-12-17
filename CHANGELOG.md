@@ -18,13 +18,13 @@ Before any major/minor/patch is released all test units will be run to verify th
 
 v3 introduces some breaking changes. They are as follows:
 
--   Strip[i].comp now references [Comp] class. (see README for details on settings strip.comp paramters)
--   Strip[i].gate now references [Gate] class. (see README for details on settings strip.gate paramters)
--   Strip[i].eq now references [Eq] class. (see README for details on settings strip.eq paramters)
--   Strip[i].device now references [Device] class. (see README for details on settings strip.device paramters)
+-   Strip[i].comp now references [Comp] class. (see README for details on settings strip.comp parameters)
+-   Strip[i].gate now references [Gate] class. (see README for details on settings strip.gate parameters)
+-   Strip[i].eq now references [Eq] class. (see README for details on settings strip.eq parameters)
+-   Strip[i].device now references [Device] class. (see README for details on settings strip.device parameters)
 
--   Bus[i].eq now references [Eq] class. (see README for details on settings bus.eq paramters)
--   Bus[i].mode now implemented as its own class.
+-   Bus[i].eq now references [Eq] class. (see README for details on settings bus.eq parameters)
+-   Bus[i].mode now implemented as its own class [Mode]. (see README for details on settings bus.mode parameters)
 
 ### Changed
 
