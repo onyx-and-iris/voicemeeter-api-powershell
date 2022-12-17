@@ -12,23 +12,22 @@ Import-Module ..\..\lib\Voicemeeter.psm1
 $VerbosePreference = "Continue"
 
 try {
-    $vmr = Get-RemotePotato
+    $vmr = Connect-Voicemeeter -Kind "potato"
 
     $buses = @($vmr.bus[1], $vmr.bus[2], $vmr.bus[4], $vmr.bus[6])
     $unmutedIndex = $null
 
     # 1)
-    $buses | ForEach-Object {
-        $bus = $_
+    foreach ($bus in $buses) {
         # 2)
         if (-not $bus.mute) {
-            "bus " + $bus.index + " is unmuted... muting it" | Write-Host
+            "bus $($bus.index) is unmuted... muting it" | Write-Host
             $unmutedIndex = $buses.IndexOf($bus)
             $bus.mute = $true
 
             # 3)
-            if ($buses[++ $unmutedIndex]) {
-                "unmuting bus " + $buses[$unmutedIndex].index | Write-Host
+            if ($buses[++$unmutedIndex]) {
+                "unmuting bus $($buses[$unmutedIndex].index)" | Write-Host
                 $buses[$unmutedIndex].mute = $false
                 break
             }
@@ -36,7 +35,10 @@ try {
         }
     }
     # 4)
-    if ($null -eq $unmutedIndex) { $buses[0].mute = $false }
-    "unmuting bus " + $buses[0].index | Write-Host
+    if ($null -eq $unmutedIndex) { 
+        $buses[0].mute = $false 
+        "unmuting bus $($buses[0].index)" | Write-Host
+    }
+    
 }
-finally { $vmr.Logout() }
+finally { Disconnect-Voicemeeter }
