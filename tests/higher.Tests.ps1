@@ -51,14 +51,14 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.bus[$index].mono | Should -Be $expected
             }
 
-            It "Should set and get Bus[$index].mode_amix" -Skip:$ifBasic {
-                $vmr.bus[$index].mode_amix = $value
-                $vmr.bus[$index].mode_amix | Should -Be $expected
+            It "Should set and get Bus[$index].mode.amix" -Skip:$ifBasic {
+                $vmr.bus[$index].mode.amix = $value
+                $vmr.bus[$index].mode.amix | Should -Be $expected
             }
 
-            It "Should set and get Bus[$index].mode_centeronly" -Skip:$ifBasic {
-                $vmr.bus[$index].mode_centeronly = $value
-                $vmr.bus[$index].mode_centeronly | Should -Be $expected
+            It "Should set and get Bus[$index].mode.centeronly" -Skip:$ifBasic {
+                $vmr.bus[$index].mode.centeronly = $value
+                $vmr.bus[$index].mode.centeronly | Should -Be $expected
             }
         }
 
