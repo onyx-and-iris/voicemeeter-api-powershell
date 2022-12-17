@@ -15,7 +15,7 @@ This example assumes the following:
 
 ```psd1
 @{
-    hostname = "localhost"
+    host = "localhost"
     port     = 4455
     password = "mystrongpassword"
 }

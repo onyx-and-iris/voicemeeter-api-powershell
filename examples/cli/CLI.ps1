@@ -7,6 +7,8 @@ param(
 
 Import-Module ..\..\lib\Voicemeeter.psm1
 
+$VerbosePreference = "Continue"
+
 function get-value {
     param([object]$vmr, [string]$line)
     try {

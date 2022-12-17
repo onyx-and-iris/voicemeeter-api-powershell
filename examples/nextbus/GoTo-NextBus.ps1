@@ -9,6 +9,8 @@
 
 Import-Module ..\..\lib\Voicemeeter.psm1
 
+$VerbosePreference = "Continue"
+
 try {
     $vmr = Get-RemotePotato
 

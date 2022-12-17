@@ -30,7 +30,7 @@ function CurrentProgramSceneChanged {
 
 function ExitStarted {
     param([System.Object]$data)
-    "OBS closing has begun!" | Write-Host
+    "OBS shutdown has begun!" | Write-Host
     break
 }
 
@@ -59,7 +59,7 @@ function main {
                 if ($data.op -eq 5) {
                     eventHandler($data.d)
                 }
-            }        
+            }
         }
     }
     finally { 
