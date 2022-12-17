@@ -18,7 +18,7 @@ function CurrentProgramSceneChanged {
         }
         "END" { 
             $vmr.strip[0].mono = $true
-            "Setting Strip 0 mono to `$false"
+            "Setting Strip 0 mono to `$true"
         }
         "LIVE" { 
             $vmr.strip[0].color_x = 0.3
