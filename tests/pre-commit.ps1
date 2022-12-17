@@ -1,4 +1,4 @@
-Param([String]$tag, [Int]$num=1, [switch]$log, [string]$kind="potato")
+Param([String]$tag, [Int]$num = 1, [switch]$log, [string]$kind = "potato")
 Import-Module .\lib\Voicemeeter.psm1
 
 Function ParseLog {
@@ -15,7 +15,7 @@ Function ParseLog {
     }
 
     ForEach ($line in `
-    $(Get-content -Path "${logfile}")) {
+        $(Get-Content -Path "${logfile}")) {
         if ($line -match $PASSED_PATTERN) {
             $DATA["passed"] += $Matches[1]
         }
@@ -25,20 +25,15 @@ Function ParseLog {
     }
 
     "=========================`n" + `
-    "$num tests run:`n" + `
-    "=========================" | Tee-Object -FilePath $summary_file -Append
+        "$num tests run:`n" + `
+        "=========================" | Tee-Object -FilePath $summary_file -Append
     $DATA | ForEach-Object { $_ } | Tee-Object -FilePath $summary_file -Append
 }
 
 
 function main() {
-    try
-    {
-        switch ($kind) {
-            "basic" { $vmr = Get-RemoteBasic }
-            "banana" { $vmr = Get-RemoteBanana }
-            "potato" { $vmr = Get-RemotePotato }
-        }
+    try {
+        $vmr = Connect-Voicemeeter -Kind $kind
         Write-Host "Running tests for $vmr"
 
         # test boundaries by kind
@@ -71,12 +66,9 @@ function main() {
             }
         }
 
-        if($log) { Parselog -logfile $logfile }
+        if ($log) { Parselog -logfile $logfile }
     }
-    finally
-    {
-        $vmr.Logout()
-    }    
+    finally { Disconnect-Voicemeeter }   
 }
 
 

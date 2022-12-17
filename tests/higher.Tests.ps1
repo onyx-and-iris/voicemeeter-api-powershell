@@ -27,12 +27,23 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             }
         }
 
+        Context 'physical only' -ForEach @(
+            @{ Index = $phys_in }
+        ){
+            Context 'eq.{param}' -Skip:$ifNotPotato {
+                It "Should set Strip[$index].EQ.On to $value" {
+                    $vmr.strip[$index].eq.on = $value
+                    $vmr.strip[$index].eq.on | Should -Be $expected
+                }                    
+            }
+        }
+
         Context 'Bus, one physical one virtual' -ForEach @(
             @{ Index = $phys_out }, @{ Index = $virt_out }
         ){
-            It "Should set and get Bus[$index].Eq" -Skip:$ifBasic {
-                $vmr.bus[$index].eq = $value
-                $vmr.bus[$index].eq | Should -Be $expected
+            It "Should set and get Bus[$index].Eq.On" -Skip:$ifBasic {
+                $vmr.bus[$index].eq.on = $value
+                $vmr.bus[$index].eq.on | Should -Be $expected
             }
 
             It "Should set and get Bus[$index].Mono" {
@@ -123,13 +134,58 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                     @{ Value = 8.3; Expected = 8.3 }, @{ Value = 5.1; Expected = 5.1 }
                 ){
                     It "Should set Strip[$index].Comp to $value" {
-                        $vmr.strip[$index].comp = $value
-                        $vmr.strip[$index].comp | Should -Be $expected
+                        $vmr.strip[$index].comp.knob = $value
+                        $vmr.strip[$index].comp.knob | Should -Be $expected
                     }
 
                     It "Should set Strip[$index].Gate to $value" {
-                        $vmr.strip[$index].gate = $value
-                        $vmr.strip[$index].gate | Should -Be $expected
+                        $vmr.strip[$index].gate.knob = $value
+                        $vmr.strip[$index].gate.knob | Should -Be $expected
+                    }
+                }
+
+                Context 'denoiser' -Skip:$ifNotPotato -ForEach @(
+                    @{ Value = 8.3; Expected = 8.3 }, @{ Value = 5.1; Expected = 5.1 }
+                ){
+                    It "Should set Strip[$index].Denoiser to $value" {
+                        $vmr.strip[$index].denoiser.knob = $value
+                        $vmr.strip[$index].denoiser.knob | Should -Be $expected
+                    }
+                }
+
+                Context 'comp.{param}' -Skip:$ifNotPotato -ForEach @(
+                    @{ Value = 8.3; Expected = 8.3 }, @{ Value = 5.1; Expected = 5.1 }
+                ){
+                    It "Should set Strip[$index].Comp.Attack to $value" {
+                        $vmr.strip[$index].comp.attack = $value
+                        $vmr.strip[$index].comp.attack | Should -Be $expected
+                    }
+                }
+
+                Context 'comp.{param}' -Skip:$ifNotPotato -ForEach @(
+                    @{ Value = 0.3; Expected = 0.3 }, @{ Value = 0.8; Expected = 0.8 }
+                ){
+                    It "Should set Strip[$index].Comp.Knee to $value" {
+                        $vmr.strip[$index].comp.knee = $value
+                        $vmr.strip[$index].comp.knee | Should -Be $expected
+                    }
+                }
+
+                Context 'gate.{param}' -Skip:$ifNotPotato -ForEach @(
+                    @{ Value = 103; Expected = 103 }, @{ Value = 3800; Expected = 3800 }
+                ){
+                    It "Should set Strip[$index].Gate.BPSidechain to $value" {
+                        $vmr.strip[$index].gate.bpsidechain = $value
+                        $vmr.strip[$index].gate.bpsidechain | Should -Be $expected
+                    }
+                }
+
+                Context 'gate.{param}' -Skip:$ifNotPotato -ForEach @(
+                    @{ Value = 0.3; Expected = 0.3 }, @{ Value = 5000; Expected = 5000 }
+                ){
+                    It "Should set Strip[$index].Gate.Hold to $value" {
+                        $vmr.strip[$index].gate.hold = $value
+                        $vmr.strip[$index].gate.hold | Should -Be $expected
                     }
                 }
             }            
