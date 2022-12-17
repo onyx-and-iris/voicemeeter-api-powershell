@@ -104,23 +104,6 @@ function AddGainlayerMembers () {
     }
 }
 
-function AddBusModeMembers () {
-    param(
-        [String[]]$PARAMS
-    )
-    [hashtable]$Signatures = @{}
-    foreach ($param in $PARAMS) {
-        # Define getter
-        $Signatures["Getter"] = "[bool]`$this.Getter('mode.{0}')" -f $param
-        # Define setter
-        $Signatures["Setter"] = "param ( [Single]`$arg )`n`$this.Setter('mode.{0}', `$arg)" `
-            -f $param
-        $param = "mode_{0}" -f $param
-
-        Addmember
-    }
-}
-
 function Addmember {
     $AddMemberParams = @{
         Name        = $param

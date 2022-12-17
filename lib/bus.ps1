@@ -31,6 +31,7 @@ class IBus {
 }
 
 class Bus : IBus {
+    [Object]$mode
     [Object]$eq
 
     # Constructor
@@ -39,9 +40,7 @@ class Bus : IBus {
         AddStringMembers -PARAMS @('label')
         AddFloatMembers -PARAMS @('gain', 'returnreverb', 'returndelay', 'returnfx1', 'returnfx2')
 
-        AddBusModeMembers -PARAMS @('normal', 'amix', 'bmix', 'repeat', 'composite', 'tvmix', 'upmix21')
-        AddBusModeMembers -PARAMS @('upmix41', 'upmix61', 'centeronly', 'lfeonly', 'rearonly')
-
+        $this.mode = [Mode]::new($index, $remote)
         $this.eq = [Eq]::new($index, $remote)
     }
 
@@ -51,6 +50,32 @@ class Bus : IBus {
 
     [void] FadeBy ([single]$target, [int]$time) {
         $this.Setter('FadeBy', "($target, $time)")
+    }
+}
+
+class Mode : IBus {
+    [System.Collections.ArrayList]$modes
+
+    Mode ([int]$index, [Object]$remote) : base ($index, $remote) {
+        $this.modes = @(
+            'normal', 'amix', 'bmix', 'repeat', 'composite', 'tvmix', 'upmix21', 'upmix41', 'upmix61', 
+            'centeronly', 'lfeonly', 'rearonly'
+        )
+
+        AddBoolMembers -PARAMS $this.modes
+    }
+
+    [string] identifier () {
+        return "Bus[" + $this.index + "].mode"
+    }
+
+    [string] Get () {
+        foreach ($mode in $this.modes) {
+            if ($this.$mode) {
+                break
+            }
+        }
+        return $mode
     }
 }
 
@@ -95,6 +120,46 @@ class Device : IBus {
         } `
         {
             return Write-Warning ("ERROR: $($this.identifier()).sr is read only")
+        }
+    )
+
+    hidden $_wdm = $($this | Add-Member ScriptProperty 'wdm' `
+        {
+            return Write-Warning ("ERROR: $($this.identifier()).wdm is write only")
+        } `
+        {
+            param($arg)
+            return $this.Setter('wdm', $arg)
+        }
+    )
+
+    hidden $_ks = $($this | Add-Member ScriptProperty 'ks' `
+        {
+            return Write-Warning ("ERROR: $($this.identifier()).ks is write only")
+        } `
+        {
+            param($arg)
+            return $this.Setter('ks', $arg)
+        }
+    )
+
+    hidden $_mme = $($this | Add-Member ScriptProperty 'mme' `
+        {
+            return Write-Warning ("ERROR: $($this.identifier()).mme is write only")
+        } `
+        {
+            param($arg)
+            return $this.Setter('mme', $arg)
+        }
+    )
+
+    hidden $_asio = $($this | Add-Member ScriptProperty 'asio' `
+        {
+            return Write-Warning ("ERROR: $($this.identifier()).asio is write only")
+        } `
+        {
+            param($arg)
+            return $this.Setter('asio', $arg)
         }
     )
 }
