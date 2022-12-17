@@ -29,7 +29,6 @@ class IVban {
 }
 
 class Vban : IVban {
-    # Constructor
     Vban ([int]$index, [string]$direction) : base ($index, $direction) {
     }
 
@@ -174,14 +173,12 @@ class Vban : IVban {
 
 
 class VbanInstream : Vban {
-    # Constructor
     VbanInstream ([int]$index, [string]$direction) : base ($index, $direction) {
     }
 }
 
 
 class VbanOutstream : Vban {
-    # Constructor
     VbanOutstream ([int]$index, [string]$direction) : base ($index, $direction) {
     }
 }

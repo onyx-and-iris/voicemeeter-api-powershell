@@ -1,7 +1,6 @@
 . $PSScriptRoot\meta.ps1
 
 class Special {
-    # Constructor
     Special () {
         AddActionMembers -PARAMS @('restart', 'shutdown', 'show')
     }

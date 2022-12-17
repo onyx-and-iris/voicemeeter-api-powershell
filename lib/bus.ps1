@@ -34,7 +34,6 @@ class Bus : IBus {
     [Object]$mode
     [Object]$eq
 
-    # Constructor
     Bus ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddBoolMembers -PARAMS @('mono', 'mute')
         AddStringMembers -PARAMS @('label')

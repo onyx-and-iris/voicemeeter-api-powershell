@@ -1,7 +1,6 @@
 class MacroButton {
     [int32]$index
 
-    # Constructor
     MacroButton ([int]$index) {
         $this.index = $index
     }

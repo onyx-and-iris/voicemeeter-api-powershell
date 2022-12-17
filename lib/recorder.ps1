@@ -2,7 +2,7 @@
 
 class Recorder {
     [Object]$remote
-    # Constructor
+
     Recorder ([Object]$remote) {
         $this.remote = $remote
 

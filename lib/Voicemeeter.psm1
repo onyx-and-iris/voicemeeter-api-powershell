@@ -11,7 +11,6 @@ class Remote {
     [Object]$recorder
     [Object]$profiles
 
-    # Constructor
     Remote ([String]$kind_id) {
         $this.kind = GetKind($kind_id)
         $this.Setup()
