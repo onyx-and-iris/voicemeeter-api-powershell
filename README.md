@@ -128,7 +128,7 @@ The following strip commands are available:
 
 for example:
 
-```
+```powershell
 $vmr.strip[5].gainlayer1 = -8.3
 ```
 
@@ -154,7 +154,7 @@ The following strip.comp commands are available:
 
 for example:
 
-```
+```powershell
 $vmr.strip[3].comp.attack = 8.5
 ```
 
@@ -172,7 +172,7 @@ The following strip.gate commands are available:
 
 for example:
 
-```
+```powershell
 $vmr.strip[3].gate.knob = 3.3
 ```
 
@@ -184,7 +184,7 @@ The following strip.denoiser commands are available:
 
 for example:
 
-```
+```powershell
 $vmr.strip[3].denoiser.knob = 5
 ```
 
@@ -195,7 +195,7 @@ $vmr.strip[3].denoiser.knob = 5
 
 for example:
 
-```
+```powershell
 $vmr.strip[5].AppGain("Spotify", 0.5)
 $vmr.strip[5].AppMute("Spotify", $true)
 ```
@@ -216,8 +216,8 @@ The following bus commands are available:
 
 for example:
 
-```
-$vmr.bus[3].mode_repeat = $true
+```powershell
+$vmr.bus[3].returnreverb = 5.7
 ```
 
 #### modes
@@ -243,7 +243,7 @@ The following bus.mode commands are available:
 
 for example:
 
-```
+```powershell
 $vmr.bus[0].mode.centeronly = $true
 
 $vmr.bus[0].mode.Get()
@@ -264,7 +264,7 @@ The following strip.device | bus.device commands are available:
 
 for example:
 
-```
+```powershell
 $vmr.strip[0].device.wdm = "Mic|Line|Instrument 1 (Audient EVO4)"
 $vmr.bus[0].device.name
 ```
@@ -288,7 +288,7 @@ Modify gain to or by the selected amount in db over a time interval in ms.
 
 for example:
 
-```
+```powershell
 $vmr.strip[3].FadeTo(-18.7, 1000)
 $vmr.bus[0].FadeBy(-10, 500)
 ```
@@ -301,7 +301,7 @@ Three modes defined: state, stateonly and trigger.
 -   Stateonly does not run associated scripts
 -   Index range (0, 69)
 
-```
+```powershell
 $vmr.button[3].state = $true
 
 $vmr.button[4].stateonly = $false
