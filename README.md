@@ -79,7 +79,7 @@ Voicemeeter factory function can be:
 -   Get-RemoteBanana
 -   Get-RemotePotato
 
-Added in v3 you may also use the following entry/exit points:
+Added in `v3` you may also use the following entry/exit points:
 
 -   Connect-Voicemeeter
 -   Disconnect-Voicemeeter
@@ -90,6 +90,8 @@ for example:
 
 ```powershell
 $vmr = Connect-Voicemeeter -Kind "potato"
+...
+Disconnect-Voicemeeter
 ```
 
 #### `Through the Shell`
@@ -291,6 +293,13 @@ The following strip.eq | bus.eq commands are available:
 
 -   on: boolean
 -   ab: boolean
+
+for example:
+
+```powershell
+$vmr.strip[0].eq.on = $true
+$vmr.bus[0].eq.ab = $false
+```
 
 #### FadeTo | FadeBy
 
