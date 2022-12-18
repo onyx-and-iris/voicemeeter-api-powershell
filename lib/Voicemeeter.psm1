@@ -3,31 +3,15 @@
 
 class Remote {
     [Hashtable]$kind
-    [System.Collections.ArrayList]$strip
-    [System.Collections.ArrayList]$bus
-    [System.Collections.ArrayList]$button
-    [PSCustomObject]$vban
-    [Object]$command
-    [Object]$recorder
     [Object]$profiles
 
-    Remote ([String]$kind_id) {
-        $this.kind = GetKind($kind_id)
-        $this.Setup()
-    }
-
-    [void] Setup() {
+    Remote ([String]$kindId) {
         if (!(Setup_DLL)) {
-            Exit
+            Exit -1
         }
-        Login -KIND $this.kind.name
+        $this.kind = GetKind($kindId)
         $this.profiles = Get_Profiles($this.kind.name)
-        $this.strip = Make_Strips($this)
-        $this.bus = Make_Buses($this)
-        $this.button = Make_Buttons
-        $this.vban = Make_Vban($this)
-        $this.command = Make_Command
-        $this.recorder = Make_Recorder($this)
+        Login -KIND $this.kind.name
     }
 
     [string] ToString() {
@@ -75,16 +59,68 @@ class Remote {
     [void] MDirty() { M_Dirty }
 }
 
+class RemoteBasic : Remote {
+    [System.Collections.ArrayList]$strip
+    [System.Collections.ArrayList]$bus
+    [System.Collections.ArrayList]$button
+    [PSCustomObject]$vban
+    [Object]$command
+
+    RemoteBasic () : base ('basic') {
+        $this.strip = Make_Strips($this)
+        $this.bus = Make_Buses($this)
+        $this.button = Make_Buttons
+        $this.vban = Make_Vban($this)
+        $this.command = Make_Command
+    }
+}
+
+class RemoteBanana : Remote {
+    [System.Collections.ArrayList]$strip
+    [System.Collections.ArrayList]$bus
+    [System.Collections.ArrayList]$button
+    [PSCustomObject]$vban
+    [Object]$command
+    [Object]$recorder
+
+    RemoteBanana () : base ('banana') {
+        $this.strip = Make_Strips($this)
+        $this.bus = Make_Buses($this)
+        $this.button = Make_Buttons
+        $this.vban = Make_Vban($this)
+        $this.command = Make_Command
+        $this.recorder = Make_Recorder($this)
+    }
+}
+
+class RemotePotato : Remote {
+    [System.Collections.ArrayList]$strip
+    [System.Collections.ArrayList]$bus
+    [System.Collections.ArrayList]$button
+    [PSCustomObject]$vban
+    [Object]$command
+    [Object]$recorder
+
+    RemotePotato () : base ('potato') {
+        $this.strip = Make_Strips($this)
+        $this.bus = Make_Buses($this)
+        $this.button = Make_Buttons
+        $this.vban = Make_Vban($this)
+        $this.command = Make_Command
+        $this.recorder = Make_Recorder($this)
+    }
+}
+
 Function Get-RemoteBasic {
-    return [Remote]::new('basic')
+    [RemoteBasic]::new()
 }
 
 Function Get-RemoteBanana {
-    return [Remote]::new('banana')
+    [RemoteBanana]::new()
 }
 
 Function Get-RemotePotato {
-    return [Remote]::new('potato')
+    [RemotePotato]::new()
 }
 
 Function Connect-Voicemeeter {
@@ -100,10 +136,10 @@ Function Connect-Voicemeeter {
             "potato" { 
                 return Get-RemotePotato
             }
-            default { throw [LoginError]::new('Unknown Voicemeeter kind') }
+            default { throw [LoginError]::new("Unknown Voicemeeter kind `"$Kind`"") }
         }        
     }
-    catch [LoginError] {
+    catch [LoginError], [CAPIError] {
         Write-Warning $_.Exception.ErrorMessage()
         throw
     }
