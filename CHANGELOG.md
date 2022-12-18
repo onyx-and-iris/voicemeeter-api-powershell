@@ -40,6 +40,7 @@ v3 introduces some breaking changes. They are as follows:
 -   AppGain(), AppMute() methods added to VirtualStrip
 -   eq added to Bus
 -   interface classes IBus, IStrip and IVban added. getters/setters moved into interface classes.
+-   RemoteBasic, RemoteBanana and RemotePotato subclasses added.
 
 ### Fixed
 
