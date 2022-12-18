@@ -26,6 +26,8 @@ v3 introduces some breaking changes. They are as follows:
 -   Bus[i].eq now references [Eq] class. (see README for details on settings bus.eq parameters)
 -   Bus[i].mode now implemented as its own class [Mode]. (see README for details on settings bus.mode parameters)
 
+There are other changes but they should not be breaking.
+
 ### Changed
 
 -   meta functions refactored, they now use identifier() functions.
