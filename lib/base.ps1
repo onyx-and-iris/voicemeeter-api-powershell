@@ -11,41 +11,40 @@
 
 function Login {
     param(
-        [string]$KIND = $null
+        [string]$kindId
     )
     try {
         $retval = [int][Voicemeeter.Remote]::VBVMR_Login()
-        if (-not $retval) { "LOGGED IN" | Write-Verbose }
+        if (-not $retval) { 
+            "LOGGED IN" | Write-Verbose
+        }
         elseif ($retval -eq 1) {
             "VM NOT RUNNING" | Write-Verbose
-            New-Variable -Name vm_exe -Value 0
+            New-Variable -Name vmExe -Value 0
 
-            switch ($KIND) {
-                'basic' { $vm_exe = 1; break }
-                'banana' { $vm_exe = 2; break }
-                'potato' {
-                    if ([Environment]::Is64BitOperatingSystem) {
-                        $vm_exe = 6
-                    }
-                    else { $vm_exe = 3 }
-                    break
-                }
-                default { throw [LoginError]::new('Unknown Voicemeeter type') }
+            if ( $kindId -eq "basic" ) { $vmExe = 1 }
+            elseif ( $kindId -eq "banana" ) {  $vmExe = 2 }
+            elseif ( $kindId -eq "potato" ) {
+                $vmExe = $(if ([Environment]::Is64BitOperatingSystem) { 6 } else { 3 })
             }
 
-            $retval = [int][Voicemeeter.Remote]::VBVMR_RunVoicemeeter([int64]$vm_exe)
-            if (-not $retval) { "STARTING VOICEMEETER" | Write-Verbose }
-            else { throw [CAPIError]::new($retval, $MyInvocation.MyCommand) }
-            Start-Sleep -s 1
+            $retval = [int][Voicemeeter.Remote]::VBVMR_RunVoicemeeter([int64]$vmExe)
+            if (-not $retval) { 
+                "STARTING VOICEMEETER" | Write-Verbose
+                Start-Sleep -s 1
+            }
+            else { 
+                throw [CAPIError]::new($retval, $MyInvocation.MyCommand) 
+            }
         }
         elseif ($retval -eq -2) {
-            throw [LoginError]::new('Login may only be called once per session')
+            throw [LoginError]::new('login may only be called once per session')
         }
         else { throw [CAPIError]::new($retval, $MyInvocation.MyCommand) }
     }
-    catch [LoginError], [CAPIError] {
-        Write-Warning $_.Exception.ErrorMessage()
-        throw
+    catch [LoginError] {
+        Write-Warning "$($_.Exception.ErrorMessage()). Fatal error, exiting..."
+        exit -2
     }
 
     while (P_Dirty -or M_Dirty) { Start-Sleep -m 1 }
@@ -55,7 +54,7 @@ function Login {
 function Logout {
     Start-Sleep -m 20
     $retval = [int][Voicemeeter.Remote]::VBVMR_Logout()
-    if (-not $retval) { "LOGGED OUT" | Write-Verbose }
+    if (-not $retval) { "LOGGED OUT" | Write-Verbose }     
 }
 
 function P_Dirty {
