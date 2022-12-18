@@ -3,13 +3,13 @@ function Setup_DLL {
         $vb_path = Get_VBPath
 
         if ([string]::IsNullOrWhiteSpace($vb_path)) {
-            throw [VMRemoteErrors]::new("ERROR: Couldn't get Voicemeeter path")
+            throw [VMRemoteError]::new("couldn't get Voicemeeter path")
         }
         $dll = Join-Path -Path $vb_path -ChildPath ("VoicemeeterRemote" + `
             (& { if ([Environment]::Is64BitOperatingSystem) { "64" } else { "" } }) + `
                 ".dll")
     }
-    catch [VMRemoteErrors] {
+    catch [VMRemoteError] {
         Write-Warning $_.Exception.ErrorMessage()
         return $false
     }
