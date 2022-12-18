@@ -11,11 +11,15 @@ class Remote {
         }
         $this.kind = GetKind($kindId)
         $this.profiles = Get_Profiles($this.kind.name)
-        Login -KIND $this.kind.name
     }
 
     [string] ToString() {
         return "Voicemeeter " + $this.kind.name.substring(0, 1).toupper() + $this.kind.name.substring(1)
+    }
+
+    [Remote] Login() {
+        Login -kindId $this.kind.name
+        return $this
     }
 
     [void] Logout() {
@@ -112,15 +116,15 @@ class RemotePotato : Remote {
 }
 
 Function Get-RemoteBasic {
-    [RemoteBasic]::new()
+    [RemoteBasic]::new().Login()
 }
 
 Function Get-RemoteBanana {
-    [RemoteBanana]::new()
+    [RemoteBanana]::new().Login()
 }
 
 Function Get-RemotePotato {
-    [RemotePotato]::new()
+    [RemotePotato]::new().Login()
 }
 
 Function Connect-Voicemeeter {
