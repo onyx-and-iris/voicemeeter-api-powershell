@@ -9,10 +9,7 @@ Before any major/minor/patch is released all test units will be run to verify th
 
 ## [Unreleased] These changes have not been added to PSGallery yet
 
--   [x] Implement command.load
--   [x] Implement comp/gate parameters introduced in v3.0.2.8 of the api.
--   [x] Add unit tests for new classes.
--   [x] Update README with changes to Strip/Bus classes.
+-   [ ]
 
 ## [3.0.0]
 
