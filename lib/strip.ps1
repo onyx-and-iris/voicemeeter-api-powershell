@@ -148,7 +148,7 @@ class Device : IStrip {
         return "Strip[" + $this.index + "].Device"
     }
 
-    hidden $_device = $($this | Add-Member ScriptProperty 'device' `
+    hidden $_name = $($this | Add-Member ScriptProperty 'name' `
         {
             $this.Getter_String('name')
         } `
