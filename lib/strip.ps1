@@ -27,6 +27,8 @@ class IStrip {
 }
 
 class Strip : IStrip {
+    [Object]$levels
+
     Strip ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddBoolMembers -PARAMS @('mono', 'solo', 'mute')
         AddIntMembers -PARAMS @('limit')
@@ -35,6 +37,8 @@ class Strip : IStrip {
 
         AddChannelMembers
         AddGainlayerMembers
+
+        $this.levels = [Levels]::new($index, $remote)
     }
 
     [string] ToString() {
@@ -47,6 +51,52 @@ class Strip : IStrip {
 
     [void] FadeBy ([single]$target, [int]$time) {
         $this.Setter('FadeBy', "($target, $time)")
+    }
+}
+
+class Levels : IStrip {
+    [int]$init
+    [int]$offset
+
+    Levels ([int]$index, [Object]$remote) : base ($index, $remote) {
+        $p_in = $remote.kind.p_in
+        if ($index -lt $p_in) {
+            $this.init = $index * 2
+            $this.offset = 2            
+        }
+        else {
+            $this.init = ($p_in * 2) + (($index - $p_in) * 8)
+            $this.offset = 8
+        }
+    }
+
+    [float] Convert([float]$val) {
+        if ($val -gt 0) { 
+            return [math]::Round(20 * [math]::Log10($val), 1) 
+        } 
+        else { 
+            return -200.0 
+        }
+    }
+
+    [System.Collections.ArrayList] Getter([int]$mode) {
+        [System.Collections.ArrayList]$vals = @()
+        $this.init..$($this.init + $this.offset - 1) | ForEach-Object {
+            $vals.Add($this.Convert($(Get_Level -MODE $mode -INDEX $_)))
+        }
+        return $vals
+    }
+
+    [System.Collections.ArrayList] PreFader() {
+        return $this.Getter(0)
+    }
+
+    [System.Collections.ArrayList] PostFader() {
+        return $this.Getter(1)
+    }
+
+    [System.Collections.ArrayList] PostMute() {
+        return $this.Getter(2)
     }
 }
 

@@ -23,7 +23,7 @@ function Login {
             New-Variable -Name vmExe -Value 0
 
             if ( $kindId -eq "basic" ) { $vmExe = 1 }
-            elseif ( $kindId -eq "banana" ) {  $vmExe = 2 }
+            elseif ( $kindId -eq "banana" ) { $vmExe = 2 }
             elseif ( $kindId -eq "potato" ) {
                 $vmExe = $(if ([Environment]::Is64BitOperatingSystem) { 6 } else { 3 })
             }
@@ -202,4 +202,19 @@ function Set_By_Script {
     catch [CAPIError] {
         Write-Warning $_.Exception.ErrorMessage()
     }
+}
+
+function Get_Level {
+    param(
+        [int64]$MODE, [int64]$INDEX
+    )
+    New-Variable -Name ptr -Value 0.0
+    try {
+        $retval = [int][Voicemeeter.Remote]::VBVMR_GetLevel($MODE, $INDEX, [ref]$ptr)
+        if ($retval) { throw [CAPIError]::new($retval, $MyInvocation.MyCommand) }
+    }
+    catch [CAPIError] {
+        Write-Warning $_.Exception.ErrorMessage()
+    }
+    [float]$ptr
 }

@@ -47,6 +47,9 @@ function Setup_DLL {
 
     [DllImport(@"$dll")]
     public static extern int VBVMR_SetParameters(String param);
+
+    [DllImport(@"$dll")]
+    public static extern int VBVMR_GetLevel(Int64 mode, Int64 index, ref float ptr);
 "@
 
     Add-Type -MemberDefinition $Signature -Name Remote -Namespace Voicemeeter -PassThru | Out-Null

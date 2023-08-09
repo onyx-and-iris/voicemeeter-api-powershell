@@ -33,6 +33,7 @@ class IBus {
 class Bus : IBus {
     [Object]$mode
     [Object]$eq
+    [Object]$levels
 
     Bus ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddBoolMembers -PARAMS @('mono', 'mute')
@@ -41,6 +42,7 @@ class Bus : IBus {
 
         $this.mode = [Mode]::new($index, $remote)
         $this.eq = [Eq]::new($index, $remote)
+        $this.levels = [Levels]::new($index, $remote)
     }
 
     [void] FadeTo ([single]$target, [int]$time) {
@@ -49,6 +51,37 @@ class Bus : IBus {
 
     [void] FadeBy ([single]$target, [int]$time) {
         $this.Setter('FadeBy', "($target, $time)")
+    }
+}
+
+class Levels : IBus {
+    [int]$init
+    [int]$offset
+
+    Levels ([int]$index, [Object]$remote) : base ($index, $remote) {
+        $this.init = $index * 8
+        $this.offset = 8            
+    }
+
+    [float] Convert([float]$val) {
+        if ($val -gt 0) { 
+            return [math]::Round(20 * [math]::Log10($val), 1) 
+        } 
+        else { 
+            return -200.0 
+        }
+    }
+
+    [System.Collections.ArrayList] Getter([int]$mode) {
+        [System.Collections.ArrayList]$vals = @()
+        $this.init..$($this.init + $this.offset - 1) | ForEach-Object {
+            $vals.Add($this.Convert($(Get_Level -MODE $mode -INDEX $_)))
+        }
+        return $vals
+    }
+
+    [System.Collections.ArrayList] All() {
+        return $this.Getter(3)
     }
 }
 
