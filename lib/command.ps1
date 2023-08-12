@@ -1,4 +1,5 @@
 . $PSScriptRoot\meta.ps1
+. $PSScriptRoot\inst.ps1
 
 class Special {
     Special () {
@@ -24,6 +25,14 @@ class Special {
         else {
             Param_Set -PARAM "$($this.identifier()).$param" -Value $val
         }
+    }
+
+    [void] RunMacrobuttons() {
+        Start-Process -FilePath $(Join-Path -Path $(Get_VMPath) -ChildPath "VoicemeeterMacroButtons.exe")
+    }
+
+    [void] CloseMacrobuttons() {
+        Stop-Process -Name "VoicemeeterMacroButtons"
     }
 
     hidden $_hide = $($this | Add-Member ScriptProperty 'hide' `

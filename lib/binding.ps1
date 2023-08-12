@@ -1,6 +1,6 @@
 function Setup_DLL {
     try {
-        $vb_path = Get_VBPath
+        $vb_path = Get_VMPath
 
         if ([string]::IsNullOrWhiteSpace($vb_path)) {
             throw [VMRemoteError]::new("couldn't get Voicemeeter path")

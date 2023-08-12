@@ -1,4 +1,4 @@
-function Get_VBPath {
+function Get_VMPath {
     $reg_path = "Registry::HKEY_LOCAL_MACHINE\Software" + `
     (& { if ([Environment]::Is64BitOperatingSystem) { "\WOW6432Node" } else { "" } }) + `
         "\Microsoft\Windows\CurrentVersion\Uninstall"

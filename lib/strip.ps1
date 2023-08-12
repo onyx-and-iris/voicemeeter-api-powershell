@@ -38,7 +38,7 @@ class Strip : IStrip {
         AddChannelMembers
         AddGainlayerMembers
 
-        $this.levels = [Levels]::new($index, $remote)
+        $this.levels = [StripLevels]::new($index, $remote)
     }
 
     [string] ToString() {
@@ -54,11 +54,11 @@ class Strip : IStrip {
     }
 }
 
-class Levels : IStrip {
+class StripLevels : IStrip {
     [int]$init
     [int]$offset
 
-    Levels ([int]$index, [Object]$remote) : base ($index, $remote) {
+    StripLevels ([int]$index, [Object]$remote) : base ($index, $remote) {
         $p_in = $remote.kind.p_in
         if ($index -lt $p_in) {
             $this.init = $index * 2
@@ -112,16 +112,16 @@ class PhysicalStrip : Strip {
         AddFloatMembers -PARAMS @('reverb', 'delay', 'fx1', 'fx2')
         AddBoolMembers -PARAMS @('postreverb', 'postdelay', 'postfx1', 'postfx2')
 
-        $this.comp = [Comp]::new($index, $remote)
-        $this.gate = [Gate]::new($index, $remote)
-        $this.denoiser = [Denoiser]::new($index, $remote)
-        $this.eq = [Eq]::new($index, $remote)
-        $this.device = [Device]::new($index, $remote)
+        $this.comp = [StripComp]::new($index, $remote)
+        $this.gate = [StripGate]::new($index, $remote)
+        $this.denoiser = [StripDenoiser]::new($index, $remote)
+        $this.eq = [StripEq]::new($index, $remote)
+        $this.device = [StripDevice]::new($index, $remote)
     }
 }
 
-class Comp : IStrip {
-    Comp ([int]$index, [Object]$remote) : base ($index, $remote) {
+class StripComp : IStrip {
+    StripComp ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddFloatMembers -PARAMS @('gainin', 'ratio', 'threshold', 'attack', 'release', 'knee', 'gainout')
         AddBoolMembers -PARAMS @('makeup')
     }
@@ -141,8 +141,8 @@ class Comp : IStrip {
     )
 }
 
-class Gate : IStrip {
-    Gate ([int]$index, [Object]$remote) : base ($index, $remote) {
+class StripGate : IStrip {
+    StripGate ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddFloatMembers -PARAMS @('threshold', 'damping', 'bpsidechain', 'attack', 'hold', 'release')
     }
 
@@ -161,8 +161,8 @@ class Gate : IStrip {
     )
 }
 
-class Denoiser : IStrip {
-    Denoiser ([int]$index, [Object]$remote) : base ($index, $remote) {
+class StripDenoiser : IStrip {
+    StripDenoiser ([int]$index, [Object]$remote) : base ($index, $remote) {
     }
 
     [string] identifier () {
@@ -180,8 +180,8 @@ class Denoiser : IStrip {
     )
 }
 
-class Eq : IStrip {
-    Eq ([int]$index, [Object]$remote) : base ($index, $remote) {
+class StripEq : IStrip {
+    StripEq ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddBoolMembers -PARAMS @('on', 'ab')
     }
 
@@ -190,8 +190,8 @@ class Eq : IStrip {
     }
 }
 
-class Device : IStrip {
-    Device ([int]$index, [Object]$remote) : base ($index, $remote) {
+class StripDevice : IStrip {
+    StripDevice ([int]$index, [Object]$remote) : base ($index, $remote) {
     }
 
     [string] identifier () {

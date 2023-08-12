@@ -34,6 +34,7 @@ Function ParseLog {
 function main() {
     try {
         $vmr = Connect-Voicemeeter -Kind $kind
+        $vmr.command.RunMacrobuttons()  # ensure macrobuttons is running before we begin
         Write-Host "Running tests for $vmr"
 
         # test boundaries by kind

@@ -40,9 +40,9 @@ class Bus : IBus {
         AddStringMembers -PARAMS @('label')
         AddFloatMembers -PARAMS @('gain', 'returnreverb', 'returndelay', 'returnfx1', 'returnfx2')
 
-        $this.mode = [Mode]::new($index, $remote)
-        $this.eq = [Eq]::new($index, $remote)
-        $this.levels = [Levels]::new($index, $remote)
+        $this.mode = [BusMode]::new($index, $remote)
+        $this.eq = [BusEq]::new($index, $remote)
+        $this.levels = [BusLevels]::new($index, $remote)
     }
 
     [void] FadeTo ([single]$target, [int]$time) {
@@ -54,11 +54,11 @@ class Bus : IBus {
     }
 }
 
-class Levels : IBus {
+class BusLevels : IBus {
     [int]$init
     [int]$offset
 
-    Levels ([int]$index, [Object]$remote) : base ($index, $remote) {
+    BusLevels ([int]$index, [Object]$remote) : base ($index, $remote) {
         $this.init = $index * 8
         $this.offset = 8            
     }
@@ -68,7 +68,7 @@ class Levels : IBus {
             return [math]::Round(20 * [math]::Log10($val), 1) 
         } 
         else { 
-            return -200.0 
+            return - 200.0 
         }
     }
 
@@ -85,10 +85,10 @@ class Levels : IBus {
     }
 }
 
-class Mode : IBus {
+class BusMode : IBus {
     [System.Collections.ArrayList]$modes
 
-    Mode ([int]$index, [Object]$remote) : base ($index, $remote) {
+    BusMode ([int]$index, [Object]$remote) : base ($index, $remote) {
         $this.modes = @(
             'normal', 'amix', 'bmix', 'repeat', 'composite', 'tvmix', 'upmix21', 'upmix41', 'upmix61', 
             'centeronly', 'lfeonly', 'rearonly'
@@ -111,8 +111,8 @@ class Mode : IBus {
     }
 }
 
-class Eq : IBus {
-    Eq ([int]$index, [Object]$remote) : base ($index, $remote) {
+class BusEq : IBus {
+    BusEq ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddBoolMembers -PARAMS @('on', 'ab')
     }
 
@@ -125,12 +125,12 @@ class PhysicalBus : Bus {
     [Object]$device
 
     PhysicalBus ([int]$index, [Object]$remote) : base ($index, $remote) {
-        $this.device = [Device]::new($index, $remote)
+        $this.device = [BusDevice]::new($index, $remote)
     }
 }
 
-class Device : IBus {
-    Device ([int]$index, [Object]$remote) : base ($index, $remote) {
+class BusDevice : IBus {
+    BusDevice ([int]$index, [Object]$remote) : base ($index, $remote) {
     }
 
     [string] identifier () {
