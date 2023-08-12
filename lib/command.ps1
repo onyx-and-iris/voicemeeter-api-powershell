@@ -2,8 +2,12 @@
 . $PSScriptRoot\inst.ps1
 
 class Special {
-    Special () {
+    [Object]$remote
+
+    Special ([Object]$remote) {
         AddActionMembers -PARAMS @('restart', 'shutdown', 'show')
+    
+        $this.remote = $remote
     }
 
     [string] identifier () {
@@ -15,15 +19,15 @@ class Special {
     }
 
     [single] Getter ($param) {
-        return Param_Get -PARAM "$($this.identifier()).$param" -IS_STRING $false
+        return $this.remote.Getter("$($this.identifier()).$param")
     }
 
     [void] Setter ($param, $val) {
         if ($val -is [Boolean]) {
-            Param_Set -PARAM "$($this.identifier()).$param" -Value $(if ($val) { 1 } else { 0 })
+            $this.remote.Setter("$($this.identifier()).$param", $(if ($val) { 1 } else { 0 }))
         }
         else {
-            Param_Set -PARAM "$($this.identifier()).$param" -Value $val
+            $this.remote.Setter("$($this.identifier()).$param", $val)
         }
     }
 
@@ -67,6 +71,6 @@ class Special {
     }
 }
 
-function Make_Command {
-    return [Special]::new()
+function Make_Command([Object]$remote) {
+    return [Special]::new($remote)
 }

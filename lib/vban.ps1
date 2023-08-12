@@ -1,9 +1,11 @@
 class IVban {
     [int32]$index
+    [Object]$remote
     [string]$direction
 
-    IVban ([int]$index, [string]$direction) {
+    IVban ([int]$index, [Object]$remote, [string]$direction) {
         $this.index = $index
+        $this.remote = $remote
         $this.direction = $direction
     }
 
@@ -16,20 +18,20 @@ class IVban {
     }
 
     [single] Getter ($param) {
-        return Param_Get -PARAM "$($this.identifier()).$param" -IS_STRING $false
+        return $this.remote.Getter("$($this.identifier()).$param")
     }
 
     [string] Getter_String ($param) {
-        return Param_Get -PARAM "$($this.identifier()).$param" -IS_STRING $true
+        return $this.remote.Getter_String("$($this.identifier()).$param")
     }
 
     [void] Setter ($param, $val) {
-        Param_Set -PARAM "$($this.identifier()).$param" -Value $val
+        $this.remote.Setter("$($this.identifier()).$param", $val)
     }
 }
 
 class Vban : IVban {
-    Vban ([int]$index, [string]$direction) : base ($index, $direction) {
+    Vban ([int]$index, [Object]$remote, [string]$direction) : base ($index, $remote, $direction) {
     }
 
     hidden $_on = $($this | Add-Member ScriptProperty 'on' `
@@ -173,13 +175,13 @@ class Vban : IVban {
 
 
 class VbanInstream : Vban {
-    VbanInstream ([int]$index, [string]$direction) : base ($index, $direction) {
+    VbanInstream ([int]$index, [Object]$remote, [string]$direction) : base ($index, $remote, $direction) {
     }
 }
 
 
 class VbanOutstream : Vban {
-    VbanOutstream ([int]$index, [string]$direction) : base ($index, $direction) {
+    VbanOutstream ([int]$index, [Object]$remote, [string]$direction) : base ($index, $remote, $direction) {
     }
 }
 
@@ -189,10 +191,10 @@ function Make_Vban ([Object]$remote) {
     [System.Collections.ArrayList]$outstream = @()
 
     0..$($remote.kind.vban_in - 1) | ForEach-Object {
-        [void]$instream.Add([VbanInstream]::new($_, "in"))
+        [void]$instream.Add([VbanInstream]::new($_, $remote, "in"))
     }
     0..$($remote.kind.vban_out - 1) | ForEach-Object {
-        [void]$outstream.Add([VbanOutstream]::new($_, "out"))
+        [void]$outstream.Add([VbanOutstream]::new($_, $remote, "out"))
     }
 
     $CustomObject = [pscustomobject]@{

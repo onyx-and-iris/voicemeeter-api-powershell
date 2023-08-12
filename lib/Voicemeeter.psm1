@@ -75,7 +75,7 @@ class RemoteBasic : Remote {
         $this.bus = Make_Buses($this)
         $this.button = Make_Buttons
         $this.vban = Make_Vban($this)
-        $this.command = Make_Command
+        $this.command = Make_Command($this)
     }
 }
 
@@ -92,7 +92,7 @@ class RemoteBanana : Remote {
         $this.bus = Make_Buses($this)
         $this.button = Make_Buttons
         $this.vban = Make_Vban($this)
-        $this.command = Make_Command
+        $this.command = Make_Command($this)
         $this.recorder = Make_Recorder($this)
     }
 }
@@ -110,7 +110,7 @@ class RemotePotato : Remote {
         $this.bus = Make_Buses($this)
         $this.button = Make_Buttons
         $this.vban = Make_Vban($this)
-        $this.command = Make_Command
+        $this.command = Make_Command($this)
         $this.recorder = Make_Recorder($this)
     }
 }

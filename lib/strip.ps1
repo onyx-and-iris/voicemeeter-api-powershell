@@ -14,15 +14,15 @@ class IStrip {
     }
 
     [single] Getter ($param) {
-        return Param_Get -PARAM "$($this.identifier()).$param" -IS_STRING $false
+        return $this.remote.Getter("$($this.identifier()).$param")
     }
 
     [string] Getter_String ($param) {
-        return Param_Get -PARAM "$($this.identifier()).$param" -IS_STRING $true
+        return $this.remote.Getter_String("$($this.identifier()).$param")
     }
 
     [void] Setter ($param, $val) {
-        Param_Set -PARAM "$($this.identifier()).$param" -Value $val
+        $this.remote.Setter("$($this.identifier()).$param", $val)
     }
 }
 

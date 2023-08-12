@@ -8,15 +8,15 @@ class IRecorder {
     }
 
     [single] Getter ($param) {
-        return Param_Get -PARAM "$($this.identifier()).$param" -IS_STRING $false
+        return $this.remote.Getter("$($this.identifier()).$param")
     }
 
     [void] Setter ($param, $val) {
         if ($val -is [Boolean]) {
-            Param_Set -PARAM "$($this.identifier()).$param" -Value $(if ($val) { 1 } else { 0 })
+            $this.remote.Setter("$($this.identifier()).$param", $(if ($val) { 1 } else { 0 }))
         }
         else {
-            Param_Set -PARAM "$($this.identifier()).$param" -Value $val
+            $this.remote.Setter("$($this.identifier()).$param", $val)
         }
     }    
 }
