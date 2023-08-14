@@ -63,4 +63,4 @@ function main {
     finally { Disconnect-Voicemeeter }
 }
 
-if ($MyInvocation.InvocationName -ne '.') { main }
+main

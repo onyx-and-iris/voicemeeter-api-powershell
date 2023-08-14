@@ -68,4 +68,4 @@ function main {
     }    
 }
 
-if ($MyInvocation.InvocationName -ne '.') { main }
+main
