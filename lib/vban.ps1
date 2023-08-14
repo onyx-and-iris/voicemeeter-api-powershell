@@ -70,7 +70,7 @@ class Vban : IVban {
         } `
         {
             param([string]$arg)
-            if ($arg -in 1024..65535) {
+            if ($arg -ge 1024 -and $arg -le 65535) {
                 $this._port = $this.Setter('port', $arg)
             }
             else {
@@ -106,7 +106,7 @@ class Vban : IVban {
             param([int]$arg)
             if ($this.direction -eq "in") { Write-Warning ('Error, read only value') }
             else {
-                if ($arg -in 1..8) {
+                if ($arg -ge 1 -and $arg -le 8) {
                     $this._channel = $this.Setter('channel', $arg)
                 }
                 else {
@@ -144,7 +144,7 @@ class Vban : IVban {
             param([int]$arg)
             if ($this.direction -eq "in") { Write-Warning ('Error, read only value') }
             else {
-                if ($arg -in 0..4) {
+                if ($arg -ge 0 -and $arg -le 4) {
                     $this._quality = $this.Setter('quality', $arg)
                 }
                 else {
@@ -162,7 +162,7 @@ class Vban : IVban {
             param([int]$arg)
             if ($this.direction -eq "in") { Write-Warning ('Error, read only value') }
             else {
-                if ($arg -in 0..8) {
+                if ($arg -ge 0 -and $arg -le 8) {
                     $this._route = $this.Setter('route', $arg)
                 }
                 else {
