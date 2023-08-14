@@ -1,0 +1,54 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "PowerShell: Launch CLI Example",
+            "type": "PowerShell",
+            "request": "launch",
+            "cwd": "${workspaceRoot}/examples/cli",
+            "script": "${workspaceFolder}/examples/cli/CLI.ps1",
+            "args": [
+                "-s",
+                "\"strip[0].mute\",",
+                "\"!strip[0].mute\",",
+                "\"strip[0].mute\",",
+                "\"bus[2].eq.on=1\",",
+                "\"command.lock=1\""
+            ],
+            "createTemporaryIntegratedConsole": true
+        },
+        {
+            "name": "PowerShell: Launch NextBus Example",
+            "type": "PowerShell",
+            "request": "launch",
+            "cwd": "${workspaceRoot}/examples/nextbus",
+            "script": "${workspaceFolder}/examples/nextbus/GoTo-NextBus.ps1",
+            "args": [],
+            "createTemporaryIntegratedConsole": true
+        },
+        {
+            "name": "PowerShell: Launch OBS Example",
+            "type": "PowerShell",
+            "request": "launch",
+            "cwd": "${workspaceRoot}/examples/obs",
+            "script": "${workspaceFolder}/examples/obs/Vm-Obs-Sync.ps1",
+            "args": [],
+            "createTemporaryIntegratedConsole": true
+        },
+        {
+            "name": "PowerShell: Launch Quick Test",
+            "type": "PowerShell",
+            "request": "launch",
+            "cwd": "${workspaceRoot}",
+            "script": "${workspaceFolder}/quick.ps1",
+            "args": [
+                "-Verbose",
+                "-Debug"
+            ],
+            "createTemporaryIntegratedConsole": true
+        }
+    ]
+}
