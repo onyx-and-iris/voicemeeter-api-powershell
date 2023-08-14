@@ -10,6 +10,7 @@ Before any major/minor/patch is released all test units will be run to verify th
 ## [Unreleased] These changes have not been added to PSGallery yet
 
 - [x] Level methods for Strip,Bus classes implemented.
+- [x] More Recorder commands implemented.
 
 ## [3.0.0]
 

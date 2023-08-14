@@ -390,18 +390,18 @@ $vmr.vban.outstream[3].bit = 16
 
 Certain 'special' commands are defined by the API as performing actions rather than setting values.
 
-The following methods are available:
+The following commands are available:
 
 - show
 - hide
 - restart
 - shutdown
-- Load(filepath)
+- showvbanchat: boolean (write only)
+- lock: boolean (write only)
 
-The following properties are write only and accept boolean values:
+The following methods are available:
 
-- showvbanchat
-- lock
+- Load($filepath): string
 
 example:
 
@@ -415,7 +415,7 @@ $vmr.command.Load("path/to/filename.xml")
 
 ### Recorder
 
-The following methods are available:
+The following commands are available:
 
 - play
 - stop
@@ -423,19 +423,53 @@ The following methods are available:
 - record
 - ff
 - rew
+- A1 - A5: boolean
+- B1 - B3: boolean
+- samplerate: int (22050, 24000, 32000, 44100, 48000, 88200, 96000, 176400, 192000)
+- bitresolution: int (8, 16, 24, 32)
+- channel: int from 1 to 8
+- kbps: int (32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320)
 
-The following properties accept boolean values.
+The following methods are available:
 
-- loop
-- A1 - A5
-- B1 - B3
+- Load($filepath): string
+- GoTo($timestring): string, must match the format 'hh:mm:ss'
+- FileType($format): string, ('wav', 'aiff', 'bwf', 'mp3')
 
 example:
 
 ```powershell
 $vmr.recorder.play
+$vmr.recorder.A1 = $true
 
-$vmr.recorder.loop = $true
+$vmr.recorder.GoTo("00:01:15")  # go to 1min 15sec into track
+```
+
+#### Mode
+
+The following commands are available:
+
+- recbus
+- playonload
+- loop
+- multitrack
+
+example:
+
+```powershell
+$vmr.recorder.mode.loop = $true
+```
+
+#### ArmStrip[i]|ArmBus[i]
+
+The following method is available:
+
+- Set($val): boolean
+
+example:
+
+```powershell
+$vmr.recorder.armstrip[0].Set($true)
 ```
 
 ### Multiple parameters

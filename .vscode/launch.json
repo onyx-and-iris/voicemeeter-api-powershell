@@ -39,6 +39,15 @@
             "createTemporaryIntegratedConsole": true
         },
         {
+            "name": "PowerShell: Run Pester Tests",
+            "type": "PowerShell",
+            "request": "launch",
+            "cwd": "${workspaceRoot}",
+            "script": "${workspaceFolder}/tests/pre-commit.ps1",
+            "args": [],
+            "createTemporaryIntegratedConsole": true
+        },
+        {
             "name": "PowerShell: Launch Quick Test",
             "type": "PowerShell",
             "request": "launch",
