@@ -7,36 +7,22 @@ function Login {
     )
     try {
         $retval = [int][Voicemeeter.Remote]::VBVMR_Login()
-        if ($retval -ne 0) {
-            switch ($retval) {
-                1 {
-                    New-Variable -Name vmExe -Value 0
-
-                    if ( $kindId -eq "basic" ) { $vmExe = 1 }
-                    elseif ( $kindId -eq "banana" ) { $vmExe = 2 }
-                    elseif ( $kindId -eq "potato" ) {
-                        $vmExe = $(if ([Environment]::Is64BitOperatingSystem) { 6 } else { 3 })
-                    }
-
-                    $retval = [int][Voicemeeter.Remote]::VBVMR_RunVoicemeeter([int64]$vmExe)
-                    if (-not $retval) { 
-                        "Voicemeeter Engine running but GUI not launched. Launching GUI now." | Write-Verbose
-                        Start-Sleep -s 1
-                    }
-                    else { 
-                        throw [CAPIError]::new($retval, $MyInvocation.MyCommand) 
-                    }
-                }
-                -2 {
-                    throw [LoginError]::new('Login may only be called once per session')
-                }
-                default { throw [CAPIError]::new($retval, $MyInvocation.MyCommand) }
-            }
-        }   
+        if ($retval -notin @(0, 1, -2)) {
+            throw [CAPIError]::new($retval, "VBVMR_Login")
+        }        
     }
-    catch [LoginError] {
-        "$($_.Exception.ErrorMessage()). Fatal error, exiting..." | Write-Warning
-        exit -2
+    catch [CAPIError] {
+        $_.Exception.ToString() | Write-Warning
+        throw
+    }
+
+    switch ($retval) {
+        1 {
+            RunVoicemeeter -kindId $kindId
+        }
+        -2 {
+            throw [LoginError]::new("Login may only be called once per session. Fatal error... exiting.")
+        }
     }
 
     while (P_Dirty -or M_Dirty) { Start-Sleep -m 1 }
@@ -45,22 +31,83 @@ function Login {
 
 function Logout {
     Start-Sleep -m 20
-    $retval = [int][Voicemeeter.Remote]::VBVMR_Logout()
-    if ($retval -eq 0) { "Sucessfully logged out" | Write-Verbose }     
+    try {
+        $retval = [int][Voicemeeter.Remote]::VBVMR_Logout()
+        if ($retval -notin @(0)) {
+            throw [CAPIError]::new($retval, "VBVMR_Logout")
+        }        
+    }
+    catch [CAPIError] {
+        $_.Exception.ToString() | Write-Warning
+        throw
+    }
+    if ($retval -eq 0) { "Sucessfully logged out" | Write-Verbose }
+}
+
+function RunVoicemeeter {
+    param(
+        [string]$kindId
+    )
+    $kinds = @{
+        "basic"  = 1
+        "banana" = 2
+        "potato" = $(if ([Environment]::Is64BitOperatingSystem) { 6 } else { 3 })
+    }
+
+    try {
+        $retval = [int][Voicemeeter.Remote]::VBVMR_RunVoicemeeter([int64]$kinds[$kindId])
+        if ($retval -notin @(0)) {
+            throw [CAPIError]::new($retval, "VBVMR_RunVoicemeeter") 
+        }        
+    }
+    catch [CAPIError] {
+        $_.Exception.ToString() | Write-Warning
+        throw
+    }
+    "Voicemeeter Engine running but GUI not launched. Launching GUI now." | Write-Verbose
+    Start-Sleep -s 1
 }
 
 function P_Dirty {
-    [bool][Voicemeeter.Remote]::VBVMR_IsParametersDirty()
+    try {
+        $retval = [Voicemeeter.Remote]::VBVMR_IsParametersDirty()
+        if ($retval -notin @(0, 1)) {
+            throw [CAPIError]::new($retval, "VBVMR_RunVoicemeeter") 
+        }   
+    }
+    catch [CAPIError] {
+        $_.Exception.ToString() | Write-Warning
+        throw
+    }
+    [bool]$retval
 }
 
 function M_Dirty {
-    [bool][Voicemeeter.Remote]::VBVMR_MacroButton_IsDirty()
+    try {
+        $retval = [Voicemeeter.Remote]::VBVMR_MacroButton_IsDirty()
+        if ($retval -notin @(0, 1)) {
+            throw [CAPIError]::new($retval, "VBVMR_RunVoicemeeter") 
+        }   
+    }
+    catch [CAPIError] {
+        $_.Exception.ToString() | Write-Warning
+        throw
+    }
+    [bool]$retval
 }
 
 function VmType {
     New-Variable -Name ptr -Value 0
-    $retval = [int][Voicemeeter.Remote]::VBVMR_GetVoicemeeterType([ref]$ptr)
-    if ($retval) { throw [CAPIError]::new($retval, $MyInvocation.MyCommand) }
+    try {
+        $retval = [int][Voicemeeter.Remote]::VBVMR_GetVoicemeeterType([ref]$ptr)
+        if ($retval -notin @(0)) { 
+            throw [CAPIError]::new($retval, "VBVMR_GetVoicemeeterType") 
+        }        
+    }
+    catch [CAPIError] {
+        $_.Exception.ToString() | Write-Warning
+        throw
+    }
     switch ($ptr) {
         1 { return "basic" }
         2 { return "banana" }
@@ -70,8 +117,16 @@ function VmType {
 
 function VmVersion {
     New-Variable -Name ptr -Value 0
-    $retval = [int][Voicemeeter.Remote]::VBVMR_GetVoicemeeterVersion([ref]$ptr)
-    if ($retval) { throw [CAPIError]::new($retval, $MyInvocation.MyCommand) }
+    try {
+        $retval = [int][Voicemeeter.Remote]::VBVMR_GetVoicemeeterVersion([ref]$ptr)
+        if ($retval -notin @(0)) { 
+            throw [CAPIError]::new($retval, "VBVMR_GetVoicemeeterVersion") 
+        }
+    }
+    catch [CAPIError] {
+        $_.Exception.ToString() | Write-Warning
+        throw
+    }
     $v1 = ($ptr -band 0xFF000000) -shr 24
     $v2 = ($ptr -band 0x00FF0000) -shr 16
     $v3 = ($ptr -band 0x0000FF00) -shr 8
@@ -84,30 +139,30 @@ function Param_Get {
     param(
         [string]$PARAM, [bool]$IS_STRING = $false
     )
-    Start-Sleep -m 50
+    Start-Sleep -m 20
     while (P_Dirty) { Start-Sleep -m 1 }
 
-    if ($IS_STRING) {
-        $BYTES = [System.Byte[]]::new(512)
-        try {
+    try {
+        if ($IS_STRING) {
+            $BYTES = [System.Byte[]]::new(512)
             $retval = [int][Voicemeeter.Remote]::VBVMR_GetParameterStringA($PARAM, $BYTES)
-            if ($retval) { throw [CAPIError]::new($retval, $MyInvocation.MyCommand) }
+            if ($retval -notin @(0)) { 
+                throw [CAPIError]::new($retval, "VBVMR_GetParameterStringA") 
+            }
+            [System.Text.Encoding]::ASCII.GetString($BYTES).Trim([char]0)
         }
-        catch [CAPIError] {
-            Write-Warning $_.Exception.ErrorMessage()
-        }
-        [System.Text.Encoding]::ASCII.GetString($BYTES).Trim([char]0)
-    }
-    else {
-        New-Variable -Name ptr -Value 0.0
-        try {
+        else {
+            New-Variable -Name ptr -Value 0.0
             $retval = [int][Voicemeeter.Remote]::VBVMR_GetParameterFloat($PARAM, [ref]$ptr)
-            if ($retval) { throw [CAPIError]::new($retval, $MyInvocation.MyCommand) }
-        }
-        catch [CAPIError] {
-            Write-Warning $_.Exception.ErrorMessage()
-        }
-        [single]$ptr
+            if ($retval -notin @(0)) { 
+                throw [CAPIError]::new($retval, "VBVMR_GetParameterFloat") 
+            }
+            [single]$ptr
+        }        
+    }
+    catch [CAPIError] {
+        $_.Exception.ToString() | Write-Warning
+        throw
     }
 }
 
@@ -118,14 +173,20 @@ function Param_Set {
     try {
         if ($VALUE -is [string]) {
             $retval = [int][Voicemeeter.Remote]::VBVMR_SetParameterStringA($PARAM, $VALUE)
+            if ($retval -notin @(0)) { 
+                throw [CAPIError]::new($retval, "VBVMR_SetParameterStringA") 
+            }
         }
         else {
             $retval = [int][Voicemeeter.Remote]::VBVMR_SetParameterFloat($PARAM, $VALUE)
+            if ($retval -notin @(0)) { 
+                throw [CAPIError]::new($retval, "VBVMR_SetParameterFloat") 
+            }
         }
-        if ($retval) { throw [CAPIError]::new($retval, $MyInvocation.MyCommand) }
     }
     catch [CAPIError] {
-        Write-Warning $_.Exception.ErrorMessage()
+        $_.Exception.ToString() | Write-Warning
+        throw
     }
 }
 
@@ -135,10 +196,13 @@ function MB_Set {
     )
     try {
         $retval = [int][Voicemeeter.Remote]::VBVMR_MacroButton_SetStatus($ID, $SET, $MODE)
-        if ($retval) { throw [CAPIError]::new($retval, $MyInvocation.MyCommand) }
+        if ($retval -notin @(0)) { 
+            throw [CAPIError]::new($retval, "VBVMR_MacroButton_SetStatus") 
+        }
     }
     catch [CAPIError] {
-        Write-Warning $_.Exception.ErrorMessage()
+        $_.Exception.ToString() | Write-Warning
+        throw
     }
 }
 
@@ -146,16 +210,19 @@ function MB_Get {
     param(
         [int64]$ID, [int64]$MODE
     )
-    Start-Sleep -m 50
+    Start-Sleep -m 30
     while (M_Dirty) { Start-Sleep -m 1 }
 
     New-Variable -Name ptr -Value 0.0
     try {
         $retval = [int][Voicemeeter.Remote]::VBVMR_MacroButton_GetStatus($ID, [ref]$ptr, $MODE)
-        if ($retval) { throw [CAPIError]::new($retval, $MyInvocation.MyCommand) }
+        if ($retval -notin @(0)) { 
+            throw [CAPIError]::new($retval, $MyInvocation.MyCommand) 
+        }
     }
     catch [CAPIError] {
-        Write-Warning $_.Exception.ErrorMessage()
+        Write-Warning $_.Exception.ToString()
+        throw
     }
     [int]$ptr
 }
@@ -189,10 +256,13 @@ function Set_By_Script {
     )
     try {
         $retval = [int][Voicemeeter.Remote]::VBVMR_SetParameters($script)
-        if ($retval) { throw [CAPIError]::new($retval, $MyInvocation.MyCommand) }
+        if ($retval -notin @(0)) { 
+            throw [CAPIError]::new($retval, "VBVMR_SetParameters") 
+        }
     }
     catch [CAPIError] {
-        Write-Warning $_.Exception.ErrorMessage()
+        Write-Warning $_.Exception.ToString()
+        throw
     }
 }
 
@@ -203,10 +273,13 @@ function Get_Level {
     New-Variable -Name ptr -Value 0.0
     try {
         $retval = [int][Voicemeeter.Remote]::VBVMR_GetLevel($MODE, $INDEX, [ref]$ptr)
-        if ($retval) { throw [CAPIError]::new($retval, $MyInvocation.MyCommand) }
+        if ($retval -notin @(0)) { 
+            throw [CAPIError]::new($retval, "VBVMR_GetLevel") 
+        }
     }
     catch [CAPIError] {
-        Write-Warning $_.Exception.ErrorMessage()
+        Write-Warning $_.Exception.ToString()
+        throw
     }
     [float]$ptr
 }
