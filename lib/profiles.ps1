@@ -24,14 +24,9 @@ function Set_Profile {
     param(
         [Object]$DATA, [string]$CONF
     )
-    try {
-        if ($null -eq $DATA -or -not $DATA.$CONF) {
-            throw [VMRemoteErrors]::new("No profile named $CONF was loaded")
-        }
-        Param_Set_Multi -HASH $DATA.$CONF
-        Start-Sleep -m 1
+    if ($null -eq $DATA -or -not $DATA.$CONF) {
+        throw [VMRemoteErrors]::new("No profile named '$CONF' has been loaded into memory.")
     }
-    catch [VMRemoteErrors] {
-        Write-Warning $_.Exception.ErrorMessage()
-    }
+    Param_Set_Multi -HASH $DATA.$CONF
+    Start-Sleep -m 1
 }

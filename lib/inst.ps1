@@ -8,6 +8,6 @@ function Get_VMPath {
         return $(Get-ItemPropertyValue -Path ($REG_KEY + $VM_KEY) -Name UninstallString | Split-Path -Parent)
     }
     catch {
-        throw [VMRemoteError]::new("Couldn't get Voicemeeter path")
+        throw [VMRemoteError]::new("Unable to fetch Voicemeeter path from the Registry.")
     }
 }

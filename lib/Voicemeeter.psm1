@@ -137,30 +137,20 @@ Function Get-RemotePotato {
 
 Function Connect-Voicemeeter {
     param([String]$Kind)
-    try {
-        switch ($Kind) {
-            "basic" { 
-                return Get-RemoteBasic
-            }
-            "banana" { 
-                return Get-RemoteBanana
-            }
-            "potato" { 
-                return Get-RemotePotato
-            }
-            default { throw [LoginError]::new("Unknown Voicemeeter kind `"$Kind`"") }
-        }        
-    }
-    catch [LoginError], [CAPIError] {
-        Write-Warning $_.Exception.ErrorMessage()
-        throw
-    }
-    catch [VMRemoteError] {
-        $_.Exception.ErrorMessage() | Write-Warning
-        if ($_.Exception.ErrorMessage() -eq "Couldn't get Voicemeeter path") { 
-            Exit -1 
+    switch ($Kind) {
+        "basic" { 
+            return Get-RemoteBasic
         }
-    }
+        "banana" { 
+            return Get-RemoteBanana
+        }
+        "potato" { 
+            return Get-RemotePotato
+        }
+        default { 
+            throw [LoginError]::new("Unknown Voicemeeter kind `"$Kind`"")
+        }
+    }         
 }
 
 Function Disconnect-Voicemeeter {
