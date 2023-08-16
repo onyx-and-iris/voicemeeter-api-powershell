@@ -1,14 +1,22 @@
-. $PSScriptRoot\kinds.ps1
+. $PSScriptRoot\errors.ps1
+. $PSScriptRoot\meta.ps1
 . $PSScriptRoot\base.ps1
+. $PSScriptRoot\kinds.ps1
+. $PSScriptRoot\strip.ps1
+. $PSScriptRoot\bus.ps1
+. $PSScriptRoot\macrobuttons.ps1
+. $PSScriptRoot\vban.ps1
+. $PSScriptRoot\command.ps1
+. $PSScriptRoot\recorder.ps1
+. $PSScriptRoot\profiles.ps1
 
 class Remote {
+    [String]$vmpath
     [Hashtable]$kind
     [Object]$profiles
 
     Remote ([String]$kindId) {
-        if (!(Setup_DLL)) {
-            Exit -1
-        }
+        $this.vmpath = Setup_DLL
         $this.kind = GetKind($kindId)
         $this.profiles = Get_Profiles($this.kind.name)
     }
@@ -31,7 +39,7 @@ class Remote {
     }
 
     [String] GetVersion() {
-        return Version
+        return VmVersion
     }
 
     [void] Set_Profile([String]$config) {
@@ -146,6 +154,12 @@ Function Connect-Voicemeeter {
     catch [LoginError], [CAPIError] {
         Write-Warning $_.Exception.ErrorMessage()
         throw
+    }
+    catch [VMRemoteError] {
+        $_.Exception.ErrorMessage() | Write-Warning
+        if ($_.Exception.ErrorMessage() -eq "Couldn't get Voicemeeter path") { 
+            Exit -1 
+        }
     }
 }
 

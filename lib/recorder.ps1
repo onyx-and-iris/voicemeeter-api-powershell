@@ -1,5 +1,3 @@
-. $PSScriptRoot\meta.ps1
-
 class IRecorder {
     [Object]$remote
 

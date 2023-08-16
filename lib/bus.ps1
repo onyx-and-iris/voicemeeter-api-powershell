@@ -1,5 +1,3 @@
-. $PSScriptRoot\meta.ps1
-
 class IBus {
     [int]$index
     [Object]$remote
@@ -13,20 +11,26 @@ class IBus {
         return "Bus[" + $this.index + "]"
     }
 
-    [string] ToString() {
-        return $this.GetType().Name + $this.index
-    }
-
     [single] Getter ($param) {
-        return $this.remote.Getter("$($this.identifier()).$param")
+        $this.ToString() + " Getter: $($this.Cmd($param))" | Write-Debug
+        return $this.remote.Getter($this.Cmd($param))
     }
 
     [string] Getter_String ($param) {
-        return $this.remote.Getter_String("$($this.identifier()).$param")
+        $this.ToString() + " Getter_String: $($this.Cmd($param))" | Write-Debug
+        return $this.remote.Getter_String($this.Cmd($param))
     }
 
     [void] Setter ($param, $val) {
-        $this.remote.Setter("$($this.identifier()).$param", $val)
+        $this.ToString() + " Setter: $($this.Cmd($param))=$val" | Write-Debug
+        $this.remote.Setter($this.Cmd($param), $val)
+    }
+
+    [string] Cmd ($param) {
+        if ([string]::IsNullOrEmpty($param)) {
+            return $this.identifier()
+        }
+        return "$($this.identifier()).$param"
     }
 }
 
@@ -43,6 +47,10 @@ class Bus : IBus {
         $this.mode = [BusMode]::new($index, $remote)
         $this.eq = [BusEq]::new($index, $remote)
         $this.levels = [BusLevels]::new($index, $remote)
+    }
+
+    [string] ToString() {
+        return $this.GetType().Name + $this.index
     }
 
     [void] FadeTo ([single]$target, [int]$time) {

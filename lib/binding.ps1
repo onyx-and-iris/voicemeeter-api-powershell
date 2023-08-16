@@ -1,18 +1,11 @@
-function Setup_DLL {
-    try {
-        $vb_path = Get_VMPath
+. $PSScriptRoot\inst.ps1
 
-        if ([string]::IsNullOrWhiteSpace($vb_path)) {
-            throw [VMRemoteError]::new("couldn't get Voicemeeter path")
-        }
-        $dll = Join-Path -Path $vb_path -ChildPath ("VoicemeeterRemote" + `
-            (& { if ([Environment]::Is64BitOperatingSystem) { "64" } else { "" } }) + `
-                ".dll")
-    }
-    catch [VMRemoteError] {
-        Write-Warning $_.Exception.ErrorMessage()
-        return $false
-    }
+function Setup_DLL {
+    $VMPATH = Get_VMPath
+
+    $dll = Join-Path -Path $VMPATH -ChildPath ("VoicemeeterRemote" + `
+        (& { if ([Environment]::Is64BitOperatingSystem) { "64" } else { "" } }) + `
+            ".dll")
 
     $Signature = @"
     [DllImport(@"$dll")]
@@ -53,5 +46,5 @@ function Setup_DLL {
 "@
 
     Add-Type -MemberDefinition $Signature -Name Remote -Namespace Voicemeeter -PassThru | Out-Null
-    return $true
+    return $VMPATH
 }

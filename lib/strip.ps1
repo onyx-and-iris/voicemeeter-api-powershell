@@ -1,5 +1,3 @@
-. $PSScriptRoot\meta.ps1
-
 class IStrip {
     [int]$index
     [Object]$remote
@@ -14,15 +12,25 @@ class IStrip {
     }
 
     [single] Getter ($param) {
-        return $this.remote.Getter("$($this.identifier()).$param")
+        $this.Cmd($param) | Write-Debug
+        return $this.remote.Getter($this.Cmd($param))
     }
 
     [string] Getter_String ($param) {
-        return $this.remote.Getter_String("$($this.identifier()).$param")
+        $this.Cmd($param) | Write-Debug
+        return $this.remote.Getter_String($this.Cmd($param))
     }
 
     [void] Setter ($param, $val) {
-        $this.remote.Setter("$($this.identifier()).$param", $val)
+        "$($this.Cmd($param))=$val" | Write-Debug
+        $this.remote.Setter($this.Cmd($param), $val)
+    }
+
+    [string] Cmd ($param) {
+        if ([string]::IsNullOrEmpty($param)) {
+            return $this.identifier()
+        }
+        return "$($this.identifier()).$param"
     }
 }
 

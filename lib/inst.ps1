@@ -1,8 +1,13 @@
 function Get_VMPath {
-    $reg_path = "Registry::HKEY_LOCAL_MACHINE\Software" + `
+    $REG_KEY = "Registry::HKEY_LOCAL_MACHINE\Software" + `
     (& { if ([Environment]::Is64BitOperatingSystem) { "\WOW6432Node" } else { "" } }) + `
         "\Microsoft\Windows\CurrentVersion\Uninstall"
-    $vm_key = "\VB:Voicemeeter {17359A74-1236-5467}\"
+    $VM_KEY = "\VB:Voicemeeter {17359A74-1236-5467}\"
 
-    return $(Get-ItemPropertyValue -Path ($reg_path + $vm_key) -Name UninstallString | Split-Path -Parent)
+    try {
+        return $(Get-ItemPropertyValue -Path ($REG_KEY + $VM_KEY) -Name UninstallString | Split-Path -Parent)
+    }
+    catch {
+        throw [VMRemoteError]::new("Couldn't get Voicemeeter path")
+    }
 }

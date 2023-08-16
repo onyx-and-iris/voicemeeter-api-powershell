@@ -1,3 +1,9 @@
+enum ButtonTypes {
+    State = 1
+    StateOnly = 2
+    Trigger = 3
+}
+
 class MacroButton {
     [int32]$index
 
@@ -10,40 +16,42 @@ class MacroButton {
     }
 
     [int] Getter ($mode) {
+        "Button[$($this.index)].$([ButtonTypes].GetEnumName($mode))" | Write-Debug
         return MB_Get -Id $this.index -Mode $mode
     }
 
-    [void] Setter ($set, $mode) {
-        MB_Set -Id $this.index -SET $set -Mode $mode
+    [void] Setter ($val, $mode) {
+        "Button[$($this.index)].$([ButtonTypes].GetEnumName($mode))=$val" | Write-Debug
+        MB_Set -Id $this.index -SET $val -Mode $mode
     }
 
     hidden $_state = $($this | Add-Member ScriptProperty 'state' `
         {
-            [bool]$this.Getter(1)
+            [bool]$this.Getter([ButtonTypes]::State)
         } `
         {
             param($arg)
-            $this._state = $this.Setter($arg, 1)
+            $this._state = $this.Setter($arg, [ButtonTypes]::State)
         }
     )
 
     hidden $_stateonly = $($this | Add-Member ScriptProperty 'stateonly' `
         {
-            [bool]$this.Getter(2)
+            [bool]$this.Getter([ButtonTypes]::StateOnly)
         } `
         {
             param($arg)
-            $this._stateonly = $this.Setter($arg, 2)
+            $this._stateonly = $this.Setter($arg, [ButtonTypes]::StateOnly)
         }
     )
 
     hidden $_trigger = $($this | Add-Member ScriptProperty 'trigger' `
         {
-            [bool]$this.Getter(3)
+            [bool]$this.Getter([ButtonTypes]::Trigger)
         } `
         {
             param($arg)
-            $this._trigger = $this.Setter($arg, 3)
+            $this._trigger = $this.Setter($arg, [ButtonTypes]::Trigger)
         }
     )
 }

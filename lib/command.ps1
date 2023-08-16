@@ -1,6 +1,3 @@
-. $PSScriptRoot\meta.ps1
-. $PSScriptRoot\inst.ps1
-
 class Special {
     [Object]$remote
 
@@ -32,10 +29,12 @@ class Special {
     }
 
     [void] RunMacrobuttons() {
-        Start-Process -FilePath $(Join-Path -Path $(Get_VMPath) -ChildPath "VoicemeeterMacroButtons.exe")
+        "Launching the MacroButtons app" | Write-Verbose
+        Start-Process -FilePath $(Join-Path -Path $this.remote.vmpath -ChildPath "VoicemeeterMacroButtons.exe")
     }
 
     [void] CloseMacrobuttons() {
+        "Closing the MacroButtons app" | Write-Verbose
         Stop-Process -Name "VoicemeeterMacroButtons"
     }
 
