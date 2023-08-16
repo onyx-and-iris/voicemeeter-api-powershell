@@ -1,13 +1,11 @@
+[cmdletbinding()]
 param(
     [switch]$interactive,
-    [switch]$output,
     [String]$kind = "banana",
     [String[]]$script = @()
 )
 
 Import-Module ..\..\lib\Voicemeeter.psm1
-
-$VerbosePreference = "Continue"
 
 function get-value {
     param([object]$vmr, [string]$line)
@@ -24,16 +22,16 @@ function msgHandler {
     param([object]$vmr, [string]$line)
     $line + " passed to handler" | Write-Debug
     if ($line[0] -eq "!") {
-        if ($output) { "Toggling " + $line.substring(1) | Write-Host }
+        "Toggling " + $line.substring(1) | Write-Debug
         $retval = get-value -vmr $vmr -line $line.substring(1)
         $vmr.Setter($line.substring(1), 1 - $retval)
     }
     elseif ($line.Contains("=")) { 
-        if ($output) { "Setting $line" | Write-Host }
+        "Setting $line" | Write-Debug
         $vmr.SendText($line)
     }
     else {
-        if ($output) { "Getting $line" | Write-Host }
+        "Getting $line" | Write-Debug
         $retval = get-value -vmr $vmr -line $line
         $line + " = " + $retval | Write-Host
     }

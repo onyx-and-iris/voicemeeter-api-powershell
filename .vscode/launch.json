@@ -16,7 +16,9 @@
                 "\"!strip[0].mute\",",
                 "\"strip[0].mute\",",
                 "\"bus[2].eq.on=1\",",
-                "\"command.lock=1\""
+                "\"command.lock=1\"",
+                "-Verbose",
+                "-Debug"
             ],
             "createTemporaryIntegratedConsole": true
         },
@@ -26,7 +28,10 @@
             "request": "launch",
             "cwd": "${workspaceRoot}/examples/nextbus",
             "script": "${workspaceFolder}/examples/nextbus/GoTo-NextBus.ps1",
-            "args": [],
+            "args": [
+                "-Verbose",
+                "-Debug"
+            ],
             "createTemporaryIntegratedConsole": true
         },
         {
@@ -35,7 +40,10 @@
             "request": "launch",
             "cwd": "${workspaceRoot}/examples/obs",
             "script": "${workspaceFolder}/examples/obs/Vm-Obs-Sync.ps1",
-            "args": [],
+            "args": [
+                "-Verbose",
+                "-Debug"
+            ],
             "createTemporaryIntegratedConsole": true
         },
         {

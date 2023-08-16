@@ -7,27 +7,30 @@
     Credits go to @bobsupercow
 #>
 
-Import-Module ..\..\lib\Voicemeeter.psm1
+[cmdletbinding()]
+param()
 
-$VerbosePreference = "Continue"
+Import-Module ..\..\lib\Voicemeeter.psm1
 
 try {
     $vmr = Connect-Voicemeeter -Kind "potato"
 
     $buses = @($vmr.bus[1], $vmr.bus[2], $vmr.bus[4], $vmr.bus[6])
+    "Buses in selection: $($buses)"
     $unmutedIndex = $null
 
     # 1)
+    "Cycling through bus selection to check for first unmuted Bus..." | Write-Host
     foreach ($bus in $buses) {
         # 2)
         if (-not $bus.mute) {
-            "bus $($bus.index) is unmuted... muting it" | Write-Host
+            "Bus $($bus.index) is unmuted... muting it" | Write-Host
             $unmutedIndex = $buses.IndexOf($bus)
             $bus.mute = $true
 
             # 3)
             if ($buses[++$unmutedIndex]) {
-                "unmuting bus $($buses[$unmutedIndex].index)" | Write-Host
+                "Unmuting Bus $($buses[$unmutedIndex].index)" | Write-Host
                 $buses[$unmutedIndex].mute = $false
                 break
             }
@@ -37,7 +40,7 @@ try {
     # 4)
     if ($null -eq $unmutedIndex) { 
         $buses[0].mute = $false 
-        "unmuting bus $($buses[0].index)" | Write-Host
+        "Unmuting Bus $($buses[0].index)" | Write-Host
     }
     
 }

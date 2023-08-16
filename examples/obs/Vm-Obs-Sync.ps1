@@ -1,7 +1,8 @@
+[cmdletbinding()]
+param()
+
 Import-Module ..\..\lib\Voicemeeter.psm1
 Import-Module obs-powershell
-
-$VerbosePreference = "Continue"
 
 function CurrentProgramSceneChanged {
     param([System.Object]$data)
@@ -10,19 +11,15 @@ function CurrentProgramSceneChanged {
     switch ($data.sceneName) {
         "START" { 
             $vmr.strip[0].mute = !$vmr.strip[0].mute
-            "Toggling Strip 0 mute"
         }
         "BRB" { 
             $vmr.strip[0].gain = -8.3
-            "Setting Strip 0 gain to -8.3"
         }
         "END" { 
             $vmr.strip[0].mono = $true
-            "Setting Strip 0 mono to `$true"
         }
         "LIVE" { 
             $vmr.strip[0].color_x = 0.3
-            "Setting Strip 0 color_x to 0.3"
         }
         default { "Expected START, BRB, END or LIVE scene" | Write-Warning; return }
     }
