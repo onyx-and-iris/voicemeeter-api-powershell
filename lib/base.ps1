@@ -12,6 +12,7 @@ function Login {
 
     switch ($retval) {
         1 {
+            "Voicemeeter Engine running but GUI not launched. Launching GUI now." | Write-Verbose
             RunVoicemeeter -kindId $kindId
         }
         -2 {
@@ -24,7 +25,7 @@ function Login {
 }
 
 function Logout {
-    Start-Sleep -m 20
+    Start-Sleep -m 100
     $retval = [int][Voicemeeter.Remote]::VBVMR_Logout()
     if ($retval -notin @(0)) {
         throw [CAPIError]::new($retval, "VBVMR_Logout")
@@ -46,7 +47,6 @@ function RunVoicemeeter {
     if ($retval -notin @(0)) {
         throw [CAPIError]::new($retval, "VBVMR_RunVoicemeeter") 
     }
-    "Voicemeeter Engine running but GUI not launched. Launching GUI now." | Write-Verbose
     Start-Sleep -s 1
 }
 
@@ -97,7 +97,7 @@ function Param_Get {
     param(
         [string]$PARAM, [bool]$IS_STRING = $false
     )
-    Start-Sleep -m 20
+    Start-Sleep -m 30
     while (P_Dirty) { Start-Sleep -m 1 }
 
     if ($IS_STRING) {
@@ -150,7 +150,7 @@ function MB_Get {
     param(
         [int64]$ID, [int64]$MODE
     )
-    Start-Sleep -m 30
+    Start-Sleep -m 50
     while (M_Dirty) { Start-Sleep -m 1 }
 
     New-Variable -Name ptr -Value 0.0
