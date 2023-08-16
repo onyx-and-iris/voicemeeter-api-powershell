@@ -115,13 +115,13 @@ $vmr.Logout()
 
 The following strip commands are available:
 
-- mute: boolean
-- mono: boolean
-- mc: boolean
+- mute: bool
+- mono: bool
+- mc: bool
 - k: int, from 0 to 4
-- solo: boolean
-- A1-A5: boolean
-- B1-B3: boolean
+- solo: bool
+- A1-A5: bool
+- B1-B3: bool
 - limit: int, from -40 to 12
 - gain: float, from -60.0 to 12.0
 - label: string
@@ -135,10 +135,10 @@ The following strip commands are available:
 - color_y: float, from 0.0 to 1.0
 - fx_x: float, from -0.5 to 0.5
 - fx_y: float, from 0.0 to 1.0
-- postreverb: boolean
-- postdelay: boolean
-- postfx1: boolean
-- postfx2: boolean
+- postreverb: bool
+- postdelay: bool
+- postfx1: bool
+- postfx2: bool
 - gainlayer0-gainlayer7: float
 
 for example:
@@ -165,7 +165,7 @@ The following strip.comp commands are available:
 - release: float, from 0.0 to 5000.0
 - knee: float, 0.0 to 1.0
 - gainout: float, from -24.0 to 24.0
-- makeup: boolean
+- makeup: bool
 
 for example:
 
@@ -206,7 +206,7 @@ $vmr.strip[3].denoiser.knob = 5
 #### AppGain | AppMute
 
 - `AppGain(amount, gain)` : string, float
-- `AppMute(amount, mutestate)` : string, boolean
+- `AppMute(amount, mutestate)` : string, bool
 
 for example:
 
@@ -253,18 +253,18 @@ $vmr.bus[3].returnreverb = 5.7
 
 The following bus.mode members are available:
 
-- normal: boolean
-- amix: boolean
-- bmix: boolean
-- repeat: boolean
-- composite: boolean
-- tvmix: boolean
-- upmix21: boolean
-- upmix41: boolean
-- upmix61: boolean
-- centeronly: boolean
-- lfeonly: boolean
-- rearonly: boolean
+- normal: bool
+- amix: bool
+- bmix: bool
+- repeat: bool
+- composite: bool
+- tvmix: bool
+- upmix21: bool
+- upmix41: bool
+- upmix61: bool
+- centeronly: bool
+- lfeonly: bool
+- rearonly: bool
 
 The following bus.mode commands are available:
 
@@ -317,8 +317,8 @@ wdm, ks, mme, asio are defined as write only.
 
 The following strip.eq | bus.eq commands are available:
 
-- on: boolean
-- ab: boolean
+- on: bool
+- ab: bool
 
 for example:
 
@@ -359,19 +359,19 @@ $vmr.button[5].trigger = $true
 
 ### VBAN
 
-- vmr.vban.enable: Toggle VBAN on or off. Accepts a boolean value.
+- vmr.vban.enable: Toggle VBAN on or off. Accepts a bool value.
 
 For each vban in/out stream the following parameters are defined:
 
-- on: boolean
+- on: bool
 - name: string
 - ip: string
-- port: int from 1024 - 65535
-- sr: int (11025, 16000, 22050, 24000, 32000, 44100, 48000, 64000, 88200, 96000)
+- port: int, from 1024 - 65535
+- sr: in, (11025, 16000, 22050, 24000, 32000, 44100, 48000, 64000, 88200, 96000)
 - channel: int from 1 to 8
-- bit: int 16 or 24
-- quality: int from 0 to 4
-- route: int from 0 to 8
+- bit: int, 16 or 24
+- quality: int, from 0 to 4
+- route: int, from 0 to 8
 
 SR, channel and bit are defined as readonly for instreams. Attempting to write
 to those parameters will throw an error. They are read and write for outstreams.
@@ -396,8 +396,8 @@ The following commands are available:
 - hide
 - restart
 - shutdown
-- showvbanchat: boolean (write only)
-- lock: boolean (write only)
+- showvbanchat: bool, (write only)
+- lock: bool, (write only)
 
 The following methods are available:
 
@@ -423,12 +423,12 @@ The following commands are available:
 - record
 - ff
 - rew
-- A1 - A5: boolean
-- B1 - B3: boolean
-- samplerate: int (22050, 24000, 32000, 44100, 48000, 88200, 96000, 176400, 192000)
-- bitresolution: int (8, 16, 24, 32)
-- channel: int from 1 to 8
-- kbps: int (32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320)
+- A1 - A5: bool
+- B1 - B3: bool
+- samplerate: int, (22050, 24000, 32000, 44100, 48000, 88200, 96000, 176400, 192000)
+- bitresolution: int, (8, 16, 24, 32)
+- channel: int, from 1 to 8
+- kbps: int, (32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320)
 
 The following methods are available:
 
@@ -464,7 +464,7 @@ $vmr.recorder.mode.loop = $true
 
 The following method is available:
 
-- Set($val): boolean
+- Set($val): bool
 
 example:
 

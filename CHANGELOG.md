@@ -9,7 +9,7 @@ Before any major/minor/patch is released all test units will be run to verify th
 
 ## [Unreleased] These changes have not been added to PSGallery yet
 
-- []
+- [x] Debug statements added to Getters, Setters in higher classes.
 
 ## [3.1.0]
 
@@ -18,6 +18,7 @@ Before any major/minor/patch is released all test units will be run to verify th
 - Level methods for Strip class implemented. See Strip.levels section in README.
 - Level methods for Bus class implemented. See Bus.levels section in README.
 - More Recorder commands implemented. See Recorder section in README.
+- RunMacrobuttons, CloseMacrobuttons added to Special class
 
 ## [3.0.0]
 
