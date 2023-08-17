@@ -402,6 +402,8 @@ The following commands are available:
 The following methods are available:
 
 - Load($filepath): string
+- RunMacrobuttons(): Launches the macrobuttons app
+- CloseMacrobuttons(): Closes the macrobuttons app
 
 example:
 
@@ -411,6 +413,8 @@ $vmr.command.show
 $vmr.command.lock = $true
 
 $vmr.command.Load("path/to/filename.xml")
+
+$vmr.command.RunMacrobuttons()
 ```
 
 ### Recorder
