@@ -542,6 +542,15 @@ Access to lower level polling functions are provided with these functions:
 - `$vmr.PDirty`: Returns true if a parameter has been updated.
 - `$vmr.MDirty`: Returns true if a macrobutton has been updated.
 
+### Errors
+
+- `VMRemoteError`: Base custom error class.
+- `LoginError`: Raised when a login error occurs.
+- `CAPIError`: Raised when a C-API function returns an error code.
+  - The following class properties are available:
+    - `function`: The name of the C-API function that returned the error code.
+    - `code`: The error code.
+
 ### Run tests
 
 Run tests using .\tests\pre-commit.ps1 which accepts the following parameters:
