@@ -53,7 +53,7 @@ function RunVoicemeeter {
 function P_Dirty {
     $retval = [Voicemeeter.Remote]::VBVMR_IsParametersDirty()
     if ($retval -notin @(0, 1)) {
-        throw [CAPIError]::new($retval, "VBVMR_RunVoicemeeter") 
+        throw [CAPIError]::new($retval, "VBVMR_IsParametersDirty") 
     }
     [bool]$retval
 }
@@ -61,7 +61,7 @@ function P_Dirty {
 function M_Dirty {
     $retval = [Voicemeeter.Remote]::VBVMR_MacroButton_IsDirty()
     if ($retval -notin @(0, 1)) {
-        throw [CAPIError]::new($retval, "VBVMR_RunVoicemeeter") 
+        throw [CAPIError]::new($retval, "VBVMR_MacroButton_IsDirty") 
     }
     [bool]$retval
 }
@@ -156,7 +156,7 @@ function MB_Get {
     New-Variable -Name ptr -Value 0.0
     $retval = [int][Voicemeeter.Remote]::VBVMR_MacroButton_GetStatus($ID, [ref]$ptr, $MODE)
     if ($retval -notin @(0)) { 
-        throw [CAPIError]::new($retval, $MyInvocation.MyCommand) 
+        throw [CAPIError]::new($retval, "VBVMR_MacroButton_GetStatus") 
     }
     [int]$ptr
 }
