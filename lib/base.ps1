@@ -188,6 +188,9 @@ function Set_By_Script {
     param(
         [string]$script
     )
+    if ($script.Length -gt 48000) {
+        throw [VMError]::new("Script size cannot be larger than 48kB")
+    }
     $retval = [int][Voicemeeter.Remote]::VBVMR_SetParameters($script)
     if ($retval -notin @(0)) { 
         throw [CAPIError]::new($retval, "VBVMR_SetParameters") 
