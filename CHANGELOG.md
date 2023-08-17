@@ -9,7 +9,20 @@ Before any major/minor/patch is released all test units will be run to verify th
 
 ## [Unreleased] These changes have not been added to PSGallery yet
 
-- [x] Debug statements added to Getters, Setters in higher classes.
+## [3.2.0]
+
+### Added
+
+- Debug statements added to Getters, Setters in higher classes.
+- RunVoicemeeter function added to base.ps1. Accepts kind name as parameter.
+- Errors section to README.
+
+### Fixed
+
+- All CAPIErrors are now exposed to the consumer.
+  - The function name and error code can be retrieved using [CAPIError].function and [CAPIError].code
+- Set_By_Script now throws [VMError] if script length exceeds 48kB.
+- parameter range checks in Vban class.
 
 ## [3.1.0]
 
