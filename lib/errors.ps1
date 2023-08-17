@@ -9,11 +9,11 @@ class LoginError : VMRemoteError {
 }
 
 class CAPIError : VMRemoteError {
-    [int]$retval
-    [string]$caller
+    [int]$code
+    [string]$function
 
-    CAPIError ([int]$retval, [string]$caller) : base ("$caller returned $retval") {
-        $this.retval = $retval
-        $this.caller = $caller
+    CAPIError ([int]$code, [string]$function) : base ("$function returned $code") {
+        $this.code = $code
+        $this.function = $function
     }
 }
