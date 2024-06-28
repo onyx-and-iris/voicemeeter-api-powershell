@@ -8,9 +8,9 @@ For past/future changes to this project refer to: [CHANGELOG](CHANGELOG.md)
 
 ## Tested against
 
-- Basic 1.0.8.8
-- Banana 2.0.6.8
-- Potato 3.0.2.8
+- Basic 1.1.1.1
+- Banana 2.1.1.1
+- Potato 3.1.1.1
 
 ## Requirements
 
