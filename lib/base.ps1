@@ -31,7 +31,8 @@ function Login {
             break
         }
         catch [CAPIError] {
-            $exception = $_.Exception
+            $exception = $_
+            $exception | Write-Debug
         }
     } while ($sw.elapsed -lt $timeout)
 
@@ -65,7 +66,6 @@ function RunVoicemeeter {
     if ($retval -notin @(0)) {
         throw [CAPIError]::new($retval, "VBVMR_RunVoicemeeter") 
     }
-    Start-Sleep -s 1
 }
 
 function P_Dirty {
