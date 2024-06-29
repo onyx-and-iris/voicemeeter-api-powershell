@@ -9,8 +9,8 @@ Before any major/minor/patch is released all test units will be run to verify th
 
 ## [Unreleased] These changes have not been added to PSGallery yet
 
-[x] Launch x64 bit GUIs for all kinds if on 64 bit system.
-[x] Add a timeout to the login function.
+- [x] Launch x64 bit GUIs for all kinds if on 64 bit system.
+- [x] Add a timeout to the login function.
 
 ## [3.2.0]
 
