@@ -9,6 +9,9 @@ Before any major/minor/patch is released all test units will be run to verify th
 
 ## [Unreleased] These changes have not been added to PSGallery yet
 
+[x] Launch x64 bit GUIs for all kinds if on 64 bit system.
+[x] Add a timeout to the login function.
+
 ## [3.2.0]
 
 ### Added
@@ -21,7 +24,7 @@ Before any major/minor/patch is released all test units will be run to verify th
 
 - All CAPIErrors are now exposed to the consumer.
   - The function name and error code can be retrieved using [CAPIError].function and [CAPIError].code
-- Set_By_Script now throws [VMError] if script length exceeds 48kB.
+- Set_By_Script now throws [VMRemoteError] if script length exceeds 48kB.
 - parameter range checks in Vban class.
 
 ## [3.1.0]

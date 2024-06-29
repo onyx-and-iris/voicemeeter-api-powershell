@@ -20,8 +20,26 @@ function Login {
         }
     }
 
+    $timeout = New-TimeSpan -Seconds 2
+    $sw = [diagnostics.stopwatch]::StartNew()
+    $exception = $null
+    do {
+        Start-Sleep -m 100
+        try {
+            "Successfully logged into Voicemeeter [" + $(VmType).ToUpper() + "] Version " + $(VmVersion) | Write-Verbose
+            $exception = $null
+            break
+        }
+        catch [CAPIError] {
+            $exception = $_.Exception
+        }
+    } while ($sw.elapsed -lt $timeout)
+
+    if ($null -ne $exception) {
+        throw [VMRemoteError]::new("Timeout logging into the API.")
+    }
+
     while (P_Dirty -or M_Dirty) { Start-Sleep -m 1 }
-    "Successfully logged into Voicemeeter [" + $(VmType).ToUpper() + "] Version " + $(VmVersion) | Write-Verbose
 }
 
 function Logout {
@@ -38,8 +56,8 @@ function RunVoicemeeter {
         [string]$kindId
     )
     $kinds = @{
-        "basic"  = 1
-        "banana" = 2
+        "basic"  = $(if ([Environment]::Is64BitOperatingSystem) { 4 } else { 1 })
+        "banana" = $(if ([Environment]::Is64BitOperatingSystem) { 5 } else { 2 })
         "potato" = $(if ([Environment]::Is64BitOperatingSystem) { 6 } else { 3 })
     }
 
@@ -189,7 +207,7 @@ function Set_By_Script {
         [string]$script
     )
     if ($script.Length -gt 48000) {
-        throw [VMError]::new("Script size cannot be larger than 48kB")
+        throw [VMRemoteError]::new("Script size cannot be larger than 48kB")
     }
     $retval = [int][Voicemeeter.Remote]::VBVMR_SetParameters($script)
     if ($retval -notin @(0)) { 
