@@ -9,10 +9,19 @@ Before any major/minor/patch is released all test units will be run to verify th
 
 ## [Unreleased] These changes have not been added to PSGallery yet
 
-- [x] Launch x64 bit GUIs for all kinds if on 64 bit system.
-- [x] Add a timeout to the login function.
+- [ ]
 
-## [3.2.0]
+## [3.3.0] - 2024-06-29
+
+### Added
+
+- Add a timeout (2s) to the login function. If timeout exceeded a VMRemoteError is thrown.
+
+### Changed
+
+- Launch x64 bit GUIs for all kinds if on 64 bit system.
+
+## [3.2.0] - 2023-08-17
 
 ### Added
 
@@ -27,7 +36,7 @@ Before any major/minor/patch is released all test units will be run to verify th
 - Set_By_Script now throws [VMRemoteError] if script length exceeds 48kB.
 - parameter range checks in Vban class.
 
-## [3.1.0]
+## [3.1.0] - 2023-08-15
 
 ### Added
 
@@ -36,7 +45,7 @@ Before any major/minor/patch is released all test units will be run to verify th
 - More Recorder commands implemented. See Recorder section in README.
 - RunMacrobuttons, CloseMacrobuttons added to Special class
 
-## [3.0.0]
+## [3.0.0] - 2023-08-09
 
 v3 introduces some breaking changes. They are as follows:
 
