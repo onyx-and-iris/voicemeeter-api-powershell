@@ -64,12 +64,9 @@ $vmr.strip[0].mute=1
 *When Pressed*
 
 ```powershell
-$vmr.strip[1].mute=0
-$vmr.strip[2].mute=0
-
-if ($vmr.strip[0].mute) {
-$vmr.strip[0].mute=0
-}
+$vmr.strip[0].mute=$(-not $vmr.strip[0].mute)
+$vmr.strip[1].mute=$(-not $vmr.strip[1].mute)
+$vmr.strip[2].mute=$(-not $vmr.strip[2].mute)
 ```
 
 ---
