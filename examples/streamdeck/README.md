@@ -6,7 +6,7 @@ Thanks to the guys at [Start Automating](https://startautomating.com/) it's poss
 
 -   [Windows ScriptDeck](https://marketplace.elgato.com/product/windows-scriptdeck-857f01dd-8fd4-44d5-8ec7-67ac850b21d3)
 
-This Voicemeeter Powershell Module will need to be installed as a Module, see [Installation](https://github.com/onyx-and-iris/voicemeeter-api-powershell?tab=readme-ov-file#installation)
+This Voicemeeter Powershell Wrapper will need to be installed as a Module, see [Installation](https://github.com/onyx-and-iris/voicemeeter-api-powershell?tab=readme-ov-file#installation)
 
 ## How
 
