@@ -86,3 +86,40 @@ $vmr.strip[2].mute=$(-not $vmr.strip[2].mute)
 Then let's say you have zillions of buttons you want to program, for each Stream Deck window configure ONE button as described above and the other buttons of the same window as described above.
 
 If this explanation is unclear or you'd like me to add some screenshots just ask.
+
+## Leveraging Powershell
+
+Since we're now working with Powershell we can do some useful things, for example, lets create a button that interacts with Voicemeeter and OBS:
+
+First make sure you've installed [obs-powershell](https://github.com/StartAutomating/obs-powershell).
+
+Now let's create a button that only toggles some strip mutes if the current OBS scene is "LIVE".
+
+#### Button
+
+*When Loaded*
+
+```powershell
+$global:vmr = Connect-Voicemeeter -Kind "banana"
+
+Connect-OBS -WebSocketToken <websocket token>
+```
+
+*When Unloaded*
+
+```powershell
+Disconnect-Voicemeeter
+Disconnect-OBS
+```
+
+*When Pressed*
+
+```powershell
+$currentScene = $(Get-OBSCurrentProgramScene | Select-Object -ExpandProperty currentProgramSceneName)
+
+if ($currentScene -eq "LIVE") {
+$vmr.strip[0].mute=$(-not $vmr.strip[0].mute)
+$vmr.strip[1].mute=$(-not $vmr.strip[1].mute)
+$vmr.strip[2].mute=$(-not $vmr.strip[2].mute)
+}
+```
