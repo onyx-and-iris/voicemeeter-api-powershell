@@ -8,7 +8,7 @@ class IBus {
     }
 
     [string] identifier () {
-        return "Bus[" + $this.index + "]"
+        return 'Bus[' + $this.index + ']'
     }
 
     [single] Getter ($param) {
@@ -106,7 +106,7 @@ class BusMode : IBus {
     }
 
     [string] identifier () {
-        return "Bus[" + $this.index + "].mode"
+        return 'Bus[' + $this.index + '].mode'
     }
 
     [string] Get () {
@@ -125,7 +125,7 @@ class BusEq : IBus {
     }
 
     [string] identifier () {
-        return "Bus[" + $this.index + "].EQ"
+        return 'Bus[' + $this.index + '].EQ'
     }
 }
 
@@ -142,7 +142,7 @@ class BusDevice : IBus {
     }
 
     [string] identifier () {
-        return "Bus[" + $this.index + "].Device"
+        return 'Bus[' + $this.index + '].Device'
     }
 
     hidden $_name = $($this | Add-Member ScriptProperty 'name' `

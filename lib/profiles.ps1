@@ -1,5 +1,5 @@
 function Get_Profiles ([string]$kind_id) {
-    $basepath = Join-Path -Path $(Split-Path -Path $PSScriptRoot) -ChildPath "profiles"
+    $basepath = Join-Path -Path $(Split-Path -Path $PSScriptRoot) -ChildPath 'profiles'
     if (Test-Path $basepath) {
         $fullpath = Join-Path -Path $basepath -ChildPath $kind_id
     }
@@ -11,7 +11,7 @@ function Get_Profiles ([string]$kind_id) {
         $filenames | ForEach-Object {
             (Join-Path -Path $fullpath -ChildPath $_) | ForEach-Object {
                 $filename = [System.IO.Path]::GetFileNameWithoutExtension($_)
-                Write-Host ("Importing profile " + $kind_id + "/" + $filename)
+                Write-Host ('Importing profile ' + $kind_id + '/' + $filename)
                 $data[$filename] = Import-PowerShellDataFile -Path $_
             }
         }

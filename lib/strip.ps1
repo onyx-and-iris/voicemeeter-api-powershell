@@ -8,7 +8,7 @@ class IStrip {
     }
 
     [string] identifier () {
-        return "Strip[" + $this.index + "]"
+        return 'Strip[' + $this.index + ']'
     }
 
     [single] Getter ($param) {
@@ -135,7 +135,7 @@ class StripComp : IStrip {
     }
 
     [string] identifier () {
-        return "Strip[" + $this.index + "].Comp"
+        return 'Strip[' + $this.index + '].Comp'
     }
 
     hidden $_knob = $($this | Add-Member ScriptProperty 'knob' `
@@ -155,7 +155,7 @@ class StripGate : IStrip {
     }
 
     [string] identifier () {
-        return "Strip[" + $this.index + "].Gate"
+        return 'Strip[' + $this.index + '].Gate'
     }
 
     hidden $_knob = $($this | Add-Member ScriptProperty 'knob' `
@@ -174,7 +174,7 @@ class StripDenoiser : IStrip {
     }
 
     [string] identifier () {
-        return "Strip[" + $this.index + "].Denoiser"
+        return 'Strip[' + $this.index + '].Denoiser'
     }
 
     hidden $_knob = $($this | Add-Member ScriptProperty 'knob' `
@@ -194,7 +194,7 @@ class StripEq : IStrip {
     }
 
     [string] identifier () {
-        return "Strip[" + $this.index + "].EQ"
+        return 'Strip[' + $this.index + '].EQ'
     }
 }
 
@@ -203,7 +203,7 @@ class StripDevice : IStrip {
     }
 
     [string] identifier () {
-        return "Strip[" + $this.index + "].Device"
+        return 'Strip[' + $this.index + '].Device'
     }
 
     hidden $_name = $($this | Add-Member ScriptProperty 'name' `

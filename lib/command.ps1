@@ -8,7 +8,7 @@ class Special {
     }
 
     [string] identifier () {
-        return "Command"
+        return 'Command'
     }
 
     [string] ToString() {
@@ -29,13 +29,13 @@ class Special {
     }
 
     [void] RunMacrobuttons() {
-        "Launching the MacroButtons app" | Write-Verbose
-        Start-Process -FilePath $(Join-Path -Path $this.remote.vmpath -ChildPath "VoicemeeterMacroButtons.exe")
+        'Launching the MacroButtons app' | Write-Verbose
+        Start-Process -FilePath $(Join-Path -Path $this.remote.vmpath -ChildPath 'VoicemeeterMacroButtons.exe')
     }
 
     [void] CloseMacrobuttons() {
-        "Closing the MacroButtons app" | Write-Verbose
-        Stop-Process -Name "VoicemeeterMacroButtons"
+        'Closing the MacroButtons app' | Write-Verbose
+        Stop-Process -Name 'VoicemeeterMacroButtons'
     }
 
     hidden $_hide = $($this | Add-Member ScriptProperty 'hide' `

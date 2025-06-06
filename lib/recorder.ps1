@@ -51,7 +51,7 @@ class Recorder : IRecorder {
     }
 
     [string] identifier () {
-        return "Recorder"
+        return 'Recorder'
     }
 
     [string] ToString() {
@@ -137,9 +137,9 @@ class Recorder : IRecorder {
 
     [void] GoTo ([string]$timestring) {
         try {
-            if ([datetime]::ParseExact($timestring, "HH:mm:ss", $null)) {
+            if ([datetime]::ParseExact($timestring, 'HH:mm:ss', $null)) {
                 $timespan = [timespan]::Parse($timestring)
-                $this.Setter("GoTo", $timespan.TotalSeconds)                
+                $this.Setter('GoTo', $timespan.TotalSeconds)                
             }
         }
         catch [FormatException] {
@@ -150,13 +150,13 @@ class Recorder : IRecorder {
     [void] FileType($format) {
         [int]$val = 0
         switch ($format) {
-            "wav" { $val = 1 }
-            "aiff" { $val = 2 }
-            "bwf" { $val = 3 }
-            "mp3" { $val = 100 }
+            'wav' { $val = 1 }
+            'aiff' { $val = 2 }
+            'bwf' { $val = 3 }
+            'mp3' { $val = 100 }
             default { "Filetype() got: $format, expected one of 'wav', 'aiff', 'bwf', 'mp3'" }
         }
-        $this.Setter("filetype", $val)
+        $this.Setter('filetype', $val)
     }
 }
 
@@ -166,7 +166,7 @@ class RecorderMode : IRecorder {
     }
 
     [string] identifier () {
-        return "Recorder.Mode"
+        return 'Recorder.Mode'
     }
 }
 
@@ -178,7 +178,7 @@ class RecorderArm : IRecorder {
     }
 
     Set ([bool]$val) {
-        $this.Setter("", $(if ($val) { 1 } else { 0 }))
+        $this.Setter('', $(if ($val) { 1 } else { 0 }))
     }
 }
 

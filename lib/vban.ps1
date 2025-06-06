@@ -10,7 +10,7 @@ class IVban {
     }
 
     [string] identifier () {
-        return "vban." + $this.direction + "stream[" + $this.index + "]"
+        return 'vban.' + $this.direction + 'stream[' + $this.index + ']'
     }
 
     [single] Getter ($param) {
@@ -94,7 +94,7 @@ class Vban : IVban {
         } `
         {
             param([int]$arg)
-            if ($this.direction -eq "in") { Write-Warning ('Error, read only value') }
+            if ($this.direction -eq 'in') { Write-Warning ('Error, read only value') }
             else {
                 $opts = @(11025, 16000, 22050, 24000, 32000, 44100, 48000, 64000, 88200, 96000)
                 if ($opts.Contains($arg)) {
@@ -113,7 +113,7 @@ class Vban : IVban {
         } `
         {
             param([int]$arg)
-            if ($this.direction -eq "in") { Write-Warning ('Error, read only value') }
+            if ($this.direction -eq 'in') { Write-Warning ('Error, read only value') }
             else {
                 if ($arg -ge 1 -and $arg -le 8) {
                     $this._channel = $this.Setter('channel', $arg)
@@ -132,7 +132,7 @@ class Vban : IVban {
         } `
         {
             param([int]$arg)
-            if ($this.direction -eq "in") { Write-Warning ('Error, read only value') }
+            if ($this.direction -eq 'in') { Write-Warning ('Error, read only value') }
             else {
                 if (@(16, 24).Contains($arg)) {
                     $val = if ($arg -eq 16) { 1 } else { 2 }
@@ -151,7 +151,7 @@ class Vban : IVban {
         } `
         {
             param([int]$arg)
-            if ($this.direction -eq "in") { Write-Warning ('Error, read only value') }
+            if ($this.direction -eq 'in') { Write-Warning ('Error, read only value') }
             else {
                 if ($arg -ge 0 -and $arg -le 4) {
                     $this._quality = $this.Setter('quality', $arg)
@@ -169,7 +169,7 @@ class Vban : IVban {
         } `
         {
             param([int]$arg)
-            if ($this.direction -eq "in") { Write-Warning ('Error, read only value') }
+            if ($this.direction -eq 'in') { Write-Warning ('Error, read only value') }
             else {
                 if ($arg -ge 0 -and $arg -le 8) {
                     $this._route = $this.Setter('route', $arg)
@@ -200,10 +200,10 @@ function Make_Vban ([Object]$remote) {
     [System.Collections.ArrayList]$outstream = @()
 
     0..$($remote.kind.vban_in - 1) | ForEach-Object {
-        [void]$instream.Add([VbanInstream]::new($_, $remote, "in"))
+        [void]$instream.Add([VbanInstream]::new($_, $remote, 'in'))
     }
     0..$($remote.kind.vban_out - 1) | ForEach-Object {
-        [void]$outstream.Add([VbanOutstream]::new($_, $remote, "out"))
+        [void]$outstream.Add([VbanOutstream]::new($_, $remote, 'out'))
     }
 
     $CustomObject = [pscustomobject]@{
@@ -213,7 +213,7 @@ function Make_Vban ([Object]$remote) {
 
     $CustomObject | Add-Member ScriptProperty 'enable' `
     {
-        return Write-Warning ("ERROR: vban.enable is write only")
+        return Write-Warning ('ERROR: vban.enable is write only')
     } `
     {
         param([bool]$arg)

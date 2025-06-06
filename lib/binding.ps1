@@ -3,9 +3,9 @@
 function Setup_DLL {
     $VMPATH = Get_VMPath
 
-    $dll = Join-Path -Path $VMPATH -ChildPath ("VoicemeeterRemote" + `
-        (& { if ([Environment]::Is64BitOperatingSystem) { "64" } else { "" } }) + `
-            ".dll")
+    $dll = Join-Path -Path $VMPATH -ChildPath ('VoicemeeterRemote' + `
+        (& { if ([Environment]::Is64BitOperatingSystem) { '64' } else { '' } }) + `
+            '.dll')
 
     $Signature = @"
     [DllImport(@"$dll")]

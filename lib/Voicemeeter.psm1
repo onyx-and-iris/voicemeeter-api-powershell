@@ -22,7 +22,7 @@ class Remote {
     }
 
     [string] ToString() {
-        return "Voicemeeter " + $this.kind.name.substring(0, 1).toupper() + $this.kind.name.substring(1)
+        return 'Voicemeeter ' + $this.kind.name.substring(0, 1).toupper() + $this.kind.name.substring(1)
     }
 
     [Remote] Login() {
@@ -138,13 +138,13 @@ Function Get-RemotePotato {
 Function Connect-Voicemeeter {
     param([String]$Kind)
     switch ($Kind) {
-        "basic" { 
+        'basic' { 
             return Get-RemoteBasic
         }
-        "banana" { 
+        'banana' { 
             return Get-RemoteBanana
         }
-        "potato" { 
+        'potato' { 
             return Get-RemotePotato
         }
         default { 
