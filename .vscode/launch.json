@@ -51,21 +51,9 @@
             "type": "PowerShell",
             "request": "launch",
             "cwd": "${workspaceRoot}",
-            "script": "${workspaceFolder}/tests/pre-commit.ps1",
+            "script": "${workspaceFolder}/tests/run.ps1",
             "args": [],
             "createTemporaryIntegratedConsole": true
         },
-        {
-            "name": "PowerShell: Launch Quick Test",
-            "type": "PowerShell",
-            "request": "launch",
-            "cwd": "${workspaceRoot}",
-            "script": "${workspaceFolder}/quick.ps1",
-            "args": [
-                "-Verbose",
-                "-Debug"
-            ],
-            "createTemporaryIntegratedConsole": true
-        }
     ]
 }

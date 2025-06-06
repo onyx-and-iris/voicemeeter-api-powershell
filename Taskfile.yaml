@@ -1,0 +1,11 @@
+version: '3'
+
+tasks:
+  test:
+    desc: 'Run tests'
+    preconditions:
+      - sh: 'pwsh -c "if ([System.Version](Get-InstalledModule Pester).Version.ToString() -gt [System.Version]"5.7.0") { exit 0 } else { exit 1 }"'
+        msg: 'Pester version must be greater than 5.7.0'
+    cmds:
+      - echo "Running tests..."
+      - pwsh -c "tests\run.ps1 {{.CLI_ARGS}}"

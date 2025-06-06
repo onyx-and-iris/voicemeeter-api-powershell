@@ -557,16 +557,16 @@ Access to lower level polling functions are provided with these functions:
 
 ### Run tests
 
-Run tests using .\tests\pre-commit.ps1 which accepts the following parameters:
+Parameters:
 
 - `kind`: Run tests of this kind
 - `tag`: Run tests tagged with this marker (currently `higher` or `lower`)
-- `num`: Run this number of tests
-- `log`: Write summary log file
 
-Run tests from repository root in a subshell and write logs, like so:
+*with Task*
 
-`powershell .\tests\pre-commit.ps1 -k "potato" -t "higher" -log`
+```console
+task test -- -t "higher" -k "banana"
+```
 
 ### Official Documentation
 

@@ -1,7 +1,6 @@
-# quick test
-quick.ps1
-
 lib/*.psd1
 **/*.log
 
 config.psd1
+
+test-*.ps1
