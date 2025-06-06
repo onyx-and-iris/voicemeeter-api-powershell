@@ -13,14 +13,14 @@ param()
 Import-Module ..\..\lib\Voicemeeter.psm1
 
 try {
-    $vmr = Connect-Voicemeeter -Kind "potato"
+    $vmr = Connect-Voicemeeter -Kind 'potato'
 
     $buses = @($vmr.bus[1], $vmr.bus[2], $vmr.bus[4], $vmr.bus[6])
     "Buses in selection: $($buses)"
     $unmutedIndex = $null
 
     # 1)
-    "Cycling through bus selection to check for first unmuted Bus..." | Write-Host
+    'Cycling through bus selection to check for first unmuted Bus...' | Write-Host
     foreach ($bus in $buses) {
         # 2)
         if (-not $bus.mute) {
