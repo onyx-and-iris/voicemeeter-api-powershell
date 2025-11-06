@@ -235,6 +235,7 @@ The following bus commands are available:
 
 - mute: bool
 - mono: bool
+- sel: bool
 - limit: int, from -40 to 12
 - gain: float, from -60.0 to 12.0
 - label: string
@@ -248,6 +249,8 @@ for example:
 ```powershell
 $vmr.bus[3].returnreverb = 5.7
 ```
+
+sel defined for Potato version only.
 
 #### modes
 

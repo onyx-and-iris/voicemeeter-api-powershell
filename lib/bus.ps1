@@ -40,7 +40,7 @@ class Bus : IBus {
     [Object]$levels
 
     Bus ([int]$index, [Object]$remote) : base ($index, $remote) {
-        AddBoolMembers -PARAMS @('mono', 'mute')
+        AddBoolMembers -PARAMS @('mono', 'mute', 'sel')
         AddStringMembers -PARAMS @('label')
         AddFloatMembers -PARAMS @('gain', 'returnreverb', 'returndelay', 'returnfx1', 'returnfx2')
 
