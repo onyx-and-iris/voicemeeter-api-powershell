@@ -40,7 +40,7 @@ class Bus : IBus {
     [Object]$levels
 
     Bus ([int]$index, [Object]$remote) : base ($index, $remote) {
-        AddBoolMembers -PARAMS @('mono', 'mute', 'sel', 'monitor', 'vaio')
+        AddBoolMembers -PARAMS @('mono', 'mute', 'sel', 'monitor')
         AddStringMembers -PARAMS @('label')
         AddFloatMembers -PARAMS @('gain', 'returnreverb', 'returndelay', 'returnfx1', 'returnfx2')
 
@@ -134,6 +134,8 @@ class PhysicalBus : Bus {
 
     PhysicalBus ([int]$index, [Object]$remote) : base ($index, $remote) {
         $this.device = [BusDevice]::new($index, $remote)
+		
+		AddBoolMembers -PARAMS @('vaio')
     }
 }
 
