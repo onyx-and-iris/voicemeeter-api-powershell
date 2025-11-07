@@ -236,21 +236,20 @@ The following bus commands are available:
 - mute: bool
 - mono: bool
 - sel: bool
-- limit: int, from -40 to 12
 - gain: float, from -60.0 to 12.0
 - label: string
 - returnreverb: float, from 0.0 to 10.0
 - returndelay: float, from 0.0 to 10.0
 - returnfx1: float, from 0.0 to 10.0
 - returnfx2: float, from 0.0 to 10.0
+- monitor: bool
+- vaio: bool
 
 for example:
 
 ```powershell
 $vmr.bus[3].returnreverb = 5.7
 ```
-
-sel defined for Potato version only.
 
 #### modes
 
