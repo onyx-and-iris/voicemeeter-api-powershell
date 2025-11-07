@@ -38,9 +38,8 @@ class Strip : IStrip {
     [Object]$levels
 
     Strip ([int]$index, [Object]$remote) : base ($index, $remote) {
-        AddBoolMembers -PARAMS @('mono', 'solo', 'mute')
-        AddIntMembers -PARAMS @('limit')
-        AddFloatMembers -PARAMS @('gain', 'pan_x', 'pan_y')
+        AddBoolMembers -PARAMS @('solo', 'mute')
+        AddFloatMembers -PARAMS @('gain', 'limit', 'pan_x', 'pan_y')
         AddStringMembers -PARAMS @('label')
 
         AddChannelMembers
@@ -112,17 +111,20 @@ class PhysicalStrip : Strip {
     [Object]$comp
     [Object]$gate
     [Object]$denoiser
+    [Object]$pitch
     [Object]$eq
     [Object]$device
 
     PhysicalStrip ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddFloatMembers -PARAMS @('color_x', 'color_y', 'fx_x', 'fx_y')
-        AddFloatMembers -PARAMS @('reverb', 'delay', 'fx1', 'fx2')
+        AddFloatMembers -PARAMS @('audibility', 'reverb', 'delay', 'fx1', 'fx2')
         AddBoolMembers -PARAMS @('postreverb', 'postdelay', 'postfx1', 'postfx2')
+        AddBoolMembers -PARAMS @('mono', 'vaio')
 
         $this.comp = [StripComp]::new($index, $remote)
         $this.gate = [StripGate]::new($index, $remote)
         $this.denoiser = [StripDenoiser]::new($index, $remote)
+        $this.pitch = [StripPitch]::new($index, $remote)
         $this.eq = [StripEq]::new($index, $remote)
         $this.device = [StripDevice]::new($index, $remote)
     }
@@ -171,6 +173,7 @@ class StripGate : IStrip {
 
 class StripDenoiser : IStrip {
     StripDenoiser ([int]$index, [Object]$remote) : base ($index, $remote) {
+        AddFloatMembers -PARAMS @('threshold')
     }
 
     [string] identifier () {
@@ -186,6 +189,18 @@ class StripDenoiser : IStrip {
             return $this.Setter('', $arg)
         }
     )
+}
+
+class StripPitch : IStrip {
+    StripPitch ([int]$index, [Object]$remote) : base ($index, $remote) {
+        AddBoolMembers -PARAMS @('on')
+        AddIntMembers -PARAMS @('drywet')
+        AddFloatMembers -PARAMS @('pitchvalue', 'loformant', 'medformant', 'hiformant')
+    }
+    
+    [string] identifier () {
+        return 'Strip[' + $this.index + '].Pitch'
+    }
 }
 
 class StripEq : IStrip {
@@ -267,6 +282,7 @@ class StripDevice : IStrip {
 
 class VirtualStrip : Strip {
     VirtualStrip ([int]$index, [Object]$remote) : base ($index, $remote) {
+        AddFloatMembers -PARAMS @('eqgain1', 'eqgain2', 'eqgain3')
         AddBoolMembers -PARAMS @('mc')
         AddIntMembers -PARAMS @('k')
     }

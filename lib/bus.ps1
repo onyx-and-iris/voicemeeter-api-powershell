@@ -133,9 +133,9 @@ class PhysicalBus : Bus {
     [Object]$device
 
     PhysicalBus ([int]$index, [Object]$remote) : base ($index, $remote) {
+        AddBoolMembers -PARAMS @('vaio')
+
         $this.device = [BusDevice]::new($index, $remote)
-		
-		AddBoolMembers -PARAMS @('vaio')
     }
 }
 

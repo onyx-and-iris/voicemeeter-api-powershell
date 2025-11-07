@@ -122,7 +122,7 @@ The following strip commands are available:
 - solo: bool
 - A1-A5: bool
 - B1-B3: bool
-- limit: int, from -40 to 12
+- limit: float, from -40.0 to 12.0
 - gain: float, from -60.0 to 12.0
 - label: string
 - reverb: float, from 0.0 to 10.0
@@ -139,7 +139,10 @@ The following strip commands are available:
 - postdelay: bool
 - postfx1: bool
 - postfx2: bool
-- gainlayer0-gainlayer7: float
+- gainlayer0-gainlayer7: float, from -60.0 to 12.0
+- eqgain1-eqgain3: float, from -12.0 to 12.0
+- audibility: float, from 0.0 to 10.0
+- vaio: bool
 
 for example:
 
@@ -196,11 +199,29 @@ $vmr.strip[3].gate.threshold = -40.5
 The following strip.denoiser commands are available:
 
 - knob: float, from 0.0 to 10.0
+- threshold: float, from 0.0 to 10.0
 
 for example:
 
 ```powershell
 $vmr.strip[3].denoiser.knob = 5
+```
+
+#### pitch
+
+The following strip.pitch commands are available:
+
+- on: bool
+- drywet: int, from -100 to 100
+- pitchvalue: float, from -12.0 to 12.0
+- loformant: float, from -12.0 to 12.0
+- medformant: float, from -12.0 to 12.0
+- hiformant: float, from -12.0 to 12.0
+
+for example:
+
+```powershell
+$vmr.strip[2].pitch.drywet = -15
 ```
 
 #### AppGain | AppMute
