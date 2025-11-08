@@ -9,7 +9,40 @@ Before any major/minor/patch is released all test units will be run to verify th
 
 ## [Unreleased] These changes have not been added to PSGallery yet
 
-- [ ]
+### Added
+
+- Bus[i].sel to select strip gainlayers to be changed with Strip[i].gain
+- Bus[i].monitor for use with Monitor On Select
+- Bus[i].vaio on physical buses for use with the VAIO extension
+- Strip[i].audibility for use with Voicemeeter Standard
+- Strip[i].vaio on physical strips for use with the VAIO extension
+- Strip[i].denoiser.threshold
+- Strip[i].Pitch parameters on physical strips with new [Pitch] class for use with Voicemeeter Potato
+  - Strip[i].Pitch.on
+  - Strip[i].Pitch.drywet
+  - Strip[i].Pitch.pitchvalue
+  - Strip[i].Pitch.loformant
+  - Strip[i].Pitch.medformant
+  - Strip[i].Pitch.hiformant
+- Strip[i].eqgain1, eqgain2, eqgain3 on virtual strips
+- Command.save($filepath) and Command.reset
+- Recorder.replay and Recorder.gain to README
+- Write-only Button[i].color through VMRAPI's Command.Button[i].color
+- New [Preset] class for Preset objects to accommodate future additions to VMRAPI such as:
+  - store/overwrite
+  - name, comment
+  - load, save
+- Preset[i].recall is the only command currently implemented
+
+### Changed
+
+- Changed Strip[i].limit to float (the value is visually truncated in the GUI, but it's not actually an integer)
+- Moved Strip[i].mono to be exclusive to physical strips
+- Corrected MacroButton index range in README
+
+### Removed
+
+- Bus[i].limit from README as it does not exist
 
 ## [3.3.0] - 2024-06-29
 
