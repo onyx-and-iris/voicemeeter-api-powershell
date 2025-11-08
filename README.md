@@ -366,19 +366,26 @@ $vmr.bus[0].FadeBy(-10, 500)
 
 ### Macrobuttons
 
-Three modes defined: state, stateonly and trigger.
+Three modes defined:
 
-- State runs associated scripts
-- Stateonly does not run associated scripts
-- Index range (0, 79)
+- state: bool
+- stateonly: bool
+- trigger: bool
+
+State runs associated scripts
+Stateonly does not run associated scripts
+
+Write-only parameter:
+
+- color: int, from 0 to 8
 
 ```powershell
-$vmr.button[3].state = $true
-
 $vmr.button[4].stateonly = $false
 
-$vmr.button[5].trigger = $true
+$vmr.button[5].color = 4
 ```
+
+Index range (0, 79)
 
 ### VBAN
 
