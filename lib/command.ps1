@@ -2,7 +2,7 @@ class Special {
     [Object]$remote
 
     Special ([Object]$remote) {
-        AddActionMembers -PARAMS @('restart', 'shutdown', 'show')
+        AddActionMembers -PARAMS @('restart', 'shutdown', 'show', 'reset')
     
         $this.remote = $remote
     }
@@ -67,6 +67,10 @@ class Special {
 
     [void] Load ([string]$filename) {
         $this.Setter('load', $filename)
+    }
+    
+    [void] Save ([string]$filename) {
+        $this.Setter('save', $filename)
     }
 }
 

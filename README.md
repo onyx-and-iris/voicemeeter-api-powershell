@@ -370,7 +370,7 @@ Three modes defined: state, stateonly and trigger.
 
 - State runs associated scripts
 - Stateonly does not run associated scripts
-- Index range (0, 69)
+- Index range (0, 79)
 
 ```powershell
 $vmr.button[3].state = $true
@@ -419,12 +419,14 @@ The following commands are available:
 - hide
 - restart
 - shutdown
+- reset
 - showvbanchat: bool, (write only)
 - lock: bool, (write only)
 
 The following methods are available:
 
 - Load($filepath): string
+- Save($filepath): string
 - RunMacrobuttons(): Launches the macrobuttons app
 - CloseMacrobuttons(): Closes the macrobuttons app
 
@@ -448,6 +450,7 @@ The following commands are available:
 - stop
 - pause
 - record
+- replay
 - ff
 - rew
 - A1 - A5: bool
@@ -456,6 +459,7 @@ The following commands are available:
 - bitresolution: int, (8, 16, 24, 32)
 - channel: int, from 1 to 8
 - kbps: int, (32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320)
+- gain: float, from -60.0 to 12.0
 
 The following methods are available:
 
