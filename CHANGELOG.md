@@ -24,7 +24,10 @@ Before any major/minor/patch is released all test units will be run to verify th
   - Strip[i].Pitch.loformant
   - Strip[i].Pitch.medformant
   - Strip[i].Pitch.hiformant
-- Strip[i].eqgain1, eqgain2, eqgain3 on virtual strips
+- EQGain on virtual strips
+  - Strip[i].bass or .low
+  - Strip[i].mid or .med
+  - Strip[i].treble or .high
 - Command.save($filepath) and Command.reset
 - Recorder.replay and Recorder.gain to README
 - Write-only Button[i].color through VMRAPI's Command.Button[i].color
@@ -38,12 +41,14 @@ Before any major/minor/patch is released all test units will be run to verify th
 ### Changed
 
 - Changed Strip[i].limit to float (the value is visually truncated in the GUI, but it's not actually an integer)
-- Moved Strip[i].mono to be exclusive to physical strips
-- Corrected MacroButton index range in README
 
 ### Removed
 
 - Bus[i].limit from README as it does not exist
+
+### Fixed
+
+- MacroButton index range in README
 
 ## [3.3.0] - 2024-06-29
 

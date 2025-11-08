@@ -140,7 +140,9 @@ The following strip commands are available:
 - postfx1: bool
 - postfx2: bool
 - gainlayer0-gainlayer7: float, from -60.0 to 12.0
-- eqgain1-eqgain3: float, from -12.0 to 12.0
+- bass/low: float, from -12.0 to 12.0
+- mid/med: float, from -12.0 to 12.0
+- treble/high: float, from -12.0 to 12.0
 - audibility: float, from 0.0 to 10.0
 - vaio: bool
 

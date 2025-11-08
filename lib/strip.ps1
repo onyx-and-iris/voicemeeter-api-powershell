@@ -38,7 +38,7 @@ class Strip : IStrip {
     [Object]$levels
 
     Strip ([int]$index, [Object]$remote) : base ($index, $remote) {
-        AddBoolMembers -PARAMS @('solo', 'mute')
+        AddBoolMembers -PARAMS @('solo', 'mute', 'mono')
         AddFloatMembers -PARAMS @('gain', 'limit', 'pan_x', 'pan_y')
         AddStringMembers -PARAMS @('label')
 
@@ -119,7 +119,7 @@ class PhysicalStrip : Strip {
         AddFloatMembers -PARAMS @('color_x', 'color_y', 'fx_x', 'fx_y')
         AddFloatMembers -PARAMS @('audibility', 'reverb', 'delay', 'fx1', 'fx2')
         AddBoolMembers -PARAMS @('postreverb', 'postdelay', 'postfx1', 'postfx2')
-        AddBoolMembers -PARAMS @('mono', 'vaio')
+        AddBoolMembers -PARAMS @('vaio')
 
         $this.comp = [StripComp]::new($index, $remote)
         $this.gate = [StripGate]::new($index, $remote)
@@ -282,7 +282,6 @@ class StripDevice : IStrip {
 
 class VirtualStrip : Strip {
     VirtualStrip ([int]$index, [Object]$remote) : base ($index, $remote) {
-        AddFloatMembers -PARAMS @('eqgain1', 'eqgain2', 'eqgain3')
         AddBoolMembers -PARAMS @('mc')
         AddIntMembers -PARAMS @('k')
     }
@@ -294,6 +293,54 @@ class VirtualStrip : Strip {
     [void] AppMute ([string]$appname, [bool]$mutestate) {
         $this.Setter('AppMute', "(`"$appname`", $(if ($mutestate) { 1 } else { 0 })")
     }
+    
+    hidden $_bass = $($this | Add-Member ScriptProperty 'bass' {
+            [math]::Round($this.Getter('eqgain1'), 1)
+        } {
+            param([single]$arg)
+            $this.Setter('eqgain1', $arg)
+        }
+    )
+
+    hidden $_low = $($this | Add-Member ScriptProperty 'low' {
+            [math]::Round($this.Getter('eqgain1'), 1)
+        } {
+            param([single]$arg)
+            $this.Setter('eqgain1', $arg)
+        }
+    )
+
+    hidden $_mid = $($this | Add-Member ScriptProperty 'mid' {
+            [math]::Round($this.Getter('eqgain2'), 1)
+        } {
+            param([single]$arg)
+            $this.Setter('eqgain2', $arg)
+        }
+    )
+
+    hidden $_med = $($this | Add-Member ScriptProperty 'med' {
+            [math]::Round($this.Getter('eqgain2'), 1)
+        } {
+            param([single]$arg)
+            $this.Setter('eqgain2', $arg)
+        }
+    )
+
+    hidden $_treble = $($this | Add-Member ScriptProperty 'treble' {
+            [math]::Round($this.Getter('eqgain3'), 1)
+        } {
+            param([single]$arg)
+            $this.Setter('eqgain3', $arg)
+        }
+    )
+
+    hidden $_high = $($this | Add-Member ScriptProperty 'high' {
+            [math]::Round($this.Getter('eqgain3'), 1)
+        } {
+            param([single]$arg)
+            $this.Setter('eqgain3', $arg)
+        }
+    )
 }
 
 
