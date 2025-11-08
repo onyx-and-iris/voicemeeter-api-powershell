@@ -302,23 +302,7 @@ class VirtualStrip : Strip {
         }
     )
 
-    hidden $_low = $($this | Add-Member ScriptProperty 'low' {
-            [math]::Round($this.Getter('eqgain1'), 1)
-        } {
-            param([single]$arg)
-            $this.Setter('eqgain1', $arg)
-        }
-    )
-
     hidden $_mid = $($this | Add-Member ScriptProperty 'mid' {
-            [math]::Round($this.Getter('eqgain2'), 1)
-        } {
-            param([single]$arg)
-            $this.Setter('eqgain2', $arg)
-        }
-    )
-
-    hidden $_med = $($this | Add-Member ScriptProperty 'med' {
             [math]::Round($this.Getter('eqgain2'), 1)
         } {
             param([single]$arg)
@@ -333,13 +317,25 @@ class VirtualStrip : Strip {
             $this.Setter('eqgain3', $arg)
         }
     )
+    
+    hidden $_mono = $(
+        $this | Add-Member -MemberType AliasProperty -Name 'mono' -Value 'mc' -Force
+    )
+    
+    hidden $_karaoke = $(
+        $this | Add-Member -MemberType AliasProperty -Name 'karaoke' -Value 'k'
+    )
 
-    hidden $_high = $($this | Add-Member ScriptProperty 'high' {
-            [math]::Round($this.Getter('eqgain3'), 1)
-        } {
-            param([single]$arg)
-            $this.Setter('eqgain3', $arg)
-        }
+    hidden $_low = $(
+        $this | Add-Member -MemberType AliasProperty -Name 'low'  -Value 'bass'
+    )
+
+    hidden $_med = $(
+        $this | Add-Member -MemberType AliasProperty -Name 'med'  -Value 'mid'
+    )
+
+    hidden $_high = $(
+        $this | Add-Member -MemberType AliasProperty -Name 'high' -Value 'treble'
     )
 }
 

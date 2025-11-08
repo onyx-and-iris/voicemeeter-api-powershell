@@ -118,7 +118,7 @@ The following strip commands are available:
 - mute: bool
 - mono: bool
 - mc: bool
-- k: int, from 0 to 4
+- k/karaoke: int, from 0 to 4
 - solo: bool
 - A1-A5: bool
 - B1-B3: bool

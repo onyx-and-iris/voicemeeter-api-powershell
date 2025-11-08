@@ -37,10 +37,12 @@ Before any major/minor/patch is released all test units will be run to verify th
   - load, save
 - Preset[i].recall is the only command currently implemented
 - Recorder.eject through VMRAPI's Command.eject
+- Strip[i].karaoke alias for Strip[i].k
 
 ### Changed
 
-- Changed Strip[i].limit to float (the value is visually truncated in the GUI, but it's not actually an integer)
+- Strip[i].limit to float (the value is visually truncated in the GUI, but it's not actually an integer)
+- Strip[i].mono is now an alias for Strip[i].mc on virtual strips (matches Python module behavior)
 
 ### Removed
 
