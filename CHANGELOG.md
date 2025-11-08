@@ -33,6 +33,7 @@ Before any major/minor/patch is released all test units will be run to verify th
   - name, comment
   - load, save
 - Preset[i].recall is the only command currently implemented
+- Recorder.eject through VMRAPI's Command.eject
 
 ### Changed
 

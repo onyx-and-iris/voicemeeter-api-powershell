@@ -474,6 +474,7 @@ The following commands are available:
 - replay
 - ff
 - rew
+- eject
 - A1 - A5: bool
 - B1 - B3: bool
 - samplerate: int, (22050, 24000, 32000, 44100, 48000, 88200, 96000, 176400, 192000)
