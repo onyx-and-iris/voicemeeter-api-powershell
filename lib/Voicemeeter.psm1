@@ -9,6 +9,7 @@
 . $PSScriptRoot\command.ps1
 . $PSScriptRoot\recorder.ps1
 . $PSScriptRoot\profiles.ps1
+. $PSScriptRoot\presets.ps1
 
 class Remote {
     [String]$vmpath
@@ -75,6 +76,7 @@ class RemoteBasic : Remote {
     [System.Collections.ArrayList]$strip
     [System.Collections.ArrayList]$bus
     [System.Collections.ArrayList]$button
+    [System.Collections.ArrayList]$preset
     [PSCustomObject]$vban
     [Object]$command
 
@@ -82,6 +84,7 @@ class RemoteBasic : Remote {
         $this.strip = Make_Strips($this)
         $this.bus = Make_Buses($this)
         $this.button = Make_Buttons
+        $this.preset = Make_Presets($this)
         $this.vban = Make_Vban($this)
         $this.command = Make_Command($this)
     }
@@ -91,6 +94,7 @@ class RemoteBanana : Remote {
     [System.Collections.ArrayList]$strip
     [System.Collections.ArrayList]$bus
     [System.Collections.ArrayList]$button
+    [System.Collections.ArrayList]$preset
     [PSCustomObject]$vban
     [Object]$command
     [Object]$recorder
@@ -99,6 +103,7 @@ class RemoteBanana : Remote {
         $this.strip = Make_Strips($this)
         $this.bus = Make_Buses($this)
         $this.button = Make_Buttons
+        $this.preset = Make_Presets($this)
         $this.vban = Make_Vban($this)
         $this.command = Make_Command($this)
         $this.recorder = Make_Recorder($this)
@@ -109,6 +114,7 @@ class RemotePotato : Remote {
     [System.Collections.ArrayList]$strip
     [System.Collections.ArrayList]$bus
     [System.Collections.ArrayList]$button
+    [System.Collections.ArrayList]$preset
     [PSCustomObject]$vban
     [Object]$command
     [Object]$recorder
@@ -117,6 +123,7 @@ class RemotePotato : Remote {
         $this.strip = Make_Strips($this)
         $this.bus = Make_Buses($this)
         $this.button = Make_Buttons
+        $this.preset = Make_Presets($this)
         $this.vban = Make_Vban($this)
         $this.command = Make_Command($this)
         $this.recorder = Make_Recorder($this)

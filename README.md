@@ -416,6 +416,20 @@ $vmr.vban.instream[2].port = 6990
 $vmr.vban.outstream[3].bit = 16
 ```
 
+### Preset
+
+Voicemeeter provides 64 preset slots (index 0–63).
+
+The following command is currently available:
+
+- recall
+
+Example:
+
+```powershell
+$vmr.preset[12].recall   # recalls preset slot 13
+```
+
 ### Command
 
 Certain 'special' commands are defined by the API as performing actions rather than setting values.
