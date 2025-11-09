@@ -75,7 +75,6 @@ class Remote {
 class RemoteBasic : Remote {
     [System.Collections.ArrayList]$strip
     [System.Collections.ArrayList]$bus
-    [System.Collections.ArrayList]$fx
     [System.Collections.ArrayList]$button
     [System.Collections.ArrayList]$preset
     [PSCustomObject]$vban
@@ -84,7 +83,6 @@ class RemoteBasic : Remote {
     RemoteBasic () : base ('basic') {
         $this.strip = Make_Strips($this)
         $this.bus = Make_Buses($this)
-        $this.fx = Make_Fx($this)
         $this.button = Make_Buttons
         $this.preset = Make_Presets($this)
         $this.vban = Make_Vban($this)
@@ -95,7 +93,6 @@ class RemoteBasic : Remote {
 class RemoteBanana : Remote {
     [System.Collections.ArrayList]$strip
     [System.Collections.ArrayList]$bus
-    [System.Collections.ArrayList]$fx
     [System.Collections.ArrayList]$button
     [System.Collections.ArrayList]$preset
     [PSCustomObject]$vban
@@ -105,7 +102,6 @@ class RemoteBanana : Remote {
     RemoteBanana () : base ('banana') {
         $this.strip = Make_Strips($this)
         $this.bus = Make_Buses($this)
-        $this.fx = Make_Fx($this)
         $this.button = Make_Buttons
         $this.preset = Make_Presets($this)
         $this.vban = Make_Vban($this)
@@ -117,11 +113,11 @@ class RemoteBanana : Remote {
 class RemotePotato : Remote {
     [System.Collections.ArrayList]$strip
     [System.Collections.ArrayList]$bus
-    [System.Collections.ArrayList]$fx
     [System.Collections.ArrayList]$button
     [System.Collections.ArrayList]$preset
     [PSCustomObject]$vban
     [Object]$command
+    [Object]$fx
     [Object]$recorder
 
     RemotePotato () : base ('potato') {
