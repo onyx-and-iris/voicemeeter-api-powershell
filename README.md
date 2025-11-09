@@ -366,6 +366,21 @@ $vmr.strip[3].FadeTo(-18.7, 1000)
 $vmr.bus[0].FadeBy(-10, 500)
 ```
 
+### Fx
+
+The following Fx commands are available:
+
+- Reverb.on: bool
+- Reverb.ab: bool
+- Delay.on: bool
+- Delay.ab: bool
+
+for example:
+
+```powershell
+$vmr.reverb.ab = $false
+```
+
 ### Macrobuttons
 
 Three modes defined:

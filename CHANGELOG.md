@@ -38,6 +38,11 @@ Before any major/minor/patch is released all test units will be run to verify th
 - Preset[i].recall is the only command currently implemented
 - Recorder.eject through VMRAPI's Command.eject
 - Strip[i].karaoke alias for Strip[i].k
+- New Fx class
+  - Fx.Reverb.on
+  - Fx.Reverb.ab
+  - Fx.Delay.on
+  - Fx.Delay.ab
 
 ### Changed
 
