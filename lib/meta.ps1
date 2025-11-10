@@ -90,14 +90,16 @@ function AddChannelMembers () {
 }
 
 function AddGainlayerMembers () {
+    $layers = $this.remote.kind.gainlayers
+    
     [hashtable]$Signatures = @{}
-    0..7 | ForEach-Object {
+    for ($i = 0; $i -lt $layers; $i++) {
         # Define getter
-        $Signatures['Getter'] = "`$this.Getter('gainlayer[{0}]')" -f $_
+        $Signatures['Getter'] = "`$this.Getter('gainlayer[{0}]')" -f $i
         # Define setter
         $Signatures['Setter'] = "param ( [Single]`$arg )`n`$this.Setter('gainlayer[{0}]', `$arg)" `
-            -f $_
-        $param = 'gainlayer{0}' -f $_
+            -f $i
+        $param = 'gainlayer{0}' -f $i
         $null = $param
 
         Addmember
