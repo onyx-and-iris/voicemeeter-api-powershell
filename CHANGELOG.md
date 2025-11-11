@@ -43,11 +43,19 @@ Before any major/minor/patch is released all test units will be run to verify th
   - Fx.Reverb.ab
   - Fx.Delay.on
   - Fx.Delay.ab
+- New Patch class
+  - Patch.asio[i]
+  - Patch.OutA2[i]-OutA5[i]
+  - Patch.composite[i]
+  - Patch.insert[k]
+  - Patch.postFaderComposite
+  - Patch.postFxInsert
 
 ### Changed
 
 - Strip[i].limit to float (the value is visually truncated in the GUI, but it's not actually an integer)
 - Strip[i].mono is now an alias for Strip[i].mc on virtual strips (matches Python module behavior)
+- GainLayers are now based on KindMap so they're only added for Potato
 
 ### Removed
 

@@ -79,6 +79,7 @@ class RemoteBasic : Remote {
     [System.Collections.ArrayList]$preset
     [PSCustomObject]$vban
     [Object]$command
+    [Object]$patch
 
     RemoteBasic () : base ('basic') {
         $this.strip = Make_Strips($this)
@@ -87,6 +88,7 @@ class RemoteBasic : Remote {
         $this.preset = Make_Presets($this)
         $this.vban = Make_Vban($this)
         $this.command = Make_Command($this)
+        $this.patch = Make_Patch($this)
     }
 }
 
@@ -97,6 +99,7 @@ class RemoteBanana : Remote {
     [System.Collections.ArrayList]$preset
     [PSCustomObject]$vban
     [Object]$command
+    [Object]$patch
     [Object]$recorder
 
     RemoteBanana () : base ('banana') {
@@ -106,6 +109,7 @@ class RemoteBanana : Remote {
         $this.preset = Make_Presets($this)
         $this.vban = Make_Vban($this)
         $this.command = Make_Command($this)
+        $this.patch = Make_Patch($this)
         $this.recorder = Make_Recorder($this)
     }
 }
@@ -118,16 +122,18 @@ class RemotePotato : Remote {
     [PSCustomObject]$vban
     [Object]$command
     [Object]$fx
+    [Object]$patch
     [Object]$recorder
 
     RemotePotato () : base ('potato') {
         $this.strip = Make_Strips($this)
         $this.bus = Make_Buses($this)
-        $this.fx = Make_Fx($this)
         $this.button = Make_Buttons
         $this.preset = Make_Presets($this)
         $this.vban = Make_Vban($this)
         $this.command = Make_Command($this)
+        $this.fx = Make_Fx($this)
+        $this.patch = Make_Patch($this)
         $this.recorder = Make_Recorder($this)
     }
 }

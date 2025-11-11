@@ -381,6 +381,23 @@ for example:
 $vmr.reverb.ab = $false
 ```
 
+### Patch
+
+The following Patch commands are available:
+
+- asio[i]: int, from 0 to ASIO input channels
+- OutA2[i]-OutA5[i]: int, from 0 to ASIO output channels
+- composite[i]: int, from 0 to strip channels
+- insert[i]: bool
+
+for example:
+
+```powershell
+$vmr.asio[3] = 2        # patches ASIO input channel 2 (2) to strip 2, channel 2 (3)
+$vmr.OutA3[0] = 24      # patches bus A3, channel 1 (0) to ASIO output channel 24
+$vmr.composite[5] = 0   # sets composite channel 6 (5) to default bus channel
+```
+
 ### Macrobuttons
 
 Three modes defined:

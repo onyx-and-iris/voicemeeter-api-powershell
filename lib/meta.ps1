@@ -90,10 +90,10 @@ function AddChannelMembers () {
 }
 
 function AddGainlayerMembers () {
-    $layers = $this.remote.kind.gainlayers
+    $gainlayer = $this.remote.kind.gainlayer
     
     [hashtable]$Signatures = @{}
-    for ($i = 0; $i -lt $layers; $i++) {
+    for ($i = 0; $i -lt $gainlayer; $i++) {
         # Define getter
         $Signatures['Getter'] = "`$this.Getter('gainlayer[{0}]')" -f $i
         # Define setter
@@ -103,6 +103,53 @@ function AddGainlayerMembers () {
         $null = $param
 
         Addmember
+    }
+}
+
+function AddASIOInMembers () {
+    $asio_in = $this.remote.kind.asio_in
+    
+    [System.Collections.ArrayList]$in_ps = @()
+    for ($i = 0; $i -lt $asio_in; $i++) {
+        $in_ps.Add('asio[{0}]' -f $i)
+
+        AddIntMembers -PARAMS $in_ps
+    }
+}
+
+function AddASIOOutMembers () {
+    $num_A = $this.remote.kind.p_out
+    $asio_out = $this.remote.kind.asio_out
+    
+    [System.Collections.ArrayList]$out_ps = @()
+    for ($i = 0; $i -lt $asio_out; $i++) {
+        foreach ($j in 2..$num_A) {
+            $out_ps.Add('OutA{0}[{1}]' -f $j $i)
+
+            AddIntMembers -PARAMS $out_ps
+        }
+    }
+}
+
+function AddCompositeMembers () {
+    $composite = $this.remote.kind.composite
+    
+    [System.Collections.ArrayList]$composite_ps = @()
+    for ($i = 0; $i -lt $composite; $i++) {
+        $composite_ps.Add('composite[{0}]' -f $i)
+
+        AddIntMembers -PARAMS $composite_ps
+    }
+}
+
+function AddInsertMembers () {
+    $insert = $this.remote.kind.insert
+    
+    [System.Collections.ArrayList]$insert_ps = @()
+    for ($i = 0; $i -lt $insert; $i++) {
+        $insert_ps.Add('insert[{0}]' -f $i)
+
+        AddBoolMembers -PARAMS $insert_ps
     }
 }
 
