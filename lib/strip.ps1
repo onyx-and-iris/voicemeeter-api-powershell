@@ -291,7 +291,7 @@ class VirtualStrip : Strip {
     }
 
     [void] AppMute ([string]$appname, [bool]$mutestate) {
-        $this.Setter('AppMute', "(`"$appname`", $(if ($mutestate) { 1 } else { 0 })")
+        $this.Setter('AppMute', "(`"$appname`", $(if ($mutestate) { 1 } else { 0 }))")
     }
     
     hidden $_bass = $($this | Add-Member ScriptProperty 'bass' {
@@ -318,23 +318,11 @@ class VirtualStrip : Strip {
         }
     )
     
-    hidden $_mono = $(
+    hidden $_aliases = $(
         $this | Add-Member -MemberType AliasProperty -Name 'mono' -Value 'mc' -Force
-    )
-    
-    hidden $_karaoke = $(
         $this | Add-Member -MemberType AliasProperty -Name 'karaoke' -Value 'k'
-    )
-
-    hidden $_low = $(
         $this | Add-Member -MemberType AliasProperty -Name 'low'  -Value 'bass'
-    )
-
-    hidden $_med = $(
         $this | Add-Member -MemberType AliasProperty -Name 'med'  -Value 'mid'
-    )
-
-    hidden $_high = $(
         $this | Add-Member -MemberType AliasProperty -Name 'high' -Value 'treble'
     )
 }

@@ -50,6 +50,7 @@ Before any major/minor/patch is released all test units will be run to verify th
   - Patch.insert[k]
   - Patch.postFaderComposite
   - Patch.postFxInsert
+- alternate pattern for gainlayers: Strip.gainlayer[i] (old pattern still works)
 
 ### Changed
 
@@ -64,6 +65,7 @@ Before any major/minor/patch is released all test units will be run to verify th
 ### Fixed
 
 - MacroButton index range in README
+- Parenthesis in Strip.AppMute string
 
 ## [3.3.0] - 2024-06-29
 
