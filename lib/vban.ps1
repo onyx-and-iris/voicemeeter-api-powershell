@@ -98,7 +98,7 @@ class Vban : IVban {
             else {
                 $opts = @(11025, 16000, 22050, 24000, 32000, 44100, 48000, 64000, 88200, 96000)
                 if ($opts.Contains($arg)) {
-                    $this._port = $this.Setter('sr', $arg)
+                    $this._sr = $this.Setter('sr', $arg)
                 }
                 else {
                     Write-Warning ('Expected one of', $opts)
