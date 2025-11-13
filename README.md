@@ -399,6 +399,52 @@ $vmr.OutA3[0] = 24      # patches bus A3, channel 1 (0) to ASIO output channel 2
 $vmr.composite[5] = 0   # sets composite channel 6 (5) to default bus channel
 ```
 
+### Option
+
+The following Option commands are available:
+
+- sr: int, (32000, 44100, 48000, 88200, 96000, 176400, 192000)
+- asiosr: bool
+- delay[i]: int, from 0 to 500
+- monitorOnSel: bool
+- sliderMode: bool
+
+for example:
+
+```powershell
+$vmr.Option.delay[2] = 30         # sets the delay for the third (2) bus
+$vmr.Option.sliderMode = $false   # sets slider mode to absolute
+```
+
+#### buffers
+
+The following Option.buffer commands are available:
+
+- mme: int, (441, 480, 512, 576, 640, 704, 768, 896, 1024, 1536, 2048)
+- wdm: int, (128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 441, 448, 480, 512, 576, 640, 704, 768, 896, 1024, 1536, 2048)
+- ks: int, (128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 441, 448, 480, 512, 576, 640, 704, 768, 896, 1024, 1536, 2048)
+- asio: int, (0, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 441, 448, 480, 512, 576, 640, 704, 768, 1024)
+
+for example:
+
+```powershell
+$vmr.Option.buffer.wdm = 512
+$vmr.Option.buffer.asio = 0    # to use default buffer size
+```
+
+#### modes
+
+The following Option.mode commands are available:
+
+- exclusif: bool
+- swift: bool
+
+for example:
+
+```powershell
+$vmr.Option.exclusif = $true
+```
+
 ### Macrobuttons
 
 Three modes defined:

@@ -1,14 +1,8 @@
-class Preset {
-    [int]$index
-    [Object]$remote
+class Preset : IndexedIRemote {
+    Preset ([int]$index, [Object]$remote : base ($index, $remote)) {}
 
-    Preset ([int]$index, [Object]$remote) {
-        $this.index  = $index
-        $this.remote = $remote
-    }
-
-    [string] ToString() {
-        return $this.GetType().Name + $this.index
+    [string] identifier () {
+        return 'Preset[' + $this.index + ']'
     }
     
     hidden $_recall = $($this | Add-Member ScriptProperty 'recall' `
@@ -20,43 +14,11 @@ class Preset {
     )
 }
 
-class IFx {
-    [Object]$remote
-
-    IFx ([Object]$remote) {
-        $this.remote = $remote
-    }
-
-    [single] Getter ($param) {
-        $this.Cmd($param) | Write-Debug
-        return $this.remote.Getter($this.Cmd($param))
-    }
-
-    [void] Setter ($param, $val) {
-        "$($this.Cmd($param))=$val" | Write-Debug
-        if ($val -is [Boolean]) {
-            $this.remote.Setter($this.Cmd($param), $(if ($val) { 1 } else { 0 }))
-        }
-        else {
-            $this.remote.Setter($this.Cmd($param), $val)
-        }
-    }
-
-    [string] Cmd ($param) {
-        if ([string]::IsNullOrEmpty($param)) {
-            return $this.identifier()
-        }
-        return "$($this.identifier()).$param"
-    }
-}
-
-class Fx : IFx {
-    [Object]$remote
+class Fx : IRemote {
     [Object]$reverb
     [Object]$delay
     
-    Fx ([Object]$remote) {
-        $this.remote = $remote
+    Fx ([Object]$remote : base ($remote)) {
         $this.reverb = [FxReverb]::new($remote)
         $this.delay = [FxDelay]::new($remote)
     }
@@ -64,13 +26,9 @@ class Fx : IFx {
     [string] identifier () {
         return 'Fx'
     }
-    
-    [string] ToString() {
-        return $this.GetType().Name
-    }
 }
 
-class FxReverb : IFx {
+class FxReverb : IRemote {
     FxReverb ([Object]$remote : base ($remote)) {
         AddBoolMembers -PARAMS @('on', 'ab')
     }
@@ -80,7 +38,7 @@ class FxReverb : IFx {
     }
 }
 
-class FxDelay : IFx {
+class FxDelay : IRemote {
     FxDelay ([Object]$remote : base ($remote)) {
         AddBoolMembers -PARAMS @('on', 'ab')
     }
@@ -90,48 +48,18 @@ class FxDelay : IFx {
     }
 }
 
-class Patch {
-    [Object]$remote
-    
-    Patch ([Object]$remote) {
+class Patch : IRemote {
+    Patch ([Object]$remote : base ($remote)) {
         AddBoolMembers -PARAMS @('postFaderComposite', 'postFxInsert')
         
         AddASIOInMembers
         AddASIOOutMembers
         AddCompositeMembers
         AddInsertMembers
-        
-        $this.remote = $remote
     }
     
     [string] identifier () {
         return 'Patch'
-    }
-    
-    [string] ToString() {
-        return $this.GetType().Name
-    }
-    
-    [single] Getter ($param) {
-        $this.Cmd($param) | Write-Debug
-        return $this.remote.Getter($this.Cmd($param))
-    }
-
-    [void] Setter ($param, $val) {
-        "$($this.Cmd($param))=$val" | Write-Debug
-        if ($val -is [Boolean]) {
-            $this.remote.Setter($this.Cmd($param), $(if ($val) { 1 } else { 0 }))
-        }
-        else {
-            $this.remote.Setter($this.Cmd($param), $val)
-        }
-    }
-
-    [string] Cmd ($param) {
-        if ([string]::IsNullOrEmpty($param)) {
-            return $this.identifier()
-        }
-        return "$($this.identifier()).$param"
     }
 }
 

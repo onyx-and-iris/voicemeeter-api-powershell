@@ -1,3 +1,66 @@
+# Base for non-indexed nodes (e.g., Recorder, Command, FX container)
+class IRemote {
+    [Object]$remote
+
+    IRemote ([Object]$remote) {
+        $this.remote = $remote
+    }
+
+    [single] Getter ($param) {
+        $this.ToString() + " Getter: $($this.Cmd($param))" | Write-Debug
+        return $this.remote.Getter($this.Cmd($param))
+    }
+
+    [string] Getter_String ($param) {
+        $this.ToString() + " Getter_String: $($this.Cmd($param))" | Write-Debug
+        return $this.remote.Getter_String($this.Cmd($param))
+    }
+
+    [void] Setter ($param, $val) {
+        $this.ToString() + " Setter: $($this.Cmd($param))=$val" | Write-Debug
+        if ($val -is [Boolean]) {
+            $this.remote.Setter($this.Cmd($param), $(if ($val) { 1 } else { 0 }))
+        }
+        else {
+            $this.remote.Setter($this.Cmd($param), $val)
+        }
+    }
+
+    [string] Cmd ($param) {
+        if ([string]::IsNullOrEmpty($param)) {
+            return $this.identifier()
+        }
+        return "$($this.identifier()).$param"
+    }
+
+    # Must be overridden by derived classes
+    [string] identifier () {
+        throw [System.NotImplementedException]::new("$($this.GetType().Name) must override identifier()")
+    }
+
+    [string] ToString() {
+        return $this.GetType().Name
+    }
+}
+
+# Base for indexed nodes (e.g., Strip, Bus, and their indexed children)
+class IndexedIRemote : IRemote {
+    [int]$index
+
+    IndexedIRemote ([int]$index, [Object]$remote) : base ($remote) {
+        $this.index = $index
+    }
+
+    # Helper to build common id segments like 'Strip[2]' or 'Bus[0]'
+    [string] BaseId ([string]$root) {
+        return "$root[$($this.index)]"
+    }
+
+    [string] ToString() {
+        return $this.GetType().Name + $this.index
+    }
+}
+
 function AddBoolMembers () {
     param(
         [String[]]$PARAMS
@@ -157,6 +220,17 @@ function AddInsertMembers () {
     }
 
     AddBoolMembers -PARAMS $insert_ps
+}
+
+function AddDelayMembers () {
+    $p_out = $this.remote.kind.p_out
+    
+    [System.Collections.ArrayList]$delays = @()
+    foreach ($i in 0..$($p_out - 1)) {
+        $delays.Add('delay[{0}]' -f $i)
+    }
+    
+    AddIntMembers -PARAMS $delays
 }
 
 function Addmember {

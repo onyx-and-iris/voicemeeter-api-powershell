@@ -51,6 +51,19 @@ Before any major/minor/patch is released all test units will be run to verify th
   - Patch.postFaderComposite
   - Patch.postFxInsert
 - alternate pattern for gainlayers: Strip.gainlayer[i] (old pattern still works)
+- New IRemote and IndexedIRemote classes to consolidate generic $this.remote, setter, getter, etc.
+- New Option class
+  - Option.sr
+  - Option.asiosr
+  - Option.delay[i]
+  - Option.Buffer.mme
+  - Option.Buffer.wdm
+  - Option.Buffer.ks
+  - Option.Buffer.asio
+  - Option.Mode.exclusif
+  - Option.Mode.swift
+  - Option.monitorOnSel
+  - Option.sliderMode
 
 ### Changed
 

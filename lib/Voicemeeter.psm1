@@ -9,6 +9,7 @@
 . $PSScriptRoot\command.ps1
 . $PSScriptRoot\recorder.ps1
 . $PSScriptRoot\profiles.ps1
+. $PSScriptRoot\option.ps1
 . $PSScriptRoot\misc.ps1
 
 class Remote {
@@ -80,6 +81,7 @@ class RemoteBasic : Remote {
     [PSCustomObject]$vban
     [Object]$command
     [Object]$patch
+    [Object]$option
 
     RemoteBasic () : base ('basic') {
         $this.strip = Make_Strips($this)
@@ -89,6 +91,7 @@ class RemoteBasic : Remote {
         $this.vban = Make_Vban($this)
         $this.command = Make_Command($this)
         $this.patch = Make_Patch($this)
+        $this.option = Make_Option($this)
     }
 }
 
@@ -100,6 +103,7 @@ class RemoteBanana : Remote {
     [PSCustomObject]$vban
     [Object]$command
     [Object]$patch
+    [Object]$option
     [Object]$recorder
 
     RemoteBanana () : base ('banana') {
@@ -110,6 +114,7 @@ class RemoteBanana : Remote {
         $this.vban = Make_Vban($this)
         $this.command = Make_Command($this)
         $this.patch = Make_Patch($this)
+        $this.option = Make_Option($this)
         $this.recorder = Make_Recorder($this)
     }
 }
@@ -123,6 +128,7 @@ class RemotePotato : Remote {
     [Object]$command
     [Object]$fx
     [Object]$patch
+    [Object]$option
     [Object]$recorder
 
     RemotePotato () : base ('potato') {
@@ -134,6 +140,7 @@ class RemotePotato : Remote {
         $this.command = Make_Command($this)
         $this.fx = Make_Fx($this)
         $this.patch = Make_Patch($this)
+        $this.option = Make_Option($this)
         $this.recorder = Make_Recorder($this)
     }
 }
