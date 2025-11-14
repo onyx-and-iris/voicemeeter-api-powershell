@@ -25,9 +25,9 @@ Before any major/minor/patch is released all test units will be run to verify th
   - Strip[i].Pitch.medformant
   - Strip[i].Pitch.hiformant
 - EQGain on virtual strips
-  - Strip[i].bass or .low
-  - Strip[i].mid or .med
-  - Strip[i].treble or .high
+  - Strip[i].bass or Strip[i].low
+  - Strip[i].mid or Strip[i].med
+  - Strip[i].treble or Strip[i].high
 - Command.save($filepath) and Command.reset
 - Recorder.replay and Recorder.gain to README
 - Write-only Button[i].color through VMRAPI's Command.Button[i].color
@@ -47,10 +47,10 @@ Before any major/minor/patch is released all test units will be run to verify th
   - Patch.asio[i]
   - Patch.OutA2[i]-OutA5[i]
   - Patch.composite[i]
-  - Patch.insert[k]
+  - Patch.insert[i]
   - Patch.postFaderComposite
   - Patch.postFxInsert
-- alternate pattern for gainlayers: Strip.gainlayer[i] (old pattern still works)
+- Alternate pattern for gainlayers: Strip.gainlayer[i] (old pattern still works)
 - New IRemote and IndexedIRemote classes to consolidate generic $this.remote, setter, getter, etc.
 - New Option class
   - Option.sr
@@ -64,12 +64,21 @@ Before any major/minor/patch is released all test units will be run to verify th
   - Option.Mode.swift
   - Option.monitorOnSel
   - Option.sliderMode
+- More Bus.Eq | Strip.Eq methods and commands
+  - Eq.save($filename)
+  - Eq.load($filename)
+  - Eq.Channel[i].Cell[j].on
+  - Eq.Channel[i].Cell[j].type
+  - Eq.Channel[i].Cell[j].f
+  - Eq.Channel[i].Cell[j].gain
+  - Eq.Channel[i].Cell[j].q
 
 ### Changed
 
 - Strip[i].limit to float (the value is visually truncated in the GUI, but it's not actually an integer)
 - Strip[i].mono is now an alias for Strip[i].mc on virtual strips (matches Python module behavior)
 - GainLayers are now based on KindMap so they're only added for Potato
+- Strip and Bus now use IndexedIRemote base class
 
 ### Removed
 

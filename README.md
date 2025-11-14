@@ -346,11 +346,33 @@ The following strip.eq | bus.eq commands are available:
 - on: bool
 - ab: bool
 
+The following strip.eq | bus.eq methods are available:
+
+- Load($filepath): string
+- Save($filepath): string
+
 for example:
 
 ```powershell
 $vmr.strip[0].eq.on = $true
 $vmr.bus[0].eq.ab = $false
+```
+
+##### channel.cell
+
+The following eq.channel.cell commands are available:
+
+- on: bool
+- type: int, from 0 to 6
+- f: float, from 20.0 to 20000.0
+- gain: float, from -12.0 to 12.0
+- q: float, from 1.0 to 100.0
+
+for example:
+
+```powershell
+$vmr.strip[2].eq.channel[1].cell[4].type = 1
+$vmr.bus[5].eq.channel[6].cell[3].on = $false
 ```
 
 #### FadeTo | FadeBy

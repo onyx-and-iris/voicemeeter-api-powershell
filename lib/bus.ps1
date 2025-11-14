@@ -1,40 +1,4 @@
-class IBus {
-    [int]$index
-    [Object]$remote
-    
-    IBus ([int]$index, [Object]$remote) {
-        $this.index = $index
-        $this.remote = $remote
-    }
-
-    [string] identifier () {
-        return 'Bus[' + $this.index + ']'
-    }
-
-    [single] Getter ($param) {
-        $this.ToString() + " Getter: $($this.Cmd($param))" | Write-Debug
-        return $this.remote.Getter($this.Cmd($param))
-    }
-
-    [string] Getter_String ($param) {
-        $this.ToString() + " Getter_String: $($this.Cmd($param))" | Write-Debug
-        return $this.remote.Getter_String($this.Cmd($param))
-    }
-
-    [void] Setter ($param, $val) {
-        $this.ToString() + " Setter: $($this.Cmd($param))=$val" | Write-Debug
-        $this.remote.Setter($this.Cmd($param), $val)
-    }
-
-    [string] Cmd ($param) {
-        if ([string]::IsNullOrEmpty($param)) {
-            return $this.identifier()
-        }
-        return "$($this.identifier()).$param"
-    }
-}
-
-class Bus : IBus {
+class Bus : IndexedIRemote {
     [Object]$mode
     [Object]$eq
     [Object]$levels
@@ -49,8 +13,8 @@ class Bus : IBus {
         $this.levels = [BusLevels]::new($index, $remote)
     }
 
-    [string] ToString() {
-        return $this.GetType().Name + $this.index
+    [string] identifier () {
+        return 'Bus[' + $this.index + ']'
     }
 
     [void] FadeTo ([single]$target, [int]$time) {
@@ -62,7 +26,7 @@ class Bus : IBus {
     }
 }
 
-class BusLevels : IBus {
+class BusLevels : IndexedIRemote {
     [int]$init
     [int]$offset
 
@@ -93,7 +57,7 @@ class BusLevels : IBus {
     }
 }
 
-class BusMode : IBus {
+class BusMode : IndexedIRemote {
     [System.Collections.ArrayList]$modes
 
     BusMode ([int]$index, [Object]$remote) : base ($index, $remote) {
@@ -119,13 +83,72 @@ class BusMode : IBus {
     }
 }
 
-class BusEq : IBus {
+class BusEq : IndexedIRemote {
+    [System.Collections.ArrayList]$channels
+    
     BusEq ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddBoolMembers -PARAMS @('on', 'ab')
+        
+        $this.channels = @()
+        $chCount = $remote.kind.bus_ch
+        for ($ch = 0; $ch -lt $chCount; $ch++) {
+            [void]$this.channels.Add([BusEqCh]::new($index, $ch, $remote))
+        } 
     }
 
     [string] identifier () {
         return 'Bus[' + $this.index + '].EQ'
+    }
+    
+    [void] Load ([string]$filename) {
+        $param = 'Command.LoadBusEq[' + $this.index + ']'
+        $this.remote.Setter($param, $filename)
+    }
+    
+    [void] Save ([string]$filename) {
+        $param = 'Command.SaveBusEq[' + $this.index + ']'
+        $this.remote.Setter($param, $filename)
+    }
+}
+
+class BusEqCh : IndexedIRemote {
+    [System.Collections.ArrayList]$cells
+    [int]$busIndex
+    [int]$chIndex
+    
+    BusEqCh ([int]$busIndex, [int]$chIndex, [Object]$remote) : base ($busIndex, $remote) {
+        $this.busIndex = $busIndex
+        $this.chIndex = $chIndex
+        
+        $this.cells = @()
+        $cellCount = $remote.kind.cells
+        for ($c = 0; $c -lt $cellCount; $c++) {
+            [void]$this.cells.Add([BusEqChCell]::new($busIndex, $chIndex, $c, $remote))
+        }
+    }
+    
+    [string] identifier () {
+        return 'Bus[{0}].EQ.Channel[{1}]' -f $this.busIndex $this.chIndex
+    }
+}
+
+class BusEqChCell : IndexedIRemote {
+    [int]$busIndex
+    [int]$chIndex
+    [int]$cellIndex
+    
+    BusEqChCell [int]$busIndex, [int]$chIndex, [int]$cellIndex, [Object]$remote) : base ($busIndex, $remote) {
+        AddBoolMembers -PARAMS @('on')
+        AddIntMembers -PARAMS @('type')
+        AddFloatMembers -PARAMS @('f', 'gain', 'q')
+        
+        $this.busIndex  = $busIndex
+        $this.chIndex   = $chIndex
+        $this.cellIndex = $cellIndex
+    }
+    
+    [string] identifier () {
+        return 'Bus[{0}].EQ.Channel[{1}].Cell[{2}]' -f $this.busIndex $this.chIndex $this.cellIndex
     }
 }
 
@@ -139,7 +162,7 @@ class PhysicalBus : Bus {
     }
 }
 
-class BusDevice : IBus {
+class BusDevice : IndexedIRemote {
     BusDevice ([int]$index, [Object]$remote) : base ($index, $remote) {
     }
 

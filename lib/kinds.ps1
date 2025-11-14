@@ -12,6 +12,9 @@ $KindMap = @{
         'insert'    = 0
         'vban_in'   = 4
         'vban_out'  = 4
+        'strip_ch'  = 0
+        'bus_ch'    = 0
+        'cells'     = 0
     };
     'banana' = @{
         'name'      = 'banana'
@@ -26,6 +29,9 @@ $KindMap = @{
         'insert'    = 22
         'vban_in'   = 8
         'vban_out'  = 8
+        'strip_ch'  = 0
+        'bus_ch'    = 8
+        'cells'     = 6
     };
     'potato' = @{
         'name'      = 'potato'
@@ -40,6 +46,9 @@ $KindMap = @{
         'insert'    = 34
         'vban_in'   = 8
         'vban_out'  = 8
+        'strip_ch'  = 2
+        'bus_ch'    = 8
+        'cells'     = 6
     };
 }
 

@@ -1,40 +1,4 @@
-class IStrip {
-    [int]$index
-    [Object]$remote
-
-    IStrip ([int]$index, [Object]$remote) {
-        $this.index = $index
-        $this.remote = $remote
-    }
-
-    [string] identifier () {
-        return 'Strip[' + $this.index + ']'
-    }
-
-    [single] Getter ($param) {
-        $this.Cmd($param) | Write-Debug
-        return $this.remote.Getter($this.Cmd($param))
-    }
-
-    [string] Getter_String ($param) {
-        $this.Cmd($param) | Write-Debug
-        return $this.remote.Getter_String($this.Cmd($param))
-    }
-
-    [void] Setter ($param, $val) {
-        "$($this.Cmd($param))=$val" | Write-Debug
-        $this.remote.Setter($this.Cmd($param), $val)
-    }
-
-    [string] Cmd ($param) {
-        if ([string]::IsNullOrEmpty($param)) {
-            return $this.identifier()
-        }
-        return "$($this.identifier()).$param"
-    }
-}
-
-class Strip : IStrip {
+class Strip : IndexedIRemote {
     [Object]$levels
 
     Strip ([int]$index, [Object]$remote) : base ($index, $remote) {
@@ -48,8 +12,8 @@ class Strip : IStrip {
         $this.levels = [StripLevels]::new($index, $remote)
     }
 
-    [string] ToString() {
-        return $this.GetType().Name + $this.index
+    [string] identifier () {
+        return 'Strip[' + $this.index + ']'
     }
 
     [void] FadeTo ([single]$target, [int]$time) {
@@ -61,7 +25,7 @@ class Strip : IStrip {
     }
 }
 
-class StripLevels : IStrip {
+class StripLevels : IndexedIRemote {
     [int]$init
     [int]$offset
 
@@ -130,7 +94,7 @@ class PhysicalStrip : Strip {
     }
 }
 
-class StripComp : IStrip {
+class StripComp : IndexedIRemote {
     StripComp ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddFloatMembers -PARAMS @('gainin', 'ratio', 'threshold', 'attack', 'release', 'knee', 'gainout')
         AddBoolMembers -PARAMS @('makeup')
@@ -151,7 +115,7 @@ class StripComp : IStrip {
     )
 }
 
-class StripGate : IStrip {
+class StripGate : IndexedIRemote {
     StripGate ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddFloatMembers -PARAMS @('threshold', 'damping', 'bpsidechain', 'attack', 'hold', 'release')
     }
@@ -171,7 +135,7 @@ class StripGate : IStrip {
     )
 }
 
-class StripDenoiser : IStrip {
+class StripDenoiser : IndexedIRemote {
     StripDenoiser ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddFloatMembers -PARAMS @('threshold')
     }
@@ -191,7 +155,7 @@ class StripDenoiser : IStrip {
     )
 }
 
-class StripPitch : IStrip {
+class StripPitch : IndexedIRemote {
     StripPitch ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddBoolMembers -PARAMS @('on')
         AddIntMembers -PARAMS @('drywet')
@@ -203,17 +167,76 @@ class StripPitch : IStrip {
     }
 }
 
-class StripEq : IStrip {
+class StripEq : IndexedIRemote {
+    [System.Collections.ArrayList]$channels
+    
     StripEq ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddBoolMembers -PARAMS @('on', 'ab')
+        
+        $this.channels = @()
+        $chCount = $remote.kind.strip_ch
+        for ($ch = 0; $ch -lt $chCount; $ch++) {
+            [void]$this.channels.Add([StripEqCh]::new($index, $ch, $remote))
+        } 
     }
 
     [string] identifier () {
         return 'Strip[' + $this.index + '].EQ'
     }
+    
+    [void] Load ([string]$filename) {
+        $param = 'Command.LoadStripEq[' + $this.index + ']'
+        $this.remote.Setter($param, $filename)
+    }
+    
+    [void] Save ([string]$filename) {
+        $param = 'Command.SaveStripEq[' + $this.index + ']'
+        $this.remote.Setter($param, $filename)
+    }
 }
 
-class StripDevice : IStrip {
+class StripEqCh : IndexedIRemote {
+    [System.Collections.ArrayList]$cells
+    [int]$stripIndex
+    [int]$chIndex
+    
+    StripEqCh ([int]$stripIndex, [int]$chIndex, [Object]$remote) : base ($stripIndex, $remote) {
+        $this.stripIndex = $stripIndex
+        $this.chIndex = $chIndex
+        
+        $this.cells = @()
+        $cellCount = $remote.kind.cells
+        for ($c = 0; $c -lt $cellCount; $c++) {
+            [void]$this.cells.Add([StripEqChCell]::new($stripIndex, $chIndex, $c, $remote))
+        }
+    }
+    
+    [string] identifier () {
+        return 'Strip[{0}].EQ.Channel[{1}]' -f $this.stripIndex $this.chIndex
+    }
+}
+
+class StripEqChCell : IndexedIRemote {
+    [int]$stripIndex
+    [int]$chIndex
+    [int]$cellIndex
+    
+    StripEqChCell [int]$stripIndex, [int]$chIndex, [int]$cellIndex, [Object]$remote) : base ($stripIndex, $remote) {
+        AddBoolMembers -PARAMS @('on')
+        AddIntMembers -PARAMS @('type')
+        AddFloatMembers -PARAMS @('f', 'gain', 'q')
+        
+        $this.stripIndex  = $stripIndex
+        $this.chIndex   = $chIndex
+        $this.cellIndex = $cellIndex
+    }
+    
+    [string] identifier () {
+        return 'Strip[{0}].EQ.Channel[{1}].Cell[{2}]' -f $this.stripIndex $this.chIndex $this.cellIndex
+    }
+}
+
+class StripDevice : IndexedIRemote {
     StripDevice ([int]$index, [Object]$remote) : base ($index, $remote) {
     }
 
