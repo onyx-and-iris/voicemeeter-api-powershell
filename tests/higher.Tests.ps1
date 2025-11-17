@@ -416,10 +416,17 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
     }
     
+    Describe 'VBAN Tests' {
+        It 'Should disable then enable VBAN' {
+            $vmr.vban.enable = $true
+            $vmr.vban.enable = $false
+            $vmr.vban.enable = $true
+        }
+    }
+    
     Describe 'Special Command Tests' {
         It 'Should hide then show GUI' {
             $vmr.command.show
-            
             $vmr.command.hide
             $vmr.command.show
         }
