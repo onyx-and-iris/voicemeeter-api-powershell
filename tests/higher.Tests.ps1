@@ -3,10 +3,10 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         @{ Value = $true; Expected = $true }
         @{ Value = $false; Expected = $false }
     ) {
-        Context 'Strips' {
-            It "Should set and get Strip[$index] booleans" -ForEach @(
-                @{ Index = $phys_in }, @{ Index = $virt_in }
-            ) {
+        Context 'Strip, one physical one virtual' -ForEach @(
+            @{ Index = $phys_in }, @{ Index = $virt_in }
+        ) {
+            It "Should set and get Strip[$index] booleans" {
                 $vmr.strip[$index].mute = $value
                 $vmr.strip[$index].solo = $value
                 $vmr.strip[$index].A1   = $value
@@ -17,20 +17,44 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.strip[$index].A1   | Should -Be $expected
                 $vmr.strip[$index].B1   | Should -Be $expected
             }
-
-            It "Should set and get physical Strip[$index] booleans" -ForEach @(
-                @{ Index = $phys_in }
-            ) {
+            
+            It "Should set and get Strip[$index] booleans (potato)" -Skip:$ifNotPotato {
+                $vmr.strip[$index].postreverb = $value
+                $vmr.strip[$index].postdelay  = $value
+                $vmr.strip[$index].postfx1    = $value
+                $vmr.strip[$index].postfx2    = $value
+                
+                $vmr.strip[$index].postreverb | Should -Be $expected
+                $vmr.strip[$index].postdelay  | Should -Be $expected
+                $vmr.strip[$index].postfx1    | Should -Be $expected
+                $vmr.strip[$index].postfx2    | Should -Be $expected
+            }
+        }
+            
+        Context 'Strip, physical only' -ForEach @(
+            @{ Index = $phys_in }
+        ) {
+            It "Should set and get Strip[$index] booleans" {
                 $vmr.strip[$index].mono = $value
                 $vmr.strip[$index].vaio = $value
                 
                 $vmr.strip[$index].mono | Should -Be $expected
                 $vmr.strip[$index].vaio | Should -Be $expected
             }
+            
+            It "Should set and get Strip[$index] audibility and pitch booleans" -Skip:$ifNotPotato {
+                $vmr.strip[$index].comp.makeup = $value
+                $vmr.strip[$index].pitch.on    = $value
+                
+                $vmr.strip[$index].comp.makeup | Should -Be $expected
+                $vmr.strip[$index].pitch.on    | Should -Be $expected
+            }
+        }
         
-            It "Should set and get virtual Strip[$index].MC via .Mono alias" -ForEach @(
-                @{ Index = $phys_in + 1 }
-            ) {
+        Context 'Strip, first virtual' -ForEach @(
+            @{ Index = $phys_in + 1 }
+        ) {
+            It "Should set and get virtual Strip[$index].MC via .Mono alias" {
                 $vmr.strip[$index].mc = -not $value
                 $vmr.strip[$index].mono = $value
                 
@@ -39,18 +63,23 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             }
         }
 
-        Context 'Buses, one physical one virtual' -ForEach @(
+        Context 'Bus, one physical one virtual' -ForEach @(
             @{ Index = $phys_out }, @{ Index = $virt_out }
         ) {
-            It "Should set and get Bus[$index] booleans" {
+            It "Should set and get Bus[$index].Mute" {
                 $vmr.bus[$index].mute = $value
-                $vmr.bus[$index].mono = $value
-                
                 $vmr.bus[$index].mute | Should -Be $expected
-                $vmr.bus[$index].mono | Should -Be $expected
+            }
+            
+            It "Should set and get Bus[$index] booleans (potato)" -Skip:$ifNotPotato {
+                $vmr.bus[$index].sel     = $value
+                $vmr.bus[$index].monitor = $value
+                
+                $vmr.bus[$index].sel     | Should -Be $expected
+                $vmr.bus[$index].monitor | Should -Be $expected
             }
 
-            It "Should set and get Bus[$index].mode booleans" {
+            It "Should set and get Bus[$index] modes" {
                 $vmr.bus[$index].mode.normal = $value
                 $vmr.bus[$index].mode.normal | Should -Be $expected
                 
@@ -62,6 +91,32 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 
                 $vmr.bus[$index].mode.composite = $value
                 $vmr.bus[$index].mode.composite | Should -Be $expected
+            }
+            
+            It "Should set and get Bus[$index] modes (banana+)" -Skip:$ifBasic {
+                $vmr.bus[$index].mode.bmix = $value
+                $vmr.bus[$index].mode.bmix | Should -Be $expected
+                
+                $vmr.bus[$index].mode.tvmix = $value
+                $vmr.bus[$index].mode.tvmix | Should -Be $expected
+                
+                $vmr.bus[$index].mode.upmix21 = $value
+                $vmr.bus[$index].mode.upmix21 | Should -Be $expected
+                
+                $vmr.bus[$index].mode.upmix41 = $value
+                $vmr.bus[$index].mode.upmix41 | Should -Be $expected
+                
+                $vmr.bus[$index].mode.upmix61 = $value
+                $vmr.bus[$index].mode.upmix61 | Should -Be $expected
+                
+                $vmr.bus[$index].mode.centeronly = $value
+                $vmr.bus[$index].mode.centeronly | Should -Be $expected
+                
+                $vmr.bus[$index].mode.lfeonly = $value
+                $vmr.bus[$index].mode.lfeonly | Should -Be $expected
+                
+                $vmr.bus[$index].mode.rearonly = $value
+                $vmr.bus[$index].mode.rearonly | Should -Be $expected
             }
         }
         
