@@ -3,62 +3,74 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         @{ Value = $true; Expected = $true }
         @{ Value = $false; Expected = $false }
     ) {
-        Context 'Strip, one physical one virtual' -ForEach @(
-            @{ Index = $phys_in }, @{ Index = $virt_in }
-        ) {
-            It "Should set and get Strip[$index].Mute" {
+        Context 'Strips' {
+            It "Should set and get Strip[$index] booleans" -ForEach @(
+                @{ Index = $phys_in }, @{ Index = $virt_in }
+            ) {
                 $vmr.strip[$index].mute = $value
-                $vmr.strip[$index].mute | Should -Be $expected
-            }
-
-            It "Should set and get Strip[$index].Solo" {
                 $vmr.strip[$index].solo = $value
+                $vmr.strip[$index].A1   = $value
+                $vmr.strip[$index].B1   = $value
+                
+                $vmr.strip[$index].mute | Should -Be $expected
                 $vmr.strip[$index].solo | Should -Be $expected
+                $vmr.strip[$index].A1   | Should -Be $expected
+                $vmr.strip[$index].B1   | Should -Be $expected
             }
 
-            It "Should set and get Strip[$index].A1" {
-                $vmr.strip[$index].A1 = $value
-                $vmr.strip[$index].A1 | Should -Be $expected
+            It "Should set and get physical Strip[$index] booleans" -ForEach @(
+                @{ Index = $phys_in }
+            ) {
+                $vmr.strip[$index].mono = $value
+                $vmr.strip[$index].vaio = $value
+                
+                $vmr.strip[$index].mono | Should -Be $expected
+                $vmr.strip[$index].vaio | Should -Be $expected
             }
-
-            It "Should set and get Strip[$index].B1" {
-                $vmr.strip[$index].B1 = $value
-                $vmr.strip[$index].B1 | Should -Be $expected
+        
+            It "Should set and get virtual Strip[$index].MC via .Mono alias" -ForEach @(
+                @{ Index = $phys_in + 1 }
+            ) {
+                $vmr.strip[$index].mc = -not $value
+                $vmr.strip[$index].mono = $value
+                
+                $vmr.strip[$index].mc | Should -Be $expected
+                $vmr.strip[$index].mono | Should -Be $expected
             }
         }
 
-        Context 'physical only' -ForEach @(
-            @{ Index = $phys_in }
-        ) {
-            Context 'eq.{param}' -Skip:$ifNotPotato {
-                It "Should set Strip[$index].EQ.On to $value" {
-                    $vmr.strip[$index].eq.on = $value
-                    $vmr.strip[$index].eq.on | Should -Be $expected
-                }                    
-            }
-        }
-
-        Context 'Bus, one physical one virtual' -ForEach @(
+        Context 'Buses, one physical one virtual' -ForEach @(
             @{ Index = $phys_out }, @{ Index = $virt_out }
         ) {
-            It "Should set and get Bus[$index].Eq.On" -Skip:$ifBasic {
-                $vmr.bus[$index].eq.on = $value
-                $vmr.bus[$index].eq.on | Should -Be $expected
-            }
-
-            It "Should set and get Bus[$index].Mono" {
+            It "Should set and get Bus[$index] booleans" {
+                $vmr.bus[$index].mute = $value
                 $vmr.bus[$index].mono = $value
+                
+                $vmr.bus[$index].mute | Should -Be $expected
                 $vmr.bus[$index].mono | Should -Be $expected
             }
 
-            It "Should set and get Bus[$index].mode.amix" -Skip:$ifBasic {
+            It "Should set and get Bus[$index].mode booleans" {
+                $vmr.bus[$index].mode.normal = $value
+                $vmr.bus[$index].mode.normal | Should -Be $expected
+                
                 $vmr.bus[$index].mode.amix = $value
                 $vmr.bus[$index].mode.amix | Should -Be $expected
+                
+                $vmr.bus[$index].mode.repeat = $value
+                $vmr.bus[$index].mode.repeat | Should -Be $expected
+                
+                $vmr.bus[$index].mode.composite = $value
+                $vmr.bus[$index].mode.composite | Should -Be $expected
             }
-
-            It "Should set and get Bus[$index].mode.centeronly" -Skip:$ifBasic {
-                $vmr.bus[$index].mode.centeronly = $value
-                $vmr.bus[$index].mode.centeronly | Should -Be $expected
+        }
+        
+        Context 'Bus, physical only' -ForEach @(
+            @{ Index = $phys_out }
+        ) {
+            It "Should set and get Bus[$index].Vaio" {
+                $vmr.bus[$index].vaio = $value
+                $vmr.bus[$index].vaio | Should -Be $expected
             }
         }
 
@@ -109,6 +121,42 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             It 'Should set command.lock' {
                 $vmr.command.lock = $value
             }
+        }
+    }
+
+    Describe 'Int Tests' -ForEach @(
+        @{ Index = $phys_in }, @{ Index = $virt_in }
+    ) {
+        Context 'Strip, one physical, one virtual' -Skip:$ifBasic -ForEach @(
+            @{ Value = 3; Expected = 3 }
+            @{ Value = -6; Expected = -6 }
+        ) {
+            It "Should set Strip[$index].Limit to 3" {
+                $vmr.strip[$index].limit = $value
+                $vmr.strip[$index].limit | Should -Be $expected
+            }
+        }
+
+        Context 'Vban outstream' {
+            Context 'sr' -ForEach @(
+                @{ Value = 44100; Expected = 44100 }
+                @{ Value = 48000; Expected = 48000 }
+            ) {
+                It "Should set vban.outstream[$index].sr to $value" {
+                    $vmr.vban.outstream[$index].sr = $value
+                    $vmr.vban.outstream[$index].sr | Should -Be $expected
+                }
+            }
+
+            Context 'channel' -ForEach @(
+                @{ Value = 1; Expected = 1 }
+                @{ Value = 2; Expected = 2 }
+            ) {
+                It 'Should set vban.outstream[0].channel to 1' {
+                    $vmr.vban.outstream[$index].channel = $value
+                    $vmr.vban.outstream[$index].channel | Should -Be $expected
+                }
+            }            
         }
     }
 
@@ -207,42 +255,6 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
     }
 
-    Describe 'Int Tests' -ForEach @(
-        @{ Index = $phys_in }, @{ Index = $virt_in }
-    ) {
-        Context 'Strip, one physical, one virtual' -Skip:$ifBasic -ForEach @(
-            @{ Value = 3; Expected = 3 }
-            @{ Value = -6; Expected = -6 }
-        ) {
-            It "Should set Strip[$index].Limit to 3" {
-                $vmr.strip[$index].limit = $value
-                $vmr.strip[$index].limit | Should -Be $expected
-            }
-        }
-
-        Context 'Vban outstream' {
-            Context 'sr' -ForEach @(
-                @{ Value = 44100; Expected = 44100 }
-                @{ Value = 48000; Expected = 48000 }
-            ) {
-                It "Should set vban.outstream[$index].sr to $value" {
-                    $vmr.vban.outstream[$index].sr = $value
-                    $vmr.vban.outstream[$index].sr | Should -Be $expected
-                }
-            }
-
-            Context 'channel' -ForEach @(
-                @{ Value = 1; Expected = 1 }
-                @{ Value = 2; Expected = 2 }
-            ) {
-                It 'Should set vban.outstream[0].channel to 1' {
-                    $vmr.vban.outstream[$index].channel = $value
-                    $vmr.vban.outstream[$index].channel | Should -Be $expected
-                }
-            }            
-        }
-    }
-
     Describe 'String Tests' {
         Context 'Strip, one physical, one virtual' -ForEach @(
             @{ Index = $phys_in }, @{ Index = $virt_in }
@@ -291,6 +303,54 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                         $vmr.vban.outstream[$index].ip | Should -Be $expected
                     }
                 }                  
+            }
+        }
+    }
+    
+    Describe 'EQ Tests' {
+        Context 'Bus & physical strip' -ForEach @(
+            @{ Eq = $vmr.bus[$phys_out].eq;  Label = "Bus[$phys_out]";  Skip = $ifBasic }
+            @{ Eq = $vmr.bus[$virt_out].eq;  Label = "Bus[$virt_out]";  Skip = $ifBasic }
+            @{ Eq = $vmr.strip[$phys_in].eq; Label = "Strip[$phys_in]"; Skip = $ifNotPotato }
+        ) {
+            It "Should set and get $Label.EQ booleans" -Skip:$Skip -ForEach @(
+                @{ Value = $true; Expected = $true }
+                @{ Value = $false; Expected = $false }
+            ) {
+                $Eq.on = $value
+                $Eq.ab = $value
+                
+                $Eq.on | Should -Be $expected
+                $Eq.ab | Should -Be $expected
+            }
+            
+            It "Should save then load EQ on $Label" -Skip:$Skip {
+                $tmp = [System.IO.Path]::Combine([System.IO.Path]::GetTempPath(), "vmreq-$(New-Guid).txt")
+                try {
+                    $Eq.save($tmp)
+                    Test-Path $tmp | Should -BeTrue
+                    $Eq.load($tmp)
+                }
+                finally {
+                    if (Test-Path $tmp) { Remove-Item $tmp -Force }
+                }
+            }
+            
+            It "Should set and get Channel[0].Cell[0] params on $Label" -Skip:$Skip {
+                $Eq.channel[0].cell[0].on   = $true
+                $Eq.channel[0].cell[0].type = 1
+                $Eq.channel[0].cell[0].f    = 1000
+                $Eq.channel[0].cell[0].gain = 2.5
+                $Eq.channel[0].cell[0].q    = 52.7
+
+                $Eq.channel[0].cell[0].on   | Should -Be $true
+                $Eq.channel[0].cell[0].type | Should -Be 1
+                $Eq.channel[0].cell[0].f    | Should -Be 1000
+                $Eq.channel[0].cell[0].gain | Should -Be 2.5
+                $Eq.channel[0].cell[0].q    | Should -Be 52.7
+                
+                $Eq.channel[0].cell[0].on = $false
+                $Eq.channel[0].cell[0].on | Should -Be $false
             }
         }
     }

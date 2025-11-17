@@ -19,6 +19,7 @@ function main() {
 
         # skip conditions by kind
         $ifBasic = $vmr.kind.name -eq 'basic'
+        $ifNotBasic = $vmr.kind.name -ne 'basic'
         $ifNotPotato = $vmr.kind.name -ne 'potato'
 
         Invoke-Pester -Tag $tag -PassThru | Out-Null
