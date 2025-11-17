@@ -197,28 +197,6 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.strip[$index].limit | Should -Be $expected
             }
         }
-
-        Context 'Vban outstream' {
-            Context 'sr' -ForEach @(
-                @{ Value = 44100; Expected = 44100 }
-                @{ Value = 48000; Expected = 48000 }
-            ) {
-                It "Should set vban.outstream[$index].sr to $value" {
-                    $vmr.vban.outstream[$index].sr = $value
-                    $vmr.vban.outstream[$index].sr | Should -Be $expected
-                }
-            }
-
-            Context 'channel' -ForEach @(
-                @{ Value = 1; Expected = 1 }
-                @{ Value = 2; Expected = 2 }
-            ) {
-                It 'Should set vban.outstream[0].channel to 1' {
-                    $vmr.vban.outstream[$index].channel = $value
-                    $vmr.vban.outstream[$index].channel | Should -Be $expected
-                }
-            }            
-        }
     }
 
     Describe 'Float Tests' {
@@ -340,32 +318,6 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.bus[$index].label | Should -Be $expected
             }
         }
-
-        Describe 'Vban' -ForEach @(
-            @{ Index = $vban_in }
-        ) {
-            Context 'instream' {
-                Context 'ip' -ForEach @(
-                    @{ Value = '0.0.0.0'; Expected = '0.0.0.0' }
-                ) {
-                    It "Should set vban.instream[$index].name to $value" {
-                        $vmr.vban.instream[$index].ip = $value
-                        $vmr.vban.instream[$index].ip | Should -Be $expected
-                    }
-                }                 
-            }
-
-            Context 'outstream' {
-                Context 'ip' -ForEach @(
-                    @{ Value = '0.0.0.0'; Expected = '0.0.0.0' }
-                ) {
-                    It "Should set vban.outstream[$index].name to $value" {
-                        $vmr.vban.outstream[$index].ip = $value
-                        $vmr.vban.outstream[$index].ip | Should -Be $expected
-                    }
-                }                  
-            }
-        }
     }
     
     Describe 'EQ Tests' {
@@ -421,6 +373,61 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             $vmr.vban.enable = $true
             $vmr.vban.enable = $false
             $vmr.vban.enable = $true
+        }
+        
+        Context 'Instream, outstream' -ForEach @(
+            @{ Stream = $vmr.vban.instream[$vban_in]; Label = "Instream[$vban_in]"; ifIn = $true }
+            @{ Stream = $vmr.vban.outstream[$vban_out]; Label = "Outstream[$vban_out]"; ifOut = $true }
+        ) {
+            It "Should set and get $Label.on" -ForEach @(
+                @{ Value = $true; Expected = $true }
+                @{ Value = $false; Expected = $false }
+            ) {
+                $Stream.on = $value
+                $Stream.on | Should -Be $expected
+            }
+            
+            It "Should set and get $Label strings" {
+                $Stream.name = "$Label"
+                $Stream.ip   = '0.0.0.0'
+                
+                $Stream.name | Should -Be "$Label"
+                $Stream.ip   | Should -Be '0.0.0.0'
+            }
+            
+            It "Should set and get $Label integers" {
+                $Stream.port    = 65535
+                $Stream.quality = 4
+                $Stream.route   = 8
+                
+                $Stream.port    | Should -Be 65535
+                $Stream.quality | Should -Be 4
+                $Stream.route   | Should -Be 8
+            }
+            
+            It "Should set and get $Label integers (out)" -Skip:$ifIn {
+                $Stream.sr      = 44100
+                $Stream.channel = 8
+                $Stream.bit     = 24
+                
+                $Stream.sr      | Should -Be 44100
+                $Stream.channel | Should -Be 8
+                $Stream.bit     | Should -Be 24
+            }
+            
+            It "Should get $Label integers (in)" -Skip:$ifOut {
+                $samplerates = @(11025, 16000, 22050, 24000, 32000, 44100, 48000, 64000, 88200, 96000)
+                $channels    = 1..8
+                $bitdepths   = @(16, 24)
+                
+                $sr      = $Stream.sr
+                $channel = $Stream.channel
+                $bit     = $Stream.bit
+                
+                $sr      | Should -BeIn $samplerates
+                $channel | Should -BeIn $channels
+                $bit     | Should -BeIn $bitdepths
+            }
         }
     }
     
