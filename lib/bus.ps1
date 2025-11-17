@@ -4,7 +4,8 @@ class Bus : IndexedIRemote {
     [Object]$levels
 
     Bus ([int]$index, [Object]$remote) : base ($index, $remote) {
-        AddBoolMembers -PARAMS @('mono', 'mute', 'sel', 'monitor')
+        AddBoolMembers -PARAMS @('mute', 'sel', 'monitor')
+        AddIntMembers -PARAMS @('mono')
         AddStringMembers -PARAMS @('label')
         AddFloatMembers -PARAMS @('gain', 'returnreverb', 'returndelay', 'returnfx1', 'returnfx2')
 
