@@ -258,7 +258,7 @@ $vmr.strip[2].levels.PreFader() -Join ', ' | Write-Host
 The following bus commands are available:
 
 - mute: bool
-- mono: bool
+- mono: int, from 0 to 2
 - sel: bool
 - gain: float, from -60.0 to 12.0
 - label: string
@@ -273,6 +273,7 @@ for example:
 
 ```powershell
 $vmr.bus[3].returnreverb = 5.7
+$vmr.bus[6].mono = 2             # sets to stereo reverse
 ```
 
 #### modes

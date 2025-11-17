@@ -89,6 +89,7 @@ Before any major/minor/patch is released all test units will be run to verify th
 - MacroButton index range in README
 - Parenthesis in Strip.AppMute string
 - '$this._port' -> '$this._sr' for Vban.stream.sr
+- Bus[i].mono changed to int (0 off, 1 mono, 2 stereo reverse)
 
 ## [3.3.0] - 2024-06-29
 
