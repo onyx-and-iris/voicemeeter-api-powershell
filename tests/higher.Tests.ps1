@@ -128,53 +128,59 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.bus[$index].vaio | Should -Be $expected
             }
         }
+        
+        Context 'FX' -Skip:$ifNotPotato {
+            It "Should set and get FX booleans" {
+                $vmr.fx.reverb.on = $value
+                $vmr.fx.reverb.ab = $value
+                $vmr.fx.delay.on  = $value
+                $vmr.fx.delay.ab  = $value
+                
+                $vmr.fx.reverb.on | Should -Be $expected
+                $vmr.fx.reverb.ab | Should -Be $expected
+                $vmr.fx.delay.on  | Should -Be $expected
+                $vmr.fx.delay.ab  | Should -Be $expected
+            }
+        }
+        
+        Context 'Patch' -Skip:$ifBasic {
+            It "Should set and get Patch booleans" {
+                $vmr.patch.insert[0]          = $value
+                $vmr.patch.postfadercomposite = $value
+                $vmr.patch.postfxinsert       = $value
+                
+                $vmr.patch.insert[0]          | Should -Be $expected
+                $vmr.patch.postfadercomposite | Should -Be $expected
+                $vmr.patch.postfxinsert       | Should -Be $expected
+            }
+        }
+        
+        Context 'Option' {
+            It "Should set and get Option.ASIOsr" {
+                $vmr.option.asiosr = $value
+                $vmr.option.asiosr | Should -Be $expected
+            }
+            
+            It "Should set and get Option booleans (potato)" -Skip:$ifNotPotato {
+                $vmr.option.monitoronsel = $value
+                $vmr.option.slidermode   = $value
+                
+                $vmr.option.monitoronsel | Should -Be $expected
+                $vmr.option.slidermode   | Should -Be $expected
+            }
+        }
 
         Context 'Macrobutton' -ForEach @(
             @{ Index = 0 }, @{ Index = 69 }
         ) {
-            It "Should set and get macrobutton[$index] State" {
-                $vmr.button[$index].state = $value
-                $vmr.button[$index].state | Should -Be $expected
-            }
-        }
-
-        Context 'Vban instream' -ForEach @(
-            @{ Index = $vban_in }
-        ) {
-            It "Should set vban.instream[$index].on" {
-                $vmr.vban.instream[$index].on = $value
-                $vmr.vban.instream[$index].on | Should -Be $expected
-            }
-        }
-
-        Context 'Vban outstream' -ForEach @(
-            @{ Index = $vban_out }
-        ) {
-            It "Should set vban.outstream[$index].on" {
-                $vmr.vban.outstream[$index].on = $value
-                $vmr.vban.outstream[$index].on | Should -Be $expected
-            }
-        }
-
-        Context 'Recorder' -Skip:$ifBasic {
-            It 'Should set and get Recorder.A3' {
-                $vmr.recorder.A3 = $value
-                $vmr.recorder.A3 | Should -Be $expected
-            }
-
-            It 'Should set and get Recorder.B1' {
-                $vmr.recorder.B1 = $value
-                $vmr.recorder.B1 | Should -Be $expected
-            }
-
-            It 'Should set and get Recorder.loop' {
-                $vmr.recorder.loop = $value
-            }
-        }
-
-        Context 'Command' {
-            It 'Should set command.lock' {
-                $vmr.command.lock = $value
+            It "Should set and get macrobutton[$index] booleans" {
+                $vmr.button[$index].state     = $value
+                $vmr.button[$index].stateonly = $value
+                $vmr.button[$index].trigger   = $value
+                
+                $vmr.button[$index].state     | Should -Be $expected
+                $vmr.button[$index].stateonly | Should -Be $expected
+                $vmr.button[$index].trigger   | Should -Be $expected
             }
         }
     }
@@ -379,18 +385,6 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $Eq.ab | Should -Be $expected
             }
             
-            It "Should save then load EQ on $Label" -Skip:$Skip {
-                $tmp = [System.IO.Path]::Combine([System.IO.Path]::GetTempPath(), "vmreq-$(New-Guid).txt")
-                try {
-                    $Eq.save($tmp)
-                    Test-Path $tmp | Should -BeTrue
-                    $Eq.load($tmp)
-                }
-                finally {
-                    if (Test-Path $tmp) { Remove-Item $tmp -Force }
-                }
-            }
-            
             It "Should set and get Channel[0].Cell[0] params on $Label" -Skip:$Skip {
                 $Eq.channel[0].cell[0].on   = $true
                 $Eq.channel[0].cell[0].type = 1
@@ -406,6 +400,58 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 
                 $Eq.channel[0].cell[0].on = $false
                 $Eq.channel[0].cell[0].on | Should -Be $false
+            }
+            
+            It "Should save then load EQ on $Label" -Skip:$Skip {
+                $tmp = [System.IO.Path]::Combine([System.IO.Path]::GetTempPath(), "vmreq-$(New-Guid).xml")
+                try {
+                    $Eq.save($tmp)
+                    Test-Path $tmp | Should -BeTrue
+                    $Eq.load($tmp)
+                }
+                finally {
+                    if (Test-Path $tmp) { Remove-Item $tmp -Force }
+                }
+            }
+        }
+    }
+    
+    Describe 'Special Command Tests' {
+        It 'Should hide then show GUI' {
+            $vmr.command.show
+            
+            $vmr.command.hide
+            $vmr.command.show
+        }
+        
+        It 'Should lock then unlock GUI' {
+            $vmr.command.lock = $true
+            $vmr.command.lock | Should -Be $true
+            
+            $vmr.command.lock = $false
+            $vmr.command.lock | Should -Be $false
+        }
+        
+        It 'Should show then hide VBAN chat' {
+            $vmr.command.showvbanchat = $false
+            
+            $vmr.command.showvbanchat = $true
+            $vmr.command.showvbanchat | Should -Be $true
+            
+            $vmr.command.showvbanchat = $false
+            $vmr.command.showvbanchat | Should -Be $false
+        }
+        
+        It 'Should save, reset, and load config' {
+            $tmp = [System.IO.Path]::Combine([System.IO.Path]::GetTempPath(), "vmrconfig-$(New-Guid).xml")
+            try {
+                $vmr.command.save($tmp)
+                Test-Path $tmp | Should -BeTrue
+                $vmr.command.reset
+                $vmr.command.load($tmp)
+            }
+            finally {
+                if (Test-Path $tmp) { Remove-Item $tmp -Force }
             }
         }
     }
