@@ -128,7 +128,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
         
         Context 'FX' -Skip:$ifNotPotato {
-            It "Should set and get FX booleans" {
+            It 'Should set and get FX booleans' {
                 $vmr.fx.reverb.on = $value
                 $vmr.fx.reverb.ab = $value
                 $vmr.fx.delay.on  = $value
@@ -142,7 +142,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
         
         Context 'Patch' {
-            It "Should set and get Patch booleans" -Skip:$ifBasic {
+            It 'Should set and get Patch booleans' -Skip:$ifBasic {
                 $vmr.patch.insert[$insert]    = $value
                 $vmr.patch.postfadercomposite = $value
                 $vmr.patch.postfxinsert       = $value
@@ -154,12 +154,12 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
         
         Context 'Option' {
-            It "Should set and get Option booleans" {
+            It 'Should set and get Option booleans' {
                 $vmr.option.asiosr = $value
                 $vmr.option.asiosr | Should -Be $expected
             }
             
-            It "Should set and get Option booleans (potato)" -Skip:$ifNotPotato {
+            It 'Should set and get Option booleans (potato)' -Skip:$ifNotPotato {
                 $vmr.option.monitoronsel = $value
                 $vmr.option.slidermode   = $value
                 
@@ -218,11 +218,32 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
         
         Context 'Patch' {
-            It "Should set and get Patch integers" -Skip:$ifBasic {
+            It 'Should set and get Patch integers' -Skip:$ifBasic {
                 $vmr.patch.composite[$composite] = 22
                 $vmr.patch.composite[$composite] | Should -Be 22
             }
-        } 
+        }
+        
+        Context 'Option' {
+            It 'Should set and get Option integers' {
+                $vmr.option.sr = 32000
+                $vmr.option.sr | Should -Be 32000
+            }
+            
+            It 'Should set and get buffer sizes' -ForEach @(
+                @{ Value = 1024; Expected = 1024 }
+            ) {
+                $vmr.option.buffer.mme  = $value
+                $vmr.option.buffer.wdm  = $value
+                $vmr.option.buffer.ks   = $value
+                $vmr.option.buffer.asio = $value
+                
+                $vmr.option.buffer.mme  | Should -Be $expected
+                $vmr.option.buffer.wdm  | Should -Be $expected
+                $vmr.option.buffer.ks   | Should -Be $expected
+                $vmr.option.buffer.asio | Should -Be $expected
+            }
+        }
         
         Context 'Macrobutton' -ForEach @(
             @{ Index = 0 }, @{ Index = 79 }
