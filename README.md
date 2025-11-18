@@ -428,7 +428,7 @@ The following Option commands are available:
 
 - sr: int, (32000, 44100, 48000, 88200, 96000, 176400, 192000)
 - asiosr: bool
-- delay[i]: int, from 0 to 500
+- delay[i]: float, from 0.00 to 500.00
 - monitorOnSel: bool
 - sliderMode: bool
 
