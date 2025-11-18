@@ -91,6 +91,7 @@ Before any major/minor/patch is released all test units will be run to verify th
 - '$this._port' -> '$this._sr' for Vban.stream.sr
 - Bus[i].mono changed to int (0 off, 1 mono, 2 stereo reverse)
 - Strip[i].Gate.BPSidechain changed to int
+- Vban.stream.route: fixed range 0..8 -> 0..7 (API documentation is incorrect; strip/bus 0 based index)
 
 ## [3.3.0] - 2024-06-29
 

@@ -505,7 +505,7 @@ For each vban in/out stream the following parameters are defined:
 - channel: int from 1 to 8
 - bit: int, 16 or 24
 - quality: int, from 0 to 4
-- route: int, from 0 to 8
+- route: int, from 0 to 7
 
 SR, channel and bit are defined as readonly for instreams. Attempting to write
 to those parameters will throw an error. They are read and write for outstreams.
