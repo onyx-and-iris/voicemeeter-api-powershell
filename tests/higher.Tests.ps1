@@ -1,7 +1,6 @@
 Describe -Tag 'higher', -TestName 'All Higher Tests' {
     Describe 'Bool tests' -ForEach @(
-        @{ Value = $true; Expected = $true }
-        @{ Value = $false; Expected = $false }
+        @{ Value = $true }, @{ Value = $false }
     ) {
         Context 'Strip, one physical one virtual' -ForEach @(
             @{ Index = $phys_in }, @{ Index = $virt_in }
@@ -12,10 +11,10 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.strip[$index].A1   = $value
                 $vmr.strip[$index].B1   = $value
                 
-                $vmr.strip[$index].mute | Should -Be $expected
-                $vmr.strip[$index].solo | Should -Be $expected
-                $vmr.strip[$index].A1   | Should -Be $expected
-                $vmr.strip[$index].B1   | Should -Be $expected
+                $vmr.strip[$index].mute | Should -Be $value
+                $vmr.strip[$index].solo | Should -Be $value
+                $vmr.strip[$index].A1   | Should -Be $value
+                $vmr.strip[$index].B1   | Should -Be $value
             }
             
             It "Should set and get Strip[$index] booleans (potato)" -Skip:$ifNotPotato {
@@ -24,39 +23,39 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.strip[$index].postfx1    = $value
                 $vmr.strip[$index].postfx2    = $value
                 
-                $vmr.strip[$index].postreverb | Should -Be $expected
-                $vmr.strip[$index].postdelay  | Should -Be $expected
-                $vmr.strip[$index].postfx1    | Should -Be $expected
-                $vmr.strip[$index].postfx2    | Should -Be $expected
+                $vmr.strip[$index].postreverb | Should -Be $value
+                $vmr.strip[$index].postdelay  | Should -Be $value
+                $vmr.strip[$index].postfx1    | Should -Be $value
+                $vmr.strip[$index].postfx2    | Should -Be $value
             }
         }
             
-        Context 'Strip, physical only' -ForEach @(
-            @{ Index = $phys_in }
-        ) {
+        Context 'Strip, physical only' {
+            BeforeAll { $index = $phys_in }
+            
             It "Should set and get Strip[$index] booleans" {
                 $vmr.strip[$index].mono = $value
-                $vmr.strip[$index].mono | Should -Be $expected
+                $vmr.strip[$index].mono | Should -Be $value
             }
             
             It "Should set and get Strip[$index] audibility and pitch booleans" -Skip:$ifNotPotato {
                 $vmr.strip[$index].comp.makeup = $value
                 $vmr.strip[$index].pitch.on    = $value
                 
-                $vmr.strip[$index].comp.makeup | Should -Be $expected
-                $vmr.strip[$index].pitch.on    | Should -Be $expected
+                $vmr.strip[$index].comp.makeup | Should -Be $value
+                $vmr.strip[$index].pitch.on    | Should -Be $value
             }
         }
         
-        Context 'Strip, first virtual' -ForEach @(
-            @{ Index = $phys_in + 1 }
-        ) {
+        Context 'Strip, first virtual' {
+            BeforeAll { $index = $phys_in + 1 }
+            
             It "Should set and get Strip[$index].MC via .Mono alias" {
                 $vmr.strip[$index].mc   = -not $value
                 $vmr.strip[$index].mono = $value
                 
-                $vmr.strip[$index].mc   | Should -Be $expected
-                $vmr.strip[$index].mono | Should -Be $expected
+                $vmr.strip[$index].mc   | Should -Be $value
+                $vmr.strip[$index].mono | Should -Be $value
             }
         }
 
@@ -65,55 +64,55 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         ) {
             It "Should set and get Bus[$index] booleans" {
                 $vmr.bus[$index].mute = $value
-                $vmr.bus[$index].mute | Should -Be $expected
+                $vmr.bus[$index].mute | Should -Be $value
             }
             
             It "Should set and get Bus[$index] booleans (potato)" -Skip:$ifNotPotato {
                 $vmr.bus[$index].sel     = $value
                 $vmr.bus[$index].monitor = $value
                 
-                $vmr.bus[$index].sel     | Should -Be $expected
-                $vmr.bus[$index].monitor | Should -Be $expected
+                $vmr.bus[$index].sel     | Should -Be $value
+                $vmr.bus[$index].monitor | Should -Be $value
             }
 
             It "Should set and get Bus[$index] modes" {
                 $vmr.bus[$index].mode.normal = $value
-                $vmr.bus[$index].mode.normal | Should -Be $expected
+                $vmr.bus[$index].mode.normal | Should -Be $value
                 
                 $vmr.bus[$index].mode.amix = $value
-                $vmr.bus[$index].mode.amix | Should -Be $expected
+                $vmr.bus[$index].mode.amix | Should -Be $value
                 
                 $vmr.bus[$index].mode.repeat = $value
-                $vmr.bus[$index].mode.repeat | Should -Be $expected
+                $vmr.bus[$index].mode.repeat | Should -Be $value
                 
                 $vmr.bus[$index].mode.composite = $value
-                $vmr.bus[$index].mode.composite | Should -Be $expected
+                $vmr.bus[$index].mode.composite | Should -Be $value
             }
             
             It "Should set and get Bus[$index] modes (banana+)" -Skip:$ifBasic {
                 $vmr.bus[$index].mode.bmix = $value
-                $vmr.bus[$index].mode.bmix | Should -Be $expected
+                $vmr.bus[$index].mode.bmix | Should -Be $value
                 
                 $vmr.bus[$index].mode.tvmix = $value
-                $vmr.bus[$index].mode.tvmix | Should -Be $expected
+                $vmr.bus[$index].mode.tvmix | Should -Be $value
                 
                 $vmr.bus[$index].mode.upmix21 = $value
-                $vmr.bus[$index].mode.upmix21 | Should -Be $expected
+                $vmr.bus[$index].mode.upmix21 | Should -Be $value
                 
                 $vmr.bus[$index].mode.upmix41 = $value
-                $vmr.bus[$index].mode.upmix41 | Should -Be $expected
+                $vmr.bus[$index].mode.upmix41 | Should -Be $value
                 
                 $vmr.bus[$index].mode.upmix61 = $value
-                $vmr.bus[$index].mode.upmix61 | Should -Be $expected
+                $vmr.bus[$index].mode.upmix61 | Should -Be $value
                 
                 $vmr.bus[$index].mode.centeronly = $value
-                $vmr.bus[$index].mode.centeronly | Should -Be $expected
+                $vmr.bus[$index].mode.centeronly | Should -Be $value
                 
                 $vmr.bus[$index].mode.lfeonly = $value
-                $vmr.bus[$index].mode.lfeonly | Should -Be $expected
+                $vmr.bus[$index].mode.lfeonly | Should -Be $value
                 
                 $vmr.bus[$index].mode.rearonly = $value
-                $vmr.bus[$index].mode.rearonly | Should -Be $expected
+                $vmr.bus[$index].mode.rearonly | Should -Be $value
             }
         }
         
@@ -123,7 +122,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         ) {
             It "Should set and get $Label.vaio" {
                 $Target.vaio = $value
-                $Target.vaio | Should -Be $expected
+                $Target.vaio | Should -Be $value
             }
         }
         
@@ -134,10 +133,10 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.fx.delay.on  = $value
                 $vmr.fx.delay.ab  = $value
                 
-                $vmr.fx.reverb.on | Should -Be $expected
-                $vmr.fx.reverb.ab | Should -Be $expected
-                $vmr.fx.delay.on  | Should -Be $expected
-                $vmr.fx.delay.ab  | Should -Be $expected
+                $vmr.fx.reverb.on | Should -Be $value
+                $vmr.fx.reverb.ab | Should -Be $value
+                $vmr.fx.delay.on  | Should -Be $value
+                $vmr.fx.delay.ab  | Should -Be $value
             }
         }
         
@@ -147,24 +146,24 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.patch.postfadercomposite = $value
                 $vmr.patch.postfxinsert       = $value
                 
-                $vmr.patch.insert[$insert]    | Should -Be $expected
-                $vmr.patch.postfadercomposite | Should -Be $expected
-                $vmr.patch.postfxinsert       | Should -Be $expected
+                $vmr.patch.insert[$insert]    | Should -Be $value
+                $vmr.patch.postfadercomposite | Should -Be $value
+                $vmr.patch.postfxinsert       | Should -Be $value
             }
         }
         
         Context 'Option' {
             It 'Should set and get Option booleans' {
                 $vmr.option.asiosr = $value
-                $vmr.option.asiosr | Should -Be $expected
+                $vmr.option.asiosr | Should -Be $value
             }
             
             It 'Should set and get Option booleans (potato)' -Skip:$ifNotPotato {
                 $vmr.option.monitoronsel = $value
                 $vmr.option.slidermode   = $value
                 
-                $vmr.option.monitoronsel | Should -Be $expected
-                $vmr.option.slidermode   | Should -Be $expected
+                $vmr.option.monitoronsel | Should -Be $value
+                $vmr.option.slidermode   | Should -Be $value
             }
         }
 
@@ -176,17 +175,17 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.button[$index].stateonly = $value
                 $vmr.button[$index].trigger   = $value
                 
-                $vmr.button[$index].state     | Should -Be $expected
-                $vmr.button[$index].stateonly | Should -Be $expected
-                $vmr.button[$index].trigger   | Should -Be $expected
+                $vmr.button[$index].state     | Should -Be $value
+                $vmr.button[$index].stateonly | Should -Be $value
+                $vmr.button[$index].trigger   | Should -Be $value
             }
         }
     }
 
     Describe 'Int Tests' {
-        Context 'Strip, physical only' -ForEach @(
-            @{ Index = $phys_in }
-        ) {
+        Context 'Strip, physical only' {
+            BeforeAll { $index = $phys_in }
+            
             It "Should set and get Strip[$index] audibility and pitch integers" -Skip:$ifNotPotato {
                 $vmr.strip[$index].gate.bpsidechain = 2500
                 $vmr.strip[$index].pitch.drywet     = -32
@@ -196,9 +195,9 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             }
         }
         
-        Context 'Strip, second virtual' -Skip:$ifBasic -ForEach @(
-            @{ Index = $phys_in + 2 }
-        ) {
+        Context 'Strip, second virtual' -Skip:$ifBasic {
+            BeforeAll { $index = $phys_in + 2 }
+            
             It "Should set and get Strip[$index].k via .karaoke alias" {
                 $vmr.strip[$index].k       = 0
                 $vmr.strip[$index].karaoke = 4
@@ -231,17 +230,17 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             }
             
             It 'Should set and get buffer sizes' -ForEach @(
-                @{ Value = 1024; Expected = 1024 }
+                @{ Value = 1024 }, @{ Value = 512 }
             ) {
                 $vmr.option.buffer.mme  = $value
                 $vmr.option.buffer.wdm  = $value
                 $vmr.option.buffer.ks   = $value
                 $vmr.option.buffer.asio = $value
                 
-                $vmr.option.buffer.mme  | Should -Be $expected
-                $vmr.option.buffer.wdm  | Should -Be $expected
-                $vmr.option.buffer.ks   | Should -Be $expected
-                $vmr.option.buffer.asio | Should -Be $expected
+                $vmr.option.buffer.mme  | Should -Be $value
+                $vmr.option.buffer.wdm  | Should -Be $value
+                $vmr.option.buffer.ks   | Should -Be $value
+                $vmr.option.buffer.asio | Should -Be $value
             }
         }
         
@@ -255,80 +254,178 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
     }
 
-    Describe 'Float Tests' {
-        Describe 'Strip tests' {
-            Context 'one physical, one virtual' -ForEach @(
-                @{ Index = $phys_in }, @{ Index = $virt_in }
-            ) {
-                Context 'gain' -ForEach @(
-                    @{ Value = 3.6; Expected = 3.6 }, @{ Value = -8.2; Expected = -8.2 }
-                ) {
-                    It "Should set Strip[$index].Gain to $value" {
-                        $vmr.strip[$index].gain = $value
-                        $vmr.strip[$index].gain | Should -Be $expected
-                    }                    
+    Describe 'Float Tests' -ForEach @(
+        @{ $gain = -24.3; $2d_x = -0.2; $2d_y = 0.8; $knob = 6.4; $slide = -7.5 }
+        @{ $gain = -12.6; $2d_x = 0.4; $2d_y = 0.1; $knob = 3.7; $slide = 5.9 }
+    ) {
+        Context 'Strip, one physical one virtual' -ForEach @(
+            @{ Index = $phys_in }, @{ Index = $virt_in }
+        ) {
+            It "Should set and get Strip[$index] floats" {
+                $vmr.strip[$index].gain  = $gain
+                $vmr.strip[$index].pan_x = $2d_x
+                $vmr.strip[$index].pan_y = $2d_y
+                
+                $vmr.strip[$index].gain  | Should -Be $gain
+                $vmr.strip[$index].pan_x | Should -Be $2d_x
+                $vmr.strip[$index].pan_y | Should -Be $2d_y
+            }
+            
+            It "Should set and get Strip[$index] floats (banana+)" -Skip:$ifBasic {
+                $vmr.strip[$index].limit = $gain
+                $vmr.strip[$index].limit | Should -Be $gain
+            }
+            
+            It "Should set and get Strip[$index] floats (potato)" -Skip:$ifNotPotato {
+                $vmr.strip[$index].gainlayer[0] = $gain
+                $vmr.strip[$index].gainlayer[0] | Should -Be $gain
+            }
+        }
+        
+        Context 'Strip, physical only' {
+            BeforeAll { $index = $phys_in }
+            
+            It "Should set and get Strip[$index] floats" {
+                $vmr.strip[$index].color_x = $2d_x
+                $vmr.strip[$index].color_y = $2d_y
+                
+                $vmr.strip[$index].color_x | Should -Be $2d_x
+                $vmr.strip[$index].color_y | Should -Be $2d_y
+            }
+            
+            It "Should set and get Strip[$index] floats (banana+)" -Skip:$ifBasic {
+                $vmr.strip[$index].fx_x = $2d_x
+                $vmr.strip[$index].fx_y = $2d_y
+                
+                $vmr.strip[$index].fx_x | Should -Be $2d_x
+                $vmr.strip[$index].fx_y | Should -Be $2d_y
+            }
+            
+            It "Should set and get Strip[$index] floats (basic)" -Skip:$ifNotBasic {
+                $vmr.strip[$index].audibility = $knob
+                $vmr.strip[$index].audibility | Should -Be $knob
+            }
+            
+            It "Should set and get Strip[$index] floats (potato)" -Skip:$ifNotPotato {
+                $vmr.strip[$index].reverb = $knob
+                $vmr.strip[$index].delay  = $knob
+                $vmr.strip[$index].fx1    = $knob
+                $vmr.strip[$index].fx2    = $knob
+                
+                $vmr.strip[$index].reverb | Should -Be $knob
+                $vmr.strip[$index].delay  | Should -Be $knob
+                $vmr.strip[$index].fx1    | Should -Be $knob
+                $vmr.strip[$index].fx2    | Should -Be $knob
+            }
+            
+            Context 'Audibility and pitch' -Skip:$ifBasic {
+                It "Should set and get Strip[$index] audibility floats" {
+                    $vmr.strip[$index].comp.knob = $knob
+                    $vmr.strip[$index].gate.knob = $knob
+                    
+                    $vmr.strip[$index].comp.knob | Should -Be $knob
+                    $vmr.strip[$index].gate.knob | Should -Be $knob
+                }
+                
+                It "Should set and get Strip[$index] compressor floats (potato)" -Skip:$ifNotPotato {
+                    
+                }
+                
+                It "Should set and get Strip[$index] gate floats (potato)" -Skip:$ifNotPotato {
+                    
+                }
+            
+                It "Should set and get Strip[$index] denoiser floats (potato)" -Skip:$ifNotPotato {
+                    
+                }
+                
+                It "Should set and get Strip[$index] pitch floats (potato)" -Skip:$ifNotPotato {
+                    
                 }
             }
-
+        }
+        
+        Context 'Strip, virtual only' {
+            BeforeAll { $index = $virt_in }
+            
+            It "Should set and get virtual Strip[$index] EQ via aliases" {
+                $vmr.strip[$index].bass   = 0
+                $vmr.strip[$index].mid    = 0
+                $vmr.strip[$index].treble = 0
+                
+                $vmr.strip[$index].low    = $slide
+                $vmr.strip[$index].med    = $slide
+                $vmr.strip[$index].high   = $slide
+                
+                $vmr.strip[$index].bass   | Should -Be $slide
+                $vmr.strip[$index].low    | Should -Be $slide
+                $vmr.strip[$index].mid    | Should -Be $slide
+                $vmr.strip[$index].med    | Should -Be $slide
+                $vmr.strip[$index].treble | Should -Be $slide
+                $vmr.strip[$index].high   | Should -Be $slide
+            }
+        }
+        # old tests
+        Describe 'Strip tests' {
             Context 'physical only' -Skip:$ifBasic -ForEach @(
                 @{ Index = $phys_in }
             ) {
                 Context 'comp, gate' -ForEach @(
-                    @{ Value = 8.3; Expected = 8.3 }, @{ Value = 5.1; Expected = 5.1 }
+                    @{ Value = 8.3 }, @{ Value = 5.1 }
                 ) {
                     It "Should set Strip[$index].Comp to $value" {
                         $vmr.strip[$index].comp.knob = $value
-                        $vmr.strip[$index].comp.knob | Should -Be $expected
+                        $vmr.strip[$index].comp.knob | Should -Be $value
                     }
 
                     It "Should set Strip[$index].Gate to $value" {
                         $vmr.strip[$index].gate.knob = $value
-                        $vmr.strip[$index].gate.knob | Should -Be $expected
+                        $vmr.strip[$index].gate.knob | Should -Be $value
                     }
                 }
 
                 Context 'denoiser' -Skip:$ifNotPotato -ForEach @(
-                    @{ Value = 8.3; Expected = 8.3 }, @{ Value = 5.1; Expected = 5.1 }
+                    @{ Value = 8.3 }, @{ Value = 5.1 }
                 ) {
                     It "Should set Strip[$index].Denoiser to $value" {
                         $vmr.strip[$index].denoiser.knob = $value
-                        $vmr.strip[$index].denoiser.knob | Should -Be $expected
+                        $vmr.strip[$index].denoiser.knob | Should -Be $value
                     }
                 }
 
                 Context 'comp.{param}' -Skip:$ifNotPotato -ForEach @(
-                    @{ Value = 8.3; Expected = 8.3 }, @{ Value = 5.1; Expected = 5.1 }
+                    @{ Value = 8.3 }, @{ Value = 5.1 }
                 ) {
                     It "Should set Strip[$index].Comp.Attack to $value" {
                         $vmr.strip[$index].comp.attack = $value
-                        $vmr.strip[$index].comp.attack | Should -Be $expected
+                        $vmr.strip[$index].comp.attack | Should -Be $value
                     }
                 }
 
                 Context 'comp.{param}' -Skip:$ifNotPotato -ForEach @(
-                    @{ Value = 0.3; Expected = 0.3 }, @{ Value = 0.8; Expected = 0.8 }
+                    @{ Value = 0.3 }, @{ Value = 0.8 }
                 ) {
                     It "Should set Strip[$index].Comp.Knee to $value" {
                         $vmr.strip[$index].comp.knee = $value
-                        $vmr.strip[$index].comp.knee | Should -Be $expected
+                        $vmr.strip[$index].comp.knee | Should -Be $value
                     }
                 }
 
                 Context 'gate.{param}' -Skip:$ifNotPotato -ForEach @(
-                    @{ Value = 103; Expected = 103 }, @{ Value = 3800; Expected = 3800 }
+                    @{ Value = 103 }, @{ Value = 3800 }
                 ) {
                     It "Should set Strip[$index].Gate.BPSidechain to $value" {
                         $vmr.strip[$index].gate.bpsidechain = $value
-                        $vmr.strip[$index].gate.bpsidechain | Should -Be $expected
+                        $vmr.strip[$index].gate.bpsidechain | Should -Be $value
                     }
                 }
 
                 Context 'gate.{param}' -Skip:$ifNotPotato -ForEach @(
-                    @{ Value = 0.3; Expected = 0.3 }, @{ Value = 5000; Expected = 5000 }
+                    @{ Value = 0.3 }, @{ Value = 5000 }
                 ) {
                     It "Should set Strip[$index].Gate.Hold to $value" {
                         $vmr.strip[$index].gate.hold = $value
-                        $vmr.strip[$index].gate.hold | Should -Be $expected
+                        $vmr.strip[$index].gate.hold | Should -Be $value
                     }
                 }
             }            
@@ -339,11 +436,11 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 @{ Index = $phys_out }, @{ Index = $virt_out }
             ) {
                 Context 'gain' -ForEach @(
-                    @{ Value = 5.2; Expected = 5.2 }, @{ Value = -38.2; Expected = -38.2 }
+                    @{ Value = 5.2 }, @{ Value = -38.2 }
                 ) {
                     It "Should set Bus[$index].Gain to $value" {
                         $vmr.bus[$index].gain = $value
-                        $vmr.bus[$index].gain | Should -Be $expected
+                        $vmr.bus[$index].gain | Should -Be $value
                     }                    
                 }
             }
@@ -355,11 +452,10 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             @{ Index = $phys_in }, @{ Index = $virt_in }
         ) {
             It "Should set Strip[$index].Label" -ForEach @(
-                @{ Value = 'test0'; Expected = 'test0' }
-                @{ Value = 'test1'; Expected = 'test1' }
+                @{ Value = 'test0' }, @{ Value = 'test1' }
             ) {
                 $vmr.strip[$index].label = $value
-                $vmr.strip[$index].label | Should -Be $expected
+                $vmr.strip[$index].label | Should -Be $value
             }
         }
 
@@ -367,11 +463,10 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             @{ Index = $phys_out }, @{ Index = $virt_out }
         ) {
             It "Should set Bus[$index].Label" -ForEach @(
-                @{ Value = 'test0'; Expected = 'test0' }
-                @{ Value = 'test1'; Expected = 'test1' }
+                @{ Value = 'test0' }, @{ Value = 'test1' }
             ) {
                 $vmr.bus[$index].label = $value
-                $vmr.bus[$index].label | Should -Be $expected
+                $vmr.bus[$index].label | Should -Be $value
             }
         }
     }
@@ -383,14 +478,13 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             @{ Eq = $vmr.strip[$phys_in].eq; Label = "Strip[$phys_in]"; Skip = $ifNotPotato }
         ) {
             It "Should set and get $Label.EQ booleans" -Skip:$Skip -ForEach @(
-                @{ Value = $true; Expected = $true }
-                @{ Value = $false; Expected = $false }
+                @{ Value = $true }, @{ Value = $false }
             ) {
                 $Eq.on = $value
                 $Eq.ab = $value
                 
-                $Eq.on | Should -Be $expected
-                $Eq.ab | Should -Be $expected
+                $Eq.on | Should -Be $value
+                $Eq.ab | Should -Be $value
             }
             
             It "Should set and get Channel[0].Cell[0] params on $Label" -Skip:$Skip {
@@ -440,7 +534,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 @{ Value = $false; Expected = $false }
             ) {
                 $Stream.on = $value
-                $Stream.on | Should -Be $expected
+                $Stream.on | Should -Be $value
             }
             
             It "Should set and get $Label strings" {
