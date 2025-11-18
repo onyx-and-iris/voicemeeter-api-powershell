@@ -225,12 +225,17 @@ function AddInsertMembers () {
 function AddDelayMembers () {
     $p_out = $this.remote.kind.p_out
     
-    [System.Collections.ArrayList]$delays = @()
     foreach ($i in 0..$($p_out - 1)) {
-        $delays.Add('delay[{0}]' -f $i)
+        $name = 'delay[{0}]' -f $i
+        $this | Add-Member ScriptProperty $name `
+            {
+                [math]::Round($this.Getter($name), 2)
+            } `
+            {
+                param ([Single]$arg)
+                $this.Setter($name, $arg)
+            }
     }
-    
-    AddIntMembers -PARAMS $delays
 }
 
 function Addmember {
