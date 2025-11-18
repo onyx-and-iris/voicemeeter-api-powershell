@@ -75,7 +75,6 @@ Before any major/minor/patch is released all test units will be run to verify th
 
 ### Changed
 
-- Strip[i].limit to float (the value is visually truncated in the GUI, but it's not actually an integer)
 - Strip[i].mono is now an alias for Strip[i].mc on virtual strips (matches Python module behavior)
 - GainLayers are now based on KindMap so they're only added for Potato
 - Strip and Bus now use IndexedIRemote base class
@@ -86,10 +85,12 @@ Before any major/minor/patch is released all test units will be run to verify th
 
 ### Fixed
 
+- Strip[i].limit changed to float (the value is visually truncated in the GUI, but it's not actually an integer)
 - MacroButton index range in README
 - Parenthesis in Strip.AppMute string
 - '$this._port' -> '$this._sr' for Vban.stream.sr
 - Bus[i].mono changed to int (0 off, 1 mono, 2 stereo reverse)
+- Strip[i].Gate.BPSidechain changed to int
 
 ## [3.3.0] - 2024-06-29
 
