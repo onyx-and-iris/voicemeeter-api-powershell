@@ -171,11 +171,11 @@ class Vban : IVban {
             param([int]$arg)
             if ($this.direction -eq 'in') { Write-Warning ('Error, read only value') }
             else {
-                if ($arg -ge 0 -and $arg -le 8) {
+                if ($arg -ge 0 -and $arg -le 7) {
                     $this._route = $this.Setter('route', $arg)
                 }
                 else {
-                    Write-Warning ('Expected value from 0 to 8')
+                    Write-Warning ('Expected value from 0 to 7')
                 }
             }
         }
