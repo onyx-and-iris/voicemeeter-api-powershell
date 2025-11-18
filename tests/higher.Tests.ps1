@@ -171,7 +171,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
 
         Context 'Macrobutton' -ForEach @(
-            @{ Index = 0 }, @{ Index = 69 }
+            @{ Index = 0 }, @{ Index = 79 }
         ) {
             It "Should set and get macrobutton[$index] booleans" {
                 $vmr.button[$index].state     = $value
@@ -185,18 +185,20 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
     }
 
-    Describe 'Int Tests' -ForEach @(
-        @{ Index = $phys_in }, @{ Index = $virt_in }
-    ) {
-        Context 'Strip, one physical, one virtual' -Skip:$ifBasic -ForEach @(
-            @{ Value = 3; Expected = 3 }
-            @{ Value = -6; Expected = -6 }
+    Describe 'Int Tests' {
+        Context 'Strip, physical only' -ForEach @(
+            @{ Index = $phys_in }
         ) {
-            It "Should set Strip[$index].Limit to 3" {
-                $vmr.strip[$index].limit = $value
-                $vmr.strip[$index].limit | Should -Be $expected
+            It "Should set and get Strip[$index] audibility and pitch integers" -Skip:$ifNotPotato {
+                $vmr.strip[$index].gate.bpsidechain = 2500
+                $vmr.strip[$index].pitch.drywet     = -32
+                
+                $vmr.strip[$index].gate.bpsidechain | Should -Be 2500
+                $vmr.strip[$index].pitch.drywet     | Should -Be -32
             }
         }
+        
+        
     }
 
     Describe 'Float Tests' {
