@@ -16,6 +16,8 @@ function main() {
         $virt_out = $vmr.kind.p_out + $vmr.kind.v_out - 1
         $vban_in = $vmr.kind.vban_in - 1
         $vban_out = $vmr.kind.vban_out - 1
+        $insert = $vmr.kind.insert - 1
+        $composite = $vmr.kind.composite - 1
 
         # skip conditions by kind
         $ifBasic = $vmr.kind.name -eq 'basic'

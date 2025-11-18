@@ -36,10 +36,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         ) {
             It "Should set and get Strip[$index] booleans" {
                 $vmr.strip[$index].mono = $value
-                $vmr.strip[$index].vaio = $value
-                
                 $vmr.strip[$index].mono | Should -Be $expected
-                $vmr.strip[$index].vaio | Should -Be $expected
             }
             
             It "Should set and get Strip[$index] audibility and pitch booleans" -Skip:$ifNotPotato {
@@ -54,11 +51,11 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         Context 'Strip, first virtual' -ForEach @(
             @{ Index = $phys_in + 1 }
         ) {
-            It "Should set and get virtual Strip[$index].MC via .Mono alias" {
-                $vmr.strip[$index].mc = -not $value
+            It "Should set and get Strip[$index].MC via .Mono alias" {
+                $vmr.strip[$index].mc   = -not $value
                 $vmr.strip[$index].mono = $value
                 
-                $vmr.strip[$index].mc | Should -Be $expected
+                $vmr.strip[$index].mc   | Should -Be $expected
                 $vmr.strip[$index].mono | Should -Be $expected
             }
         }
@@ -66,7 +63,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         Context 'Bus, one physical one virtual' -ForEach @(
             @{ Index = $phys_out }, @{ Index = $virt_out }
         ) {
-            It "Should set and get Bus[$index].Mute" {
+            It "Should set and get Bus[$index] booleans" {
                 $vmr.bus[$index].mute = $value
                 $vmr.bus[$index].mute | Should -Be $expected
             }
@@ -120,12 +117,13 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             }
         }
         
-        Context 'Bus, physical only' -ForEach @(
-            @{ Index = $phys_out }
+        Context 'Physical bus physical strip' -ForEach @(
+            @{ Target = $vmr.bus[$phys_out]; Label = "Bus[$phys_out]" }
+            @{ Target = $vmr.strip[$phys_in]; Label = "Strip[$phys_in]" }
         ) {
-            It "Should set and get Bus[$index].Vaio" {
-                $vmr.bus[$index].vaio = $value
-                $vmr.bus[$index].vaio | Should -Be $expected
+            It "Should set and get $Label.vaio" {
+                $Target.vaio = $value
+                $Target.vaio | Should -Be $expected
             }
         }
         
@@ -143,20 +141,20 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             }
         }
         
-        Context 'Patch' -Skip:$ifBasic {
-            It "Should set and get Patch booleans" {
-                $vmr.patch.insert[0]          = $value
+        Context 'Patch' {
+            It "Should set and get Patch booleans" -Skip:$ifBasic {
+                $vmr.patch.insert[$insert]    = $value
                 $vmr.patch.postfadercomposite = $value
                 $vmr.patch.postfxinsert       = $value
                 
-                $vmr.patch.insert[0]          | Should -Be $expected
+                $vmr.patch.insert[$insert]    | Should -Be $expected
                 $vmr.patch.postfadercomposite | Should -Be $expected
                 $vmr.patch.postfxinsert       | Should -Be $expected
             }
         }
         
         Context 'Option' {
-            It "Should set and get Option.ASIOsr" {
+            It "Should set and get Option booleans" {
                 $vmr.option.asiosr = $value
                 $vmr.option.asiosr | Should -Be $expected
             }
@@ -173,7 +171,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         Context 'Macrobutton' -ForEach @(
             @{ Index = 0 }, @{ Index = 79 }
         ) {
-            It "Should set and get macrobutton[$index] booleans" {
+            It "Should set and get Button[$index] booleans" {
                 $vmr.button[$index].state     = $value
                 $vmr.button[$index].stateonly = $value
                 $vmr.button[$index].trigger   = $value
@@ -198,7 +196,42 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             }
         }
         
+        Context 'Strip, second virtual' -Skip:$ifBasic -ForEach @(
+            @{ Index = $phys_in + 2 }
+        ) {
+            It "Should set and get Strip[$index].k via .karaoke alias" {
+                $vmr.strip[$index].k       = 0
+                $vmr.strip[$index].karaoke = 4
+                
+                $vmr.strip[$index].k       | Should -Be 4
+                $vmr.strip[$index].karaoke | Should -Be 4
+            }
+        }
         
+        Context 'Bus, one physical one virtual' -ForEach @(
+            @{ Index = $phys_out }, @{ Index = $virt_out }
+        ) {
+            It "Should set and get Bus[$index] integers" {
+                $vmr.bus[$index].mono = 2
+                $vmr.bus[$index].mono | Should -Be 2
+            }
+        }
+        
+        Context 'Patch' {
+            It "Should set and get Patch integers" -Skip:$ifBasic {
+                $vmr.patch.composite[$composite] = 22
+                $vmr.patch.composite[$composite] | Should -Be 22
+            }
+        } 
+        
+        Context 'Macrobutton' -ForEach @(
+            @{ Index = 0 }, @{ Index = 79 }
+        ) {
+            It "Should set Button[$index].color" -ForEach (0..8) {
+                param($color)
+                $vmr.button[$index].color = $color
+            }
+        }
     }
 
     Describe 'Float Tests' {
@@ -400,11 +433,11 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             It "Should set and get $Label integers" {
                 $Stream.port    = 65535
                 $Stream.quality = 4
-                $Stream.route   = 8
+                $Stream.route   = 7
                 
                 $Stream.port    | Should -Be 65535
                 $Stream.quality | Should -Be 4
-                $Stream.route   | Should -Be 8
+                $Stream.route   | Should -Be 7
             }
             
             It "Should set and get $Label integers (out)" -Skip:$ifIn {
@@ -422,13 +455,9 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $channels    = 1..8
                 $bitdepths   = @(16, 24)
                 
-                $sr      = $Stream.sr
-                $channel = $Stream.channel
-                $bit     = $Stream.bit
-                
-                $sr      | Should -BeIn $samplerates
-                $channel | Should -BeIn $channels
-                $bit     | Should -BeIn $bitdepths
+                $Stream.sr      | Should -BeIn $samplerates
+                $Stream.channel | Should -BeIn $channels
+                $Stream.bit     | Should -BeIn $bitdepths
             }
         }
     }
