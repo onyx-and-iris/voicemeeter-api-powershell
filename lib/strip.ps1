@@ -117,7 +117,8 @@ class StripComp : IndexedIRemote {
 
 class StripGate : IndexedIRemote {
     StripGate ([int]$index, [Object]$remote) : base ($index, $remote) {
-        AddFloatMembers -PARAMS @('threshold', 'damping', 'bpsidechain', 'attack', 'hold', 'release')
+        AddFloatMembers -PARAMS @('threshold', 'damping', 'attack', 'hold', 'release')
+        AddIntMembers -PARAMS @('bpsidechain')
     }
 
     [string] identifier () {
