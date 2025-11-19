@@ -254,9 +254,9 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
     }
 
-    Describe 'Float Tests' -ForEach @(
-        @{ $gain = -24.3; $2d_x = -0.2; $2d_y = 0.8; $knob = 6.4; $slide = -7.5 }
-        @{ $gain = -12.6; $2d_x = 0.4; $2d_y = 0.1; $knob = 3.7; $slide = 5.9 }
+    Describe 'Float Tests' -ForEach @( # knob: 1 to 8 / 0 to 10, slide: -12 to 12 / -24 to 24
+        @{ Gain = -24.3; 2D_x = -0.2; 2D_y = 0.8; Knob = 6.4; Slide = -7.5; Ms = 196.8 }
+        @{ Gain = -12.6; 2D_x = 0.4; 2D_y = 0.1; Knob = 3.7; Slide = 5.9; Ms = 32.6 }
     ) {
         Context 'Strip, one physical one virtual' -ForEach @(
             @{ Index = $phys_in }, @{ Index = $virt_in }
@@ -328,19 +328,55 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 }
                 
                 It "Should set and get Strip[$index] compressor floats (potato)" -Skip:$ifNotPotato {
+                    $vmr.strip[$index].comp.gainin    = $slide
+                    $vmr.strip[$index].comp.ratio     = $knob
+                    $vmr.strip[$index].comp.threshold = $gain
+                    $vmr.strip[$index].comp.attack    = $ms
+                    $vmr.strip[$index].comp.release   = $ms
+                    $vmr.strip[$index].comp.knee      = $2d_y
+                    $vmr.strip[$index].comp.gainout   = $slide
                     
+                    $vmr.strip[$index].comp.gainin    | Should -Be $slide
+                    $vmr.strip[$index].comp.ratio     | Should -Be $knob
+                    $vmr.strip[$index].comp.threshold | Should -Be $gain
+                    $vmr.strip[$index].comp.attack    | Should -Be $ms
+                    $vmr.strip[$index].comp.release   | Should -Be $ms
+                    $vmr.strip[$index].comp.knee      | Should -Be $2d_y
+                    $vmr.strip[$index].comp.gainout   | Should -Be $slide
                 }
                 
                 It "Should set and get Strip[$index] gate floats (potato)" -Skip:$ifNotPotato {
+                    $vmr.strip[$index].gate.threshold = $gain
+                    $vmr.strip[$index].gate.damping   = $gain
+                    $vmr.strip[$index].gate.attack    = $ms
+                    $vmr.strip[$index].gate.hold      = $ms
+                    $vmr.strip[$index].gate.release   = $ms
                     
+                    $vmr.strip[$index].gate.threshold | Should -Be $gain
+                    $vmr.strip[$index].gate.damping   | Should -Be $gain
+                    $vmr.strip[$index].gate.attack    | Should -Be $ms
+                    $vmr.strip[$index].gate.hold      | Should -Be $ms
+                    $vmr.strip[$index].gate.release   | Should -Be $ms
                 }
             
                 It "Should set and get Strip[$index] denoiser floats (potato)" -Skip:$ifNotPotato {
+                    $vmr.strip[$index].denoiser.knob      = $knob
+                    $vmr.strip[$index].denoiser.threshold = $knob
                     
+                    $vmr.strip[$index].denoiser.knob      | Should -Be $knob
+                    $vmr.strip[$index].denoiser.threshold | Should -Be $knob
                 }
                 
                 It "Should set and get Strip[$index] pitch floats (potato)" -Skip:$ifNotPotato {
+                    $vmr.strip[$index].pitch.pitchvalue = $slide
+                    $vmr.strip[$index].pitch.loformant  = $slide
+                    $vmr.strip[$index].pitch.medformant = $slide
+                    $vmr.strip[$index].pitch.hiformant  = $slide
                     
+                    $vmr.strip[$index].pitch.pitchvalue | Should -Be $slide
+                    $vmr.strip[$index].pitch.loformant  | Should -Be $slide
+                    $vmr.strip[$index].pitch.medformant | Should -Be $slide
+                    $vmr.strip[$index].pitch.hiformant  | Should -Be $slide
                 }
             }
         }
@@ -365,114 +401,85 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.strip[$index].high   | Should -Be $slide
             }
         }
-        # old tests
-        Describe 'Strip tests' {
-            Context 'physical only' -Skip:$ifBasic -ForEach @(
-                @{ Index = $phys_in }
-            ) {
-                Context 'comp, gate' -ForEach @(
-                    @{ Value = 8.3 }, @{ Value = 5.1 }
-                ) {
-                    It "Should set Strip[$index].Comp to $value" {
-                        $vmr.strip[$index].comp.knob = $value
-                        $vmr.strip[$index].comp.knob | Should -Be $value
-                    }
-
-                    It "Should set Strip[$index].Gate to $value" {
-                        $vmr.strip[$index].gate.knob = $value
-                        $vmr.strip[$index].gate.knob | Should -Be $value
-                    }
-                }
-
-                Context 'denoiser' -Skip:$ifNotPotato -ForEach @(
-                    @{ Value = 8.3 }, @{ Value = 5.1 }
-                ) {
-                    It "Should set Strip[$index].Denoiser to $value" {
-                        $vmr.strip[$index].denoiser.knob = $value
-                        $vmr.strip[$index].denoiser.knob | Should -Be $value
-                    }
-                }
-
-                Context 'comp.{param}' -Skip:$ifNotPotato -ForEach @(
-                    @{ Value = 8.3 }, @{ Value = 5.1 }
-                ) {
-                    It "Should set Strip[$index].Comp.Attack to $value" {
-                        $vmr.strip[$index].comp.attack = $value
-                        $vmr.strip[$index].comp.attack | Should -Be $value
-                    }
-                }
-
-                Context 'comp.{param}' -Skip:$ifNotPotato -ForEach @(
-                    @{ Value = 0.3 }, @{ Value = 0.8 }
-                ) {
-                    It "Should set Strip[$index].Comp.Knee to $value" {
-                        $vmr.strip[$index].comp.knee = $value
-                        $vmr.strip[$index].comp.knee | Should -Be $value
-                    }
-                }
-
-                Context 'gate.{param}' -Skip:$ifNotPotato -ForEach @(
-                    @{ Value = 103 }, @{ Value = 3800 }
-                ) {
-                    It "Should set Strip[$index].Gate.BPSidechain to $value" {
-                        $vmr.strip[$index].gate.bpsidechain = $value
-                        $vmr.strip[$index].gate.bpsidechain | Should -Be $value
-                    }
-                }
-
-                Context 'gate.{param}' -Skip:$ifNotPotato -ForEach @(
-                    @{ Value = 0.3 }, @{ Value = 5000 }
-                ) {
-                    It "Should set Strip[$index].Gate.Hold to $value" {
-                        $vmr.strip[$index].gate.hold = $value
-                        $vmr.strip[$index].gate.hold | Should -Be $value
-                    }
-                }
-            }            
+        
+        Context 'Bus, one physical one virual' -ForEach @(
+            @{ Index = $phys_out }, @{ Index = $virt_out }
+        ) {
+            It "Should set and get Bus[$index] floats" {
+                $vmr.bus[$index].gain = $gain
+                $vmr.bus[$index].gain | Should -Be $gain
+            }
+            
+            It "Should set and get Bus[$index] floats (potato)" -Skip:$ifNotPotato {
+                $vmr.bus[$index].returnreverb = $knob
+                $vmr.bus[$index].returndelay  = $knob
+                $vmr.bus[$index].returnfx1    = $knob
+                $vmr.bus[$index].returnfx2    = $knob
+                
+                $vmr.bus[$index].returnreverb | Should -Be $knob
+                $vmr.bus[$index].returndelay  | Should -Be $knob
+                $vmr.bus[$index].returnfx1    | Should -Be $knob
+                $vmr.bus[$index].returnfx2    | Should -Be $knob
+            }
         }
-
-        Describe 'Bus tests' {
-            Context 'one physical, one virtual' -ForEach @(
-                @{ Index = $phys_out }, @{ Index = $virt_out }
-            ) {
-                Context 'gain' -ForEach @(
-                    @{ Value = 5.2 }, @{ Value = -38.2 }
-                ) {
-                    It "Should set Bus[$index].Gain to $value" {
-                        $vmr.bus[$index].gain = $value
-                        $vmr.bus[$index].gain | Should -Be $value
-                    }                    
-                }
+        
+        Context 'Option' {
+            It "Should set and get Option.delay[$phys_out]" {
+                $mss = $ms + 0.03   # delay should take and return 2 decimal places
+                $vmr.option.delay[$phys_out] = $mss
+                $vmr.option.delay[$phys_out] | Should -Be $mss
             }
         }
     }
 
     Describe 'String Tests' {
-        Context 'Strip, one physical, one virtual' -ForEach @(
-            @{ Index = $phys_in }, @{ Index = $virt_in }
+        Context 'Bus and strip, one physical one virtual' -ForEach @(
+            @{ Target = $vmr.bus[$phys_out]; Label = "Bus[$phys_out]" }
+            @{ Target = $vmr.bus[$virt_out]; Label = "Bus[$virt_out]" }
+            @{ Target = $vmr.strip[$phys_in]; Label = "Strip[$phys_in]" }
+            @{ Target = $vmr.strip[$virt_in]; Label = "Strip[$virt_in]" }
         ) {
-            It "Should set Strip[$index].Label" -ForEach @(
+            It "Should set $Label.Label" -ForEach @(
                 @{ Value = 'test0' }, @{ Value = 'test1' }
             ) {
-                $vmr.strip[$index].label = $value
-                $vmr.strip[$index].label | Should -Be $value
+                $target.label = $value
+                $target.label | Should -Be $value
             }
         }
-
-        Context 'Bus, one physical, one virtual' -ForEach @(
-            @{ Index = $phys_out }, @{ Index = $virt_out }
+    }
+    
+    Describe 'Fade Tests' {
+        Context 'Bus and strip, one physical one virtual' -ForEach @(
+            @{ Target = $vmr.bus[$phys_out]; Label = "Bus[$phys_out]" }
+            @{ Target = $vmr.bus[$virt_out]; Label = "Bus[$virt_out]" }
+            @{ Target = $vmr.strip[$phys_in]; Label = "Strip[$phys_in]" }
+            @{ Target = $vmr.strip[$virt_in]; Label = "Strip[$virt_in]" }
         ) {
-            It "Should set Bus[$index].Label" -ForEach @(
-                @{ Value = 'test0' }, @{ Value = 'test1' }
+            It "Should fade $Label gain to dB over ms time" -ForEach @(
+                @{ Value = -21.7; Time = 750 }, @{ Value = -60.0; Time = 1250 }
             ) {
-                $vmr.bus[$index].label = $value
-                $vmr.bus[$index].label | Should -Be $value
+                $sleep = $time + 10   # give it a little wiggle room
+                
+                $target.fadeto($value, $time)
+                Start-Sleep -Milliseconds $sleep
+                $target.gain | Should -Be $value
+            }
+            
+            It "Should fade $Label gain by dB over ms time" -ForEach @(
+                @{ Value = -45.0; Time = 1050 }, @{ Value = 16.9; Time = 300 }
+            ) {
+                $sleep = $time + 10
+                $gain = @($target.gain + $value, -60.0, 12.0)
+                
+                $target.fadeby($value, $time)
+                Start-Sleep -Milliseconds $sleep
+                $target.gain | Should -BeIn $gain
             }
         }
     }
     
     Describe 'EQ Tests' {
-        Context 'Bus & physical strip' -ForEach @(
+        Context 'Bus and physical strip' -ForEach @(
             @{ Eq = $vmr.bus[$phys_out].eq;  Label = "Bus[$phys_out]";  Skip = $ifBasic }
             @{ Eq = $vmr.bus[$virt_out].eq;  Label = "Bus[$virt_out]";  Skip = $ifBasic }
             @{ Eq = $vmr.strip[$phys_in].eq; Label = "Strip[$phys_in]"; Skip = $ifNotPotato }
@@ -518,100 +525,110 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
     }
     
-    Describe 'VBAN Tests' {
-        It 'Should disable then enable VBAN' {
-            $vmr.vban.enable = $true
-            $vmr.vban.enable = $false
-            $vmr.vban.enable = $true
+    Describe 'Recorder Tests' {
+        Context 'Recorder' -Skip:$ifBasic {
+            
         }
-        
-        Context 'Instream, outstream' -ForEach @(
-            @{ Stream = $vmr.vban.instream[$vban_in]; Label = "Instream[$vban_in]"; ifIn = $true }
-            @{ Stream = $vmr.vban.outstream[$vban_out]; Label = "Outstream[$vban_out]"; ifOut = $true }
-        ) {
-            It "Should set and get $Label.on" -ForEach @(
-                @{ Value = $true; Expected = $true }
-                @{ Value = $false; Expected = $false }
+    }
+    
+    Describe 'VBAN Tests' {
+        Context 'VBAN' {
+            It 'Should disable then enable VBAN' {
+                $vmr.vban.enable = $true
+                $vmr.vban.enable = $false
+                $vmr.vban.enable = $true
+            }
+            
+            Context 'Instream, outstream' -ForEach @(
+                @{ Stream = $vmr.vban.instream[$vban_in]; Label = "Instream[$vban_in]"; ifIn = $true }
+                @{ Stream = $vmr.vban.outstream[$vban_out]; Label = "Outstream[$vban_out]"; ifOut = $true }
             ) {
-                $Stream.on = $value
-                $Stream.on | Should -Be $value
-            }
-            
-            It "Should set and get $Label strings" {
-                $Stream.name = "$Label"
-                $Stream.ip   = '0.0.0.0'
+                It "Should set and get $Label.on" -ForEach @(
+                    @{ Value = $true; Expected = $true }
+                    @{ Value = $false; Expected = $false }
+                ) {
+                    $Stream.on = $value
+                    $Stream.on | Should -Be $value
+                }
                 
-                $Stream.name | Should -Be "$Label"
-                $Stream.ip   | Should -Be '0.0.0.0'
-            }
-            
-            It "Should set and get $Label integers" {
-                $Stream.port    = 65535
-                $Stream.quality = 4
-                $Stream.route   = 7
+                It "Should set and get $Label strings" {
+                    $Stream.name = "$Label"
+                    $Stream.ip   = '0.0.0.0'
+                    
+                    $Stream.name | Should -Be "$Label"
+                    $Stream.ip   | Should -Be '0.0.0.0'
+                }
                 
-                $Stream.port    | Should -Be 65535
-                $Stream.quality | Should -Be 4
-                $Stream.route   | Should -Be 7
-            }
-            
-            It "Should set and get $Label integers (out)" -Skip:$ifIn {
-                $Stream.sr      = 44100
-                $Stream.channel = 8
-                $Stream.bit     = 24
+                It "Should set and get $Label integers" {
+                    $Stream.port    = 65535
+                    $Stream.quality = 4
+                    $Stream.route   = 7
+                    
+                    $Stream.port    | Should -Be 65535
+                    $Stream.quality | Should -Be 4
+                    $Stream.route   | Should -Be 7
+                }
                 
-                $Stream.sr      | Should -Be 44100
-                $Stream.channel | Should -Be 8
-                $Stream.bit     | Should -Be 24
-            }
-            
-            It "Should get $Label integers (in)" -Skip:$ifOut {
-                $samplerates = @(11025, 16000, 22050, 24000, 32000, 44100, 48000, 64000, 88200, 96000)
-                $channels    = 1..8
-                $bitdepths   = @(16, 24)
+                It "Should set and get $Label integers (out)" -Skip:$ifIn {
+                    $Stream.sr      = 44100
+                    $Stream.channel = 8
+                    $Stream.bit     = 24
+                    
+                    $Stream.sr      | Should -Be 44100
+                    $Stream.channel | Should -Be 8
+                    $Stream.bit     | Should -Be 24
+                }
                 
-                $Stream.sr      | Should -BeIn $samplerates
-                $Stream.channel | Should -BeIn $channels
-                $Stream.bit     | Should -BeIn $bitdepths
+                It "Should get $Label integers (in)" -Skip:$ifOut {
+                    $samplerates = @(11025, 16000, 22050, 24000, 32000, 44100, 48000, 64000, 88200, 96000)
+                    $channels    = 1..8
+                    $bitdepths   = @(16, 24)
+                    
+                    $Stream.sr      | Should -BeIn $samplerates
+                    $Stream.channel | Should -BeIn $channels
+                    $Stream.bit     | Should -BeIn $bitdepths
+                }
             }
         }
     }
     
     Describe 'Special Command Tests' {
-        It 'Should hide then show GUI' {
-            $vmr.command.show
-            $vmr.command.hide
-            $vmr.command.show
-        }
-        
-        It 'Should lock then unlock GUI' {
-            $vmr.command.lock = $true
-            $vmr.command.lock | Should -Be $true
-            
-            $vmr.command.lock = $false
-            $vmr.command.lock | Should -Be $false
-        }
-        
-        It 'Should show then hide VBAN chat' {
-            $vmr.command.showvbanchat = $false
-            
-            $vmr.command.showvbanchat = $true
-            $vmr.command.showvbanchat | Should -Be $true
-            
-            $vmr.command.showvbanchat = $false
-            $vmr.command.showvbanchat | Should -Be $false
-        }
-        
-        It 'Should save, reset, and load config' {
-            $tmp = [System.IO.Path]::Combine([System.IO.Path]::GetTempPath(), "vmrconfig-$(New-Guid).xml")
-            try {
-                $vmr.command.save($tmp)
-                Test-Path $tmp | Should -BeTrue
-                $vmr.command.reset
-                $vmr.command.load($tmp)
+        Context 'Command' {
+            It 'Should hide then show GUI' {
+                $vmr.command.show
+                $vmr.command.hide
+                $vmr.command.show
             }
-            finally {
-                if (Test-Path $tmp) { Remove-Item $tmp -Force }
+            
+            It 'Should lock then unlock GUI' {
+                $vmr.command.lock = $true
+                $vmr.command.lock | Should -Be $true
+                
+                $vmr.command.lock = $false
+                $vmr.command.lock | Should -Be $false
+            }
+            
+            It 'Should show then hide VBAN chat' {
+                $vmr.command.showvbanchat = $false
+                
+                $vmr.command.showvbanchat = $true
+                $vmr.command.showvbanchat | Should -Be $true
+                
+                $vmr.command.showvbanchat = $false
+                $vmr.command.showvbanchat | Should -Be $false
+            }
+            
+            It 'Should save, reset, and load config' {
+                $tmp = [System.IO.Path]::Combine([System.IO.Path]::GetTempPath(), "vmrconfig-$(New-Guid).xml")
+                try {
+                    $vmr.command.save($tmp)
+                    Test-Path $tmp | Should -BeTrue
+                    $vmr.command.reset
+                    $vmr.command.load($tmp)
+                }
+                finally {
+                    if (Test-Path $tmp) { Remove-Item $tmp -Force }
+                }
             }
         }
     }
