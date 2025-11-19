@@ -166,6 +166,28 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.option.slidermode   | Should -Be $value
             }
         }
+        
+        Context 'Recorder' -Skip:$ifBasic {
+            It 'Should set and get Recorder outs' {
+                $vmr.recorder.A3 = $value
+                $vmr.recorder.B2 = $value
+                
+                $vmr.recorder.A3 | Should -Be $value
+                $vmr.recorder.B2 | Should -Be $value
+            }
+            
+            It 'Should set and get Recorder modes' {
+                $vmr.recorder.mode.recbus     = $value
+                $vmr.recorder.mode.playonload = $value
+                $vmr.recorder.mode.loop       = $value
+                $vmr.recorder.mode.multitrack = $value
+                
+                $vmr.recorder.mode.recbus     | Should -Be $value
+                $vmr.recorder.mode.playonload | Should -Be $value
+                $vmr.recorder.mode.loop       | Should -Be $value
+                $vmr.recorder.mode.multitrack | Should -Be $value
+            }
+        }
 
         Context 'Macrobutton' -ForEach @(
             @{ Index = 0 }, @{ Index = 79 }
@@ -241,6 +263,23 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.option.buffer.wdm  | Should -Be $value
                 $vmr.option.buffer.ks   | Should -Be $value
                 $vmr.option.buffer.asio | Should -Be $value
+            }
+        }
+        
+        Context 'Recorder' -Skip:$ifBasic {
+            It 'Should set and get Recorder integers' -ForEach @(
+                @{ Rate = 32000; BitRes = 16; Channel = 1; Kbps = 96 }
+                @{ Rate = 44100; BitRes = 24; Channel = 2; Kbps = 192 }
+            ) {
+                $vmr.recorder.samplerate    = $rate
+                $vmr.recorder.bitresolution = $bitres
+                $vmr.recorder.channel       = $channel
+                $vmr.recorder.kbps          = $kbps
+                
+                $vmr.recorder.samplerate    | Should -Be $rate
+                $vmr.recorder.bitresolution | Should -Be $bitres
+                $vmr.recorder.channel       | Should -Be $channel
+                $vmr.recorder.kbps          | Should -Be $kbps
             }
         }
         
@@ -430,6 +469,13 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.option.delay[$phys_out] | Should -Be $mss
             }
         }
+        
+        Context 'Recorder' -Skip:$ifBasic {
+            It 'Should set and get Recorder floats' {
+                $vmr.recorder.gain = $gain
+                $vmr.recorder.gain | Should -Be $gain
+            }
+        }
     }
 
     Describe 'String Tests' {
@@ -525,13 +571,51 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
     }
     
-    Describe 'Recorder Tests' {
+    Describe 'Special Tests' {
         Context 'Recorder' -Skip:$ifBasic {
+            It 'Should set Recorder input arming' -ForEach @(
+                @{ Value = $true }, @{ Value = $false }
+            ) {
+                $vmr.recorder.armstrip[$phys_in].set($value)
+                $vmr.recorder.armstrip[$virt_in].set($value)
+            }
             
+            It 'Should set Recorder output arming' {
+                $vmr.recorder.armbus[$phys_out].set($true)
+                $vmr.recorder.armbus[$virt_out].set($true)
+                
+                $vmr.recorder.armbus[$virt_out].set($false)
+            }
+            
+            It 'Should record a short audio file, perform navigation tests, then eject' {
+                $vmr.recorder.record
+                Start-Sleep -Seconds 5
+                $vmr.recorder.pause
+                
+                $vmr.recorder.record
+                Start-Sleep -Seconds 5
+                $vmr.recorder.stop
+                
+                $vmr.recorder.play
+                Start-Sleep -Seconds 2
+                
+                $vmr.recorder.replay
+                Start-Sleep -Seconds 2
+                
+                $vmr.recorder.ff
+                Start-Sleep -Seconds 2
+                $vmr.recorder.stop
+                
+                $vmr.recorder.goto('00:00:08')
+                
+                $vmr.recorder.rew
+                Start-Sleep -Seconds 2
+                $vmr.recorder.stop
+                
+                $vmr.recorder.eject
+            }
         }
-    }
     
-    Describe 'VBAN Tests' {
         Context 'VBAN' {
             It 'Should disable then enable VBAN' {
                 $vmr.vban.enable = $true
@@ -590,9 +674,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 }
             }
         }
-    }
     
-    Describe 'Special Command Tests' {
         Context 'Command' {
             It 'Should hide then show GUI' {
                 $vmr.command.show
