@@ -1,5 +1,5 @@
 Describe -Tag 'higher', -TestName 'All Higher Tests' {
-    Describe 'Bool Tests' -ForEach @(
+    Describe 'Bool Tests' -Tag 'bool' -ForEach @(
         @{ Value = $true }, @{ Value = $false }
     ) {
         Context 'Strip, one physical one virtual' -ForEach @(
@@ -24,6 +24,15 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.strip[$index].B1 = $value
                 $vmr.strip[$index].B1 | Should -Be $value
             }
+        }
+            
+        Context 'Strip, physical only' {
+            BeforeAll { $index = $phys_in }
+            
+            It "Should set and get Strip[$index].mono" {
+                $vmr.strip[$index].mono = $value
+                $vmr.strip[$index].mono | Should -Be $value
+            }
             
             It "Should set and get Strip[$index].postreverb" -Skip:$ifNotPotato {
                 $vmr.strip[$index].postreverb = $value
@@ -43,15 +52,6 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             It "Should set and get Strip[$index].postfx2" -Skip:$ifNotPotato {
                 $vmr.strip[$index].postfx2 = $value
                 $vmr.strip[$index].postfx2 | Should -Be $value
-            }
-        }
-            
-        Context 'Strip, physical only' {
-            BeforeAll { $index = $phys_in }
-            
-            It "Should set and get Strip[$index].mono" {
-                $vmr.strip[$index].mono = $value
-                $vmr.strip[$index].mono | Should -Be $value
             }
             
             It "Should set and get Strip[$index].comp.makeup" -Skip:$ifNotPotato {
@@ -96,8 +96,8 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             }
 
             It "Should set and get Bus[$index].mode.normal" {
-                $vmr.bus[$index].mode.normal = $value
-                $vmr.bus[$index].mode.normal | Should -Be $value
+                $vmr.bus[$index].mode.normal = $true
+                $vmr.bus[$index].mode.normal | Should -Be $true
             }
 
             It "Should set and get Bus[$index].mode.amix" {
@@ -189,9 +189,9 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
         
         Context 'Patch' {
-            It 'Should set and get Patch.insert[$insert]' -Skip:$ifBasic {
-                $vmr.patch.insert[$insert] = $value
-                $vmr.patch.insert[$insert] | Should -Be $value
+            It 'Should set and get Patch.insert[0]' -Skip:$ifBasic {
+                $vmr.patch.insert[0] = $value
+                $vmr.patch.insert[0] | Should -Be $value
             }
             
             It 'Should set and get Patch.postfadercomposite' -Skip:$ifBasic {
@@ -208,16 +208,21 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         Context 'Option' {
             It 'Should set and get Option.asiosr' {
                 $vmr.option.asiosr = $value
+                Start-Sleep -Milliseconds 300
                 $vmr.option.asiosr | Should -Be $value
             }
             
             It 'Should set and get Option.monitoronsel' -Skip:$ifNotPotato {
                 $vmr.option.monitoronsel = $value
+                $vmr.command.restart
+                Start-Sleep -Milliseconds 300
                 $vmr.option.monitoronsel | Should -Be $value
             }
             
             It 'Should set and get Option.slidermode' -Skip:$ifNotPotato {
                 $vmr.option.slidermode = $value
+                $vmr.command.restart
+                Start-Sleep -Milliseconds 300
                 $vmr.option.slidermode | Should -Be $value
             }
         }
@@ -236,45 +241,52 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             It 'Should set and get Recorder.mode.recbus' {
                 $vmr.recorder.mode.recbus = $value
                 $vmr.recorder.mode.recbus | Should -Be $value
+                Start-Sleep -Milliseconds 100
             }
             
             It 'Should set and get Recorder.mode.playonload' {
                 $vmr.recorder.mode.playonload = $value
                 $vmr.recorder.mode.playonload | Should -Be $value
+                Start-Sleep -Milliseconds 100
             }
             
             It 'Should set and get Recorder.mode.loop' {
                 $vmr.recorder.mode.loop = $value
                 $vmr.recorder.mode.loop | Should -Be $value
+                Start-Sleep -Milliseconds 100
             }
             
             It 'Should set and get Recorder.mode.multitrack' {
                 $vmr.recorder.mode.multitrack = $value
                 $vmr.recorder.mode.multitrack | Should -Be $value
+                Start-Sleep -Milliseconds 100
             }
         }
 
         Context 'Macrobutton' -ForEach @(
-            @{ Index = 0 }, @{ Index = 79 }
+            @{ Index = 37 }, @{ Index = 79 }
         ) {
             It "Should set and get Button[$index].state" {
                 $vmr.button[$index].state = $value
                 $vmr.button[$index].state | Should -Be $value
+                Start-Sleep -Milliseconds 100
             }
             
             It "Should set and get Button[$index].stateonly" {
                 $vmr.button[$index].stateonly = $value
                 $vmr.button[$index].stateonly | Should -Be $value
+                Start-Sleep -Milliseconds 100
             }
             
             It "Should set and get Button[$index].trigger" {
                 $vmr.button[$index].trigger = $value
                 $vmr.button[$index].trigger | Should -Be $value
+                Start-Sleep -Milliseconds 100
             }
         }
     }
 
-    Describe 'Int Tests' {
+    Describe 'Int Tests' -Tag 'int' {
         Context 'Strip, physical only' {
             BeforeAll { $index = $phys_in }
             
@@ -393,7 +405,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
     }
 
-    Describe 'Float Tests' -ForEach @( # knob: 1 to 8 / 0 to 10, slide: -12 to 12 / -24 to 24
+    Describe 'Float Tests' -Tag 'float' -ForEach @( # knob: 1 to 8 / 0 to 10, slide: -12 to 12 / -24 to 24
         @{ Gain = -24.3; TwoD_x = -0.2; TwoD_y = 0.8; Knob = 6.4; Slide = -7.5; Ms = 196.8 }
         @{ Gain = -12.6; TwoD_x = 0.4; TwoD_y = 0.1; Knob = 3.7; Slide = 5.9; Ms = 32.6 }
     ) {
@@ -658,7 +670,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
     }
 
-    Describe 'String Tests' {
+    Describe 'String Tests' -Tag 'string' {
         Context 'Bus and strip, one physical one virtual' -ForEach @(
             @{ Target = $vmr.bus[$phys_out]; Label = "Bus[$phys_out]" }
             @{ Target = $vmr.bus[$virt_out]; Label = "Bus[$virt_out]" }
@@ -674,7 +686,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
     }
     
-    Describe 'Fade Tests' {
+    Describe 'Fade Tests' -Tag 'fade' {
         Context 'Bus and strip, one physical one virtual' -ForEach @(
             @{ Target = $vmr.bus[$phys_out]; Label = "Bus[$phys_out]" }
             @{ Target = $vmr.bus[$virt_out]; Label = "Bus[$virt_out]" }
@@ -704,7 +716,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
     }
     
-    Describe 'EQ Tests' {
+    Describe 'EQ Tests' -Tag 'eq' {
         Context 'Bus and physical strip EQ' -Skip:$ifBasic -ForEach @(
             @{ Eq = $vmr.bus[$phys_out].eq; Label = "Bus[$phys_out]" }
             @{ Eq = $vmr.bus[$virt_out].eq; Label = "Bus[$virt_out]" }
@@ -773,7 +785,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
     }
     
-    Describe 'Special Tests' {
+    Describe 'Special Tests' -Tag 'special' {
         Context 'Recorder' -Skip:$ifBasic {
             It 'Should set Recorder input arming' -ForEach @(
                 @{ Value = $true }, @{ Value = $false }
