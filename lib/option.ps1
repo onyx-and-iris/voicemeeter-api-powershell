@@ -1,12 +1,12 @@
 class Option : IRemote {
+    [FloatArray]$delay
     [Object]$buffer
     [Object]$mode
     
     Option ([Object]$remote) : base ($remote) {
         AddBoolMembers -PARAMS @('asiosr', 'monitorOnSel', 'sliderMode')
         
-        AddDelayMembers
-        
+        $this.delay = [FloatArray]::new($remote, 'Option', 'delay', $remote.kind.p_out, 2)
         $this.buffer = [OptionBuffer]::new($remote)
         $this.mode = [OptionMode]::new($remote)
     }

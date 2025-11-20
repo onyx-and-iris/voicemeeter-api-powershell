@@ -49,17 +49,36 @@ class FxDelay : IRemote {
 }
 
 class Patch : IRemote {
+    [IntArray]$asio
+    [IntArray]$composite
+    [BoolArray]$insert
+    
     Patch ([Object]$remote) : base ($remote) {
         AddBoolMembers -PARAMS @('postFaderComposite', 'postFxInsert')
         
-        AddASIOInMembers
+        $this.asio = [IntArray]::new($remote, 'Patch', 'asio', $remote.kind.asio_in)
+        $this.composite = [IntArray]::new($remote, 'Patch', 'composite', $remote.kind.composite)
+        $this.insert = [BoolArray]::new($remote, 'Patch', 'insert', $remote.kind.insert)
+        
         AddASIOOutMembers
-        AddCompositeMembers
-        AddInsertMembers
     }
     
     [string] identifier () {
         return 'Patch'
+    }
+    
+    hidden [void] AddASIOOutMembers () {
+        $num_A = $this.remote.kind.p_out
+        $asio_out = [int]$this.remote.kind.asio_out
+        
+        for ($i = 2; $i -le $num_A; $i++) {
+            $propName = "OutA$($i)"
+            if (-not $this.PSObject.Properties[$propName]) {
+                $array = [IntArray]::new($this.remote, 'Patch', $propName, $asio_out)
+                # Add as NoteProperty so the same instance is reused
+                Add-Member -InputObject $this -MemberType NoteProperty -Name $propName -Value $array
+            }
+        }
     }
 }
 
