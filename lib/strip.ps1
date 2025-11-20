@@ -2,7 +2,7 @@ class Strip : IndexedIRemote {
     [Object]$levels
 
     Strip ([int]$index, [Object]$remote) : base ($index, $remote) {
-        AddBoolMembers -PARAMS @('solo', 'mute', 'mono')
+        AddBoolMembers -PARAMS @('solo', 'mute')
         AddFloatMembers -PARAMS @('gain', 'limit', 'pan_x', 'pan_y')
         AddStringMembers -PARAMS @('label')
 
@@ -83,7 +83,7 @@ class PhysicalStrip : Strip {
         AddFloatMembers -PARAMS @('color_x', 'color_y', 'fx_x', 'fx_y')
         AddFloatMembers -PARAMS @('audibility', 'reverb', 'delay', 'fx1', 'fx2')
         AddBoolMembers -PARAMS @('postreverb', 'postdelay', 'postfx1', 'postfx2')
-        AddBoolMembers -PARAMS @('vaio')
+        AddBoolMembers -PARAMS @('mono', 'vaio')
 
         $this.comp = [StripComp]::new($index, $remote)
         $this.gate = [StripGate]::new($index, $remote)
@@ -343,7 +343,7 @@ class VirtualStrip : Strip {
     )
     
     hidden $_aliases = $(
-        $this | Add-Member -MemberType AliasProperty -Name 'mono' -Value 'mc' -Force
+        $this | Add-Member -MemberType AliasProperty -Name 'mono' -Value 'mc'
         $this | Add-Member -MemberType AliasProperty -Name 'karaoke' -Value 'k'
         $this | Add-Member -MemberType AliasProperty -Name 'low'  -Value 'bass'
         $this | Add-Member -MemberType AliasProperty -Name 'med'  -Value 'mid'
