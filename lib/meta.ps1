@@ -193,7 +193,7 @@ function AddASIOOutMembers () {
     [System.Collections.ArrayList]$out_ps = @()
     for ($i = 0; $i -lt $asio_out; $i++) {
         foreach ($j in 2..$num_A) {
-            $out_ps.Add('OutA{0}[{1}]' -f $j $i)
+            $out_ps.Add(('OutA{0}[{1}]' -f $j, $i))
         }
     }
 

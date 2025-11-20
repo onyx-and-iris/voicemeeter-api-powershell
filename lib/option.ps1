@@ -2,7 +2,7 @@ class Option : IRemote {
     [Object]$buffer
     [Object]$mode
     
-    Option ([Object]$remote : base ($remote)) {
+    Option ([Object]$remote) : base ($remote) {
         AddBoolMembers -PARAMS @('asiosr', 'monitorOnSel', 'sliderMode')
         
         AddDelayMembers
@@ -33,7 +33,7 @@ class Option : IRemote {
 }
 
 class OptionBuffer : IRemote {
-    OptionBuffer ([Object]$remote : base ($remote)) {}
+    OptionBuffer ([Object]$remote) : base ($remote) {}
     
     [string] identifier () {
         return 'Option.Buffer'
@@ -105,7 +105,7 @@ class OptionBuffer : IRemote {
 }
 
 class OptionMode : IRemote {
-    OptionMode ([Object]$remote : base ($remote)) {
+    OptionMode ([Object]$remote) : base ($remote) {
         AddBoolMembers -PARAMS @('exclusif', 'swift')
     }
     

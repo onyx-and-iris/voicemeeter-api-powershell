@@ -213,7 +213,7 @@ class StripEqCh : IndexedIRemote {
     }
     
     [string] identifier () {
-        return 'Strip[{0}].EQ.Channel[{1}]' -f $this.stripIndex $this.chIndex
+        return ('Strip[{0}].EQ.Channel[{1}]' -f $this.stripIndex, $this.chIndex)
     }
 }
 
@@ -222,7 +222,7 @@ class StripEqChCell : IndexedIRemote {
     [int]$chIndex
     [int]$cellIndex
     
-    StripEqChCell [int]$stripIndex, [int]$chIndex, [int]$cellIndex, [Object]$remote) : base ($stripIndex, $remote) {
+    StripEqChCell ([int]$stripIndex, [int]$chIndex, [int]$cellIndex, [Object]$remote) : base ($stripIndex, $remote) {
         AddBoolMembers -PARAMS @('on')
         AddIntMembers -PARAMS @('type')
         AddFloatMembers -PARAMS @('f', 'gain', 'q')
@@ -233,7 +233,7 @@ class StripEqChCell : IndexedIRemote {
     }
     
     [string] identifier () {
-        return 'Strip[{0}].EQ.Channel[{1}].Cell[{2}]' -f $this.stripIndex $this.chIndex $this.cellIndex
+        return ('Strip[{0}].EQ.Channel[{1}].Cell[{2}]' -f $this.stripIndex, $this.chIndex, $this.cellIndex)
     }
 }
 

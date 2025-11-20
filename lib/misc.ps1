@@ -1,5 +1,5 @@
 class Preset : IndexedIRemote {
-    Preset ([int]$index, [Object]$remote : base ($index, $remote)) {}
+    Preset ([int]$index, [Object]$remote) : base ($index, $remote) {}
 
     [string] identifier () {
         return 'Preset[' + $this.index + ']'
@@ -18,7 +18,7 @@ class Fx : IRemote {
     [Object]$reverb
     [Object]$delay
     
-    Fx ([Object]$remote : base ($remote)) {
+    Fx ([Object]$remote) : base ($remote) {
         $this.reverb = [FxReverb]::new($remote)
         $this.delay = [FxDelay]::new($remote)
     }
@@ -29,7 +29,7 @@ class Fx : IRemote {
 }
 
 class FxReverb : IRemote {
-    FxReverb ([Object]$remote : base ($remote)) {
+    FxReverb ([Object]$remote) : base ($remote) {
         AddBoolMembers -PARAMS @('on', 'ab')
     }
     
@@ -39,7 +39,7 @@ class FxReverb : IRemote {
 }
 
 class FxDelay : IRemote {
-    FxDelay ([Object]$remote : base ($remote)) {
+    FxDelay ([Object]$remote) : base ($remote) {
         AddBoolMembers -PARAMS @('on', 'ab')
     }
     
@@ -49,7 +49,7 @@ class FxDelay : IRemote {
 }
 
 class Patch : IRemote {
-    Patch ([Object]$remote : base ($remote)) {
+    Patch ([Object]$remote) : base ($remote) {
         AddBoolMembers -PARAMS @('postFaderComposite', 'postFxInsert')
         
         AddASIOInMembers

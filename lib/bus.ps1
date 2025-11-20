@@ -129,7 +129,7 @@ class BusEqCh : IndexedIRemote {
     }
     
     [string] identifier () {
-        return 'Bus[{0}].EQ.Channel[{1}]' -f $this.busIndex $this.chIndex
+        return ('Bus[{0}].EQ.Channel[{1}]' -f $this.busIndex, $this.chIndex)
     }
 }
 
@@ -138,7 +138,7 @@ class BusEqChCell : IndexedIRemote {
     [int]$chIndex
     [int]$cellIndex
     
-    BusEqChCell [int]$busIndex, [int]$chIndex, [int]$cellIndex, [Object]$remote) : base ($busIndex, $remote) {
+    BusEqChCell ([int]$busIndex, [int]$chIndex, [int]$cellIndex, [Object]$remote) : base ($busIndex, $remote) {
         AddBoolMembers -PARAMS @('on')
         AddIntMembers -PARAMS @('type')
         AddFloatMembers -PARAMS @('f', 'gain', 'q')
@@ -149,7 +149,7 @@ class BusEqChCell : IndexedIRemote {
     }
     
     [string] identifier () {
-        return 'Bus[{0}].EQ.Channel[{1}].Cell[{2}]' -f $this.busIndex $this.chIndex $this.cellIndex
+        return ('Bus[{0}].EQ.Channel[{1}].Cell[{2}]' -f $this.busIndex, $this.chIndex, $this.cellIndex)
     }
 }
 
