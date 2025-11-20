@@ -61,173 +61,6 @@ class IndexedIRemote : IRemote {
     }
 }
 
-class ParamArray : IRemote {
-    [string]$parentId
-    [string]$prefix
-    [int]$count
-    
-    ParamArray (
-        [object]$remote, [string]$parentId, [string]$prefix, [int]$count
-    ) : base ($remote) {
-        $this.parentId = $parentId
-        $this.prefix   = $prefix
-        $this.count    = $count
-    }
-    
-    [string] identifier () {
-        return $this.parentId
-    }
-    
-    hidden [void] ValidateIndex ([int]$index) {
-        if ($this.Count -eq 0) {
-            throw "ParamArray ($($this.ParentId).$($this.Prefix)) has Count=0 (no elements)."
-        }
-        if ($index -lt 0 -or $index -ge $this.Count) {
-            throw "ParamArray index $index out of range (0..$($this.Count - 1))."
-        }
-    }
-    
-    hidden [string] ElementParam ([int]$index) {
-        return "{0}[{1}]" -f $this.Prefix, $index
-    }
-
-    [string] ToString() {
-        return "ParamArray {$($this.ParentId).$($this.Prefix)} Count=$($this.Count)"
-    }
-}
-
-class BoolArray : ParamArray {
-    BoolArray (
-        [object]$remote, [string]$parentId, [string]$prefix, [int]$count
-    ) : base ($remote, $parentId, $prefix, $count) {}
-    
-    [bool] get_Item([int]$index) {
-        $this.ValidateIndex($index)
-        $param = $this.ElementParam($index)
-        return [bool]($this.Getter($param))  # Getter returns single/numeric; cast to bool
-    }
-
-    [void] set_Item([int]$index, [bool]$value) {
-        $this.ValidateIndex($index)
-        $param = $this.ElementParam($index)
-        $this.Setter($param, $value)         # IRemote.Setter maps bool -> 0/1
-    }
-
-    [bool[]] ToArray() {
-        $arr = [bool[]]::new($this.Count)
-        for ($i = 0; $i -lt $this.Count; $i++) {
-            $arr[$i] = $this.get_Item($i)
-        }
-        return $arr
-    }
-
-    [void] SetAll([bool]$state) {
-        for ($i = 0; $i -lt $this.Count; $i++) {
-            $this.set_Item($i, $state)
-        }
-    }
-}
-
-class IntArray : ParamArray {
-    IntArray (
-        [object]$remote, [string]$parentId, [string]$prefix, [int]$count
-    ) : base ($remote, $parentId, $prefix, $count) {}
-    
-    [int] get_Item([int]$index) {
-        $this.ValidateIndex($index)
-        $param = $this.ElementParam($index)
-        return [int]($this.Getter($param))
-    }
-
-    [void] set_Item([int]$index, [int]$value) {
-        $this.ValidateIndex($index)
-        $param = $this.ElementParam($index)
-        $this.Setter($param, $value)
-    }
-
-    [int[]] ToArray() {
-        $arr = [int[]]::new($this.Count)
-        for ($i = 0; $i -lt $this.Count; $i++) {
-            $arr[$i] = $this.get_Item($i)
-        }
-        return $arr
-    }
-
-    [void] SetAll([int]$value) {
-        for ($i = 0; $i -lt $this.Count; $i++) {
-            $this.set_Item($i, $value)
-        }
-    }
-}
-
-class FloatArray : ParamArray {
-    [int]$decimals
-    
-    FloatArray (
-        [object]$remote, [string]$parentId, [string]$prefix, [int]$count, [int]$decimals = 1
-    ) : base ($remote, $parentId, $prefix, $count) {
-        $this.decimals = $decimals
-    }
-
-    [double] get_Item([int]$index) {
-        $this.ValidateIndex($index)
-        $param = $this.ElementParam($index)
-        return [math]::Round($this.Getter($param), $this.decimals)
-    }
-
-    [void] set_Item([int]$index, [double]$value) {
-        $this.ValidateIndex($index)
-        $param = $this.ElementParam($index)
-        $this.Setter($param, $value)
-    }
-
-    [double[]] ToArray() {
-        $arr = [double[]]::new($this.Count)
-        for ($i = 0; $i -lt $this.Count; $i++) {
-            $arr[$i] = $this.get_Item($i)
-        }
-        return $arr
-    }
-
-    [void] SetAll([double]$value) {
-        for ($i = 0; $i -lt $this.Count; $i++) {
-            $this.set_Item($i, $value)
-        }
-    }
-}
-
-class StringArray : ParamArray {
-    StringArray (
-        [object]$remote, [string]$parentId, [string]$prefix, [int]$count
-    ) : base ($remote, $parentId, $prefix, $count) {}
-
-    [string] get_Item([int]$index) {
-        $this.ValidateIndex($index)
-        $param = $this.ElementParam($index)
-        return $this.Getter_String($param)
-    }
-
-    [void] set_Item([int]$index, [string]$value) {
-        $this.ValidateIndex($index)
-        $param = $this.ElementParam($index)
-        $this.Setter($param, $value)
-    }
-
-    [string[]] ToArray() {
-        $arr = [string[]]::new($this.Count)
-        for ($i = 0; $i -lt $this.Count; $i++) {
-            $arr[$i] = $this.get_Item($i)
-        }
-        return $arr
-    }
-
-    [void] SetAll([string]$value) {
-        for ($i = 0; $i -lt $this.Count; $i++) {
-            $this.set_Item($i, $value)
-        }
-    }
-}
-
 function AddBoolMembers () {
     param(
         [String[]]$PARAMS
@@ -244,22 +77,6 @@ function AddBoolMembers () {
     }
 }
 
-function AddIntMembers () {
-    param(
-        [String[]]$PARAMS
-    )
-    [hashtable]$Signatures = @{}
-    foreach ($param in $PARAMS) {
-        # Define getter
-        $Signatures['Getter'] = "[Int]`$this.Getter('{0}')" -f $param
-        # Define setter
-        $Signatures['Setter'] = "param ( [Single]`$arg )`n`$this.Setter('{0}', `$arg)" `
-            -f $param
-
-        Addmember
-    }
-}
-
 function AddFloatMembers () {
     param(
         [String[]]$PARAMS
@@ -268,6 +85,22 @@ function AddFloatMembers () {
     foreach ($param in $PARAMS) {
         # Define getter
         $Signatures['Getter'] = "[math]::Round(`$this.Getter('{0}'), 1)" -f $param
+        # Define setter
+        $Signatures['Setter'] = "param ( [Single]`$arg )`n`$this.Setter('{0}', `$arg)" `
+            -f $param
+
+        Addmember
+    }
+}
+
+function AddIntMembers () {
+    param(
+        [String[]]$PARAMS
+    )
+    [hashtable]$Signatures = @{}
+    foreach ($param in $PARAMS) {
+        # Define getter
+        $Signatures['Getter'] = "[Int]`$this.Getter('{0}')" -f $param
         # Define setter
         $Signatures['Setter'] = "param ( [Single]`$arg )`n`$this.Setter('{0}', `$arg)" `
             -f $param
@@ -317,6 +150,92 @@ function AddChannelMembers () {
     }
 
     AddBoolMembers -PARAMS $channels
+}
+
+function AddGainlayerMembers () {
+    $gainlayer = $this.remote.kind.gainlayer
+
+    # Collect (name, alias) pairs
+    [System.Collections.ArrayList]$gainlayers = @()
+    for ($i = 0; $i -lt $gainlayer; $i++) {
+        $name  = "gainlayer[$i]"
+        $alias = "gainlayer$i"
+        [void]$gainlayers.Add([pscustomobject]@{
+            name  = $name
+            alias = $alias
+        })
+    }
+
+    # Add the float members using only the 'name' values
+    AddFloatMembers -PARAMS ($gainlayers | ForEach-Object { $_.name })
+
+    # Add alias properties pointing alias -> name
+    foreach ($gl in $gainlayers) {
+        Add-Member -InputObject $this -MemberType AliasProperty -Name $gl.alias -Value $gl.name
+    }
+}
+
+function AddASIOInMembers () {
+    $asio_in = $this.remote.kind.asio_in
+    
+    [System.Collections.ArrayList]$in_ps = @()
+    for ($i = 0; $i -lt $asio_in; $i++) {
+        $in_ps.Add('asio[{0}]' -f $i)
+    }
+
+    AddIntMembers -PARAMS $in_ps
+}
+
+function AddASIOOutMembers () {
+    $num_A = $this.remote.kind.p_out
+    $asio_out = $this.remote.kind.asio_out
+    
+    [System.Collections.ArrayList]$out_ps = @()
+    for ($i = 0; $i -lt $asio_out; $i++) {
+        foreach ($j in 2..$num_A) {
+            $out_ps.Add(('OutA{0}[{1}]' -f $j, $i))
+        }
+    }
+
+    AddIntMembers -PARAMS $out_ps
+}
+
+function AddCompositeMembers () {
+    $composite = $this.remote.kind.composite
+    
+    [System.Collections.ArrayList]$composite_ps = @()
+    for ($i = 0; $i -lt $composite; $i++) {
+        $composite_ps.Add('composite[{0}]' -f $i)
+    }
+
+    AddIntMembers -PARAMS $composite_ps
+}
+
+function AddInsertMembers () {
+    $insert = $this.remote.kind.insert
+    
+    [System.Collections.ArrayList]$insert_ps = @()
+    for ($i = 0; $i -lt $insert; $i++) {
+        $insert_ps.Add('insert[{0}]' -f $i)
+    }
+
+    AddBoolMembers -PARAMS $insert_ps
+}
+
+function AddDelayMembers () {
+    $p_out = $this.remote.kind.p_out
+    
+    foreach ($i in 0..$($p_out - 1)) {
+        $name = 'delay[{0}]' -f $i
+        $this | Add-Member ScriptProperty $name `
+            {
+                [math]::Round($this.Getter($name), 2)
+            } `
+            {
+                param ([Single]$arg)
+                $this.Setter($name, $arg)
+            }
+    }
 }
 
 function Addmember {

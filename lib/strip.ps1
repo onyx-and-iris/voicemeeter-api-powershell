@@ -1,20 +1,15 @@
 class Strip : IndexedIRemote {
     [Object]$levels
-    [FloatArray]$gainlayer
 
     Strip ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddBoolMembers -PARAMS @('solo', 'mute')
         AddFloatMembers -PARAMS @('gain', 'limit', 'pan_x', 'pan_y')
         AddStringMembers -PARAMS @('label')
-        
-        $this.levels = [StripLevels]::new($index, $remote)
 
-        $parentId = "Strip[$index]"
-        $glcount = $remote.kind.gainlayer
-        $this.gainlayer = [FloatArray]::new($remote, $parentId, 'gainlayer', $glcount)
-
-        AddGainlayerMembers
         AddChannelMembers
+        AddGainlayerMembers
+
+        $this.levels = [StripLevels]::new($index, $remote)
     }
 
     [string] identifier () {
@@ -27,22 +22,6 @@ class Strip : IndexedIRemote {
 
     [void] FadeBy ([single]$target, [int]$time) {
         $this.Setter('FadeBy', "($target, $time)")
-    }
-    
-    hidden [void] AddGainlayerMembers () {
-        $glcount = $this.remote.kind.gainlayer
-        
-        for ($i = 0; $i -lt $glcount; $i++) {
-            $propName = "gainlayer$($i)"
-            if ($this.PSObject.Properties[$propName]) {
-                continue
-            }
-
-            $getter = [scriptblock]::Create("`$this.gainlayer[$i]")
-            $setter = [scriptblock]::Create("param ( [single]`$value )`n`$this.gainlayer[$i] = `$value")
-
-            $this | Add-Member -MemberType ScriptProperty -Name $propName -Value $getter -SecondValue $setter
-        }
     }
 }
 
