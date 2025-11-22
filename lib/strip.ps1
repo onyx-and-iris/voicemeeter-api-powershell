@@ -1,4 +1,4 @@
-class Strip : IndexedIRemote {
+class Strip : IRemote {
     [Object]$levels
 
     Strip ([int]$index, [Object]$remote) : base ($index, $remote) {
@@ -25,7 +25,7 @@ class Strip : IndexedIRemote {
     }
 }
 
-class StripLevels : IndexedIRemote {
+class StripLevels : IRemote {
     [int]$init
     [int]$offset
 
@@ -94,7 +94,7 @@ class PhysicalStrip : Strip {
     }
 }
 
-class StripComp : IndexedIRemote {
+class StripComp : IRemote {
     StripComp ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddFloatMembers -PARAMS @('gainin', 'ratio', 'threshold', 'attack', 'release', 'knee', 'gainout')
         AddBoolMembers -PARAMS @('makeup')
@@ -115,7 +115,7 @@ class StripComp : IndexedIRemote {
     )
 }
 
-class StripGate : IndexedIRemote {
+class StripGate : IRemote {
     StripGate ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddFloatMembers -PARAMS @('threshold', 'damping', 'attack', 'hold', 'release')
         AddIntMembers -PARAMS @('bpsidechain')
@@ -136,7 +136,7 @@ class StripGate : IndexedIRemote {
     )
 }
 
-class StripDenoiser : IndexedIRemote {
+class StripDenoiser : IRemote {
     StripDenoiser ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddFloatMembers -PARAMS @('threshold')
     }
@@ -156,7 +156,7 @@ class StripDenoiser : IndexedIRemote {
     )
 }
 
-class StripPitch : IndexedIRemote {
+class StripPitch : IRemote {
     StripPitch ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddBoolMembers -PARAMS @('on')
         AddIntMembers -PARAMS @('drywet')
@@ -168,7 +168,7 @@ class StripPitch : IndexedIRemote {
     }
 }
 
-class StripEq : IndexedIRemote {
+class StripEq : IRemote {
     [System.Collections.ArrayList]$channels
     
     StripEq ([int]$index, [Object]$remote) : base ($index, $remote) {
@@ -196,7 +196,7 @@ class StripEq : IndexedIRemote {
     }
 }
 
-class StripEqCh : IndexedIRemote {
+class StripEqCh : IRemote {
     [System.Collections.ArrayList]$cells
     [int]$stripIndex
     [int]$chIndex
@@ -217,7 +217,7 @@ class StripEqCh : IndexedIRemote {
     }
 }
 
-class StripEqChCell : IndexedIRemote {
+class StripEqChCell : IRemote {
     [int]$stripIndex
     [int]$chIndex
     [int]$cellIndex
@@ -237,7 +237,7 @@ class StripEqChCell : IndexedIRemote {
     }
 }
 
-class StripDevice : IndexedIRemote {
+class StripDevice : IRemote {
     StripDevice ([int]$index, [Object]$remote) : base ($index, $remote) {
     }
 

@@ -1,4 +1,4 @@
-class Bus : IndexedIRemote {
+class Bus : IRemote {
     [Object]$mode
     [Object]$eq
     [Object]$levels
@@ -27,7 +27,7 @@ class Bus : IndexedIRemote {
     }
 }
 
-class BusLevels : IndexedIRemote {
+class BusLevels : IRemote {
     [int]$init
     [int]$offset
 
@@ -58,7 +58,7 @@ class BusLevels : IndexedIRemote {
     }
 }
 
-class BusMode : IndexedIRemote {
+class BusMode : IRemote {
     [System.Collections.ArrayList]$modes
 
     BusMode ([int]$index, [Object]$remote) : base ($index, $remote) {
@@ -84,7 +84,7 @@ class BusMode : IndexedIRemote {
     }
 }
 
-class BusEq : IndexedIRemote {
+class BusEq : IRemote {
     [System.Collections.ArrayList]$channels
     
     BusEq ([int]$index, [Object]$remote) : base ($index, $remote) {
@@ -112,7 +112,7 @@ class BusEq : IndexedIRemote {
     }
 }
 
-class BusEqCh : IndexedIRemote {
+class BusEqCh : IRemote {
     [System.Collections.ArrayList]$cells
     [int]$busIndex
     [int]$chIndex
@@ -133,7 +133,7 @@ class BusEqCh : IndexedIRemote {
     }
 }
 
-class BusEqChCell : IndexedIRemote {
+class BusEqChCell : IRemote {
     [int]$busIndex
     [int]$chIndex
     [int]$cellIndex
@@ -163,7 +163,7 @@ class PhysicalBus : Bus {
     }
 }
 
-class BusDevice : IndexedIRemote {
+class BusDevice : IRemote {
     BusDevice ([int]$index, [Object]$remote) : base ($index, $remote) {
     }
 
