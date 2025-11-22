@@ -206,11 +206,13 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
         
         Context 'Option' {
-            It 'Should set and get Option.asiosr' {
+            # this caused my Focusrite ASIO driver to crash my PC
+            # don't change ASIO sr or buffer if they are determined by the driver
+            <# It 'Should set and get Option.asiosr' {
                 $vmr.option.asiosr = $value
                 Start-Sleep -Milliseconds 300
                 $vmr.option.asiosr | Should -Be $value
-            }
+            } #>
             
             It 'Should set and get Option.monitoronsel' -Skip:$ifNotPotato {
                 $vmr.option.monitoronsel = $value
@@ -268,20 +270,20 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         ) {
             It "Should set and get Button[$index].state" {
                 $vmr.button[$index].state = $value
-                $vmr.button[$index].state | Should -Be $value
                 Start-Sleep -Milliseconds 100
+                $vmr.button[$index].state | Should -Be $value
             }
             
             It "Should set and get Button[$index].stateonly" {
                 $vmr.button[$index].stateonly = $value
-                $vmr.button[$index].stateonly | Should -Be $value
                 Start-Sleep -Milliseconds 100
+                $vmr.button[$index].stateonly | Should -Be $value
             }
             
             It "Should set and get Button[$index].trigger" {
                 $vmr.button[$index].trigger = $value
-                $vmr.button[$index].trigger | Should -Be $value
                 Start-Sleep -Milliseconds 100
+                $vmr.button[$index].trigger | Should -Be $value
             }
         }
     }
@@ -357,10 +359,11 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                     $vmr.option.buffer.ks | Should -Be $value
                 }
                 
-                It 'Should set and get asio buffer' {
+                # I suspect this would also cause active ASIO drivers to crash the PC
+                <# It 'Should set and get asio buffer' {
                     $vmr.option.buffer.asio = $value
                     $vmr.option.buffer.asio | Should -Be $value
-                }
+                } #>
             }
         }
         
