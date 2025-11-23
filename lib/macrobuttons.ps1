@@ -55,7 +55,7 @@ class MacroButton {
         }
     )
     
-    hidden $_color = $($this | Add-Member ScriptProperty 'color' `
+    <# hidden $_color = $($this | Add-Member ScriptProperty 'color' `
         {
             return Write-Warning ("ERROR: Button[$($this.index)].color is write only")
         } `
@@ -63,7 +63,7 @@ class MacroButton {
             param([int]$arg)
             Param_Set -PARAM ("Command.Button[{0}].color" -f $this.index) -VALUE $arg
         }
-    )
+    ) #>
 }
 
 function Make_Buttons {

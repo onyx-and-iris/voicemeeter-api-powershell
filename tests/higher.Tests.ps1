@@ -400,16 +400,6 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.recorder.kbps | Should -Be $value
             }
         }
-        
-        Context 'Macrobutton' -ForEach @(
-            @{ Index = 0 }, @{ Index = 79 }
-        ) {
-            It "Should set Button[$index].color" -ForEach (0..8) {
-                param($color)
-                $vmr.button[$index].color = $color
-                Start-Sleep -Milliseconds 50
-            }
-        }
     }
 
     Describe 'Float Tests' -Tag 'float' -ForEach @( # knob: 1 to 8 / 0 to 10, slide: -12 to 12 / -24 to 24

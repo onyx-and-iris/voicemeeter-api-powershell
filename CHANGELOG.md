@@ -30,7 +30,6 @@ Before any major/minor/patch is released all test units will be run to verify th
   - Strip[i].treble or Strip[i].high
 - Command.save($filepath) and Command.reset
 - Recorder.replay and Recorder.gain to README
-- Write-only Button[i].color through VMRAPI's Command.Button[i].color
 - New [Preset] class for Preset objects to accommodate future additions to VMRAPI such as:
   - store/overwrite
   - name, comment
