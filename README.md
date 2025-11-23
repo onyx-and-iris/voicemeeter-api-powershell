@@ -139,23 +139,28 @@ The following strip commands are available:
 - postdelay: bool
 - postfx1: bool
 - postfx2: bool
-- gainlayer[i]: float, from -60.0 to 12.0
+- gainlayer0-7: float, from -60.0 to 12.0
 - bass/low: float, from -12.0 to 12.0
 - mid/med: float, from -12.0 to 12.0
 - treble/high: float, from -12.0 to 12.0
 - audibility: float, from 0.0 to 10.0
 - vaio: bool
 
+The following Strip.Gainlayer[i] methods are available:
+
+- Set($val): float, from -60.0 to 12.0
+- Get()
+
 for example:
 
 ```powershell
 $vmr.strip[5].gainlayer1 = -8.3
+$vmr.strip[3].gainlayer[6].Get()
 ```
 
 A,B commands depend on Voicemeeter type.
 
 gainlayers defined for Potato version only.
-gainlayer0-gainlayer7 can also be used.
 
 mc, k for virtual strips only.
 

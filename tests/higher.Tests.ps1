@@ -429,11 +429,12 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.strip[$index].limit | Should -Be $gain
             }
             
-            It "Should set and get Strip[$index].gainlayer[$layer]" -Skip:$ifNotPotato -ForEach @(
-                @{ Layer = 0 }, @{ Layer = 8 }
-            ) {
-                $vmr.strip[$index].gainlayer[$layer] = $gain
-                $vmr.strip[$index].gainlayer[$layer] | Should -Be $gain
+            It "Should set and get Strip[$index].gainlayer[2]" -Skip:$ifNotPotato {
+                $vmr.strip[$index].gainlayer2 = 0
+                $vmr.strip[$index].gainlayer[2].set($gain)
+                
+                $vmr.strip[$index].gainlayer2         | Should -Be $gain
+                $vmr.strip[$index].gainlayer[2].get() | Should -Be $gain
             }
         }
         

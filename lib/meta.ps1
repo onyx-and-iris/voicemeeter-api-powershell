@@ -92,23 +92,17 @@ function AddChannelMembers () {
 function AddGainlayerMembers () {
     $gainlayer = $this.remote.kind.gainlayer
 
-    # Collect (name, alias) pairs
-    [System.Collections.ArrayList]$gainlayers = @()
+    [hashtable]$Signatures = @{}
     for ($i = 0; $i -lt $gainlayer; $i++) {
-        $name  = "gainlayer[$i]"
-        $alias = "gainlayer$i"
-        [void]$gainlayers.Add([pscustomobject]@{
-            name  = $name
-            alias = $alias
-        })
-    }
-
-    # Add the float members using only the 'name' values
-    AddFloatMembers -PARAMS ($gainlayers | ForEach-Object { $_.name })
-
-    # Add alias properties pointing alias -> name
-    foreach ($gl in $gainlayers) {
-        Add-Member -InputObject $this -MemberType AliasProperty -Name $gl.alias -Value $gl.name
+        # Define getter
+        $Signatures['Getter'] = "`$this.Getter('gainlayer[{0}]')" -f $i
+        # Define setter
+        $Signatures['Setter'] = "param ( [Single]`$arg )`n`$this.Setter('gainlayer[{0}]', `$arg)" `
+            -f $i
+        $param = 'gainlayer{0}' -f $i
+        $null = $param
+        
+        Addmember
     }
 }
 
