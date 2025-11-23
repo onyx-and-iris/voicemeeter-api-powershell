@@ -407,19 +407,22 @@ $vmr.reverb.ab = $false
 
 ### Patch
 
-The following Patch commands are available:
+The following Patch methods are available:
 
-- asio[i]: int, from 0 to ASIO input channels
-- OutA2[i]-OutA5[i]: int, from 0 to ASIO output channels
-- composite[i]: int, from 0 to strip channels
-- insert[i]: bool
+- asio[i].Set($val): int, from 0 to ASIO input channels
+- OutA2[i]-OutA5[i].Set($val): int, from 0 to ASIO output channels
+- composite[i].Set($val): int, from 0 to strip channels
+- insert[i].Set($val): bool
+
+All members also have Get() available
 
 for example:
 
 ```powershell
-$vmr.asio[3] = 2        # patches ASIO input channel 2 (2) to strip 2, channel 2 (3)
-$vmr.OutA3[0] = 24      # patches bus A3, channel 1 (0) to ASIO output channel 24
-$vmr.composite[5] = 0   # sets composite channel 6 (5) to default bus channel
+$vmr.asio[3].set(2)        # patches ASIO input channel 2 (2) to strip 2, channel 2 (3)
+$vmr.OutA3[0].set(24)      # patches bus A3, channel 1 (0) to ASIO output channel 24
+$vmr.composite[5].set(0)   # sets composite channel 6 (5) to default bus channel
+$vmr.insert[4].get()
 ```
 
 ### Option
@@ -428,14 +431,18 @@ The following Option commands are available:
 
 - sr: int, (32000, 44100, 48000, 88200, 96000, 176400, 192000)
 - asiosr: bool
-- delay[i]: float, from 0.00 to 500.00
 - monitorOnSel: bool
 - sliderMode: bool
+
+The following Option.delay[i] methods are available:
+
+- Set($val): float, from 0.00 to 500.00
+- Get()
 
 for example:
 
 ```powershell
-$vmr.Option.delay[2] = 30         # sets the delay for the third (2) bus
+$vmr.Option.delay[2].set(30)      # sets the delay for the third (2) bus
 $vmr.Option.sliderMode = $false   # sets slider mode to absolute
 ```
 

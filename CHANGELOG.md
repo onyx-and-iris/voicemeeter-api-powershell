@@ -44,18 +44,19 @@ Before any major/minor/patch is released all test units will be run to verify th
   - Fx.Delay.on
   - Fx.Delay.ab
 - New Patch class
-  - Patch.asio[i]
-  - Patch.OutA2[i]-OutA5[i]
-  - Patch.composite[i]
-  - Patch.insert[i]
+  - Patch.asio[i].Set($val) & .Get()
+  - Patch.OutA2[i]-OutA5[i].Set($val) & .Get()
+  - Patch.composite[i].Set($val) & .Get()
+  - Patch.insert[i].Set($val) & .Get()
   - Patch.postFaderComposite
   - Patch.postFxInsert
 - Alternate pattern for gainlayers: Strip.gainlayer[i] (old pattern still works)
-- New IRemote and IndexedIRemote classes to consolidate generic $this.remote, setter, getter, etc.
+- New IRemote class to consolidate generic $this.remote, setter, getter, etc.
+- New ArrayMember classes with .Set($val) and .Get()
 - New Option class
   - Option.sr
   - Option.asiosr
-  - Option.delay[i]
+  - Option.delay[i].Set($val) & .Get()
   - Option.Buffer.mme
   - Option.Buffer.wdm
   - Option.Buffer.ks
@@ -77,7 +78,7 @@ Before any major/minor/patch is released all test units will be run to verify th
 
 - Strip[i].mono is now an alias for Strip[i].mc on virtual strips (matches Python module behavior)
 - GainLayers are now based on KindMap so they're only added for Potato
-- Strip and Bus now use IndexedIRemote base class
+- Strip and Bus now use IRemote base class
 
 ### Removed
 

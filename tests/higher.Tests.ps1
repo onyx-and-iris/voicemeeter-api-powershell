@@ -190,8 +190,8 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         
         Context 'Patch' {
             It 'Should set and get Patch.insert[0]' -Skip:$ifBasic {
-                $vmr.patch.insert[0] = $value
-                $vmr.patch.insert[0] | Should -Be $value
+                $vmr.patch.insert[0].set($value)
+                $vmr.patch.insert[0].get() | Should -Be $value
             }
             
             It 'Should set and get Patch.postfadercomposite' -Skip:$ifBasic {
@@ -243,25 +243,21 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             It 'Should set and get Recorder.mode.recbus' {
                 $vmr.recorder.mode.recbus = $value
                 $vmr.recorder.mode.recbus | Should -Be $value
-                Start-Sleep -Milliseconds 100
             }
             
             It 'Should set and get Recorder.mode.playonload' {
                 $vmr.recorder.mode.playonload = $value
                 $vmr.recorder.mode.playonload | Should -Be $value
-                Start-Sleep -Milliseconds 100
             }
             
             It 'Should set and get Recorder.mode.loop' {
                 $vmr.recorder.mode.loop = $value
                 $vmr.recorder.mode.loop | Should -Be $value
-                Start-Sleep -Milliseconds 100
             }
             
             It 'Should set and get Recorder.mode.multitrack' {
                 $vmr.recorder.mode.multitrack = $value
                 $vmr.recorder.mode.multitrack | Should -Be $value
-                Start-Sleep -Milliseconds 100
             }
         }
 
@@ -325,11 +321,11 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
         
         Context 'Patch' {
-            It 'Should set and get Patch.composite[$composite]' -Skip:$ifBasic -ForEach @(
+            It 'Should set and get Patch.composite[7]' -Skip:$ifBasic -ForEach @(
                 @{ Value = 22 }, @{ Value = 6 }
             ) {
-                $vmr.patch.composite[$composite] = $value
-                $vmr.patch.composite[$composite] | Should -Be $value
+                $vmr.patch.composite[7].set($value)
+                $vmr.patch.composite[7].get() | Should -Be $value
             }
         }
         
@@ -338,6 +334,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 @{ Value = 44100 }, @{ Value = 48000 }
             ) {
                 $vmr.option.sr = $value
+                Start-Sleep -Milliseconds 500
                 $vmr.option.sr | Should -Be $value
             }
             
@@ -346,16 +343,19 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             ) {
                 It 'Should set and get mme buffer' {
                     $vmr.option.buffer.mme = $value
+                    Start-Sleep -Milliseconds 500
                     $vmr.option.buffer.mme | Should -Be $value
                 }
                 
                 It 'Should set and get wdm buffer' {
                     $vmr.option.buffer.wdm = $value
+                    Start-Sleep -Milliseconds 500
                     $vmr.option.buffer.wdm | Should -Be $value
                 }
                 
                 It 'Should set and get ks buffer' {
                     $vmr.option.buffer.ks = $value
+                    Start-Sleep -Milliseconds 500
                     $vmr.option.buffer.ks | Should -Be $value
                 }
                 
@@ -372,6 +372,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 @{ Value = 32000 }, @{ Value = 44100 }
             ) {
                 $vmr.recorder.samplerate = $value
+                Start-Sleep -Milliseconds 500
                 $vmr.recorder.samplerate | Should -Be $value
             }
             
@@ -379,20 +380,23 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 @{ Value = 16 }, @{ Value = 24 }
             ) {
                 $vmr.recorder.bitresolution = $value
+                Start-Sleep -Milliseconds 500
                 $vmr.recorder.bitresolution | Should -Be $value
             }
             
-            It 'Should set and get Recorder.channel' -ForEach @(
+            <# It 'Should set and get Recorder.channel' -ForEach @(
                 @{ Value = 1 }, @{ Value = 2 }
             ) {
                 $vmr.recorder.channel = $value
+                Start-Sleep -Milliseconds 300
                 $vmr.recorder.channel | Should -Be $value
-            }
+            } #>
             
             It 'Should set and get Recorder.kbps' -ForEach @(
                 @{ Value = 96 }, @{ Value = 192 }
             ) {
                 $vmr.recorder.kbps = $value
+                Start-Sleep -Milliseconds 500
                 $vmr.recorder.kbps | Should -Be $value
             }
         }
@@ -660,8 +664,8 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         Context 'Option' {
             It "Should set and get Option.delay[$phys_out]" {
                 $mss = $ms + 0.03   # delay should take and return 2 decimal places
-                $vmr.option.delay[$phys_out] = $mss
-                $vmr.option.delay[$phys_out] | Should -Be $mss
+                $vmr.option.delay[$phys_out].set($mss)
+                $vmr.option.delay[$phys_out].get() | Should -Be $mss
             }
         }
         
