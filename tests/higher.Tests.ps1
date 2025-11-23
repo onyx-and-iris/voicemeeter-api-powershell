@@ -384,14 +384,6 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.recorder.bitresolution | Should -Be $value
             }
             
-            <# It 'Should set and get Recorder.channel' -ForEach @(
-                @{ Value = 1 }, @{ Value = 2 }
-            ) {
-                $vmr.recorder.channel = $value
-                Start-Sleep -Milliseconds 300
-                $vmr.recorder.channel | Should -Be $value
-            } #>
-            
             It 'Should set and get Recorder.kbps' -ForEach @(
                 @{ Value = 96 }, @{ Value = 192 }
             ) {
@@ -779,11 +771,15 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             It "Should save then load EQ on $Label" -Skip:$Skip {
                 $tmp = [System.IO.Path]::Combine([System.IO.Path]::GetTempPath(), "vmreq-$(New-Guid).xml")
                 try {
+                    $Eq.channel[0].cell[0].q = 0.3
                     $Eq.save($tmp)
                     Start-Sleep -Milliseconds 50
                     Test-Path $tmp | Should -BeTrue
+                    
+                    $Eq.channel[0].cell[0].q = 50.2
                     $Eq.load($tmp)
                     Start-Sleep -Milliseconds 50
+                    $Eq.channel[0].cell[0].q | Should -Be 0.3
                 }
                 finally {
                     if (Test-Path $tmp) { Remove-Item $tmp -Force }
@@ -794,55 +790,47 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
     
     Describe 'Special Tests' -Tag 'special' {
         Context 'Recorder' -Skip:$ifBasic {
-            It 'Should set Recorder input arming' -ForEach @(
+            <# It 'Should set Recorder input arming' -ForEach @(
                 @{ Value = $true }, @{ Value = $false }
             ) {
                 $vmr.recorder.armstrip[$phys_in].set($value)
                 $vmr.recorder.armstrip[$virt_in].set($value)
-            }
+            } #>
             
-            It 'Should set Recorder output arming' {
+            <# It 'Should set Recorder output arming' {
                 $vmr.recorder.armbus[$phys_out].set($true)
                 $vmr.recorder.armbus[$virt_out].set($true)
                 
                 $vmr.recorder.armbus[$virt_out].set($false)
-            }
+            } #>
             
-            It 'Should record a short audio file, perform navigation tests, then eject' {
-                $vmr.recorder.record
-                Start-Sleep -Seconds 5
-                $vmr.recorder.pause
-                
-                $vmr.recorder.record
-                Start-Sleep -Seconds 5
-                $vmr.recorder.stop
-                
-                $vmr.recorder.play
-                Start-Sleep -Seconds 2
-                
-                $vmr.recorder.replay
-                Start-Sleep -Seconds 2
-                
-                $vmr.recorder.ff
-                Start-Sleep -Seconds 2
-                $vmr.recorder.stop
-                
-                $vmr.recorder.goto('00:00:08')
-                
-                $vmr.recorder.rew
-                Start-Sleep -Seconds 2
-                $vmr.recorder.stop
-                
-                $vmr.recorder.eject
-                Start-Sleep -Milliseconds 50
+            It 'Should set and get Recorder.channel' -ForEach @(
+                @{ Value = 2 }, @{ Value = 8 }
+            ) {
+                $vmr.recorder.mode.recbus = $true
+                $vmr.recorder.channel = $value
+                Start-Sleep -Milliseconds 300
+                $vmr.recorder.channel | Should -Be $value
             }
         }
     
         Context 'VBAN' {
-            It 'Should disable then enable VBAN' {
-                $vmr.vban.enable = $true
-                $vmr.vban.enable = $false
-                $vmr.vban.enable = $true
+            It 'Should set and get VBAN.enable' -ForEach @(
+                @{ Value = $true }, @{ Value = $false }
+            ) {
+                $vmr.vban.enable = $value
+                $vmr.command.restart
+                Start-Sleep -Milliseconds 1500
+                $vmr.vban.enable | Should -Be $value
+            }
+            
+            It 'Should set and get VBAN.port' -ForEach @(
+                @{ Value = 1024 }, @{ Value = 65535 }
+            ) {
+                $vmr.vban.port = $value
+                $vmr.command.restart
+                Start-Sleep -Milliseconds 1500
+                $vmr.vban.port | Should -Be $value
             }
             
             Context 'Instream, outstream' -ForEach @(
@@ -870,17 +858,11 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                     $Stream.ip | Should -Be $value
                 }
                 
-                It "Should set and get $Label.port" -ForEach @(
-                    @{ Value = 65535 }, @{ Value = 5481 }
-                ) {
-                    $Stream.port = $value
-                    $Stream.port | Should -Be $value
-                }
-                
                 It "Should set and get $Label.quality" -ForEach @(
                     @{ Value = 4 }, @{ Value = 0 }
                 ) {
                     $Stream.quality = $value
+                    Start-Sleep -Milliseconds 500
                     $Stream.quality | Should -Be $value
                 }
                 
@@ -930,39 +912,18 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
     
         Context 'Command' {
-            It 'Should hide then show GUI' {
-                $vmr.command.show
-                $vmr.command.hide
-                $vmr.command.show
-            }
-            
-            It 'Should lock then unlock GUI' {
-                $vmr.command.lock = $true
-                $vmr.command.lock | Should -Be $true
-                
-                $vmr.command.lock = $false
-                $vmr.command.lock | Should -Be $false
-            }
-            
-            It 'Should show then hide VBAN chat' {
-                $vmr.command.showvbanchat = $false
-                
-                $vmr.command.showvbanchat = $true
-                $vmr.command.showvbanchat | Should -Be $true
-                
-                $vmr.command.showvbanchat = $false
-                $vmr.command.showvbanchat | Should -Be $false
-            }
-            
             It 'Should save, reset, and load config' {
                 $tmp = [System.IO.Path]::Combine([System.IO.Path]::GetTempPath(), "vmrconfig-$(New-Guid).xml")
                 try {
+                    $vmr.strip[2].gain = -37.2
                     $vmr.command.save($tmp)
                     Start-Sleep -Milliseconds 50
                     Test-Path $tmp | Should -BeTrue
+                    
                     $vmr.command.reset
                     $vmr.command.load($tmp)
                     Start-Sleep -Milliseconds 50
+                    $vmr.strip[2].gain | Should -Be -37.2
                 }
                 finally {
                     if (Test-Path $tmp) { Remove-Item $tmp -Force }

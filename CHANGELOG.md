@@ -73,6 +73,7 @@ Before any major/minor/patch is released all test units will be run to verify th
   - Eq.Channel[i].Cell[j].gain
   - Eq.Channel[i].Cell[j].q
 - Virtual Strip[i].pan_y range to README
+- Vban.port sets and gets vban.instream[0].port: this port is currently used for all streams
 
 ### Changed
 
@@ -93,6 +94,7 @@ Before any major/minor/patch is released all test units will be run to verify th
 - Bus[i].mono changed to int (0 off, 1 mono, 2 stereo reverse)
 - Strip[i].Gate.BPSidechain changed to int
 - Vban.stream.route: fixed range 0..8 -> 0..7 (API documentation is incorrect; strip/bus 0 based index)
+- Accepted Recorder.channel values
 
 ## [3.3.0] - 2024-06-29
 

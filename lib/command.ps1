@@ -47,7 +47,7 @@ class Special {
 
     hidden $_showvbanchat = $($this | Add-Member ScriptProperty 'showvbanchat' `
         {
-            $this.Getter('DialogShow.VBANCHAT')
+            return Write-Warning ('ERROR: command.showvbanchat is write only')
         } `
         {
             param([bool]$arg)
@@ -57,7 +57,7 @@ class Special {
 
     hidden $_lock = $($this | Add-Member ScriptProperty 'lock' `
         {
-            $this._lock = $this.Getter('lock')
+            return Write-Warning ('ERROR: command.lock is write only')
         } `
         {
             param([bool]$arg)

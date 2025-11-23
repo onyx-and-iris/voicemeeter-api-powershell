@@ -372,7 +372,7 @@ The following eq.channel.cell commands are available:
 - type: int, from 0 to 6
 - f: float, from 20.0 to 20000.0
 - gain: float, from -12.0 to 12.0
-- q: float, from 1.0 to 100.0
+- q: float, from 0.3 to 100.0
 
 for example:
 
@@ -505,14 +505,16 @@ Index range (0, 79)
 
 ### VBAN
 
-- vmr.vban.enable: Toggle VBAN on or off. Accepts a bool value.
+The following VBAN commands are available:
+
+- enable: bool
+- port: int, from 1024 to 65535
 
 For each vban in/out stream the following parameters are defined:
 
 - on: bool
 - name: string
 - ip: string
-- port: int, from 1024 - 65535
 - sr: in, (11025, 16000, 22050, 24000, 32000, 44100, 48000, 64000, 88200, 96000)
 - channel: int from 1 to 8
 - bit: int, 16 or 24
@@ -522,13 +524,15 @@ For each vban in/out stream the following parameters are defined:
 SR, channel and bit are defined as readonly for instreams. Attempting to write
 to those parameters will throw an error. They are read and write for outstreams.
 
+Instream[i]|Outstream[i].port still supported, but only Instream[0].port is used.
+
 example:
 
 ```powershell
 $vmr.vban.enable = $true
+$vmr.vban.port = 6990
 
 $vmr.vban.instream[0].on = $true
-$vmr.vban.instream[2].port = 6990
 $vmr.vban.outstream[3].bit = 16
 ```
 
@@ -595,7 +599,7 @@ The following commands are available:
 - B1 - B3: bool
 - samplerate: int, (22050, 24000, 32000, 44100, 48000, 88200, 96000, 176400, 192000)
 - bitresolution: int, (8, 16, 24, 32)
-- channel: int, from 1 to 8
+- channel: int, (2, 4, 6, 8)
 - kbps: int, (32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320)
 - gain: float, from -60.0 to 12.0
 

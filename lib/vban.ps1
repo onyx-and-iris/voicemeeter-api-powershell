@@ -78,7 +78,7 @@ class Vban : IVban {
             $this.Getter('port')
         } `
         {
-            param([string]$arg)
+            param([int]$arg)
             if ($arg -ge 1024 -and $arg -le 65535) {
                 $this._port = $this.Setter('port', $arg)
             }
@@ -151,14 +151,11 @@ class Vban : IVban {
         } `
         {
             param([int]$arg)
-            if ($this.direction -eq 'in') { Write-Warning ('Error, read only value') }
+            if ($arg -ge 0 -and $arg -le 4) {
+                $this._quality = $this.Setter('quality', $arg)
+            }
             else {
-                if ($arg -ge 0 -and $arg -le 4) {
-                    $this._quality = $this.Setter('quality', $arg)
-                }
-                else {
-                    Write-Warning ('Expected value from 0 to 4')
-                }
+                Write-Warning ('Expected value from 0 to 4')
             }
         }
     )
@@ -169,14 +166,11 @@ class Vban : IVban {
         } `
         {
             param([int]$arg)
-            if ($this.direction -eq 'in') { Write-Warning ('Error, read only value') }
+            if ($arg -ge 0 -and $arg -le 7) {
+                $this._route = $this.Setter('route', $arg)
+            }
             else {
-                if ($arg -ge 0 -and $arg -le 7) {
-                    $this._route = $this.Setter('route', $arg)
-                }
-                else {
-                    Write-Warning ('Expected value from 0 to 7')
-                }
+                Write-Warning ('Expected value from 0 to 7')
             }
         }
     )
@@ -213,11 +207,26 @@ function Make_Vban ([Object]$remote) {
 
     $CustomObject | Add-Member ScriptProperty 'enable' `
     {
-        return Write-Warning ('ERROR: vban.enable is write only')
+        # return Write-Warning ('ERROR: vban.enable is write only')
+        return [bool]( Param_Get -PARAM 'vban.enable' )
     } `
     {
         param([bool]$arg)
         Param_Set -PARAM 'vban.Enable' -Value $(if ($arg) { 1 } else { 0 })
+    }
+    
+    $CustomObject | Add-Member ScriptProperty 'port' `
+    {
+        return Param_Get -PARAM 'vban.instream[0].port'
+    } `
+    {
+        param([int]$arg)
+        if ($arg -ge 1024 -and $arg -le 65535) {
+            Param_Set -PARAM 'vban.instream[0].port' -Value $arg
+        }
+        else {
+            Write-Warning ('Expected value from 1024 to 65535')
+        }
     }
 
     $CustomObject
