@@ -85,15 +85,15 @@ class BusMode : IRemote {
 }
 
 class BusEq : IRemote {
-    [System.Collections.ArrayList]$channels
+    [System.Collections.ArrayList]$channel
     
     BusEq ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddBoolMembers -PARAMS @('on', 'ab')
         
-        $this.channels = @()
+        $this.channel = @()
         $chCount = $remote.kind.bus_ch
         for ($ch = 0; $ch -lt $chCount; $ch++) {
-            [void]$this.channels.Add([BusEqCh]::new($index, $ch, $remote))
+            [void]$this.channel.Add([BusEqCh]::new($index, $ch, $remote))
         } 
     }
 
@@ -113,7 +113,7 @@ class BusEq : IRemote {
 }
 
 class BusEqCh : IRemote {
-    [System.Collections.ArrayList]$cells
+    [System.Collections.ArrayList]$cell
     [int]$busIndex
     [int]$chIndex
     
@@ -121,10 +121,10 @@ class BusEqCh : IRemote {
         $this.busIndex = $busIndex
         $this.chIndex = $chIndex
         
-        $this.cells = @()
+        $this.cell = @()
         $cellCount = $remote.kind.cells
         for ($c = 0; $c -lt $cellCount; $c++) {
-            [void]$this.cells.Add([BusEqChCell]::new($busIndex, $chIndex, $c, $remote))
+            [void]$this.cell.Add([BusEqChCell]::new($busIndex, $chIndex, $c, $remote))
         }
     }
     

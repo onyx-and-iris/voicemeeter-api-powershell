@@ -49,7 +49,7 @@ Before any major/minor/patch is released all test units will be run to verify th
   - Patch.insert[i].Set($val) & .Get()
   - Patch.postFaderComposite
   - Patch.postFxInsert
-- Alternate pattern for gainlayers: Strip.gainlayer[i].Set($val) & .Get() (old pattern still works)
+- Alternate pattern for gainlayers: Strip[i].gainlayer[j].Set($val) & .Get() (old pattern still works)
 - New IRemote class to consolidate generic $this.remote, setter, getter, etc.
 - New ArrayMember classes with .Set($val) and .Get()
 - New Option class
@@ -72,6 +72,7 @@ Before any major/minor/patch is released all test units will be run to verify th
   - Eq.Channel[i].Cell[j].f
   - Eq.Channel[i].Cell[j].gain
   - Eq.Channel[i].Cell[j].q
+- Virtual Strip[i].pan_y range to README
 
 ### Changed
 

@@ -95,7 +95,7 @@ function AddGainlayerMembers () {
     [hashtable]$Signatures = @{}
     for ($i = 0; $i -lt $gainlayer; $i++) {
         # Define getter
-        $Signatures['Getter'] = "`$this.Getter('gainlayer[{0}]')" -f $i
+        $Signatures['Getter'] = "[math]::Round(`$this.Getter('gainlayer[{0}]'), 1)" -f $i
         # Define setter
         $Signatures['Setter'] = "param ( [Single]`$arg )`n`$this.Setter('gainlayer[{0}]', `$arg)" `
             -f $i

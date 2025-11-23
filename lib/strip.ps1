@@ -175,15 +175,15 @@ class StripPitch : IRemote {
 }
 
 class StripEq : IRemote {
-    [System.Collections.ArrayList]$channels
+    [System.Collections.ArrayList]$channel
     
     StripEq ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddBoolMembers -PARAMS @('on', 'ab')
         
-        $this.channels = @()
+        $this.channel = @()
         $chCount = $remote.kind.strip_ch
         for ($ch = 0; $ch -lt $chCount; $ch++) {
-            [void]$this.channels.Add([StripEqCh]::new($index, $ch, $remote))
+            $this.channel.Add([StripEqCh]::new($index, $ch, $remote))
         } 
     }
 
@@ -203,7 +203,7 @@ class StripEq : IRemote {
 }
 
 class StripEqCh : IRemote {
-    [System.Collections.ArrayList]$cells
+    [System.Collections.ArrayList]$cell
     [int]$stripIndex
     [int]$chIndex
     
@@ -211,10 +211,10 @@ class StripEqCh : IRemote {
         $this.stripIndex = $stripIndex
         $this.chIndex = $chIndex
         
-        $this.cells = @()
+        $this.cell = @()
         $cellCount = $remote.kind.cells
         for ($c = 0; $c -lt $cellCount; $c++) {
-            [void]$this.cells.Add([StripEqChCell]::new($stripIndex, $chIndex, $c, $remote))
+            [void]$this.cell.Add([StripEqChCell]::new($stripIndex, $chIndex, $c, $remote))
         }
     }
     

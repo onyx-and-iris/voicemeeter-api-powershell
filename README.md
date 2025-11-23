@@ -130,7 +130,7 @@ The following strip commands are available:
 - fx1: float, from 0.0 to 10.0
 - fx2: float, from 0.0 to 10.0
 - pan_x: float, from -0.5 to 0.5
-- pan_y: float, from 0.0 to 1.0
+- pan_y: float, physical: from 0.0 to 1.0 | virtual: from -0.5 to 0.5
 - color_x: float, from -0.5 to 0.5
 - color_y: float, from 0.0 to 1.0
 - fx_x: float, from -0.5 to 0.5

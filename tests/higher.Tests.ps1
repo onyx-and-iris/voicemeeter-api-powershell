@@ -189,9 +189,9 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
         
         Context 'Patch' {
-            It 'Should set and get Patch.insert[0]' -Skip:$ifBasic {
-                $vmr.patch.insert[0].set($value)
-                $vmr.patch.insert[0].get() | Should -Be $value
+            It 'Should set and get Patch.insert[$insert]' -Skip:$ifBasic {
+                $vmr.patch.insert[$insert].set($value)
+                $vmr.patch.insert[$insert].get() | Should -Be $value
             }
             
             It 'Should set and get Patch.postfadercomposite' -Skip:$ifBasic {
@@ -321,11 +321,11 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
         
         Context 'Patch' {
-            It 'Should set and get Patch.composite[7]' -Skip:$ifBasic -ForEach @(
+            It 'Should set and get Patch.composite[$composite]' -Skip:$ifBasic -ForEach @(
                 @{ Value = 22 }, @{ Value = 6 }
             ) {
-                $vmr.patch.composite[7].set($value)
-                $vmr.patch.composite[7].get() | Should -Be $value
+                $vmr.patch.composite[$composite].set($value)
+                $vmr.patch.composite[$composite].get() | Should -Be $value
             }
         }
         
@@ -419,11 +419,6 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.strip[$index].pan_x | Should -Be $twoD_x
             }
             
-            It "Should set and get Strip[$index].pan_y" {
-                $vmr.strip[$index].pan_y = $twoD_y
-                $vmr.strip[$index].pan_y | Should -Be $twoD_y
-            }
-            
             It "Should set and get Strip[$index].limit" -Skip:$ifBasic {
                 $vmr.strip[$index].limit = $gain
                 $vmr.strip[$index].limit | Should -Be $gain
@@ -440,6 +435,11 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         
         Context 'Strip, physical only' {
             BeforeAll { $index = $phys_in }
+            
+            It "Should set and get Strip[$index].pan_y" {
+                $vmr.strip[$index].pan_y = $twoD_y
+                $vmr.strip[$index].pan_y | Should -Be $twoD_y
+            }
             
             It "Should set and get Strip[$index].color_x" {
                 $vmr.strip[$index].color_x = $twoD_x
@@ -598,6 +598,11 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         Context 'Strip, virtual only' {
             BeforeAll { $index = $virt_in }
             
+            It "Should set and get Strip[$index].pan_y" {
+                $vmr.strip[$index].pan_y = $twoD_x
+                $vmr.strip[$index].pan_y | Should -Be $twoD_x
+            }
+            
             It "Should set and get Strip[$index].bass via .low alias" {
                 $vmr.strip[$index].bass = 0
                 $vmr.strip[$index].low  = $slide
@@ -656,6 +661,8 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             It "Should set and get Option.delay[$phys_out]" {
                 $mss = $ms + 0.03   # delay should take and return 2 decimal places
                 $vmr.option.delay[$phys_out].set($mss)
+                $vmr.command.restart
+                Start-Sleep -Milliseconds 300
                 $vmr.option.delay[$phys_out].get() | Should -Be $mss
             }
         }
@@ -691,10 +698,12 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             @{ Target = $vmr.strip[$phys_in]; Label = "Strip[$phys_in]" }
             @{ Target = $vmr.strip[$virt_in]; Label = "Strip[$virt_in]" }
         ) {
+            BeforeEach { $target.gain = 0 }
+            
             It "Should fade $Label gain to dB over ms time" -ForEach @(
                 @{ Value = -21.7; Time = 750 }, @{ Value = -60.0; Time = 1250 }
             ) {
-                $sleep = $time + 10   # give it a little wiggle room
+                $sleep = $time + 50   # give it a little wiggle room
                 
                 $target.fadeto($value, $time)
                 Start-Sleep -Milliseconds $sleep
@@ -702,10 +711,10 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             }
             
             It "Should fade $Label gain by dB over ms time" -ForEach @(
-                @{ Value = -45.0; Time = 1050 }, @{ Value = 16.9; Time = 300 }
+                @{ Value = 16.9; Time = 1050 }, @{ Value = -45; Time = 300 }
             ) {
-                $sleep = $time + 10
-                $gain = @($target.gain + $value, -60.0, 12.0)
+                $sleep = $time + 50
+                $gain = @($($target.gain + $value), -60.0, 12.0)
                 
                 $target.fadeby($value, $time)
                 Start-Sleep -Milliseconds $sleep
