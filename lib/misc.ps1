@@ -96,8 +96,8 @@ class Patch : IRemote {
 
 function Make_Presets ([Object]$remote) {
     [System.Collections.ArrayList]$preset = @()
-    foreach ($i in 0..63) {
-        $preset.Add([Preset]::new($i, $remote))
+    0..63 | ForEach-Object {
+        [void]$preset.Add([Preset]::new($_, $remote))
     }
     $preset
 }

@@ -167,16 +167,10 @@ class VirtualBus : Bus {
 }
 
 function Make_Buses ([Object]$remote) {
-    $busCount = $remote.kind.p_out + $remote.kind.v_out
-    
     [System.Collections.ArrayList]$bus = @()
-    for ($i = 0; $i -lt $busCount; $i++) {
-        if ($i -lt $remote.kind.p_out) {
-            $bus.Add([PhysicalBus]::new($i, $remote))
-        }
-        else {
-            $bus.Add([VirtualBus]::new($i, $remote))
-        }
+    0..$($remote.kind.p_out + $remote.kind.v_out - 1) | ForEach-Object {
+        if ($_ -lt $remote.kind.p_out) { [void]$bus.Add([PhysicalBus]::new($_, $remote)) }
+        else { [void]$bus.Add([VirtualBus]::new($_, $remote)) }
     }
     $bus
 }

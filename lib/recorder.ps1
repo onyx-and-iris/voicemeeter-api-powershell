@@ -12,15 +12,13 @@ class Recorder : IRemote {
         $this.mode = [RecorderMode]::new($remote)
         
         $this.armstrip = @()
-        $stripCount = $remote.kind.p_in + $remote.kind.v_in
-        for ($i = 0; $i -lt $stripCount; $i++) {
-            $this.armstrip.Add([BoolArrayMember]::new($i, 'armstrip', $this))
+        0..($remote.kind.p_in + $remote.kind.v_in - 1) | ForEach-Object {
+            $this.armstrip.Add([BoolArrayMember]::new($_, 'armstrip', $this))
         }
         
         $this.armbus = @()
-        $busCount = $remote.kind.p_out + $remote.kind.v_out
-        for ($i = 0; $i -lt $busCount; $i++) {
-            $this.armbus.Add([BoolArrayMember]::new($i, 'armbus', $this))
+        0..($remote.kind.p_out + $remote.kind.v_out - 1) | ForEach-Object {
+            $this.armbus.Add([BoolArrayMember]::new($_, 'armbus', $this))
         }
     }
 

@@ -150,11 +150,11 @@ function Make_Vban ([Object]$remote) {
     [System.Collections.ArrayList]$instream = @()
     [System.Collections.ArrayList]$outstream = @()
 
-    for ($i = 0; $i -lt $remote.kind.vban_in; $i++) {
-        $instream.Add([VbanStream]::new($i, $remote, 'in'))
+    0..$($remote.kind.vban_in - 1) | ForEach-Object {
+        $instream.Add([VbanStream]::new($_, $remote, 'in'))
     }
-    for ($i = 0; $i -lt $remote.kind.vban_out; $i++) {
-        $outstream.Add([VbanStream]::new($i, $remote, 'out'))
+    0..$($remote.kind.vban_out - 1) | ForEach-Object {
+        $outstream.Add([VbanStream]::new($_, $remote, 'out'))
     }
 
     $CustomObject = [pscustomobject]@{
