@@ -82,11 +82,8 @@ function AddChannelMembers () {
     $num_B = $this.remote.kind.v_out
 
     [System.Collections.ArrayList]$channels = @()
-    foreach ($i in 1..$num_A) {
-        $channels.Add('A{0}' -f $i)
-    }
-    foreach ($i in 1..$num_B) {
-        $channels.Add('B{0}' -f $i)
+    1..$($num_A + $num_B) | ForEach-Object {
+        if ($_ -le $num_A) { $channels.Add('A{0}' -f $_) } else { $channels.Add('B{0}' -f $($_ - $num_A)) }
     }
 
     AddBoolMembers -PARAMS $channels
