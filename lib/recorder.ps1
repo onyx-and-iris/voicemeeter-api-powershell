@@ -102,11 +102,9 @@ class Recorder : IRemote {
     
     hidden $_eject = $($this | Add-Member ScriptProperty 'eject' `
         {
-            return Write-Warning ('ERROR: Recorder.eject is write only')
-        } `
-        {
             $this.remote.Setter('Command.eject', 1)
-        }
+        } `
+        {}
     )
 
     [void] Load ([string]$filename) {
