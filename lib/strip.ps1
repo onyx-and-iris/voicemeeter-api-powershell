@@ -359,12 +359,16 @@ class VirtualStrip : Strip {
 
 
 function Make_Strips ([Object]$remote) {
+    $stripCount = $remote.kind.p_in + $remote.kind.v_in
+    
     [System.Collections.ArrayList]$strip = @()
-    0..$($remote.kind.p_in + $remote.kind.v_in - 1) | ForEach-Object {
-        if ($_ -lt $remote.kind.p_in) {
-            [void]$strip.Add([PhysicalStrip]::new($_, $remote))
+    for ($i = 0; $i -lt $stripCount; $i++) {
+        if ($i -lt $remote.kind.p_in) {
+            $strip.Add([PhysicalStrip]::new($i, $remote))
         }
-        else { [void]$strip.Add([VirtualStrip]::new($_, $remote)) }
+        else {
+            $strip.Add([VirtualStrip]::new($i, $remote))
+        }
     }
     $strip
 }

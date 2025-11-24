@@ -68,8 +68,8 @@ class MacroButton {
 
 function Make_Buttons {
     [System.Collections.ArrayList]$button = @()
-    0..79 | ForEach-Object {
-        [void]$button.Add([MacroButton]::new($_))
+    foreach ($i in 0..79) {
+        $button.Add([MacroButton]::new($i))
     }
     $button
 }
