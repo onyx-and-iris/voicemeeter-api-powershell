@@ -95,8 +95,8 @@ class PhysicalStrip : Strip {
         $this.gate = [StripGate]::new($index, $remote)
         $this.denoiser = [StripDenoiser]::new($index, $remote)
         $this.pitch = [StripPitch]::new($index, $remote)
-        $this.eq = [StripEq]::new($index, $remote)
         $this.device = [StripDevice]::new($index, $remote)
+        $this.eq = [Eq]::new('Strip', $remote.kind.strip_ch, $this)
     }
 }
 
@@ -171,75 +171,6 @@ class StripPitch : IRemote {
     
     [string] identifier () {
         return 'Strip[' + $this.index + '].Pitch'
-    }
-}
-
-class StripEq : IRemote {
-    [System.Collections.ArrayList]$channel
-    
-    StripEq ([int]$index, [Object]$remote) : base ($index, $remote) {
-        AddBoolMembers -PARAMS @('on', 'ab')
-        
-        $this.channel = @()
-        $chCount = $remote.kind.strip_ch
-        for ($ch = 0; $ch -lt $chCount; $ch++) {
-            $this.channel.Add([StripEqCh]::new($index, $ch, $remote))
-        } 
-    }
-
-    [string] identifier () {
-        return 'Strip[' + $this.index + '].EQ'
-    }
-    
-    [void] Load ([string]$filename) {
-        $param = 'Command.LoadStripEq[' + $this.index + ']'
-        $this.remote.Setter($param, $filename)
-    }
-    
-    [void] Save ([string]$filename) {
-        $param = 'Command.SaveStripEq[' + $this.index + ']'
-        $this.remote.Setter($param, $filename)
-    }
-}
-
-class StripEqCh : IRemote {
-    [System.Collections.ArrayList]$cell
-    [int]$stripIndex
-    [int]$chIndex
-    
-    StripEqCh ([int]$stripIndex, [int]$chIndex, [Object]$remote) : base ($stripIndex, $remote) {
-        $this.stripIndex = $stripIndex
-        $this.chIndex = $chIndex
-        
-        $this.cell = @()
-        $cellCount = $remote.kind.cells
-        for ($c = 0; $c -lt $cellCount; $c++) {
-            [void]$this.cell.Add([StripEqChCell]::new($stripIndex, $chIndex, $c, $remote))
-        }
-    }
-    
-    [string] identifier () {
-        return ('Strip[{0}].EQ.Channel[{1}]' -f $this.stripIndex, $this.chIndex)
-    }
-}
-
-class StripEqChCell : IRemote {
-    [int]$stripIndex
-    [int]$chIndex
-    [int]$cellIndex
-    
-    StripEqChCell ([int]$stripIndex, [int]$chIndex, [int]$cellIndex, [Object]$remote) : base ($stripIndex, $remote) {
-        AddBoolMembers -PARAMS @('on')
-        AddIntMembers -PARAMS @('type')
-        AddFloatMembers -PARAMS @('f', 'gain', 'q')
-        
-        $this.stripIndex  = $stripIndex
-        $this.chIndex   = $chIndex
-        $this.cellIndex = $cellIndex
-    }
-    
-    [string] identifier () {
-        return ('Strip[{0}].EQ.Channel[{1}].Cell[{2}]' -f $this.stripIndex, $this.chIndex, $this.cellIndex)
     }
 }
 

@@ -9,9 +9,9 @@ class Bus : IRemote {
         AddStringMembers -PARAMS @('label')
         AddFloatMembers -PARAMS @('gain', 'returnreverb', 'returndelay', 'returnfx1', 'returnfx2')
 
-        $this.mode = [BusMode]::new($index, $remote)
-        $this.eq = [BusEq]::new($index, $remote)
         $this.levels = [BusLevels]::new($index, $remote)
+        $this.mode = [BusMode]::new($index, $remote)
+        $this.eq = [Eq]::new('Bus', $remote.kind.bus_ch, $this)
     }
 
     [string] identifier () {
@@ -81,75 +81,6 @@ class BusMode : IRemote {
             }
         }
         return $mode
-    }
-}
-
-class BusEq : IRemote {
-    [System.Collections.ArrayList]$channel
-    
-    BusEq ([int]$index, [Object]$remote) : base ($index, $remote) {
-        AddBoolMembers -PARAMS @('on', 'ab')
-        
-        $this.channel = @()
-        $chCount = $remote.kind.bus_ch
-        for ($ch = 0; $ch -lt $chCount; $ch++) {
-            [void]$this.channel.Add([BusEqCh]::new($index, $ch, $remote))
-        } 
-    }
-
-    [string] identifier () {
-        return 'Bus[' + $this.index + '].EQ'
-    }
-    
-    [void] Load ([string]$filename) {
-        $param = 'Command.LoadBusEq[' + $this.index + ']'
-        $this.remote.Setter($param, $filename)
-    }
-    
-    [void] Save ([string]$filename) {
-        $param = 'Command.SaveBusEq[' + $this.index + ']'
-        $this.remote.Setter($param, $filename)
-    }
-}
-
-class BusEqCh : IRemote {
-    [System.Collections.ArrayList]$cell
-    [int]$busIndex
-    [int]$chIndex
-    
-    BusEqCh ([int]$busIndex, [int]$chIndex, [Object]$remote) : base ($busIndex, $remote) {
-        $this.busIndex = $busIndex
-        $this.chIndex = $chIndex
-        
-        $this.cell = @()
-        $cellCount = $remote.kind.cells
-        for ($c = 0; $c -lt $cellCount; $c++) {
-            [void]$this.cell.Add([BusEqChCell]::new($busIndex, $chIndex, $c, $remote))
-        }
-    }
-    
-    [string] identifier () {
-        return ('Bus[{0}].EQ.Channel[{1}]' -f $this.busIndex, $this.chIndex)
-    }
-}
-
-class BusEqChCell : IRemote {
-    [int]$busIndex
-    [int]$chIndex
-    [int]$cellIndex
-    
-    BusEqChCell ([int]$busIndex, [int]$chIndex, [int]$cellIndex, [Object]$remote) : base ($busIndex, $remote) {
-        AddBoolMembers -PARAMS @('on')
-        AddIntMembers -PARAMS @('type')
-        AddFloatMembers -PARAMS @('f', 'gain', 'q')
-        
-        $this.busIndex  = $busIndex
-        $this.chIndex   = $chIndex
-        $this.cellIndex = $cellIndex
-    }
-    
-    [string] identifier () {
-        return ('Bus[{0}].EQ.Channel[{1}].Cell[{2}]' -f $this.busIndex, $this.chIndex, $this.cellIndex)
     }
 }
 

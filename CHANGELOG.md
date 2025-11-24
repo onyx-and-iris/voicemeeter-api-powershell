@@ -64,6 +64,7 @@ Before any major/minor/patch is released all test units will be run to verify th
   - Option.Mode.swift
   - Option.monitorOnSel
   - Option.sliderMode
+- New Eq classes
 - More Bus.Eq | Strip.Eq methods and commands
   - Eq.save($filename)
   - Eq.load($filename)
@@ -82,6 +83,7 @@ Before any major/minor/patch is released all test units will be run to verify th
 - GainLayers are now based on KindMap so they're only added for Potato
 - Strip, Bus, Command, Recorder, and Vban now use IRemote base class
 - Recorder.Armstrip[i]|Armbus[i] now use IntArrayMember class
+- Bus.Eq and Strip.Eq now use Eq class
 
 ### Removed
 
