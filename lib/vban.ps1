@@ -1,42 +1,12 @@
-class IVban {
-    [int32]$index
-    [Object]$remote
+class VbanStream : IRemote {
     [string]$direction
-
-    IVban ([int]$index, [Object]$remote, [string]$direction) {
-        $this.index = $index
-        $this.remote = $remote
+    
+    VbanStream ([int]$index, [Object]$remote, [string]$direction) : base ($index, $remote) {
         $this.direction = $direction
     }
 
     [string] identifier () {
         return 'vban.' + $this.direction + 'stream[' + $this.index + ']'
-    }
-
-    [single] Getter ($param) {
-        return $this.remote.Getter($this.Cmd($param))
-    }
-
-    [string] Getter_String ($param) {
-        $this.Cmd($param) | Write-Debug
-        return $this.remote.Getter_String($this.Cmd($param))
-    }
-
-    [void] Setter ($param, $val) {
-        "$($this.Cmd($param))=$val" | Write-Debug
-        $this.remote.Setter($this.Cmd($param), $val)
-    }
-
-    [string] Cmd ($param) {
-        if ([string]::IsNullOrEmpty($param)) {
-            return $this.identifier()
-        }
-        return "$($this.identifier()).$param"
-    }
-}
-
-class Vban : IVban {
-    Vban ([int]$index, [Object]$remote, [string]$direction) : base ($index, $remote, $direction) {
     }
 
     [string] ToString() {
@@ -176,28 +146,15 @@ class Vban : IVban {
     )
 }
 
-
-class VbanInstream : Vban {
-    VbanInstream ([int]$index, [Object]$remote, [string]$direction) : base ($index, $remote, $direction) {
-    }
-}
-
-
-class VbanOutstream : Vban {
-    VbanOutstream ([int]$index, [Object]$remote, [string]$direction) : base ($index, $remote, $direction) {
-    }
-}
-
-
 function Make_Vban ([Object]$remote) {
     [System.Collections.ArrayList]$instream = @()
     [System.Collections.ArrayList]$outstream = @()
 
     0..$($remote.kind.vban_in - 1) | ForEach-Object {
-        [void]$instream.Add([VbanInstream]::new($_, $remote, 'in'))
+        $instream.Add([VbanStream]::new($_, $remote, 'in'))
     }
     0..$($remote.kind.vban_out - 1) | ForEach-Object {
-        [void]$outstream.Add([VbanOutstream]::new($_, $remote, 'out'))
+        $outstream.Add([VbanStream]::new($_, $remote, 'out'))
     }
 
     $CustomObject = [pscustomobject]@{
@@ -207,7 +164,6 @@ function Make_Vban ([Object]$remote) {
 
     $CustomObject | Add-Member ScriptProperty 'enable' `
     {
-        # return Write-Warning ('ERROR: vban.enable is write only')
         return [bool]( Param_Get -PARAM 'vban.enable' )
     } `
     {

@@ -635,9 +635,10 @@ $vmr.recorder.mode.loop = $true
 
 #### ArmStrip[i]|ArmBus[i]
 
-The following method is available:
+The following methods are available:
 
 - Set($val): bool
+- Get()
 
 example:
 

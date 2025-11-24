@@ -74,12 +74,14 @@ Before any major/minor/patch is released all test units will be run to verify th
   - Eq.Channel[i].Cell[j].q
 - Virtual Strip[i].pan_y range to README
 - Vban.port sets and gets vban.instream[0].port: this port is currently used for all streams
+- Recorder.Armstrip[i]|Armbus[i].Get()
 
 ### Changed
 
 - Strip[i].mono is now an alias for Strip[i].mc on virtual strips (matches Python module behavior)
 - GainLayers are now based on KindMap so they're only added for Potato
-- Strip and Bus now use IRemote base class
+- Strip, Bus, Command, Recorder, and Vban now use IRemote base class
+- Recorder.Armstrip[i]|Armbus[i] now use IntArrayMember class
 
 ### Removed
 

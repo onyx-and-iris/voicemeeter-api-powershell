@@ -259,6 +259,13 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.recorder.mode.multitrack = $value
                 $vmr.recorder.mode.multitrack | Should -Be $value
             }
+            
+            It 'Should set and get Recorder input arming' -ForEach @(
+                @{ Index = $phys_in }, @{ Index = $virt_in }
+            ) {
+                $vmr.recorder.armstrip[$index].set($value)
+                $vmr.recorder.armstrip[$index].get() | Should -Be $value
+            }
         }
 
         Context 'Macrobutton' -ForEach @(
@@ -773,12 +780,12 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 try {
                     $Eq.channel[0].cell[0].q = 0.3
                     $Eq.save($tmp)
-                    Start-Sleep -Milliseconds 50
+                    Start-Sleep -Milliseconds 100
                     Test-Path $tmp | Should -BeTrue
                     
                     $Eq.channel[0].cell[0].q = 50.2
                     $Eq.load($tmp)
-                    Start-Sleep -Milliseconds 50
+                    Start-Sleep -Milliseconds 100
                     $Eq.channel[0].cell[0].q | Should -Be 0.3
                 }
                 finally {
@@ -790,19 +797,14 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
     
     Describe 'Special Tests' -Tag 'special' {
         Context 'Recorder' -Skip:$ifBasic {
-            <# It 'Should set Recorder input arming' -ForEach @(
-                @{ Value = $true }, @{ Value = $false }
+            It 'Should set and get Recorder output arming' -ForEach @(
+                @{ Arm = $phys_out; Dis = $virt_out }
+                @{ Arm = $virt_out; Dis = $phys_out }
             ) {
-                $vmr.recorder.armstrip[$phys_in].set($value)
-                $vmr.recorder.armstrip[$virt_in].set($value)
-            } #>
-            
-            <# It 'Should set Recorder output arming' {
-                $vmr.recorder.armbus[$phys_out].set($true)
-                $vmr.recorder.armbus[$virt_out].set($true)
-                
-                $vmr.recorder.armbus[$virt_out].set($false)
-            } #>
+                $vmr.recorder.armbus[$arm].set($true)
+                $vmr.recorder.armbus[$arm].get() | Should -Be $true
+                $vmr.recorder.armbus[$dis].get() | Should -Be $false
+            }
             
             It 'Should set and get Recorder.channel' -ForEach @(
                 @{ Value = 2 }, @{ Value = 8 }
@@ -917,12 +919,12 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 try {
                     $vmr.strip[2].gain = -37.2
                     $vmr.command.save($tmp)
-                    Start-Sleep -Milliseconds 50
+                    Start-Sleep -Milliseconds 100
                     Test-Path $tmp | Should -BeTrue
                     
                     $vmr.command.reset
                     $vmr.command.load($tmp)
-                    Start-Sleep -Milliseconds 50
+                    Start-Sleep -Milliseconds 100
                     $vmr.strip[2].gain | Should -Be -37.2
                 }
                 finally {

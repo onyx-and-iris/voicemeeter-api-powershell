@@ -1,61 +1,29 @@
-class IRecorder {
-    [Object]$remote
-
-    IRecorder ([Object]$remote) {
-        $this.remote = $remote
-    }
-
-    [single] Getter ($param) {
-        $this.Cmd($param) | Write-Debug
-        return $this.remote.Getter($this.Cmd($param))
-    }
-
-    [void] Setter ($param, $val) {
-        "$($this.Cmd($param))=$val" | Write-Debug
-        if ($val -is [Boolean]) {
-            $this.remote.Setter($this.Cmd($param), $(if ($val) { 1 } else { 0 }))
-        }
-        else {
-            $this.remote.Setter($this.Cmd($param), $val)
-        }
-    }
-
-    [string] Cmd ($param) {
-        if ([string]::IsNullOrEmpty($param)) {
-            return $this.identifier()
-        }
-        return "$($this.identifier()).$param"
-    }
-}
-
-class Recorder : IRecorder {
-    [Object]$remote
-    [Object]$mode
+class Recorder : IRemote {
     [System.Collections.ArrayList]$armstrip
     [System.Collections.ArrayList]$armbus
+    [Object]$mode
 
     Recorder ([Object]$remote) : base ($remote) {
-        $this.mode = [RecorderMode]::new($remote)
-        $this.armstrip = @()
-        0..($remote.kind.p_in + $remote.kind.v_in - 1) | ForEach-Object {
-            $this.armstrip.Add([RecorderArmStrip]::new($_, $remote))
-        }
-        $this.armbus = @()
-        0..($remote.kind.p_out + $remote.kind.v_out - 1) | ForEach-Object {
-            $this.armbus.Add([RecorderArmBus]::new($_, $remote))
-        }
-
         AddActionMembers -PARAMS @('play', 'stop', 'pause', 'replay', 'record', 'ff', 'rew')
         AddFloatMembers -PARAMS @('gain')
+        
         AddChannelMembers
+        
+        $this.mode = [RecorderMode]::new($remote)
+        
+        $this.armstrip = @()
+        0..($remote.kind.p_in + $remote.kind.v_in - 1) | ForEach-Object {
+            $this.armstrip.Add([BoolArrayMember]::new($_, 'armstrip', $this))
+        }
+        
+        $this.armbus = @()
+        0..($remote.kind.p_out + $remote.kind.v_out - 1) | ForEach-Object {
+            $this.armbus.Add([BoolArrayMember]::new($_, 'armbus', $this))
+        }
     }
 
     [string] identifier () {
         return 'Recorder'
-    }
-
-    [string] ToString() {
-        return $this.GetType().Name
     }
 
     hidden $_loop = $($this | Add-Member ScriptProperty 'loop' `
@@ -170,43 +138,13 @@ class Recorder : IRecorder {
     }
 }
 
-class RecorderMode : IRecorder {
+class RecorderMode : IRemote {
     RecorderMode ([Object]$remote) : base ($remote) {
         AddBoolMembers -PARAMS @('recbus', 'playonload', 'loop', 'multitrack')
     }
 
     [string] identifier () {
         return 'Recorder.Mode'
-    }
-}
-
-class RecorderArm : IRecorder {
-    [int]$index
-
-    RecorderArm ([int]$index, [Object]$remote) : base ($remote) {
-        $this.index = $index
-    }
-
-    Set ([bool]$val) {
-        $this.Setter('', $(if ($val) { 1 } else { 0 }))
-    }
-}
-
-class RecorderArmStrip : RecorderArm {
-    RecorderArmStrip ([int]$index, [Object]$remote) : base ($index, $remote) {
-    }
-
-    [string] identifier () {
-        return "Recorder.ArmStrip[$($this.index)]"
-    }
-}
-
-class RecorderArmBus : RecorderArm {
-    RecorderArmBus ([int]$index, [Object]$remote) : base ($index, $remote) {
-    }
-
-    [string] identifier () {
-        return "Recorder.ArmBus[$($this.index)]"
     }
 }
 
