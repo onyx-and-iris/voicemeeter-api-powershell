@@ -1,46 +1,12 @@
-class IVban {
-    [int32]$index
-    [Object]$remote
+class Vban : IRemote {
     [string]$direction
-
-    IVban ([int]$index, [Object]$remote, [string]$direction) {
-        $this.index = $index
-        $this.remote = $remote
+    
+    Vban ([int]$index, [Object]$remote, [string]$direction) : base ($index, $remote) {
         $this.direction = $direction
     }
 
     [string] identifier () {
         return 'vban.' + $this.direction + 'stream[' + $this.index + ']'
-    }
-
-    [single] Getter ($param) {
-        return $this.remote.Getter($this.Cmd($param))
-    }
-
-    [string] Getter_String ($param) {
-        $this.Cmd($param) | Write-Debug
-        return $this.remote.Getter_String($this.Cmd($param))
-    }
-
-    [void] Setter ($param, $val) {
-        "$($this.Cmd($param))=$val" | Write-Debug
-        $this.remote.Setter($this.Cmd($param), $val)
-    }
-
-    [string] Cmd ($param) {
-        if ([string]::IsNullOrEmpty($param)) {
-            return $this.identifier()
-        }
-        return "$($this.identifier()).$param"
-    }
-}
-
-class Vban : IVban {
-    Vban ([int]$index, [Object]$remote, [string]$direction) : base ($index, $remote, $direction) {
-    }
-
-    [string] ToString() {
-        return $this.GetType().Name + $this.index
     }
 
     hidden $_on = $($this | Add-Member ScriptProperty 'on' `
