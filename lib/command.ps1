@@ -1,31 +1,10 @@
-class Special {
-    [Object]$remote
-
+class Special : IRemote {
     Special ([Object]$remote) {
         AddActionMembers -PARAMS @('restart', 'shutdown', 'show')
-    
-        $this.remote = $remote
     }
 
     [string] identifier () {
         return 'Command'
-    }
-
-    [string] ToString() {
-        return $this.GetType().Name
-    }
-
-    [single] Getter ($param) {
-        return $this.remote.Getter("$($this.identifier()).$param")
-    }
-
-    [void] Setter ($param, $val) {
-        if ($val -is [Boolean]) {
-            $this.remote.Setter("$($this.identifier()).$param", $(if ($val) { 1 } else { 0 }))
-        }
-        else {
-            $this.remote.Setter("$($this.identifier()).$param", $val)
-        }
     }
 
     [void] RunMacrobuttons() {
