@@ -12,6 +12,7 @@ Before any major/minor/patch is released all test units will be run to verify th
 ### Added
 
 - IRemote base class
+- ArrayMember classes for array-like properties
 
 ## [3.3.0] - 2024-06-29
 
