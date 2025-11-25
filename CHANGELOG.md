@@ -9,7 +9,9 @@ Before any major/minor/patch is released all test units will be run to verify th
 
 ## [Unreleased] These changes have not been added to PSGallery yet
 
-- [ ]
+### Added
+
+- IRemote base class
 
 ## [3.3.0] - 2024-06-29
 
