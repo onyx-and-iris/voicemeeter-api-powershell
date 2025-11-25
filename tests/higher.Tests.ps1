@@ -836,8 +836,20 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             }
             
             Context 'Instream, outstream' -ForEach @(
-                @{ Stream = $vmr.vban.instream[$vban_in]; Label = "Instream[$vban_in]"; ifIn = $true }
-                @{ Stream = $vmr.vban.outstream[$vban_out]; Label = "Outstream[$vban_out]"; ifOut = $true }
+                @{
+                    Stream = $vmr.vban.instream[$vban_in]
+                    Label = "Instream[$vban_in]"
+                    Route1 = $phys_in
+                    Route2 = $virt_in
+                    ifIn = $true
+                }
+                @{
+                    Stream = $vmr.vban.outstream[$vban_out]
+                    Label = "Outstream[$vban_out]"
+                    Route1 = $phys_out
+                    Route2 = $virt_out
+                    ifOut = $true
+                }
             ) {
                 It "Should set and get $Label.on" -ForEach @(
                     @{ Value = $true }, @{ Value = $false }
@@ -869,7 +881,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 }
                 
                 It "Should set and get $Label.route" -ForEach @(
-                    @{ Value = 7 }, @{ Value = 0 }
+                    @{ Value = $route1 }, @{ Value = $route2 }
                 ) {
                     $Stream.route = $value
                     $Stream.route | Should -Be $value
