@@ -1,40 +1,4 @@
-class IBus {
-    [int]$index
-    [Object]$remote
-    
-    IBus ([int]$index, [Object]$remote) {
-        $this.index = $index
-        $this.remote = $remote
-    }
-
-    [string] identifier () {
-        return 'Bus[' + $this.index + ']'
-    }
-
-    [single] Getter ($param) {
-        $this.ToString() + " Getter: $($this.Cmd($param))" | Write-Debug
-        return $this.remote.Getter($this.Cmd($param))
-    }
-
-    [string] Getter_String ($param) {
-        $this.ToString() + " Getter_String: $($this.Cmd($param))" | Write-Debug
-        return $this.remote.Getter_String($this.Cmd($param))
-    }
-
-    [void] Setter ($param, $val) {
-        $this.ToString() + " Setter: $($this.Cmd($param))=$val" | Write-Debug
-        $this.remote.Setter($this.Cmd($param), $val)
-    }
-
-    [string] Cmd ($param) {
-        if ([string]::IsNullOrEmpty($param)) {
-            return $this.identifier()
-        }
-        return "$($this.identifier()).$param"
-    }
-}
-
-class Bus : IBus {
+class Bus : IRemote {
     [Object]$mode
     [Object]$eq
     [Object]$levels
@@ -49,8 +13,8 @@ class Bus : IBus {
         $this.levels = [BusLevels]::new($index, $remote)
     }
 
-    [string] ToString() {
-        return $this.GetType().Name + $this.index
+    [string] identifier () {
+        return 'Bus[' + $this.index + ']'
     }
 
     [void] FadeTo ([single]$target, [int]$time) {
@@ -62,7 +26,7 @@ class Bus : IBus {
     }
 }
 
-class BusLevels : IBus {
+class BusLevels : IRemote {
     [int]$init
     [int]$offset
 
@@ -93,7 +57,7 @@ class BusLevels : IBus {
     }
 }
 
-class BusMode : IBus {
+class BusMode : IRemote {
     [System.Collections.ArrayList]$modes
 
     BusMode ([int]$index, [Object]$remote) : base ($index, $remote) {
@@ -119,7 +83,7 @@ class BusMode : IBus {
     }
 }
 
-class BusEq : IBus {
+class BusEq : IRemote {
     BusEq ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddBoolMembers -PARAMS @('on', 'ab')
     }
@@ -137,7 +101,7 @@ class PhysicalBus : Bus {
     }
 }
 
-class BusDevice : IBus {
+class BusDevice : IRemote {
     BusDevice ([int]$index, [Object]$remote) : base ($index, $remote) {
     }
 
