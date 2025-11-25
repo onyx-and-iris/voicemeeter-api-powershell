@@ -1,35 +1,4 @@
-class IRecorder {
-    [Object]$remote
-
-    IRecorder ([Object]$remote) {
-        $this.remote = $remote
-    }
-
-    [single] Getter ($param) {
-        $this.Cmd($param) | Write-Debug
-        return $this.remote.Getter($this.Cmd($param))
-    }
-
-    [void] Setter ($param, $val) {
-        "$($this.Cmd($param))=$val" | Write-Debug
-        if ($val -is [Boolean]) {
-            $this.remote.Setter($this.Cmd($param), $(if ($val) { 1 } else { 0 }))
-        }
-        else {
-            $this.remote.Setter($this.Cmd($param), $val)
-        }
-    }
-
-    [string] Cmd ($param) {
-        if ([string]::IsNullOrEmpty($param)) {
-            return $this.identifier()
-        }
-        return "$($this.identifier()).$param"
-    }
-}
-
-class Recorder : IRecorder {
-    [Object]$remote
+class Recorder : IRemote {
     [Object]$mode
     [System.Collections.ArrayList]$armstrip
     [System.Collections.ArrayList]$armbus
@@ -52,10 +21,6 @@ class Recorder : IRecorder {
 
     [string] identifier () {
         return 'Recorder'
-    }
-
-    [string] ToString() {
-        return $this.GetType().Name
     }
 
     hidden $_loop = $($this | Add-Member ScriptProperty 'loop' `
@@ -160,7 +125,7 @@ class Recorder : IRecorder {
     }
 }
 
-class RecorderMode : IRecorder {
+class RecorderMode : IRemote {
     RecorderMode ([Object]$remote) : base ($remote) {
         AddBoolMembers -PARAMS @('recbus', 'playonload', 'loop', 'multitrack')
     }
@@ -170,11 +135,8 @@ class RecorderMode : IRecorder {
     }
 }
 
-class RecorderArm : IRecorder {
-    [int]$index
-
-    RecorderArm ([int]$index, [Object]$remote) : base ($remote) {
-        $this.index = $index
+class RecorderArm : IRemote {
+    RecorderArm ([int]$index, [Object]$remote) : base ($index, $remote) {
     }
 
     Set ([bool]$val) {
