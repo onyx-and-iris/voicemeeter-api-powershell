@@ -1,5 +1,5 @@
 class Special : IRemote {
-    Special ([Object]$remote) {
+    Special ([Object]$remote) : base ($remote) {
         AddActionMembers -PARAMS @('restart', 'shutdown', 'show')
     }
 
