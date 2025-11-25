@@ -1,5 +1,5 @@
 class IRemote {
-    [int]$index
+    [Nullable[int]]$index
     [Object]$remote
 
     IRemote ([Object]$remote) {
@@ -44,6 +44,9 @@ class IRemote {
     }
 
     [string] ToString() {
+        if ($this.index.HasValue) {
+            return $this.GetType().Name + $this.index
+        }
         return $this.GetType().Name
     }
 }
