@@ -29,7 +29,10 @@ class Patch : IRemote {
     }
     
     hidden [void] AddASIOOutMembers () {
-        $num_A     = $this.remote.kind.p_out
+        $num_A = $this.remote.kind.p_out
+        if ($this.remote.kind.name -eq 'basic') {
+            $num_A += $this.remote.kind.v_out
+        }
         $asio_out  = $this.remote.kind.asio_out
         
         if ($asio_out -le 0) { return }
