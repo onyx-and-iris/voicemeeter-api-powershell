@@ -417,6 +417,29 @@ $vmr.command.Load("path/to/filename.xml")
 $vmr.command.RunMacrobuttons()
 ```
 
+### Patch
+
+The following Patch commands are available:
+
+- postFaderComposite: bool
+- postFxInsert: bool
+
+The following Patch members have .Set($val) and .Get() available:
+
+- asio[i]: int, from 0 to ASIO input channels
+- OutA2[i]-OutA5[i]: int, from 0 to ASIO output channels
+- composite[i]: int, from 0 to strip channels
+- insert[i]: bool
+
+for example:
+
+```powershell
+$vmr.patch.asio[3].set(2)        # patches ASIO input channel 2 (2) to strip 2, channel 2 (3)
+$vmr.patch.OutA3[0].set(24)      # patches bus A3, channel 1 (0) to ASIO output channel 24
+$vmr.patch.composite[5].set(0)   # sets composite channel 6 (5) to default bus channel
+$vmr.patch.insert[4].get()
+```
+
 ### Recorder
 
 The following commands are available:

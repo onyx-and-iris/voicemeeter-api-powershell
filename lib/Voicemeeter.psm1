@@ -3,12 +3,14 @@
 . $PSScriptRoot\base.ps1
 . $PSScriptRoot\kinds.ps1
 . $PSScriptRoot\iremote.ps1
+. $PSScriptRoot\arraymember.ps1
 . $PSScriptRoot\strip.ps1
 . $PSScriptRoot\bus.ps1
 . $PSScriptRoot\macrobuttons.ps1
 . $PSScriptRoot\vban.ps1
 . $PSScriptRoot\command.ps1
 . $PSScriptRoot\recorder.ps1
+. $PSScriptRoot\patch.ps1
 . $PSScriptRoot\profiles.ps1
 
 class Remote {
@@ -78,6 +80,7 @@ class RemoteBasic : Remote {
     [System.Collections.ArrayList]$button
     [PSCustomObject]$vban
     [Object]$command
+    [Object]$patch
 
     RemoteBasic () : base ('basic') {
         $this.strip = Make_Strips($this)
@@ -85,6 +88,7 @@ class RemoteBasic : Remote {
         $this.button = Make_Buttons
         $this.vban = Make_Vban($this)
         $this.command = Make_Command($this)
+        $this.patch = Make_Patch($this)
     }
 }
 
@@ -94,6 +98,7 @@ class RemoteBanana : Remote {
     [System.Collections.ArrayList]$button
     [PSCustomObject]$vban
     [Object]$command
+    [Object]$patch
     [Object]$recorder
 
     RemoteBanana () : base ('banana') {
@@ -102,6 +107,7 @@ class RemoteBanana : Remote {
         $this.button = Make_Buttons
         $this.vban = Make_Vban($this)
         $this.command = Make_Command($this)
+        $this.patch = Make_Patch($this)
         $this.recorder = Make_Recorder($this)
     }
 }
@@ -112,6 +118,7 @@ class RemotePotato : Remote {
     [System.Collections.ArrayList]$button
     [PSCustomObject]$vban
     [Object]$command
+    [Object]$patch
     [Object]$recorder
 
     RemotePotato () : base ('potato') {
@@ -120,6 +127,7 @@ class RemotePotato : Remote {
         $this.button = Make_Buttons
         $this.vban = Make_Vban($this)
         $this.command = Make_Command($this)
+        $this.patch = Make_Patch($this)
         $this.recorder = Make_Recorder($this)
     }
 }
