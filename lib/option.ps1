@@ -7,8 +7,13 @@ class Option : IRemote {
         
         $this.buffer = [OptionBuffer]::new($remote)
         
+        $num_A = $this.remote.kind.p_out
+        if ($this.remote.kind.name -eq 'basic') {
+            $num_A += $this.remote.kind.v_out
+        }
+        
         $this.delay = @()
-        for ($i = 0; $i -lt $remote.kind.p_out; $i++) {
+        for ($i = 0; $i -lt $num_A; $i++) {
             $this.delay.Add([FloatArrayMember]::new($i, 'delay', $this, 2))
         }
     }
