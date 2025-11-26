@@ -312,6 +312,7 @@ $vmr.bus[0].device.name
 
 name, sr are defined as read only.
 wdm, ks, mme, asio are defined as write only.
+asio only defined for Bus[0].Device
 
 #### eq
 

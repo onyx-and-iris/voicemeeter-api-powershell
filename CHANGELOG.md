@@ -15,6 +15,7 @@ Before any major/minor/patch is released all test units will be run to verify th
 - ArrayMember classes for array-like properties
 - Patch class
 - Option class
+- Device classes
 
 ## [3.3.0] - 2024-06-29
 
