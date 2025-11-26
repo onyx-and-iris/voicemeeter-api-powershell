@@ -1,40 +1,4 @@
-class IStrip {
-    [int]$index
-    [Object]$remote
-
-    IStrip ([int]$index, [Object]$remote) {
-        $this.index = $index
-        $this.remote = $remote
-    }
-
-    [string] identifier () {
-        return 'Strip[' + $this.index + ']'
-    }
-
-    [single] Getter ($param) {
-        $this.Cmd($param) | Write-Debug
-        return $this.remote.Getter($this.Cmd($param))
-    }
-
-    [string] Getter_String ($param) {
-        $this.Cmd($param) | Write-Debug
-        return $this.remote.Getter_String($this.Cmd($param))
-    }
-
-    [void] Setter ($param, $val) {
-        "$($this.Cmd($param))=$val" | Write-Debug
-        $this.remote.Setter($this.Cmd($param), $val)
-    }
-
-    [string] Cmd ($param) {
-        if ([string]::IsNullOrEmpty($param)) {
-            return $this.identifier()
-        }
-        return "$($this.identifier()).$param"
-    }
-}
-
-class Strip : IStrip {
+class Strip : IRemote {
     [Object]$levels
 
     Strip ([int]$index, [Object]$remote) : base ($index, $remote) {
@@ -49,8 +13,8 @@ class Strip : IStrip {
         $this.levels = [StripLevels]::new($index, $remote)
     }
 
-    [string] ToString() {
-        return $this.GetType().Name + $this.index
+    [string] identifier () {
+        return 'Strip[' + $this.index + ']'
     }
 
     [void] FadeTo ([single]$target, [int]$time) {
@@ -62,7 +26,7 @@ class Strip : IStrip {
     }
 }
 
-class StripLevels : IStrip {
+class StripLevels : IRemote {
     [int]$init
     [int]$offset
 
@@ -128,7 +92,7 @@ class PhysicalStrip : Strip {
     }
 }
 
-class StripComp : IStrip {
+class StripComp : IRemote {
     StripComp ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddFloatMembers -PARAMS @('gainin', 'ratio', 'threshold', 'attack', 'release', 'knee', 'gainout')
         AddBoolMembers -PARAMS @('makeup')
@@ -149,7 +113,7 @@ class StripComp : IStrip {
     )
 }
 
-class StripGate : IStrip {
+class StripGate : IRemote {
     StripGate ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddFloatMembers -PARAMS @('threshold', 'damping', 'bpsidechain', 'attack', 'hold', 'release')
     }
@@ -169,7 +133,7 @@ class StripGate : IStrip {
     )
 }
 
-class StripDenoiser : IStrip {
+class StripDenoiser : IRemote {
     StripDenoiser ([int]$index, [Object]$remote) : base ($index, $remote) {
     }
 
@@ -188,7 +152,7 @@ class StripDenoiser : IStrip {
     )
 }
 
-class StripEq : IStrip {
+class StripEq : IRemote {
     StripEq ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddBoolMembers -PARAMS @('on', 'ab')
     }
@@ -198,7 +162,7 @@ class StripEq : IStrip {
     }
 }
 
-class StripDevice : IStrip {
+class StripDevice : IRemote {
     StripDevice ([int]$index, [Object]$remote) : base ($index, $remote) {
     }
 

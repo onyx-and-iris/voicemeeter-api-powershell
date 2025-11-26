@@ -1,6 +1,6 @@
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "", Target = "variablename")]
 Param([String]$tag, [string]$kind = 'potato')
-Import-Module .\lib\Voicemeeter.psm1
+Import-Module (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\Voicemeeter.psm1') -Force
 
 
 function main() {
