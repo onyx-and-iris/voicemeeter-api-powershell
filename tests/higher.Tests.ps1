@@ -110,6 +110,23 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.command.lock = $value
             }
         }
+        
+        Context 'Patch' {
+            It 'Should set and get Patch.insert[$insert]' -Skip:$ifBasic {
+                $vmr.patch.insert[$insert].set($value)
+                $vmr.patch.insert[$insert].get() | Should -Be $value
+            }
+            
+            It 'Should set and get Patch.postfadercomposite' -Skip:$ifBasic {
+                $vmr.patch.postfadercomposite = $value
+                $vmr.patch.postfadercomposite | Should -Be $value
+            }
+            
+            It 'Should set and get Patch.postfxinsert' -Skip:$ifBasic {
+                $vmr.patch.postfxinsert = $value
+                $vmr.patch.postfxinsert | Should -Be $value
+            }
+        }
     }
 
     Describe 'Float Tests' {
@@ -240,6 +257,15 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                     $vmr.vban.outstream[$index].channel | Should -Be $expected
                 }
             }            
+        }
+        
+        Context 'Patch' {
+            It 'Should set and get Patch.composite[$composite]' -Skip:$ifBasic -ForEach @(
+                @{ Value = 22 }, @{ Value = 6 }
+            ) {
+                $vmr.patch.composite[$composite].set($value)
+                $vmr.patch.composite[$composite].get() | Should -Be $value
+            }
         }
     }
 
