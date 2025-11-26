@@ -440,6 +440,56 @@ $vmr.patch.composite[5].set(0)   # sets composite channel 6 (5) to default bus c
 $vmr.patch.insert[4].get()
 ```
 
+### Option
+
+The following Option commands are available:
+
+- sr: int, (32000, 44100, 48000, 88200, 96000, 176400, 192000)
+- asiosr: bool
+- monitorOnSel: bool
+- sliderMode: bool
+
+The following Option.delay[i] methods are available:
+
+- Set($val): float, from 0.00 to 500.00
+- Get()
+
+for example:
+
+```powershell
+$vmr.Option.delay[2].set(30.26)   # sets the delay for the third (2) bus
+$vmr.Option.sliderMode = $false   # sets slider mode to absolute
+```
+
+#### buffers
+
+The following Option.buffer commands are available:
+
+- mme: int, (441, 480, 512, 576, 640, 704, 768, 896, 1024, 1536, 2048)
+- wdm: int, (128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 441, 448, 480, 512, 576, 640, 704, 768, 896, 1024, 1536, 2048)
+- ks: int, (128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 441, 448, 480, 512, 576, 640, 704, 768, 896, 1024, 1536, 2048)
+- asio: int, (0, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 441, 448, 480, 512, 576, 640, 704, 768, 1024)
+
+for example:
+
+```powershell
+$vmr.Option.buffer.wdm = 512
+$vmr.Option.buffer.asio = 0    # to use default buffer size
+```
+
+#### modes
+
+The following Option.mode commands are available:
+
+- exclusif: bool
+- swift: bool
+
+for example:
+
+```powershell
+$vmr.Option.mode.exclusif = $true   # sets WDM exclusive mode
+```
+
 ### Recorder
 
 The following commands are available:
