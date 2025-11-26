@@ -44,7 +44,7 @@ class IRemote {
     }
 
     [string] ToString() {
-        if ($this.index.HasValue) {
+        if ($null -ne $this.index) {
             return $this.GetType().Name + $this.index
         }
         return $this.GetType().Name
