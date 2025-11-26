@@ -1,13 +1,11 @@
 class Option : IRemote {
     [System.Collections.ArrayList]$delay
     [Object]$buffer
-    [Object]$mode
     
     Option ([Object]$remote) : base ($remote) {
         AddBoolMembers -PARAMS @('asiosr', 'monitorOnSel', 'sliderMode')
         
         $this.buffer = [OptionBuffer]::new($remote)
-        $this.mode = [OptionMode]::new($remote)
         
         $this.delay = @()
         for ($i = 0; $i -lt $remote.kind.p_out; $i++) {
@@ -106,16 +104,6 @@ class OptionBuffer : IRemote {
             }
         }
     )
-}
-
-class OptionMode : IRemote {
-    OptionMode ([Object]$remote) : base ($remote) {
-        AddBoolMembers -PARAMS @('exclusif', 'swift')
-    }
-    
-    [string] identifier () {
-        return 'Option.Mode'
-    }
 }
 
 function Make_Option ([Object]$remote) {

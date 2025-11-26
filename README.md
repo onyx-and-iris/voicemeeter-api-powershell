@@ -477,19 +477,6 @@ $vmr.Option.buffer.wdm = 512
 $vmr.Option.buffer.asio = 0    # to use default buffer size
 ```
 
-#### modes
-
-The following Option.mode commands are available:
-
-- exclusif: bool
-- swift: bool
-
-for example:
-
-```powershell
-$vmr.Option.mode.exclusif = $true   # sets WDM exclusive mode
-```
-
 ### Recorder
 
 The following commands are available:
