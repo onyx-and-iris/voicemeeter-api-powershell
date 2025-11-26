@@ -13,7 +13,7 @@ class Device : IRemote {
 
     hidden $_sr = $($this | Add-Member ScriptProperty 'sr' `
         {
-            $this.Getter('sr')
+            [int]$this.Getter('sr')
         } `
         {
             return Write-Warning ("ERROR: $($this.identifier()).sr is read only")

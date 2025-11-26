@@ -251,39 +251,67 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
     }
 
-    Describe 'Int Tests' -ForEach @(
-        @{ Index = $phys_in }, @{ Index = $virt_in }
-    ) {
-        Context 'Strip, one physical, one virtual' -Skip:$ifBasic -ForEach @(
-            @{ Value = 3; Expected = 3 }
-            @{ Value = -6; Expected = -6 }
+    Describe 'Int Tests' {
+        Context 'Strip, one physical, one virtual' -ForEach @(
+            @{ Index = $phys_in }, @{ Index = $virt_in }
         ) {
-            It "Should set Strip[$index].Limit to 3" {
+            It "Should set and get Strip[$index].Limit" -Skip:$ifBasic -ForEach @(
+                @{ Value = 3; Expected = 3 }
+                @{ Value = -6; Expected = -6 }
+            ) {
                 $vmr.strip[$index].limit = $value
                 $vmr.strip[$index].limit | Should -Be $expected
             }
         }
 
-        Context 'Vban outstream' {
-            Context 'sr' -ForEach @(
+        Context 'Strip, physical only' -ForEach @(
+            @{ Index = $phys_in }
+        ) {
+            Context 'Device' {
+                It "Should get Strip[$index].Device.sr" {
+                    $vmr.strip[$index].device.sr | Should -BeOfType [int]
+                }
+            }
+        }
+
+        Context 'Bus, physical only' -ForEach @(
+            @{ Index = $phys_out }
+        ) {
+            Context 'Device' {
+                It "Should get Bus[$index].Device.sr" {
+                    $vmr.bus[$index].device.sr | Should -BeOfType [int]
+                }
+            }
+        }
+
+        Context 'Bus, virtual only' -ForEach @(
+            @{ Index = $virt_out }
+        ) {
+            Context 'Device' -Skip:$ifNotBasic {
+                It "Should get Bus[$index].Device.sr" {
+                    $vmr.bus[$index].device.sr | Should -BeOfType [int]
+                }
+            }
+        }
+
+        Context 'Vban outstream' -ForEach @(
+            @{ Index = $vban_out }
+        ) {
+            It "Should set vban.outstream[$index].sr to $value" -ForEach @(
                 @{ Value = 44100; Expected = 44100 }
                 @{ Value = 48000; Expected = 48000 }
             ) {
-                It "Should set vban.outstream[$index].sr to $value" {
-                    $vmr.vban.outstream[$index].sr = $value
-                    $vmr.vban.outstream[$index].sr | Should -Be $expected
-                }
+                $vmr.vban.outstream[$index].sr = $value
+                $vmr.vban.outstream[$index].sr | Should -Be $expected
             }
 
-            Context 'channel' -ForEach @(
+            It 'Should set vban.outstream[0].channel to 1' -ForEach @(
                 @{ Value = 1; Expected = 1 }
                 @{ Value = 2; Expected = 2 }
             ) {
-                It 'Should set vban.outstream[0].channel to 1' {
-                    $vmr.vban.outstream[$index].channel = $value
-                    $vmr.vban.outstream[$index].channel | Should -Be $expected
-                }
-            }            
+                $vmr.vban.outstream[$index].channel = $value
+                $vmr.vban.outstream[$index].channel | Should -Be $expected
+            }
         }
         
         Context 'Patch' {
@@ -341,6 +369,32 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             }
         }
 
+        Context 'Strip, physical only' -ForEach @(
+            @{ Index = $phys_in }
+        ) {
+            Context 'Device' -ForEach @(
+                @{ Value = 'testInput' }, @{ Value = '' }
+            ) {
+                It "Should set Strip[$index].Device.wdm" {
+                    $vmr.strip[$index].device.wdm = $value
+                    Start-Sleep -Milliseconds 800
+                    $vmr.strip[$index].device.name | Should -Be $value
+                }
+
+                It "Should set Strip[$index].Device.ks" {
+                    $vmr.strip[$index].device.ks = $value
+                    Start-Sleep -Milliseconds 800
+                    $vmr.strip[$index].device.name | Should -Be $value
+                }
+            
+                It "Should set Strip[$index].Device.mme" {
+                    $vmr.strip[$index].device.mme = $value
+                    Start-Sleep -Milliseconds 800
+                    $vmr.strip[$index].device.name | Should -Be $value
+                }
+            }
+        }
+
         Context 'Bus, one physical, one virtual' -ForEach @(
             @{ Index = $phys_out }, @{ Index = $virt_out }
         ) {
@@ -350,6 +404,58 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             ) {
                 $vmr.bus[$index].label = $value
                 $vmr.bus[$index].label | Should -Be $expected
+            }
+        }
+
+        Context 'Bus, physical only' -ForEach @(
+            @{ Index = $phys_out }
+        ) {
+            Context 'Device' -ForEach @(
+                @{ Value = 'testOutput' }, @{ Value = '' }
+            ) {
+                It "Should set Bus[$index].Device.wdm" {
+                    $vmr.bus[$index].device.wdm = $value
+                    Start-Sleep -Milliseconds 800
+                    $vmr.bus[$index].device.name | Should -Be $value
+                }
+
+                It "Should set Bus[$index].Device.ks" {
+                    $vmr.bus[$index].device.ks = $value
+                    Start-Sleep -Milliseconds 800
+                    $vmr.bus[$index].device.name | Should -Be $value
+                }
+            
+                It "Should set Bus[$index].Device.mme" {
+                    $vmr.bus[$index].device.mme = $value
+                    Start-Sleep -Milliseconds 800
+                    $vmr.bus[$index].device.name | Should -Be $value
+                }
+            }
+        }
+
+        Context 'Bus, virtual only' -ForEach @(
+            @{ Index = $virt_out }
+        ) {
+            Context 'Device' -Skip:$ifNotBasic -ForEach @(
+                @{ Value = 'testOutput' }, @{ Value = '' }
+            ) {
+                It "Should set Bus[$index].Device.wdm" {
+                    $vmr.bus[$index].device.wdm = $value
+                    Start-Sleep -Milliseconds 800
+                    $vmr.bus[$index].device.name | Should -Be $value
+                }
+
+                It "Should set Bus[$index].Device.ks" {
+                    $vmr.bus[$index].device.ks = $value
+                    Start-Sleep -Milliseconds 800
+                    $vmr.bus[$index].device.name | Should -Be $value
+                }
+
+                It "Should set Bus[$index].Device.mme" {
+                    $vmr.bus[$index].device.mme = $value
+                    Start-Sleep -Milliseconds 800
+                    $vmr.bus[$index].device.name | Should -Be $value
+                }
             }
         }
 
