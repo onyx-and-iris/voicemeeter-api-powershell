@@ -24,12 +24,12 @@ class Option : IRemote {
         {
             param([int]$arg)
             $opts = @(32000, 44100, 48000, 88200, 96000, 176400, 192000)
-                if ($opts.Contains($arg)) {
-                    $this._sr = $this.Setter('sr', $arg)
-                }
-                else {
-                    Write-Warning ('Expected one of', $opts)
-                }
+            if ($opts.Contains($arg)) {
+                $this._sr = $this.Setter('sr', $arg)
+            }
+            else {
+                Write-Warning ('Expected one of', $opts)
+            }
         }
     )
 }
@@ -48,12 +48,12 @@ class OptionBuffer : IRemote {
         {
             param([int]$arg)
             $opts = @(441, 480, 512, 576, 640, 704, 768, 896, 1024, 1536, 2048)
-                if ($opts.Contains($arg)) {
-                    $this._mme = $this.Setter('mme', $arg)
-                }
-                else {
-                    Write-Warning ('Expected one of', $opts)
-                }
+            if ($opts.Contains($arg)) {
+                $this._mme = $this.Setter('mme', $arg)
+            }
+            else {
+                Write-Warning ('Expected one of', $opts)
+            }
         }
     )
     
