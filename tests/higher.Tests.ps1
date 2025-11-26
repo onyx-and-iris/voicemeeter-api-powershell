@@ -127,6 +127,22 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.patch.postfxinsert | Should -Be $value
             }
         }
+        
+        Context 'Option' {
+            It 'Should set and get Option.monitoronsel' -Skip:$ifNotPotato {
+                $vmr.option.monitoronsel = $value
+                $vmr.command.restart
+                Start-Sleep -Milliseconds 500
+                $vmr.option.monitoronsel | Should -Be $value
+            }
+            
+            It 'Should set and get Option.slidermode' -Skip:$ifNotPotato {
+                $vmr.option.slidermode = $value
+                $vmr.command.restart
+                Start-Sleep -Milliseconds 500
+                $vmr.option.slidermode | Should -Be $value
+            }
+        }
     }
 
     Describe 'Float Tests' {
@@ -222,6 +238,17 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 }
             }
         }
+        
+        Context 'Option' {
+            It "Should set and get Option.delay[$phys_out]" -ForEach @(
+                @{ Value = 486.57 }, @{ Value = 26.41 }
+            ) {
+                $vmr.option.delay[$phys_out].set($value)
+                $vmr.command.restart
+                Start-Sleep -Milliseconds 500
+                $vmr.option.delay[$phys_out].get() | Should -Be $value
+            }
+        }
     }
 
     Describe 'Int Tests' -ForEach @(
@@ -265,6 +292,38 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             ) {
                 $vmr.patch.composite[$composite].set($value)
                 $vmr.patch.composite[$composite].get() | Should -Be $value
+            }
+        }
+        
+        Context 'Option' {
+            It 'Should set and get Option.sr' -ForEach @(
+                @{ Value = 44100 }, @{ Value = 48000 }
+            ) {
+                $vmr.option.sr = $value
+                Start-Sleep -Milliseconds 500
+                $vmr.option.sr | Should -Be $value
+            }
+            
+            Context 'Option.buffer' -ForEach @(
+                @{ Value = 1024 }, @{ Value = 512 }
+            ) {
+                It 'Should set and get mme buffer' {
+                    $vmr.option.buffer.mme = $value
+                    Start-Sleep -Milliseconds 500
+                    $vmr.option.buffer.mme | Should -Be $value
+                }
+                
+                It 'Should set and get wdm buffer' {
+                    $vmr.option.buffer.wdm = $value
+                    Start-Sleep -Milliseconds 500
+                    $vmr.option.buffer.wdm | Should -Be $value
+                }
+                
+                It 'Should set and get ks buffer' {
+                    $vmr.option.buffer.ks = $value
+                    Start-Sleep -Milliseconds 500
+                    $vmr.option.buffer.ks | Should -Be $value
+                }
             }
         }
     }
