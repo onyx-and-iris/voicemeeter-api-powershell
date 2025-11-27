@@ -440,6 +440,21 @@ $vmr.command.Load("path/to/filename.xml")
 $vmr.command.RunMacrobuttons()
 ```
 
+### Fx
+
+The following Fx commands are available:
+
+- Reverb.on: bool
+- Reverb.ab: bool
+- Delay.on: bool
+- Delay.ab: bool
+
+for example:
+
+```powershell
+$vmr.fx.reverb.ab = $false
+```
+
 ### Patch
 
 The following Patch commands are available:
