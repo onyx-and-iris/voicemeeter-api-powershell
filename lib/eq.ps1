@@ -2,15 +2,19 @@ class Eq : IRemote {
     [System.Collections.ArrayList]$channel
     [string]$prefix
     
-    Eq ([string]$prefix, [int]$chCount, [Object]$parent) : base ($parent.index, $parent.remote) {
+    Eq ([int]$index, [Object]$remote, [string]$prefix, [int]$chCount) : base ($index, $remote) {
+        $this.prefix = $prefix
+
         AddBoolMembers -PARAMS @('on', 'ab')
 
         $this.channel = @()
         for ($ch = 0; $ch -lt $chCount; $ch++) {
-            $this.channel.Add([EqChannel]::new($ch, $this))
+            $this.channel.Add([EqChannel]::new($ch, $remote, $this.identifier()))
         }
+    }
 
-        $this.prefix = $prefix
+    [string] identifier () {
+        return '{0}[{1}].EQ' -f $this.prefix, $this.index
     }
 
     [void] Load ([string]$filename) {
@@ -28,13 +32,13 @@ class EqChannel : IRemote {
     [System.Collections.ArrayList]$cell
     [string]$eqId
     
-    EqChannel ([int]$index, [Object]$eq) : base ($index, $eq.remote) {
-        $this.eqId = $eq.identifier()
+    EqChannel ([int]$index, [Object]$remote, [string]$eqId) : base ($index, $remote) {
+        $this.eqId = $eqId
 
         $this.cell = @()
         $cellCount = $this.remote.kind.cells
         for ($c = 0; $c -lt $cellCount; $c++) {
-            $this.cell.Add([EqCell]::new($c, $this))
+            $this.cell.Add([EqCell]::new($c, $remote, $this.identifier()))
         }
     }
 
@@ -46,8 +50,8 @@ class EqChannel : IRemote {
 class EqCell : IRemote {
     [string]$channelId
     
-    EqCell ([int]$index, [Object]$channel) : base ($index, $channel.remote) {
-        $this.channelId = $channel.identifier()
+    EqCell ([int]$index, [Object]$remote, [string]$channelId) : base ($index, $remote) {
+        $this.channelId = $channelId
 
         AddBoolMembers -PARAMS @('on')
         AddIntMembers -PARAMS @('type')
