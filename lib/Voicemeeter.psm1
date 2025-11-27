@@ -14,6 +14,7 @@
 . $PSScriptRoot\recorder.ps1
 . $PSScriptRoot\patch.ps1
 . $PSScriptRoot\option.ps1
+. $PSScriptRoot\fx.ps1
 . $PSScriptRoot\profiles.ps1
 
 class Remote {
@@ -125,6 +126,7 @@ class RemotePotato : Remote {
     [System.Collections.ArrayList]$button
     [PSCustomObject]$vban
     [Object]$command
+    [Object]$fx
     [Object]$patch
     [Object]$option
     [Object]$recorder
@@ -135,6 +137,7 @@ class RemotePotato : Remote {
         $this.button = Make_Buttons
         $this.vban = Make_Vban($this)
         $this.command = Make_Command($this)
+        $this.fx = Make_Fx($this)
         $this.patch = Make_Patch($this)
         $this.option = Make_Option($this)
         $this.recorder = Make_Recorder($this)
