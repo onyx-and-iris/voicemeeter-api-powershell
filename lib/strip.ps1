@@ -162,6 +162,15 @@ class StripEq : IRemote {
     }
 }
 
+class StripDevice : Device {
+    StripDevice ([int]$index, [Object]$remote) : base ($index, $remote) {
+    }
+
+    [string] identifier () {
+        return 'Strip[' + $this.index + '].Device'
+    }
+}
+
 class VirtualStrip : Strip {
     VirtualStrip ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddBoolMembers -PARAMS @('mc')

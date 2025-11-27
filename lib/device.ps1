@@ -50,34 +50,3 @@ class Device : IRemote {
         }
     )
 }
-
-class BusDevice : Device {
-    BusDevice ([int]$index, [Object]$remote) : base ($index, $remote) {
-        if ($this.index -eq 0) {
-            $this.AddASIO()
-        }
-    }
-
-    [string] identifier () {
-        return 'Bus[' + $this.index + '].Device'
-    }
-
-    hidden [void] AddASIO () {
-        Add-Member -InputObject $this -MemberType ScriptProperty -Name 'asio' `
-            -Value {
-            return Write-Warning ("ERROR: $($this.identifier()).asio is write only")
-        } -SecondValue {
-            param($arg)
-            return $this.Setter('asio', $arg)
-        } -Force
-    }
-}
-
-class StripDevice : Device {
-    StripDevice ([int]$index, [Object]$remote) : base ($index, $remote) {
-    }
-
-    [string] identifier () {
-        return 'Strip[' + $this.index + '].Device'
-    }
-}

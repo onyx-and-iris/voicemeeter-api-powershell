@@ -111,6 +111,28 @@ class VirtualBus : Bus {
     }
 }
 
+class BusDevice : Device {
+    BusDevice ([int]$index, [Object]$remote) : base ($index, $remote) {
+        if ($this.index -eq 0) {
+            $this.AddASIO()
+        }
+    }
+
+    [string] identifier () {
+        return 'Bus[' + $this.index + '].Device'
+    }
+
+    hidden [void] AddASIO () {
+        Add-Member -InputObject $this -MemberType ScriptProperty -Name 'asio' `
+            -Value {
+            return Write-Warning ("ERROR: $($this.identifier()).asio is write only")
+        } -SecondValue {
+            param($arg)
+            return $this.Setter('asio', $arg)
+        } -Force
+    }
+}
+
 function Make_Buses ([Object]$remote) {
     [System.Collections.ArrayList]$bus = @()
     0..$($remote.kind.p_out + $remote.kind.v_out - 1) | ForEach-Object {
