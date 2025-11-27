@@ -136,6 +136,32 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.command.lock = $value
             }
         }
+
+        Context 'Fx' -Skip:$ifNotPotato {
+            Context 'Delay' {
+                It 'Should set and get Fx.delay.on' {
+                    $vmr.fx.delay.on = $value
+                    $vmr.fx.delay.on | Should -Be $expected
+                }
+
+                It 'Should set and get Fx.delay.ab' {
+                    $vmr.fx.delay.ab = $value
+                    $vmr.fx.delay.ab | Should -Be $expected
+                }
+            }
+            
+            Context 'Reverb' {
+                It 'Should set and get Fx.reverb.on' {
+                    $vmr.fx.reverb.on = $value
+                    $vmr.fx.reverb.on | Should -Be $expected
+                }
+
+                It 'Should set and get Fx.reverb.ab' {
+                    $vmr.fx.reverb.ab = $value
+                    $vmr.fx.reverb.ab | Should -Be $expected
+                }
+            }
+        }
         
         Context 'Patch' {
             It 'Should set and get Patch.insert[$insert]' -Skip:$ifBasic {
