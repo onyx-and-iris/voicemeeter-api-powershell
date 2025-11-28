@@ -152,9 +152,8 @@ class StripDenoiser : IRemote {
     )
 }
 
-class StripEq : IRemote {
-    StripEq ([int]$index, [Object]$remote) : base ($index, $remote) {
-        AddBoolMembers -PARAMS @('on', 'ab')
+class StripEq : Eq {
+    StripEq ([int]$index, [Object]$remote) : base ($index, $remote, 'Strip') {
     }
 
     [string] identifier () {

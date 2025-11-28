@@ -18,6 +18,9 @@ function main() {
         $vban_out = $vmr.kind.vban_out - 1
         $insert = $vmr.kind.insert - 1
         $composite = $vmr.kind.composite - 1
+        $strip_ch = $vmr.kind.strip_ch - 1
+        $bus_ch = $vmr.kind.bus_ch - 1
+        $cells = $vmr.kind.cells - 1
 
         # skip conditions by kind
         $ifBasic = $vmr.kind.name -eq 'basic'

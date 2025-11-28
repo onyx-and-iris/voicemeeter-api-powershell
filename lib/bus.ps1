@@ -83,9 +83,8 @@ class BusMode : IRemote {
     }
 }
 
-class BusEq : IRemote {
-    BusEq ([int]$index, [Object]$remote) : base ($index, $remote) {
-        AddBoolMembers -PARAMS @('on', 'ab')
+class BusEq : Eq {
+    BusEq ([int]$index, [Object]$remote) : base ($index, $remote, 'Bus') {
     }
 
     [string] identifier () {
