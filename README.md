@@ -382,14 +382,16 @@ $vmr.button[5].trigger = $true
 
 ### VBAN
 
-- vmr.vban.enable: Toggle VBAN on or off. Accepts a bool value.
+The following vban commands are available:
+
+- enable: bool
+- port: int, from 1024 - 65535
 
 For each vban in/out stream the following parameters are defined:
 
 - on: bool
 - name: string
 - ip: string
-- port: int, from 1024 - 65535
 - sr: in, (11025, 16000, 22050, 24000, 32000, 44100, 48000, 64000, 88200, 96000)
 - channel: int from 1 to 8
 - bit: int, 16 or 24
@@ -403,9 +405,9 @@ example:
 
 ```powershell
 $vmr.vban.enable = $true
+$vmr.vban.port = 6990
 
 $vmr.vban.instream[0].on = $true
-$vmr.vban.instream[2].port = 6990
 $vmr.vban.outstream[3].bit = 16
 ```
 
