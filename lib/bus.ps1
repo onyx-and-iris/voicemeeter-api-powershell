@@ -84,7 +84,11 @@ class BusMode : IRemote {
 }
 
 class BusEq : Eq {
-    BusEq ([int]$index, [Object]$remote) : base ($index, $remote, 'Bus', $remote.kind.bus_ch) {
+    BusEq ([int]$index, [Object]$remote) : base ($index, $remote, 'Bus') {
+    }
+
+    [string] identifier () {
+        return 'Bus[' + $this.index + '].EQ'
     }
 }
 

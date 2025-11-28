@@ -1,29 +1,25 @@
 class Eq : IRemote {
     [System.Collections.ArrayList]$channel
-    [string]$prefix
+    [string]$kindOfEq
     
-    Eq ([int]$index, [Object]$remote, [string]$prefix, [int]$chCount) : base ($index, $remote) {
-        $this.prefix = $prefix
+    Eq ([int]$index, [Object]$remote, [string]$kindOfEq) : base ($index, $remote) {
+        $this.kindOfEq = $kindOfEq
 
         AddBoolMembers -PARAMS @('on', 'ab')
 
         $this.channel = @()
-        for ($ch = 0; $ch -lt $chCount; $ch++) {
+        for ($ch = 0; $ch -lt $remote.kind.eq_ch[$this.kindOfEq]; $ch++) {
             $this.channel.Add([EqChannel]::new($ch, $remote, $this.identifier()))
         }
     }
 
-    [string] identifier () {
-        return '{0}[{1}].EQ' -f $this.prefix, $this.index
-    }
-
     [void] Load ([string]$filename) {
-        $param = 'Command.Load{0}Eq[{1}]' -f $this.prefix, $this.index
+        $param = 'Command.Load{0}Eq[{1}]' -f $this.kindOfEq, $this.index
         $this.remote.Setter($param, $filename)
     }
 
     [void] Save ([string]$filename) {
-        $param = 'Command.Save{0}Eq[{1}]' -f $this.prefix, $this.index
+        $param = 'Command.Save{0}Eq[{1}]' -f $this.kindOfEq, $this.index
         $this.remote.Setter($param, $filename)
     }
 }

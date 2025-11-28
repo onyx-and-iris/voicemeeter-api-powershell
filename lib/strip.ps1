@@ -153,7 +153,11 @@ class StripDenoiser : IRemote {
 }
 
 class StripEq : Eq {
-    StripEq ([int]$index, [Object]$remote) : base ($index, $remote, 'Strip', $remote.kind.strip_ch) {
+    StripEq ([int]$index, [Object]$remote) : base ($index, $remote, 'Strip') {
+    }
+
+    [string] identifier () {
+        return 'Strip[' + $this.index + '].EQ'
     }
 }
 
