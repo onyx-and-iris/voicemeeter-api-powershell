@@ -1,5 +1,5 @@
 Describe -Tag 'higher', -TestName 'All Higher Tests' {
-    Describe 'Bool tests' -ForEach @(
+    Describe 'Bool tests' -Tag 'bool' -ForEach @(
         @{ Value = $true; Expected = $true }
         @{ Value = $false; Expected = $false }
     ) {
@@ -97,21 +97,30 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             }
         }
 
-        Context 'Vban instream' -ForEach @(
-            @{ Index = $vban_in }
-        ) {
-            It "Should set vban.instream[$index].on" {
-                $vmr.vban.instream[$index].on = $value
-                $vmr.vban.instream[$index].on | Should -Be $expected
+        Context 'Vban' {
+            It 'Should set and get Vban.enable' {
+                $vmr.vban.enable = $value
+                $vmr.command.restart
+                Start-Sleep -Milliseconds 2000
+                $vmr.vban.enable | Should -Be $expected
             }
-        }
+        
+            Context 'Instream' -ForEach @(
+                @{ Index = $vban_in }
+            ) {
+                It "Should set vban.instream[$index].on" {
+                    $vmr.vban.instream[$index].on = $value
+                    $vmr.vban.instream[$index].on | Should -Be $expected
+                }
+            }
 
-        Context 'Vban outstream' -ForEach @(
-            @{ Index = $vban_out }
-        ) {
-            It "Should set vban.outstream[$index].on" {
-                $vmr.vban.outstream[$index].on = $value
-                $vmr.vban.outstream[$index].on | Should -Be $expected
+            Context 'Outstream' -ForEach @(
+                @{ Index = $vban_out }
+            ) {
+                It "Should set vban.outstream[$index].on" {
+                    $vmr.vban.outstream[$index].on = $value
+                    $vmr.vban.outstream[$index].on | Should -Be $expected
+                }
             }
         }
 
@@ -184,20 +193,20 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             It 'Should set and get Option.monitoronsel' -Skip:$ifNotPotato {
                 $vmr.option.monitoronsel = $value
                 $vmr.command.restart
-                Start-Sleep -Milliseconds 500
+                Start-Sleep -Milliseconds 2000
                 $vmr.option.monitoronsel | Should -Be $value
             }
             
             It 'Should set and get Option.slidermode' -Skip:$ifNotPotato {
                 $vmr.option.slidermode = $value
                 $vmr.command.restart
-                Start-Sleep -Milliseconds 500
+                Start-Sleep -Milliseconds 2000
                 $vmr.option.slidermode | Should -Be $value
             }
         }
     }
 
-    Describe 'Float Tests' {
+    Describe 'Float Tests' -Tag 'float' {
         Context 'Strip, one physical one virtual' -ForEach @(
             @{ Index = $phys_in }, @{ Index = $virt_in }
         ) {
@@ -331,13 +340,13 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             ) {
                 $vmr.option.delay[$phys_out].set($value)
                 $vmr.command.restart
-                Start-Sleep -Milliseconds 500
+                Start-Sleep -Milliseconds 2000
                 $vmr.option.delay[$phys_out].get() | Should -Be $value
             }
         }
     }
 
-    Describe 'Int Tests' {
+    Describe 'Int Tests' -Tag 'int' {
         Context 'Strip, one physical, one virtual' -ForEach @(
             @{ Index = $phys_in }, @{ Index = $virt_in }
         ) {
@@ -406,23 +415,113 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             }
         }
 
-        Context 'Vban outstream' -ForEach @(
-            @{ Index = $vban_out }
-        ) {
-            It "Should set vban.outstream[$index].sr to $value" -ForEach @(
-                @{ Value = 44100; Expected = 44100 }
-                @{ Value = 48000; Expected = 48000 }
+        Context 'Vban' {
+            It 'Should set vban.port' -ForEach @(
+                @{ Value = 1024; Expected = 1024 }
+                @{ Value = 65535; Expected = 65535 }
             ) {
-                $vmr.vban.outstream[$index].sr = $value
-                $vmr.vban.outstream[$index].sr | Should -Be $expected
+                $vmr.vban.port = $value
+                $vmr.command.restart
+                Start-Sleep -Milliseconds 2000
+                $vmr.vban.port | Should -Be $expected
             }
-
-            It 'Should set vban.outstream[0].channel to 1' -ForEach @(
-                @{ Value = 1; Expected = 1 }
-                @{ Value = 2; Expected = 2 }
+            
+            Context 'Instream' -ForEach @(
+                @{ Index = $vban_in }
             ) {
-                $vmr.vban.outstream[$index].channel = $value
-                $vmr.vban.outstream[$index].channel | Should -Be $expected
+                It "Should set vban.instream[$index].port" -ForEach @(
+                    @{ Value = 1024; Expected = 1024 }
+                    @{ Value = 65535; Expected = 65535 }
+                ) {
+                    $vmr.vban.instream[$index].port = $value
+                    $vmr.command.restart
+                    Start-Sleep -Milliseconds 2000
+                    $vmr.vban.instream[$index].port | Should -Be $expected
+                }
+
+                It "Should set vban.instream[$index].sr" {
+                    $vmr.vban.instream[$index].sr | Should -BeOfType [int]
+                }
+
+                It "Should set vban.instream[$index].channel" {
+                    $vmr.vban.instream[$index].channel | Should -BeOfType [int]
+                }
+
+                It "Should set vban.instream[$index].bit" {
+                    $vmr.vban.instream[$index].bit | Should -BeOfType [int]
+                }
+
+                It "Should set vban.instream[$index].quality" -ForEach @(
+                    @{ Value = 0; Expected = 0 }
+                    @{ Value = 4; Expected = 4 }
+                ) {
+                    $vmr.vban.instream[$index].quality = $value
+                    Start-Sleep -Milliseconds 500
+                    $vmr.vban.instream[$index].quality | Should -Be $expected
+                }
+
+                It "Should set vban.instream[$index].route" -ForEach @(
+                    @{ Value = $phys_in; Expected = $phys_in }
+                    @{ Value = $virt_in; Expected = $virt_in }
+                ) {
+                    $vmr.vban.instream[$index].route = $value
+                    $vmr.vban.instream[$index].route | Should -Be $expected
+                }
+            }
+            
+            Context 'Outstream' -ForEach @(
+                @{ Index = $vban_out }
+            ) {
+                It "Should set vban.outstream[$index].port" -ForEach @(
+                    @{ Value = 1024; Expected = 1024 }
+                    @{ Value = 65535; Expected = 65535 }
+                ) {
+                    $vmr.vban.outstream[$index].port = $value
+                    $vmr.command.restart
+                    Start-Sleep -Milliseconds 2000
+                    $vmr.vban.outstream[$index].port | Should -Be $expected
+                }
+                
+                It "Should set vban.outstream[$index].sr" -ForEach @(
+                    @{ Value = 44100; Expected = 44100 }
+                    @{ Value = 48000; Expected = 48000 }
+                ) {
+                    $vmr.vban.outstream[$index].sr = $value
+                    $vmr.vban.outstream[$index].sr | Should -Be $expected
+                }
+
+                It "Should set vban.outstream[$index].channel" -ForEach @(
+                    @{ Value = 1; Expected = 1 }
+                    @{ Value = 2; Expected = 2 }
+                ) {
+                    $vmr.vban.outstream[$index].channel = $value
+                    $vmr.vban.outstream[$index].channel | Should -Be $expected
+                }
+
+                It "Should set vban.outstream[$index].bit" -ForEach @(
+                    @{ Value = 16; Expected = 16 }
+                    @{ Value = 24; Expected = 24 }
+                ) {
+                    $vmr.vban.outstream[$index].bit = $value
+                    $vmr.vban.outstream[$index].bit | Should -Be $expected
+                }
+
+                It "Should set vban.outstream[$index].quality" -ForEach @(
+                    @{ Value = 0; Expected = 0 }
+                    @{ Value = 4; Expected = 4 }
+                ) {
+                    $vmr.vban.outstream[$index].quality = $value
+                    Start-Sleep -Milliseconds 500
+                    $vmr.vban.outstream[$index].quality | Should -Be $expected
+                }
+
+                It "Should set vban.outstream[$index].route" -ForEach @(
+                    @{ Value = $phys_out; Expected = $phys_out }
+                    @{ Value = $virt_out; Expected = $virt_out }
+                ) {
+                    $vmr.vban.outstream[$index].route = $value
+                    $vmr.vban.outstream[$index].route | Should -Be $expected
+                }
             }
         }
         
@@ -468,7 +567,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
     }
 
-    Describe 'String Tests' {
+    Describe 'String Tests' -Tag 'string' {
         Context 'Strip, one physical, one virtual' -ForEach @(
             @{ Index = $phys_in }, @{ Index = $virt_in }
         ) {
@@ -657,29 +756,43 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             }
         }
 
-        Describe 'Vban' -ForEach @(
-            @{ Index = $vban_in }
-        ) {
-            Context 'instream' {
-                Context 'ip' -ForEach @(
+        Describe 'Vban' {
+            Context 'Instream' -ForEach @(
+                @{ Index = $vban_in }
+            ) {
+                It "Should set vban.instream[$index].name" -ForEach @(
+                    @{ Value = 'TestIn0'; Expected = 'TestIn0' }
+                    @{ Value = 'TestIn1'; Expected = 'TestIn1' }
+                ) {
+                    $vmr.vban.instream[$index].name = $value
+                    $vmr.vban.instream[$index].name | Should -Be $expected
+                }
+                
+                It "Should set vban.instream[$index].ip" -ForEach @(
                     @{ Value = '0.0.0.0'; Expected = '0.0.0.0' }
                 ) {
-                    It "Should set vban.instream[$index].name to $value" {
-                        $vmr.vban.instream[$index].ip = $value
-                        $vmr.vban.instream[$index].ip | Should -Be $expected
-                    }
-                }                 
+                    $vmr.vban.instream[$index].ip = $value
+                    $vmr.vban.instream[$index].ip | Should -Be $expected
+                }
             }
 
-            Context 'outstream' {
-                Context 'ip' -ForEach @(
+            Context 'Outstream' -ForEach @(
+                @{ Index = $vban_out }
+            ) {
+                It "Should set vban.outstream[$index].name" -ForEach @(
+                    @{ Value = 'TestOut0'; Expected = 'TestOut0' }
+                    @{ Value = 'TestOut1'; Expected = 'TestOut1' }
+                ) {
+                    $vmr.vban.outstream[$index].name = $value
+                    $vmr.vban.outstream[$index].name | Should -Be $expected
+                }
+                
+                It "Should set vban.outstream[$index].ip" -ForEach @(
                     @{ Value = '0.0.0.0'; Expected = '0.0.0.0' }
                 ) {
-                    It "Should set vban.outstream[$index].name to $value" {
-                        $vmr.vban.outstream[$index].ip = $value
-                        $vmr.vban.outstream[$index].ip | Should -Be $expected
-                    }
-                }                  
+                    $vmr.vban.outstream[$index].ip = $value
+                    $vmr.vban.outstream[$index].ip | Should -Be $expected
+                }       
             }
         }
     }
