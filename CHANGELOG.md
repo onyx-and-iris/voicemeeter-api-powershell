@@ -17,6 +17,7 @@ Before any major/minor/patch is released all test units will be run to verify th
 - Option class
 - Device classes
 - EQ class
+- FX class
 
 ## [3.3.0] - 2024-06-29
 
