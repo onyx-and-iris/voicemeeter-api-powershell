@@ -10,8 +10,8 @@ class Vban : IRemote {
     }
 }
 
-class VbanStream : Vban {
-    VbanStream ([int]$index, [Object]$remote, [string]$direction) : base ($index, $remote, $direction) {
+class VbanAudio : Vban {
+    VbanAudio ([int]$index, [Object]$remote, [string]$direction) : base ($index, $remote, $direction) {
         AddBoolMembers -PARAMS @('on')
         AddStringMembers -PARAMS @('name', 'ip')
     }
@@ -190,8 +190,8 @@ class VbanText : Vban {
     )
 }
 
-class VbanInstream : VbanStream {
-    VbanInstream ([int]$index, [Object]$remote) : base ($index, $remote, 'in') {
+class VbanInAudio : VbanAudio {
+    VbanInAudio ([int]$index, [Object]$remote) : base ($index, $remote, 'in') {
     }
 }
 
@@ -205,8 +205,8 @@ class VbanInText : VbanText {
     }
 }
 
-class VbanOutstream : VbanStream {
-    VbanOutstream ([int]$index, [Object]$remote) : base ($index, $remote, 'out') {
+class VbanOutAudio : VbanAudio {
+    VbanOutAudio ([int]$index, [Object]$remote) : base ($index, $remote, 'out') {
     }
 }
 
@@ -224,7 +224,7 @@ function Make_Vban ([Object]$remote) {
 
     for ($i = 0; $i -lt $totalInstreams; $i++) {
         if ($i -lt $remote.kind.vban.in) {
-            [void]$instream.Add([VbanInstream]::new($i, $remote))
+            [void]$instream.Add([VbanInAudio]::new($i, $remote))
         }
         elseif ($i -lt ($remote.kind.vban.in + $remote.kind.vban.midi)) {
             [void]$instream.Add([VbanInMidi]::new($i, $remote))
@@ -235,7 +235,7 @@ function Make_Vban ([Object]$remote) {
     }
     for ($i = 0; $i -lt $totalOutstreams; $i++) {
         if ($i -lt $remote.kind.vban.out) {
-            [void]$outstream.Add([VbanOutstream]::new($i, $remote))
+            [void]$outstream.Add([VbanOutAudio]::new($i, $remote))
         }
         else {
             [void]$outstream.Add([VbanOutMidi]::new($i, $remote))
