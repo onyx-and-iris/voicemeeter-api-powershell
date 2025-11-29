@@ -19,6 +19,10 @@ Before any major/minor/patch is released all test units will be run to verify th
 - EQ class
 - FX class
 - Vban.port sets Vban.Instream[0].port
+- Vban Midi and Command streams
+  - on, write-only
+  - name, write-only
+  - ip, write-only
 
 ### Changed
 
