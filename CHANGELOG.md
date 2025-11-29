@@ -18,6 +18,29 @@ Before any major/minor/patch is released all test units will be run to verify th
 - Device classes
 - EQ class
 - FX class
+- Vban.port sets Vban.Instream[0].port
+- Vban Midi and Command streams
+  - on, write-only
+  - name, write-only
+  - ip, write-only
+
+### Changed
+
+- some vban.instream | vban.outstream commands now added with meta functions
+  - on
+  - name
+  - ip
+- cast vban getters to types for consistency
+
+### Fixed
+
+- some vban commands incorrectly read-only/write-only
+  - enable
+  - instream|outstream.quality
+  - instream|outstream.route
+- vban.stream.port: [string]$arg -> [int]$arg
+- vban route range (API documentation is incorrect)
+- vban.stream.sr: $this._port -> $this._sr
 
 ## [3.3.0] - 2024-06-29
 
