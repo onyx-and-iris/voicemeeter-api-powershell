@@ -9,8 +9,7 @@ $KindMap = @{
         'asio_out'  = 8
         'composite' = 0
         'insert'    = 0
-        'vban_in'   = 4
-        'vban_out'  = 4
+        'vban'      = @{ 'in' = 4; 'out' = 4; 'midi' = 1; 'text' = 1 }
         'eq_ch'     = @{ 'strip' = 0; 'bus' = 0 }
         'cells'     = 0
     };
@@ -24,8 +23,7 @@ $KindMap = @{
         'asio_out'  = 8
         'composite' = 8
         'insert'    = 22
-        'vban_in'   = 8
-        'vban_out'  = 8
+        'vban'      = @{ 'in' = 8; 'out' = 8; 'midi' = 1; 'text' = 1 }
         'eq_ch'     = @{ 'strip' = 0; 'bus' = 8 }
         'cells'     = 6
     };
@@ -39,8 +37,7 @@ $KindMap = @{
         'asio_out'  = 8
         'composite' = 8
         'insert'    = 34
-        'vban_in'   = 8
-        'vban_out'  = 8
+        'vban'      = @{ 'in' = 8; 'out' = 8; 'midi' = 1; 'text' = 1 }
         'eq_ch'     = @{ 'strip' = 2; 'bus' = 8 }
         'cells'     = 6
     };

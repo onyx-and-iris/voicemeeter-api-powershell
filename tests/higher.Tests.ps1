@@ -106,7 +106,9 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             }
         
             Context 'Instream' -ForEach @(
-                @{ Index = $vban_in }
+                @{ Index = $vban_inA }
+                # @{ Index = $vban_inM }
+                # @{ Index = $vban_inT }
             ) {
                 It "Should set vban.instream[$index].on" {
                     $vmr.vban.instream[$index].on = $value
@@ -115,7 +117,8 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             }
 
             Context 'Outstream' -ForEach @(
-                @{ Index = $vban_out }
+                @{ Index = $vban_outA }
+                # @{ Index = $vban_outM }
             ) {
                 It "Should set vban.outstream[$index].on" {
                     $vmr.vban.outstream[$index].on = $value
@@ -427,7 +430,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             }
             
             Context 'Instream' -ForEach @(
-                @{ Index = $vban_in }
+                @{ Index = $vban_inA }
             ) {
                 It "Should set vban.instream[$index].port" -ForEach @(
                     @{ Value = 1024; Expected = 1024 }
@@ -470,7 +473,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             }
             
             Context 'Outstream' -ForEach @(
-                @{ Index = $vban_out }
+                @{ Index = $vban_outA }
             ) {
                 It "Should set vban.outstream[$index].port" -ForEach @(
                     @{ Value = 1024; Expected = 1024 }
@@ -758,7 +761,9 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
 
         Describe 'Vban' {
             Context 'Instream' -ForEach @(
-                @{ Index = $vban_in }
+                @{ Index = $vban_inA }
+                # @{ Index = $vban_inM }
+                # @{ Index = $vban_inT }
             ) {
                 It "Should set vban.instream[$index].name" -ForEach @(
                     @{ Value = 'TestIn0'; Expected = 'TestIn0' }
@@ -777,7 +782,8 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             }
 
             Context 'Outstream' -ForEach @(
-                @{ Index = $vban_out }
+                @{ Index = $vban_outA }
+                # @{ Index = $vban_outM }
             ) {
                 It "Should set vban.outstream[$index].name" -ForEach @(
                     @{ Value = 'TestOut0'; Expected = 'TestOut0' }

@@ -14,8 +14,11 @@ function main() {
         $virt_in = $vmr.kind.p_in + $vmr.kind.v_in - 1
         $phys_out = $vmr.kind.p_out - 1
         $virt_out = $vmr.kind.p_out + $vmr.kind.v_out - 1
-        $vban_in = $vmr.kind.vban_in - 1
-        $vban_out = $vmr.kind.vban_out - 1
+        $vban_inA = $vmr.kind.vban.in - 1
+        $vban_inM = $vmr.kind.vban.in + $vmr.kind.vban.midi - 1
+        $vban_inT = $vmr.kind.vban.in + $vmr.kind.vban.midi + $vmr.kind.vban.text - 1
+        $vban_outA = $vmr.kind.vban.out - 1
+        $vban_outM = $vmr.kind.vban.out + $vmr.kind.vban.midi - 1
         $insert = $vmr.kind.insert - 1
         $composite = $vmr.kind.composite - 1
         $strip_ch = $vmr.kind.eq_ch['strip'] - 1
