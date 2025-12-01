@@ -24,7 +24,7 @@ class Option : IRemote {
     
     hidden $_sr = $($this | Add-Member ScriptProperty 'sr' `
         {
-            $this.Getter('sr')
+            [int]$this.Getter('sr')
         } `
         {
             param([int]$arg)
@@ -37,6 +37,28 @@ class Option : IRemote {
             }
         }
     )
+
+    hidden $_monitoringBus = $($this | Add-Member ScriptProperty 'monitoringBus' `
+        {
+            foreach ($bus in 0..$($this.remote.kind.p_out + $this.remote.kind.v_out - 1)) {
+                if ($this.remote.Getter("Bus[$bus].Monitor")) {
+                    break
+                }
+            }
+            return $bus
+        } `
+        {
+            param([int]$arg)
+            $busMax = $this.remote.kind.p_out + $this.remote.kind.v_out - 1
+            if ($arg -ge 0 -and $arg -le $busMax) {
+                $this._monitoringBus = $this.remote.Setter("Bus[$arg].Monitor", $arg)
+            }
+            else {
+                Write-Warning ("Expected a bus index between 0 and $busMax")
+            }
+        }
+    )
+        
 }
 
 class OptionBuffer : IRemote {
@@ -48,7 +70,7 @@ class OptionBuffer : IRemote {
     
     hidden $_mme = $($this | Add-Member ScriptProperty 'mme' `
         {
-            $this.Getter('mme')
+            [int]$this.Getter('mme')
         } `
         {
             param([int]$arg)
@@ -64,7 +86,7 @@ class OptionBuffer : IRemote {
     
     hidden $_wdm = $($this | Add-Member ScriptProperty 'wdm' `
         {
-            $this.Getter('wdm')
+            [int]$this.Getter('wdm')
         } `
         {
             param([int]$arg)
@@ -80,7 +102,7 @@ class OptionBuffer : IRemote {
     
     hidden $_ks = $($this | Add-Member ScriptProperty 'ks' `
         {
-            $this.Getter('ks')
+            [int]$this.Getter('ks')
         } `
         {
             param([int]$arg)
@@ -96,7 +118,7 @@ class OptionBuffer : IRemote {
     
     hidden $_asio = $($this | Add-Member ScriptProperty 'asio' `
         {
-            $this.Getter('asio')
+            [int]$this.Getter('asio')
         } `
         {
             param([int]$arg)

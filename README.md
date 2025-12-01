@@ -491,6 +491,7 @@ The following Option commands are available:
 - asiosr: bool
 - monitorOnSel: bool
 - sliderMode: bool
+- monitoringBus: int, from 0 to bus index
 
 The following Option.delay[i] methods are available:
 

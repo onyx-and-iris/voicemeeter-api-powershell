@@ -573,6 +573,13 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 Start-Sleep -Milliseconds 500
                 $vmr.option.sr | Should -Be $value
             }
+
+            It 'Should set and get Option.MonitoringBus' -Skip:$ifNotPotato -ForEach @(
+                @{ Value = $phys_out }, @{ Value = $virt_out }
+            ) {
+                $vmr.option.monitoringbus = $value
+                $vmr.option.monitoringbus | Should -Be $value
+            }
             
             Context 'Option.buffer' -ForEach @(
                 @{ Value = 1024 }, @{ Value = 512 }
