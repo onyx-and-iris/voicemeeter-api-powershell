@@ -270,6 +270,7 @@ The following bus.mode members are available:
 
 The following bus.mode commands are available:
 
+- Set($mode): string, sets the current bus mode
 - Get(): returns the current bus mode.
 
 for example:

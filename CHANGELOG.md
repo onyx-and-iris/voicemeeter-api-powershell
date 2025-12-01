@@ -24,6 +24,7 @@ Before any major/minor/patch is released all test units will be run to verify th
   - name, write-only
   - ip, write-only
 - Bus.Sel, Bus.Monitor, Bus.Vaio
+- Bus.Mode.Set($mode)
 
 ### Changed
 
