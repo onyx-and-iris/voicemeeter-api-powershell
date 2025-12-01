@@ -23,6 +23,7 @@ Before any major/minor/patch is released all test units will be run to verify th
   - on, write-only
   - name, write-only
   - ip, write-only
+- Bus.Sel, Bus.Monitor, Bus.Vaio
 
 ### Changed
 
@@ -31,6 +32,8 @@ Before any major/minor/patch is released all test units will be run to verify th
   - name
   - ip
 - cast vban getters to types for consistency
+- Bus.Mono -> [int] for stereo reverse
+- Bus.Levels.Convert return type [float] -> [single] for naming consistency, no functional change
 
 ### Fixed
 

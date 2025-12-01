@@ -234,8 +234,10 @@ $vmr.strip[2].levels.PreFader() -Join ', ' | Write-Host
 The following bus commands are available:
 
 - mute: bool
-- mono: bool
-- limit: int, from -40 to 12
+- sel: bool
+- monitor: bool
+- vaio: bool
+- mono: int, 0 off, 1 mono, 2 stereo reverse
 - gain: float, from -60.0 to 12.0
 - label: string
 - returnreverb: float, from 0.0 to 10.0
