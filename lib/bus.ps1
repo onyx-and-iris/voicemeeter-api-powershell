@@ -4,7 +4,8 @@ class Bus : IRemote {
     [Object]$levels
 
     Bus ([int]$index, [Object]$remote) : base ($index, $remote) {
-        AddBoolMembers -PARAMS @('mono', 'mute')
+        AddBoolMembers -PARAMS @('mute', 'sel', 'monitor')
+        AddIntMembers -PARAMS @('mono')
         AddStringMembers -PARAMS @('label')
         AddFloatMembers -PARAMS @('gain', 'returnreverb', 'returndelay', 'returnfx1', 'returnfx2')
 
@@ -35,7 +36,7 @@ class BusLevels : IRemote {
         $this.offset = 8            
     }
 
-    [float] Convert([float]$val) {
+    [single] Convert([single]$val) {
         if ($val -gt 0) { 
             return [math]::Round(20 * [math]::Log10($val), 1) 
         } 
@@ -97,6 +98,8 @@ class PhysicalBus : Bus {
 
     PhysicalBus ([int]$index, [Object]$remote) : base ($index, $remote) {
         $this.device = [BusDevice]::new($index, $remote)
+
+        AddBoolMembers -PARAMS @('vaio')
     }
 }
 
@@ -126,7 +129,7 @@ class BusDevice : Device {
             -Value {
             return Write-Warning ("ERROR: $($this.identifier()).asio is write only")
         } -SecondValue {
-            param($arg)
+            param([string]$arg)
             return $this.Setter('asio', $arg)
         } -Force
     }
