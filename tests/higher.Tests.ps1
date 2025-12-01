@@ -68,7 +68,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.bus[$index].sel | Should -Be $expected
             }
 
-            It "Should set and get Bus[$index].mode.amix" -Skip:$ifBasic {
+            It "Should set and get Bus[$index].mode.amix" {
                 $vmr.bus[$index].mode.amix = $value
                 $vmr.bus[$index].mode.amix | Should -Be $expected
             }
@@ -689,6 +689,15 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             ) {
                 $vmr.bus[$index].label = $value
                 $vmr.bus[$index].label | Should -Be $expected
+            }
+
+            It "Should set Bus[$index].Mode" -Skip:$ifBasic -ForEach @(
+                @{ Value = 'bmix'; Expected = 'bmix' }
+                @{ Value = 'upmix41'; Expected = 'upmix41' }
+                @{ Value = 'rearonly'; Expected = 'rearonly' }
+            ) {
+                $vmr.bus[$index].mode.Set($value)
+                $vmr.bus[$index].mode.Get() | Should -Be $expected
             }
 
             Context 'EQ' -Skip:$ifBasic -ForEach @(

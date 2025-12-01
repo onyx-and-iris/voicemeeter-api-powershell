@@ -36,7 +36,7 @@ class BusLevels : IRemote {
         $this.offset = 8            
     }
 
-    [single] Convert([single]$val) {
+    hidden [single] Convert([single]$val) {
         if ($val -gt 0) { 
             return [math]::Round(20 * [math]::Log10($val), 1) 
         } 
@@ -81,6 +81,15 @@ class BusMode : IRemote {
             }
         }
         return $mode
+    }
+
+    [void] Set ([string]$mode) {
+        if ($this.modes.Contains($mode)) {
+            $this.Setter($mode, $true)
+        }
+        else {
+            throw [System.ArgumentException]::new("Invalid mode: $mode")
+        }
     }
 }
 
