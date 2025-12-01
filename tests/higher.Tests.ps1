@@ -53,9 +53,19 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         Context 'Bus, one physical one virtual' -ForEach @(
             @{ Index = $phys_out }, @{ Index = $virt_out }
         ) {
-            It "Should set and get Bus[$index].Mono" {
-                $vmr.bus[$index].mono = $value
-                $vmr.bus[$index].mono | Should -Be $expected
+            It "Should set and get Bus[$index].Monitor" -Skip:$ifNotPotato {
+                $vmr.bus[$index].monitor = $value
+                $vmr.bus[$index].monitor | Should -Be $expected
+            }
+
+            It "Should set and get Bus[$index].Mute" {
+                $vmr.bus[$index].mute = $value
+                $vmr.bus[$index].mute | Should -Be $expected
+            }
+
+            It "Should set and get Bus[$index].Sel" -Skip:$ifNotPotato {
+                $vmr.bus[$index].sel = $value
+                $vmr.bus[$index].sel | Should -Be $expected
             }
 
             It "Should set and get Bus[$index].mode.amix" -Skip:$ifBasic {
@@ -85,6 +95,15 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                     $eq.channel[$bus_ch].cell[$cells].on = $value
                     $eq.channel[$bus_ch].cell[$cells].on | Should -Be $value
                 }
+            }
+        }
+
+        Context 'Bus, physical only' -ForEach @(
+            @{ Index = $phys_out }
+        ) {
+            It "Should set and get Bus[$index].vaio" {
+                $vmr.bus[$index].vaio = $value
+                $vmr.bus[$index].vaio | Should -Be $expected
             }
         }
 
@@ -386,6 +405,15 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         Context 'Bus, one physical one virtual' -ForEach @(
             @{ Index = $phys_out }, @{ Index = $virt_out }
         ) {
+            It "Should set and get Bus[$index].Mono" -ForEach @(
+                @{ Value = 0; Expected = 0 }
+                @{ Value = 1; Expected = 1 }
+                @{ Value = 2; Expected = 2 }
+            ) {
+                $vmr.bus[$index].mono = $value
+                $vmr.bus[$index].mono | Should -Be $expected
+            }
+            
             Context 'Eq' -Skip:$ifBasic -ForEach @(
                 @{ Eq = $vmr.bus[$index].eq }
             ) {
