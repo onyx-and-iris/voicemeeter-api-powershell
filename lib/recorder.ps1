@@ -5,13 +5,17 @@ class Recorder : IRemote {
 
     Recorder ([Object]$remote) : base ($remote) {
         $this.mode = [RecorderMode]::new($remote)
+        
         $this.armstrip = @()
-        0..($remote.kind.p_in + $remote.kind.v_in - 1) | ForEach-Object {
-            $this.armstrip.Add([RecorderArmStrip]::new($_, $remote))
+        $stripCount = $($remote.kind.p_in + $remote.kind.v_in)
+        for ($i = 0; $i -lt $stripCount; $i++) {
+            $this.armstrip.Add([BoolArrayMember]::new($i, 'armstrip', $this))
         }
+        
         $this.armbus = @()
-        0..($remote.kind.p_out + $remote.kind.v_out - 1) | ForEach-Object {
-            $this.armbus.Add([RecorderArmBus]::new($_, $remote))
+        $busCount = $($remote.kind.p_out + $remote.kind.v_out)
+        for ($i = 0; $i -lt $busCount; $i++) {
+            $this.armbus.Add([BoolArrayMember]::new($i, 'armbus', $this))
         }
 
         AddActionMembers -PARAMS @('play', 'stop', 'pause', 'replay', 'record', 'ff', 'rew')
@@ -95,6 +99,26 @@ class Recorder : IRemote {
             }
         }
     )
+
+    hidden $_armedbus = $($this | Add-Member ScriptProperty 'armedbus' `
+        {
+            foreach ($bus in 0..$($this.remote.kind.p_out + $this.remote.kind.v_out - 1)) {
+                if ($this.remote.Getter("Recorder.ArmBus[$bus]")) {
+                    break
+                }
+            }
+            return $bus
+        } `
+        {
+            param([int]$arg)
+            $busMax = $this.remote.kind.p_out + $this.remote.kind.v_out - 1
+            if ($arg -ge 0 -and $arg -le $busMax) {
+                $this._armedbus = $this.remote.Setter("Recorder.ArmBus[$arg]", 1)
+            }
+            else {
+                Write-Warning ("Expected a bus index between 0 and $busMax")
+            }
+        })
 
     [void] Load ([string]$filename) {
         $this.Setter('load', $filename)

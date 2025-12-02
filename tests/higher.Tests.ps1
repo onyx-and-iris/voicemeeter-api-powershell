@@ -160,6 +160,20 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             It 'Should set and get Recorder.loop' {
                 $vmr.recorder.loop = $value
             }
+
+            It 'Should set and get Recorder.armstrip[i]' -ForEach @(
+                @{ Index = $phys_in }, @{ Index = $virt_in }
+            ) {
+                $vmr.recorder.armstrip[$index].set($value)
+                $vmr.recorder.armstrip[$index].get() | Should -Be $value
+            }
+
+            It 'Should set and get Recorder.armbus[i]' -ForEach @(
+                @{ Index = $phys_out }, @{ Index = $virt_out }
+            ) {
+                $vmr.recorder.armbus[$index].set($value)
+                $vmr.recorder.armbus[$index].get() | Should -Be $value
+            }
         }
 
         Context 'Command' {
@@ -601,6 +615,15 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                     Start-Sleep -Milliseconds 500
                     $vmr.option.buffer.ks | Should -Be $value
                 }
+            }
+        }
+
+        Context 'Recorder' -Skip:$ifBasic {
+            It 'Should set and get Recorder.armedbus' -ForEach @(
+                @{ Value = $phys_out }, @{ Value = $virt_out }
+            ) {
+                $vmr.recorder.armedbus = $value
+                $vmr.recorder.armedbus | Should -Be $value
             }
         }
     }
