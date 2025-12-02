@@ -625,6 +625,13 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.recorder.armedbus = $value
                 $vmr.recorder.armedbus | Should -Be $value
             }
+
+            It 'Should set and get Recorder.prerectime' -ForEach @(
+                @{ Value = 5 }, @{ Value = 20 }
+            ) {
+                $vmr.recorder.prerectime = $value
+                $vmr.recorder.prerectime | Should -Be $value
+            }
         }
     }
 

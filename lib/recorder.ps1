@@ -19,7 +19,10 @@ class Recorder : IRemote {
         }
 
         AddActionMembers -PARAMS @('play', 'stop', 'pause', 'replay', 'record', 'ff', 'rew')
+        
         AddFloatMembers -PARAMS @('gain')
+        AddIntMembers -PARAMS @('prerectime')
+
         AddChannelMembers
     }
 
@@ -146,6 +149,10 @@ class Recorder : IRemote {
             default { "Filetype() got: $format, expected one of 'wav', 'aiff', 'bwf', 'mp3'" }
         }
         $this.Setter('filetype', $val)
+    }
+
+    [void] Prefix ([string]$prefix) {
+        $this.Setter('prefix', $prefix)
     }
 }
 

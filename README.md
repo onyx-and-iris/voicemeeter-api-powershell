@@ -528,6 +528,7 @@ The following commands are available:
 - A1 - A5: bool
 - B1 - B3: bool
 - armedbus: int, from 0 to bus index
+- prerectime: int, from 0 to 20 seconds
 - samplerate: int, (22050, 24000, 32000, 44100, 48000, 88200, 96000, 176400, 192000)
 - bitresolution: int, (8, 16, 24, 32)
 - channel: int, from 1 to 8
@@ -545,6 +546,7 @@ The following methods are available:
 - Load($filepath): string
 - GoTo($timestring): string, must match the format 'hh:mm:ss'
 - FileType($format): string, ('wav', 'aiff', 'bwf', 'mp3')
+- Prefix($prefix): string
 
 example:
 

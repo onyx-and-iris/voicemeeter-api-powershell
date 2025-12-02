@@ -32,6 +32,8 @@ AddActionMembers now adds ScriptMethods instead of ScriptProperties:
 - Bus.Sel, Bus.Monitor, Bus.Vaio
 - Bus.Mode.Set($mode)
 - Recorder.Armedbus
+- Recorder.PreRecTime
+- Recorder.Prefix($prefix)
 
 ### Changed
 
