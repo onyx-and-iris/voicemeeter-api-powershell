@@ -25,7 +25,7 @@ class BoolArrayMember : ArrayMember {
     ) : base ($index, $prefix, $parent) {}
     
     [bool] Get () {
-        return [bool]$this.Getter('')
+        return $this.Getter('')
     }
 }
 
@@ -35,7 +35,7 @@ class IntArrayMember : ArrayMember {
     ) : base ($index, $prefix, $parent) {}
     
     [int] Get () {
-        return [int]$this.Getter('')
+        return $this.Getter('')
     }
 }
 
@@ -59,6 +59,6 @@ class StringArrayMember : ArrayMember {
     ) : base ($index, $prefix, $parent) {}
     
     [string] Get () {
-        return [string]$this.Getter_String('')
+        return $this.Getter_String('')
     }
 }
