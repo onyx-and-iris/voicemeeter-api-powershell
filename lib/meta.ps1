@@ -7,7 +7,7 @@ function AddBoolMembers () {
         # Define getter
         $Signatures['Getter'] = "[bool]`$this.Getter('{0}')" -f $param
         # Define setter
-        $Signatures['Setter'] = "param ( [Single]`$arg )`n`$this.Setter('{0}', `$arg)" `
+        $Signatures['Setter'] = "param ( [bool]`$arg )`n`$this.Setter('{0}', `$arg)" `
             -f $param
 
         Addmember
@@ -39,7 +39,7 @@ function AddIntMembers () {
         # Define getter
         $Signatures['Getter'] = "[Int]`$this.Getter('{0}')" -f $param
         # Define setter
-        $Signatures['Setter'] = "param ( [Single]`$arg )`n`$this.Setter('{0}', `$arg)" `
+        $Signatures['Setter'] = "param ( [Int]`$arg )`n`$this.Setter('{0}', `$arg)" `
             -f $param
 
         Addmember
@@ -66,14 +66,10 @@ function AddActionMembers () {
     param(
         [String[]]$PARAMS
     )
-    [hashtable]$Signatures = @{}
     foreach ($param in $PARAMS) {
-        # Define getter
-        $Signatures['Getter'] = "`$this.Setter('{0}', `$true)" -f $param
-        # Define setter
-        $Signatures['Setter'] = ''
-
-        Addmember
+        $this | Add-Member -MemberType ScriptMethod -Name $param `
+            -Value ([scriptblock]::Create("`$null = `$this.Setter('$param', 1)")) `
+            -Force
     }
 }
 

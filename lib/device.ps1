@@ -25,7 +25,7 @@ class Device : IRemote {
             return Write-Warning ("ERROR: $($this.identifier()).wdm is write only")
         } `
         {
-            param($arg)
+            param([string]$arg)
             return $this.Setter('wdm', $arg)
         }
     )
@@ -35,7 +35,7 @@ class Device : IRemote {
             return Write-Warning ("ERROR: $($this.identifier()).ks is write only")
         } `
         {
-            param($arg)
+            param([string]$arg)
             return $this.Setter('ks', $arg)
         }
     )
@@ -45,7 +45,7 @@ class Device : IRemote {
             return Write-Warning ("ERROR: $($this.identifier()).mme is write only")
         } `
         {
-            param($arg)
+            param([string]$arg)
             return $this.Setter('mme', $arg)
         }
     )

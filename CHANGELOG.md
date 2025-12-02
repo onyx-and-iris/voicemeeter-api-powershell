@@ -9,6 +9,12 @@ Before any major/minor/patch is released all test units will be run to verify th
 
 ## [Unreleased] These changes have not been added to PSGallery yet
 
+### Breaking Changes
+
+AddActionMembers now adds ScriptMethods instead of ScriptProperties:
+- See Command section of README for details on using special commands
+- See Recorder section of README for details on using playback/record actions
+
 ### Added
 
 - IRemote base class
@@ -35,6 +41,8 @@ Before any major/minor/patch is released all test units will be run to verify th
 - cast vban getters to types for consistency
 - Bus.Mono -> [int] for stereo reverse
 - Bus.Levels.Convert return type [float] -> [single] for naming consistency, no functional change
+- Meta: AddBoolMembers, AddIntMembers $arg types for consistency
+- Device: explicit $arg types for consistency
 
 ### Fixed
 
