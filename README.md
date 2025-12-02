@@ -420,15 +420,15 @@ Certain 'special' commands are defined by the API as performing actions rather t
 
 The following commands are available:
 
-- show
 - hide
-- restart
-- shutdown
 - showvbanchat: bool, (write only)
 - lock: bool, (write only)
 
 The following methods are available:
 
+- Show()
+- Restart()
+- Shutdown()
 - Load($filepath): string
 - RunMacrobuttons(): Launches the macrobuttons app
 - CloseMacrobuttons(): Closes the macrobuttons app
@@ -436,7 +436,7 @@ The following methods are available:
 example:
 
 ```powershell
-$vmr.command.show
+$vmr.command.show()
 
 $vmr.command.lock = $true
 
@@ -525,12 +525,6 @@ $vmr.Option.buffer.asio = 0    # to use default buffer size
 
 The following commands are available:
 
-- play
-- stop
-- pause
-- record
-- ff
-- rew
 - A1 - A5: bool
 - B1 - B3: bool
 - samplerate: int, (22050, 24000, 32000, 44100, 48000, 88200, 96000, 176400, 192000)
@@ -540,6 +534,13 @@ The following commands are available:
 
 The following methods are available:
 
+- Play()
+- Stop()
+- Replay()
+- FF()
+- Rew()
+- Record()
+- Pause()
 - Load($filepath): string
 - GoTo($timestring): string, must match the format 'hh:mm:ss'
 - FileType($format): string, ('wav', 'aiff', 'bwf', 'mp3')
@@ -547,7 +548,7 @@ The following methods are available:
 example:
 
 ```powershell
-$vmr.recorder.play
+$vmr.recorder.play()
 $vmr.recorder.A1 = $true
 
 $vmr.recorder.GoTo("00:01:15")  # go to 1min 15sec into track
