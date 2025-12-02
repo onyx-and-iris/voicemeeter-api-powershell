@@ -31,6 +31,7 @@ AddActionMembers now adds ScriptMethods instead of ScriptProperties:
   - ip, write-only
 - Bus.Sel, Bus.Monitor, Bus.Vaio
 - Bus.Mode.Set($mode)
+- Recorder.Armedbus
 
 ### Changed
 
@@ -43,6 +44,7 @@ AddActionMembers now adds ScriptMethods instead of ScriptProperties:
 - Bus.Levels.Convert return type [float] -> [single] for naming consistency, no functional change
 - Meta: AddBoolMembers, AddIntMembers $arg types for consistency
 - Device: explicit $arg types for consistency
+- Recorder.Armstrip|Armbus -> BoolArrayMember: now have .Get()
 
 ### Fixed
 
