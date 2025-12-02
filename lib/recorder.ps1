@@ -154,6 +154,10 @@ class Recorder : IRemote {
     [void] Prefix ([string]$prefix) {
         $this.Setter('prefix', $prefix)
     }
+
+    [void] Eject () {
+        $this.remote.Setter('Command.Eject', 1)
+    }
 }
 
 class RecorderMode : IRemote {

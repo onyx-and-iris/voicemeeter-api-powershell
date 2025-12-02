@@ -543,6 +543,7 @@ The following methods are available:
 - Rew()
 - Record()
 - Pause()
+- Eject()
 - Load($filepath): string
 - GoTo($timestring): string, must match the format 'hh:mm:ss'
 - FileType($format): string, ('wav', 'aiff', 'bwf', 'mp3')
