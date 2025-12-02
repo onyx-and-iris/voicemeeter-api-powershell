@@ -7,7 +7,7 @@ function AddBoolMembers () {
         # Define getter
         $Signatures['Getter'] = "[bool]`$this.Getter('{0}')" -f $param
         # Define setter
-        $Signatures['Setter'] = "param ( [Single]`$arg )`n`$this.Setter('{0}', `$arg)" `
+        $Signatures['Setter'] = "param ( [bool]`$arg )`n`$this.Setter('{0}', `$arg)" `
             -f $param
 
         Addmember
@@ -39,7 +39,7 @@ function AddIntMembers () {
         # Define getter
         $Signatures['Getter'] = "[Int]`$this.Getter('{0}')" -f $param
         # Define setter
-        $Signatures['Setter'] = "param ( [Single]`$arg )`n`$this.Setter('{0}', `$arg)" `
+        $Signatures['Setter'] = "param ( [Int]`$arg )`n`$this.Setter('{0}', `$arg)" `
             -f $param
 
         Addmember
