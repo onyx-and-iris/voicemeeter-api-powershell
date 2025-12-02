@@ -66,14 +66,10 @@ function AddActionMembers () {
     param(
         [String[]]$PARAMS
     )
-    [hashtable]$Signatures = @{}
     foreach ($param in $PARAMS) {
-        # Define getter
-        $Signatures['Getter'] = "`$this.Setter('{0}', `$true)" -f $param
-        # Define setter
-        $Signatures['Setter'] = ''
-
-        Addmember
+        $this | Add-Member -MemberType ScriptMethod -Name $param `
+            -Value ([scriptblock]::Create("`$null = `$this.Setter('$param', 1)")) `
+            -Force
     }
 }
 

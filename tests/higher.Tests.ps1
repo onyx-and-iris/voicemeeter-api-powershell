@@ -119,7 +119,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         Context 'Vban' {
             It 'Should set and get Vban.enable' {
                 $vmr.vban.enable = $value
-                $vmr.command.restart
+                $vmr.command.restart()
                 Start-Sleep -Milliseconds 2000
                 $vmr.vban.enable | Should -Be $expected
             }
@@ -214,14 +214,14 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         Context 'Option' {
             It 'Should set and get Option.monitoronsel' -Skip:$ifNotPotato {
                 $vmr.option.monitoronsel = $value
-                $vmr.command.restart
+                $vmr.command.restart()
                 Start-Sleep -Milliseconds 2000
                 $vmr.option.monitoronsel | Should -Be $value
             }
             
             It 'Should set and get Option.slidermode' -Skip:$ifNotPotato {
                 $vmr.option.slidermode = $value
-                $vmr.command.restart
+                $vmr.command.restart()
                 Start-Sleep -Milliseconds 2000
                 $vmr.option.slidermode | Should -Be $value
             }
@@ -361,7 +361,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 @{ Value = 486.57 }, @{ Value = 26.41 }
             ) {
                 $vmr.option.delay[$phys_out].set($value)
-                $vmr.command.restart
+                $vmr.command.restart()
                 Start-Sleep -Milliseconds 2000
                 $vmr.option.delay[$phys_out].get() | Should -Be $value
             }
@@ -452,7 +452,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 @{ Value = 65535; Expected = 65535 }
             ) {
                 $vmr.vban.port = $value
-                $vmr.command.restart
+                $vmr.command.restart()
                 Start-Sleep -Milliseconds 2000
                 $vmr.vban.port | Should -Be $expected
             }
@@ -465,7 +465,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                     @{ Value = 65535; Expected = 65535 }
                 ) {
                     $vmr.vban.instream[$index].port = $value
-                    $vmr.command.restart
+                    $vmr.command.restart()
                     Start-Sleep -Milliseconds 2000
                     $vmr.vban.instream[$index].port | Should -Be $expected
                 }
@@ -508,7 +508,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                     @{ Value = 65535; Expected = 65535 }
                 ) {
                     $vmr.vban.outstream[$index].port = $value
-                    $vmr.command.restart
+                    $vmr.command.restart()
                     Start-Sleep -Milliseconds 2000
                     $vmr.vban.outstream[$index].port | Should -Be $expected
                 }
