@@ -418,15 +418,14 @@ $vmr.vban.outstream[3].bit = 16
 
 Certain 'special' commands are defined by the API as performing actions rather than setting values.
 
-The following commands are available:
-
-- hide
-- showvbanchat: bool, (write only)
-- lock: bool, (write only)
-
 The following methods are available:
 
 - Show()
+- Hide()
+- Lock()
+- Unlock()
+- ShowVBANChat()
+- HideVBANChat()
 - Restart()
 - Shutdown()
 - Load($filepath): string
