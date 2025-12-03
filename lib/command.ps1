@@ -1,6 +1,6 @@
 class Special : IRemote {
     Special ([Object]$remote) : base ($remote) {
-        AddActionMembers -PARAMS @('restart', 'shutdown', 'show', 'lock')
+        AddActionMembers -PARAMS @('restart', 'shutdown', 'show', 'lock', 'reset')
     }
 
     [string] identifier () {
@@ -35,6 +35,10 @@ class Special : IRemote {
 
     [void] Load ([string]$filename) {
         $this.Setter('load', $filename)
+    }
+
+    [void] Save ([string]$filename) {
+        $this.Setter('save', $filename)
     }
 }
 

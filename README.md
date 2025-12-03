@@ -428,6 +428,8 @@ The following methods are available:
 - HideVBANChat()
 - Restart()
 - Shutdown()
+- Reset(): Reset all config
+- Save($filepath): string
 - Load($filepath): string
 - RunMacrobuttons(): Launches the macrobuttons app
 - CloseMacrobuttons(): Closes the macrobuttons app
@@ -437,7 +439,7 @@ example:
 ```powershell
 $vmr.command.show()
 
-$vmr.command.lock = $true
+$vmr.command.lock()
 
 $vmr.command.Load("path/to/filename.xml")
 
