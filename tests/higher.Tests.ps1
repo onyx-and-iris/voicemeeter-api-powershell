@@ -157,10 +157,6 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.recorder.B1 | Should -Be $expected
             }
 
-            It 'Should set and get Recorder.loop' {
-                $vmr.recorder.loop = $value
-            }
-
             It 'Should set and get Recorder.armstrip[i]' -ForEach @(
                 @{ Index = $phys_in }, @{ Index = $virt_in }
             ) {
@@ -173,6 +169,18 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             ) {
                 $vmr.recorder.armbus[$index].set($value)
                 $vmr.recorder.armbus[$index].get() | Should -Be $value
+            }
+
+            Context 'Mode' {
+                It 'Should set and get Recorder.mode.multitrack' {
+                    $vmr.recorder.mode.multitrack = $value
+                    $vmr.recorder.mode.multitrack | Should -Be $expected
+                }
+
+                It 'Should set and get Recorder.mode.loop' {
+                    $vmr.recorder.mode.loop = $value
+                    $vmr.recorder.mode.loop | Should -Be $expected
+                }
             }
         }
 

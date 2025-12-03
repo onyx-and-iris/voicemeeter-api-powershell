@@ -33,15 +33,41 @@ class Recorder : IRemote {
         return 'Recorder'
     }
 
-    hidden $_loop = $($this | Add-Member ScriptProperty 'loop' `
-        {
-            [bool]$this.mode.loop
-        } `
-        {
-            param($arg)
-            $this.mode.loop = $arg
+    [void] Eject () {
+        $this.remote.Setter('Command.Eject', 1)
+    }
+
+    [void] Load ([string]$filename) {
+        $this.Setter('load', $filename)
+    }
+
+    [void] Prefix ([string]$prefix) {
+        $this.Setter('prefix', $prefix)
+    }
+
+    [void] FileType([string]$format) {
+        [int]$val = 0
+        switch ($format) {
+            'wav' { $val = 1 }
+            'aiff' { $val = 2 }
+            'bwf' { $val = 3 }
+            'mp3' { $val = 100 }
+            default { "Filetype() got: $format, expected one of 'wav', 'aiff', 'bwf', 'mp3'" }
         }
-    )
+        $this.Setter('filetype', $val)
+    }
+
+    [void] GoTo ([string]$timestring) {
+        try {
+            if ([datetime]::ParseExact($timestring, 'HH:mm:ss', $null)) {
+                $timespan = [timespan]::Parse($timestring)
+                $this.Setter('GoTo', $timespan.TotalSeconds)                
+            }
+        }
+        catch [FormatException] {
+            "Time string $timestring does not match the required format 'hh:mm:ss'" | Write-Warning
+        }
+    }
 
     hidden $_samplerate = $($this | Add-Member ScriptProperty 'samplerate' `
         {
@@ -150,42 +176,6 @@ class Recorder : IRemote {
             $this._state = $this.Setter($arg, 1)
         }
     )
-
-    [void] Load ([string]$filename) {
-        $this.Setter('load', $filename)
-    }
-
-    [void] GoTo ([string]$timestring) {
-        try {
-            if ([datetime]::ParseExact($timestring, 'HH:mm:ss', $null)) {
-                $timespan = [timespan]::Parse($timestring)
-                $this.Setter('GoTo', $timespan.TotalSeconds)                
-            }
-        }
-        catch [FormatException] {
-            "Time string $timestring does not match the required format 'hh:mm:ss'" | Write-Warning
-        }
-    }
-
-    [void] FileType($format) {
-        [int]$val = 0
-        switch ($format) {
-            'wav' { $val = 1 }
-            'aiff' { $val = 2 }
-            'bwf' { $val = 3 }
-            'mp3' { $val = 100 }
-            default { "Filetype() got: $format, expected one of 'wav', 'aiff', 'bwf', 'mp3'" }
-        }
-        $this.Setter('filetype', $val)
-    }
-
-    [void] Prefix ([string]$prefix) {
-        $this.Setter('prefix', $prefix)
-    }
-
-    [void] Eject () {
-        $this.remote.Setter('Command.Eject', 1)
-    }
 }
 
 class RecorderMode : IRemote {
@@ -195,33 +185,6 @@ class RecorderMode : IRemote {
 
     [string] identifier () {
         return 'Recorder.Mode'
-    }
-}
-
-class RecorderArm : IRemote {
-    RecorderArm ([int]$index, [Object]$remote) : base ($index, $remote) {
-    }
-
-    Set ([bool]$val) {
-        $this.Setter('', $(if ($val) { 1 } else { 0 }))
-    }
-}
-
-class RecorderArmStrip : RecorderArm {
-    RecorderArmStrip ([int]$index, [Object]$remote) : base ($index, $remote) {
-    }
-
-    [string] identifier () {
-        return "Recorder.ArmStrip[$($this.index)]"
-    }
-}
-
-class RecorderArmBus : RecorderArm {
-    RecorderArmBus ([int]$index, [Object]$remote) : base ($index, $remote) {
-    }
-
-    [string] identifier () {
-        return "Recorder.ArmBus[$($this.index)]"
     }
 }
 

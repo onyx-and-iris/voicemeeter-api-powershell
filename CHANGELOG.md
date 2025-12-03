@@ -15,6 +15,8 @@ AddActionMembers now adds ScriptMethods instead of ScriptProperties:
 - See Command section of README for details on using special commands
 - See Recorder section of README for details on using playback/record actions
 
+Deprecated Recorder.Loop removed: use Recorder.Mode.Loop
+
 ### Added
 
 - IRemote base class
