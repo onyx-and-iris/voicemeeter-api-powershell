@@ -35,6 +35,7 @@ AddActionMembers now adds ScriptMethods instead of ScriptProperties:
 - Recorder.PreRecTime
 - Recorder.Prefix($prefix)
 - Recorder.Eject() references 'Command.Eject'
+- Recorder.State
 
 ### Changed
 

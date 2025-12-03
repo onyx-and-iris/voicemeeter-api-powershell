@@ -1,7 +1,40 @@
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "", Target = "variablename")]
-Param([String]$tag, [string]$kind = 'potato')
+Param([String]$tag, [string]$kind = 'potato', [string]$recDir = (Join-Path ([Environment]::GetFolderPath('MyDocuments')) 'Voicemeeter'))
 Import-Module (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\Voicemeeter.psm1') -Force
 
+
+function Test-RecDir ([object]$vmr, [string]$recDir) {
+    $prefix = 'temp'
+    $filetype = 'wav'
+    $vmr.recorder.prefix($prefix)
+    $vmr.recorder.filetype($filetype)
+
+    
+    try {
+        $vmr.recorder.record()
+        $stamp = '{0:yyyy-MM-dd} at {0:HH}h{0:mm}m{0:ss}s' -f (Get-Date)
+        Start-Sleep -Milliseconds 2000
+
+        $tmp = Join-Path $recDir ("{0} {1}.{2}" -f $prefix, $stamp, $filetype)
+
+        $vmr.recorder.stop()
+        $vmr.recorder.eject()
+        Start-Sleep -Milliseconds 500
+    }
+    catch {
+        Write-Warning "Failed to record pre-check clip: $_"
+    }
+
+    if (Test-Path $tmp) {
+        Remove-Item -Path $tmp -Force
+        return $false
+    }
+    else {
+        Write-Warning "Recorder output not found at given path: $tmp"
+        Write-Warning "Skipping Recording/Playback tests. Provide custom path with -recDir"
+        return $true
+    }
+}
 
 function main() {
     try {
@@ -29,6 +62,10 @@ function main() {
         $ifBasic = $vmr.kind.name -eq 'basic'
         $ifNotBasic = $vmr.kind.name -ne 'basic'
         $ifNotPotato = $vmr.kind.name -ne 'potato'
+
+        # recording directory: default ~/My Documents/Voicemeeter, override if custom
+        $recDir = [System.IO.Path]::GetFullPath($recDir)
+        $ifCustomDir = Test-RecDir -vmr $vmr -recDir $recDir # avoid creating files we can't delete
 
         Invoke-Pester -Tag $tag -PassThru | Out-Null
     }

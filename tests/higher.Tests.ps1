@@ -876,4 +876,60 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             }
         }
     }
+
+    Describe 'Action Tests' -Tag 'action' {
+        Context 'Recorder' -Skip:$ifBasic {
+            Context 'Recording/Playback' -Skip:$ifCustomDir {
+                BeforeAll {
+                    $prefix = 'temp'
+                    $filetype = 'wav'
+                    $vmr.recorder.prefix($prefix)
+                    $vmr.recorder.filetype($filetype)
+                }
+
+                BeforeEach {
+                    $vmr.recorder.state = 'record'
+                    $stamp = '{0:yyyy-MM-dd} at {0:HH}h{0:mm}m{0:ss}s' -f (Get-Date)
+                    Start-Sleep -Milliseconds 2000
+
+                    $tmp = [System.IO.Path]::Combine($recDir, ("{0} {1}.{2}" -f $prefix, $stamp, $filetype))
+
+                    $vmr.recorder.state = 'pause'
+                    Start-Sleep -Milliseconds 500
+                }
+
+                AfterEach {
+                    $vmr.recorder.state = 'stop'
+                    $vmr.recorder.eject()
+                    Start-Sleep -Milliseconds 500
+                    
+                    if (Test-Path $tmp) {
+                        Remove-Item -Path $tmp -Force
+                    }
+                    else {
+                        throw "Recording file $tmp was not found."
+                    }
+                }
+            
+                It 'Should call Recorder.record()' {
+                    $vmr.recorder.record()
+                    $vmr.recorder.state | Should -Be 'record'
+                }
+
+                It 'Should call Recorder.pause()' {
+                    $vmr.recorder.record()
+                    Start-Sleep -Milliseconds 500
+                    $vmr.recorder.pause()
+                    $vmr.recorder.state | Should -Be 'pause'
+                }
+
+                It 'Should call Recorder.play()' {
+                    $vmr.recorder.stop()
+                    Start-Sleep -Milliseconds 500
+                    $vmr.recorder.play()
+                    $vmr.recorder.state | Should -Be 'play'
+                }
+            }
+        }
+    }
 }

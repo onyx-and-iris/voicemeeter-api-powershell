@@ -2,6 +2,7 @@ class Recorder : IRemote {
     [Object]$mode
     [System.Collections.ArrayList]$armstrip
     [System.Collections.ArrayList]$armbus
+    [System.Collections.ArrayList]$states
 
     Recorder ([Object]$remote) : base ($remote) {
         $this.mode = [RecorderMode]::new($remote)
@@ -18,8 +19,10 @@ class Recorder : IRemote {
             $this.armbus.Add([BoolArrayMember]::new($i, 'armbus', $this))
         }
 
-        AddActionMembers -PARAMS @('play', 'stop', 'pause', 'replay', 'record', 'ff', 'rew')
-        
+        $this.states = @('play', 'stop', 'record', 'pause')
+        AddActionMembers -PARAMS $this.states
+
+        AddActionMembers -PARAMS @('replay', 'ff', 'rew')
         AddFloatMembers -PARAMS @('gain')
         AddIntMembers -PARAMS @('prerectime')
 
@@ -121,7 +124,32 @@ class Recorder : IRemote {
             else {
                 Write-Warning ("Expected a bus index between 0 and $busMax")
             }
-        })
+        }
+    )
+
+    hidden $_state = $($this | Add-Member ScriptProperty 'state' `
+        {
+            if ($this.Getter('pause')) { return 'pause' }
+            foreach ($state in $this.states) {
+                if ($this.Getter($state)) {
+                    break
+                }
+            }
+            return $state
+        } `
+        {
+            param([string]$arg)
+            if (-not $this.states.Contains($arg)) {
+                Write-Warning ("Recorder.State got: $arg, expected one of $($this.states)")
+                return
+            }
+            if ($arg -eq 'pause' -and -not $this.Getter('record')) {
+                Write-Warning ("Recorder.State can only be set to 'pause' when recording")
+                return
+            }
+            $this._state = $this.Setter($arg, 1)
+        }
+    )
 
     [void] Load ([string]$filename) {
         $this.Setter('load', $filename)
