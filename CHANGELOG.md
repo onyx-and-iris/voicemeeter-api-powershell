@@ -51,6 +51,7 @@ Deprecated Recorder.Loop removed: use Recorder.Mode.Loop
 - Meta: AddBoolMembers, AddIntMembers $arg types for consistency
 - Device: explicit $arg types for consistency
 - Recorder.Armstrip|Armbus -> BoolArrayMember: now have .Get()
+- Cast Recorder getters to types for consistency
 
 ### Fixed
 
@@ -61,6 +62,7 @@ Deprecated Recorder.Loop removed: use Recorder.Mode.Loop
 - vban.stream.port: [string]$arg -> [int]$arg
 - vban route range (API documentation is incorrect)
 - vban.stream.sr: $this._port -> $this._sr
+- Recorder.channel values: 1..8 -> (2, 4, 6, 8)
 
 ## [3.3.0] - 2024-06-29
 

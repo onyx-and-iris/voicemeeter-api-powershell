@@ -65,7 +65,12 @@ function main() {
 
         # recording directory: default ~/My Documents/Voicemeeter, override if custom
         $recDir = [System.IO.Path]::GetFullPath($recDir)
-        $ifCustomDir = Test-RecDir -vmr $vmr -recDir $recDir # avoid creating files we can't delete
+        if ($ifBasic) {
+            $ifCustomDir = $ifBasic # basic can't record, so skip the test
+        }
+        else {
+            $ifCustomDir = Test-RecDir -vmr $vmr -recDir $recDir # avoid creating files we can't delete
+        }
 
         Invoke-Pester -Tag $tag -PassThru | Out-Null
     }

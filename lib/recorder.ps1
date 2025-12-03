@@ -71,7 +71,7 @@ class Recorder : IRemote {
 
     hidden $_samplerate = $($this | Add-Member ScriptProperty 'samplerate' `
         {
-            $this.Getter('samplerate')
+            [int]$this.Getter('samplerate')
         } `
         {
             param([int]$arg)
@@ -87,7 +87,7 @@ class Recorder : IRemote {
 
     hidden $_bitresolution = $($this | Add-Member ScriptProperty 'bitresolution' `
         {
-            $this.Getter('bitresolution')
+            [int]$this.Getter('bitresolution')
         } `
         {
             param([int]$arg)
@@ -103,22 +103,23 @@ class Recorder : IRemote {
 
     hidden $_channel = $($this | Add-Member ScriptProperty 'channel' `
         {
-            $this.Getter('channel')
+            [int]$this.Getter('channel')
         } `
         {
             param([int]$arg)
-            if ($arg -ge 1 -and $arg -le 8) {
+            $opts = @(2, 4, 6, 8)
+            if ($opts.Contains($arg)) {
                 $this._channel = $this.Setter('channel', $arg)
             }
             else {
-                "channel got: $arg, expected value from 1 to 8" | Write-Warning
+                "channel got: $arg, expected one of $opts" | Write-Warning
             }
         }
     )
 
     hidden $_kbps = $($this | Add-Member ScriptProperty 'kbps' `
         {
-            $this.Getter('kbps')
+            [int]$this.Getter('kbps')
         } `
         {
             param([int]$arg)

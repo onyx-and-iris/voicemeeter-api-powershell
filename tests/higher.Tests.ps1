@@ -640,6 +640,27 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.recorder.prerectime = $value
                 $vmr.recorder.prerectime | Should -Be $value
             }
+
+            It 'Should set and get Recorder.samplerate' -ForEach @(
+                @{ Value = 44100 }, @{ Value = 48000 }
+            ) {
+                $vmr.recorder.samplerate = $value
+                $vmr.recorder.samplerate | Should -Be $value
+            }
+
+            It 'Should set and get Recorder.bitresolution' -ForEach @(
+                @{ Value = 24 }, @{ Value = 16 }
+            ) {
+                $vmr.recorder.bitresolution = $value
+                $vmr.recorder.bitresolution | Should -Be $value
+            }
+
+            It 'Should set and get Recorder.kbps' -ForEach @(
+                @{ Value = 96 }, @{ Value = 192 }
+            ) {
+                $vmr.recorder.kbps = $value
+                $vmr.recorder.kbps | Should -Be $value
+            }
         }
     }
 
