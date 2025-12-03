@@ -875,31 +875,75 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 }       
             }
         }
+
+        Context 'Recorder' -Skip:$ifBasic {
+            It 'Should record a test file, eject, and load it back' -Skip:$ifCustomDir {
+                try {
+                    $prefix = 'stringtest'
+                    $filetype = 'wav'
+                    $vmr.recorder.prefix($prefix)
+                    $vmr.recorder.filetype($filetype)
+
+                    $vmr.recorder.state = 'record'
+                    $stamp = '{0:yyyy-MM-dd} at {0:HH}h{0:mm}m{0:ss}s' -f (Get-Date)
+                    $vmr.recorder.state | Should -Be 'record'
+                    Start-Sleep -Milliseconds 2000
+
+                    $tmp = [System.IO.Path]::Combine($recDir, ("{0} {1}.{2}" -f $prefix, $stamp, $filetype))
+
+                    $vmr.recorder.state = 'stop'
+                    $vmr.recorder.eject()
+                    Start-Sleep -Milliseconds 500
+
+                    $vmr.recorder.state = 'play'
+                    $vmr.recorder.state | Should -Be 'stop'  # because no file is loaded
+
+                    $vmr.recorder.load($tmp)
+                    Start-Sleep -Milliseconds 500
+                    if (-not $vmr.recorder.mode.playonload) {
+                        $vmr.recorder.state = 'play'
+                    }
+                    $vmr.recorder.state | Should -Be 'play'
+                }
+                finally {
+                    $vmr.recorder.state = 'stop'
+                    $vmr.recorder.eject()
+                    Start-Sleep -Milliseconds 500
+                    
+                    if (Test-Path $tmp) {
+                        Remove-Item -Path $tmp -Force
+                    }
+                    else {
+                        throw "Recording file $tmp was not found."
+                    }
+                }
+            }
+        }
     }
 
     Describe 'Action Tests' -Tag 'action' {
         Context 'Recorder' -Skip:$ifBasic {
             Context 'Recording/Playback' -Skip:$ifCustomDir {
                 BeforeAll {
-                    $prefix = 'temp'
+                    $prefix = 'actiontest'
                     $filetype = 'wav'
                     $vmr.recorder.prefix($prefix)
                     $vmr.recorder.filetype($filetype)
                 }
 
                 BeforeEach {
-                    $vmr.recorder.state = 'record'
+                    $vmr.recorder.record()
                     $stamp = '{0:yyyy-MM-dd} at {0:HH}h{0:mm}m{0:ss}s' -f (Get-Date)
                     Start-Sleep -Milliseconds 2000
 
                     $tmp = [System.IO.Path]::Combine($recDir, ("{0} {1}.{2}" -f $prefix, $stamp, $filetype))
 
-                    $vmr.recorder.state = 'pause'
+                    $vmr.recorder.pause()
                     Start-Sleep -Milliseconds 500
                 }
 
                 AfterEach {
-                    $vmr.recorder.state = 'stop'
+                    $vmr.recorder.stop()
                     $vmr.recorder.eject()
                     Start-Sleep -Milliseconds 500
                     
