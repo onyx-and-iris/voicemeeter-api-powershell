@@ -1,6 +1,6 @@
 class Special : IRemote {
     Special ([Object]$remote) : base ($remote) {
-        AddActionMembers -PARAMS @('restart', 'shutdown', 'show')
+        AddActionMembers -PARAMS @('restart', 'shutdown', 'show', 'lock', 'reset')
     }
 
     [string] identifier () {
@@ -17,35 +17,56 @@ class Special : IRemote {
         Stop-Process -Name 'VoicemeeterMacroButtons'
     }
 
-    hidden $_hide = $($this | Add-Member ScriptProperty 'hide' `
-        {
-            $this._hide = $this.Setter('show', $false)
-        } `
-        {}
-    )
+    [void] Hide () {
+        $this.Setter('show', $false)
+    }
 
-    hidden $_showvbanchat = $($this | Add-Member ScriptProperty 'showvbanchat' `
-        {
-            $this.Getter('DialogShow.VBANCHAT')
-        } `
-        {
-            param([bool]$arg)
-            $this._showvbanchat = $this.Setter('DialogShow.VBANCHAT', $arg)
-        }
-    )
+    [void] Unlock () {
+        $this.Setter('lock', $false)
+    }
 
-    hidden $_lock = $($this | Add-Member ScriptProperty 'lock' `
-        {
-            $this._lock = $this.Getter('lock')
-        } `
-        {
-            param([bool]$arg)
-            $this._lock = $this.Setter('lock', $arg)
-        }
-    )
+    [void] ShowVBANChat () {
+        $this.Setter('DialogShow.VBANCHAT', $true)
+    }
+
+    [void] HideVBANChat () {
+        $this.Setter('DialogShow.VBANCHAT', $false)
+    }
 
     [void] Load ([string]$filename) {
         $this.Setter('load', $filename)
+    }
+
+    [void] Save ([string]$filename) {
+        $this.Setter('save', $filename)
+    }
+
+    [void] StorePreset () {
+        $this.Setter('updatepreset', '')
+    }
+
+    [void] StorePreset ([string]$name) {
+        $this.Setter('updatepreset', $name)
+    }
+
+    [void] StorePreset ([int]$index) {
+        $this.Setter('preset[{0}].store' -f $index, '')
+    }
+
+    [void] StorePreset ([int]$index, [string]$name) {
+        $this.Setter('preset[{0}].store' -f $index, $name)
+    }
+
+    [void] RecallPreset () {
+        $this.Setter('recallpreset', '')
+    }
+
+    [void] RecallPreset ([string]$name) {
+        $this.Setter('recallpreset', $name)
+    }
+
+    [void] RecallPreset ([int]$index) {
+        $this.Setter('preset[{0}].recall' -f $index, 1)
     }
 }
 

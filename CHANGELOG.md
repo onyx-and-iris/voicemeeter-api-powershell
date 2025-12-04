@@ -39,6 +39,10 @@ Recorder.FileType changed from method to write-only property
 - Recorder.Prefix
 - Recorder.Eject() references 'Command.Eject'
 - Recorder.State
+- Command.Reset()
+- Command.Save($filepath)
+- Command.StorePreset()
+- Command.RecallPreset()
 
 ### Changed
 

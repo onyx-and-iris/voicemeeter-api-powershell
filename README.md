@@ -418,32 +418,43 @@ $vmr.vban.outstream[3].bit = 16
 
 Certain 'special' commands are defined by the API as performing actions rather than setting values.
 
-The following commands are available:
-
-- hide
-- showvbanchat: bool, (write only)
-- lock: bool, (write only)
-
 The following methods are available:
 
 - Show()
+- Hide()
+- Lock()
+- Unlock()
+- ShowVBANChat()
+- HideVBANChat()
 - Restart()
 - Shutdown()
+- Reset(): Reset all config
+- Save($filepath): string
 - Load($filepath): string
+- StorePreset($index, $name): (int, string)
+- RecallPreset($index or $name): (int or string)
 - RunMacrobuttons(): Launches the macrobuttons app
 - CloseMacrobuttons(): Closes the macrobuttons app
 
 example:
 
 ```powershell
-$vmr.command.show()
-
-$vmr.command.lock = $true
-
+$vmr.command.Show()
+$vmr.command.Lock()
 $vmr.command.Load("path/to/filename.xml")
-
 $vmr.command.RunMacrobuttons()
+
+$vmr.command.StorePreset(63, 'example')
+$vmr.command.StorePreset('example')
+$vmr.command.StorePreset(63)                # same as StorePreset(63, '')
+$vmr.command.StorePreset()                  # same as StorePreset(''), overwrites last recalled
+
+$vmr.command.RecallPreset('example')
+$vmr.command.RecallPreset(63)
+$vmr.command.RecallPreset()                 # same as RecallPreset(''), recalls last recalled
 ```
+
+StorePreset('') and RecallPreset('') interact with the 'selected' preset. This is highlighted green in the GUI. Recalling a preset selects it. Storing a preset via GUI also selects it. Storing a preset with StorePreset does not select it.
 
 ### Fx
 

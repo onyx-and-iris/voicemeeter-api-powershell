@@ -184,12 +184,6 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             }
         }
 
-        Context 'Command' {
-            It 'Should set command.lock' {
-                $vmr.command.lock = $value
-            }
-        }
-
         Context 'Fx' -Skip:$ifNotPotato {
             Context 'Delay' {
                 It 'Should set and get Fx.delay.on' {
@@ -914,6 +908,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                     $vmr.recorder.filetype = $filetype
 
                     $vmr.recorder.state = 'record'
+                    Start-Sleep -Milliseconds 100
                     $stamp = '{0:yyyy-MM-dd} at {0:HH}h{0:mm}m{0:ss}s' -f (Get-Date)
                     $vmr.recorder.state | Should -Be 'record'
                     Start-Sleep -Milliseconds 2000
@@ -948,6 +943,51 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 }
             }
         }
+
+        Context 'Command' {
+            It 'Should save, reset, then load config' -ForEach @(
+                @{ Gain = -27.1; Mode = 'composite'; Bit = 24; Port = 1044 }
+            ) {
+                $tmp = [System.IO.Path]::Combine([System.IO.Path]::GetTempPath(), "vmrconfig-$(New-Guid).xml")
+                try {
+                    # set some values
+                    $vmr.strip[$virt_in].gain = $gain
+                    $vmr.bus[$phys_out].mode.set($mode)
+                    $vmr.vban.outstream[$vban_outA].bit = $bit
+                    $vmr.vban.port = $port
+
+                    # save config
+                    $vmr.command.save($tmp)
+                    Start-Sleep -Milliseconds 100
+                    Test-Path $tmp | Should -BeTrue
+
+                    # reset config
+                    $vmr.command.reset()
+                    Start-Sleep -Milliseconds 500
+
+                    # verify default values
+                    $vmr.strip[$virt_in].gain | Should -Be 0.0
+                    $vmr.bus[$phys_out].mode.get() | Should -Be 'normal'
+                    $vmr.vban.outstream[$vban_outA].bit | Should -Be 16
+                    $vmr.vban.port | Should -Be 6980
+
+                    # load config
+                    $vmr.command.load($tmp)
+                    Start-Sleep -Milliseconds 500
+
+                    # verify values
+                    $vmr.strip[$virt_in].gain | Should -Be $gain
+                    $vmr.bus[$phys_out].mode.get() | Should -Be $mode
+                    $vmr.vban.outstream[$vban_outA].bit | Should -Be $bit
+                    $vmr.vban.port | Should -Be $port
+                }
+                finally {
+                    if (Test-Path $tmp) {
+                        Remove-Item $tmp -Force
+                    }
+                }
+            }
+        }
     }
 
     Describe 'Action Tests' -Tag 'action' {
@@ -962,6 +1002,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
 
                 BeforeEach {
                     $vmr.recorder.record()
+                    Start-Sleep -Milliseconds 100
                     $stamp = '{0:yyyy-MM-dd} at {0:HH}h{0:mm}m{0:ss}s' -f (Get-Date)
                     Start-Sleep -Milliseconds 2000
 
@@ -1001,6 +1042,65 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                     Start-Sleep -Milliseconds 500
                     $vmr.recorder.play()
                     $vmr.recorder.state | Should -Be 'play'
+                }
+            }
+        }
+
+        Context 'Command' {
+            Context 'Preset Scene' -ForEach @(
+                @{ Index = 0; Name = 'Test Scene 1' }
+                @{ Index = 63; Name = 'Test Scene 64' }
+            ) {
+                It "Should store preset at index '$index' with name '$name'" -ForEach @(
+                    @{ Value = -15.5 }, @{ Value = -52.9 }
+                ) {
+                    $vmr.bus[$phys_out].gain = $value
+                    $vmr.command.storepreset($index, $name)
+
+                    $vmr.bus[$phys_out].gain = 0.0
+
+                    $vmr.command.recallpreset($name)
+                    Start-Sleep -Milliseconds 500
+                    $vmr.bus[$phys_out].gain | Should -Be $value
+                }
+
+                It "Should update preset at index '$index'" -ForEach @(
+                    @{ Value = $false }, @{ Value = $true }
+                ) {
+                    $vmr.strip[$virt_in].B1 = $value
+                    $vmr.command.storepreset($index)
+
+                    $vmr.strip[$virt_in].B1 = -not $value
+
+                    $vmr.command.recallpreset($index)
+                    Start-Sleep -Milliseconds 500
+                    $vmr.strip[$virt_in].B1 | Should -Be $value
+                }
+
+                It "Should update preset with name '$name'" -ForEach @(
+                    @{ Value = 2 }, @{ Value = 1 }
+                ) {
+                    $vmr.bus[$virt_out].mono = $value
+                    $vmr.command.storepreset($name)
+
+                    $vmr.bus[$virt_out].mono = 0
+
+                    $vmr.command.recallpreset($name)
+                    Start-Sleep -Milliseconds 500
+                    $vmr.bus[$virt_out].mono | Should -Be $value
+                }
+
+                It "Should update last recalled preset ($index`: $(($index + 1).ToString('00')) - $name)" -ForEach @(
+                    @{ Value = 0.8 }, @{ Value = 0.3 }
+                ) {
+                    $vmr.strip[$phys_in].color_y = $value
+                    $vmr.command.storepreset()
+
+                    $vmr.strip[$phys_in].color_y = 0.0
+                    
+                    $vmr.command.recallpreset()
+                    Start-Sleep -Milliseconds 500
+                    $vmr.strip[$phys_in].color_y | Should -Be $value
                 }
             }
         }
