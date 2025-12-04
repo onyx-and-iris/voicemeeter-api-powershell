@@ -910,8 +910,8 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 try {
                     $prefix = 'stringtest'
                     $filetype = 'wav'
-                    $vmr.recorder.prefix($prefix)
-                    $vmr.recorder.filetype($filetype)
+                    $vmr.recorder.prefix = $prefix
+                    $vmr.recorder.filetype = $filetype
 
                     $vmr.recorder.state = 'record'
                     $stamp = '{0:yyyy-MM-dd} at {0:HH}h{0:mm}m{0:ss}s' -f (Get-Date)
@@ -956,8 +956,8 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 BeforeAll {
                     $prefix = 'actiontest'
                     $filetype = 'wav'
-                    $vmr.recorder.prefix($prefix)
-                    $vmr.recorder.filetype($filetype)
+                    $vmr.recorder.prefix = $prefix
+                    $vmr.recorder.filetype = $filetype
                 }
 
                 BeforeEach {

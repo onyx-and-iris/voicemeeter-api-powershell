@@ -531,6 +531,8 @@ The following commands are available:
 - armedbus: int, from 0 to bus index
 - state: string, ('play', 'stop', 'record', 'pause')
 - prerectime: int, from 0 to 20 seconds
+- prefix: string, write-only
+- filetype: string, write-only, ('wav', 'aiff', 'bwf', 'mp3')
 - samplerate: int, (22050, 24000, 32000, 44100, 48000, 88200, 96000, 176400, 192000)
 - bitresolution: int, (8, 16, 24, 32)
 - channel: int, (2, 4, 6, 8)
@@ -548,8 +550,6 @@ The following methods are available:
 - Eject()
 - Load($filepath): string
 - GoTo($timestring): string, must match the format 'hh:mm:ss'
-- FileType($format): string, ('wav', 'aiff', 'bwf', 'mp3')
-- Prefix($prefix): string
 
 example:
 

@@ -6,8 +6,8 @@ Import-Module (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\Voicemeeter.psm
 function Test-RecDir ([object]$vmr, [string]$recDir) {
     $prefix = 'temp'
     $filetype = 'wav'
-    $vmr.recorder.prefix($prefix)
-    $vmr.recorder.filetype($filetype)
+    $vmr.recorder.prefix = $prefix
+    $vmr.recorder.filetype = $filetype
 
     
     try {

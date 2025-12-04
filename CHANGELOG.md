@@ -16,6 +16,7 @@ AddActionMembers now adds ScriptMethods instead of ScriptProperties:
 - See Recorder section of README for details on using playback/record actions
 
 Deprecated Recorder.Loop removed: use Recorder.Mode.Loop
+Recorder.FileType changed from method to write-only property
 
 ### Added
 
@@ -35,7 +36,7 @@ Deprecated Recorder.Loop removed: use Recorder.Mode.Loop
 - Bus.Mode.Set($mode)
 - Recorder.Armedbus
 - Recorder.PreRecTime
-- Recorder.Prefix($prefix)
+- Recorder.Prefix
 - Recorder.Eject() references 'Command.Eject'
 - Recorder.State
 

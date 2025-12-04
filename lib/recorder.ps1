@@ -41,22 +41,6 @@ class Recorder : IRemote {
         $this.Setter('load', $filename)
     }
 
-    [void] Prefix ([string]$prefix) {
-        $this.Setter('prefix', $prefix)
-    }
-
-    [void] FileType([string]$format) {
-        [int]$val = 0
-        switch ($format) {
-            'wav' { $val = 1 }
-            'aiff' { $val = 2 }
-            'bwf' { $val = 3 }
-            'mp3' { $val = 100 }
-            default { "Filetype() got: $format, expected one of 'wav', 'aiff', 'bwf', 'mp3'" }
-        }
-        $this.Setter('filetype', $val)
-    }
-
     [void] GoTo ([string]$timestring) {
         try {
             if ([datetime]::ParseExact($timestring, 'HH:mm:ss', $null)) {
@@ -130,6 +114,34 @@ class Recorder : IRemote {
             else {
                 "kbps got: $arg, expected one of $opts" | Write-Warning
             }
+        }
+    )
+
+    hidden $_prefix = $($this | Add-Member ScriptProperty 'prefix' `
+        {
+            return Write-Warning ("ERROR: $($this.identifier()).prefix is write only")
+        } `
+        {
+            param([string]$arg)
+            $this._prefix = $this.Setter('prefix', $arg)
+        }
+    )
+
+    hidden $_filetype = $($this | Add-Member ScriptProperty 'filetype' `
+        {
+            return Write-Warning ("ERROR: $($this.identifier()).filetype is write only")
+        } `
+        {
+            param([string]$arg)
+            [int]$val = 0
+            switch ($arg) {
+                'wav' { $val = 1 }
+                'aiff' { $val = 2 }
+                'bwf' { $val = 3 }
+                'mp3' { $val = 100 }
+                default { "Filetype() got: $arg, expected one of 'wav', 'aiff', 'bwf', 'mp3'" }
+            }
+            $this._filetype = $this.Setter('filetype', $val)
         }
     )
 
