@@ -15,6 +15,9 @@ AddActionMembers now adds ScriptMethods instead of ScriptProperties:
 - See Command section of README for details on using special commands
 - See Recorder section of README for details on using playback/record actions
 
+Deprecated Recorder.Loop removed: use Recorder.Mode.Loop
+Recorder.FileType changed from method to write-only property
+
 ### Added
 
 - IRemote base class
@@ -31,6 +34,11 @@ AddActionMembers now adds ScriptMethods instead of ScriptProperties:
   - ip, write-only
 - Bus.Sel, Bus.Monitor, Bus.Vaio
 - Bus.Mode.Set($mode)
+- Recorder.Armedbus
+- Recorder.PreRecTime
+- Recorder.Prefix
+- Recorder.Eject() references 'Command.Eject'
+- Recorder.State
 
 ### Changed
 
@@ -43,6 +51,8 @@ AddActionMembers now adds ScriptMethods instead of ScriptProperties:
 - Bus.Levels.Convert return type [float] -> [single] for naming consistency, no functional change
 - Meta: AddBoolMembers, AddIntMembers $arg types for consistency
 - Device: explicit $arg types for consistency
+- Recorder.Armstrip|Armbus -> BoolArrayMember: now have .Get()
+- Cast Recorder getters to types for consistency
 
 ### Fixed
 
@@ -53,6 +63,7 @@ AddActionMembers now adds ScriptMethods instead of ScriptProperties:
 - vban.stream.port: [string]$arg -> [int]$arg
 - vban route range (API documentation is incorrect)
 - vban.stream.sr: $this._port -> $this._sr
+- Recorder.channel values: 1..8 -> (2, 4, 6, 8)
 
 ## [3.3.0] - 2024-06-29
 

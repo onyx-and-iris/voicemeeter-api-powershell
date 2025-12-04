@@ -527,9 +527,15 @@ The following commands are available:
 
 - A1 - A5: bool
 - B1 - B3: bool
+- gain: float, from -60.0 to 12.0
+- armedbus: int, from 0 to bus index
+- state: string, ('play', 'stop', 'record', 'pause')
+- prerectime: int, from 0 to 20 seconds
+- prefix: string, write-only
+- filetype: string, write-only, ('wav', 'aiff', 'bwf', 'mp3')
 - samplerate: int, (22050, 24000, 32000, 44100, 48000, 88200, 96000, 176400, 192000)
 - bitresolution: int, (8, 16, 24, 32)
-- channel: int, from 1 to 8
+- channel: int, (2, 4, 6, 8)
 - kbps: int, (32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320)
 
 The following methods are available:
@@ -541,9 +547,9 @@ The following methods are available:
 - Rew()
 - Record()
 - Pause()
+- Eject()
 - Load($filepath): string
 - GoTo($timestring): string, must match the format 'hh:mm:ss'
-- FileType($format): string, ('wav', 'aiff', 'bwf', 'mp3')
 
 example:
 
@@ -571,9 +577,10 @@ $vmr.recorder.mode.loop = $true
 
 #### ArmStrip[i]|ArmBus[i]
 
-The following method is available:
+The following methods are available:
 
 - Set($val): bool
+- Get()
 
 example:
 

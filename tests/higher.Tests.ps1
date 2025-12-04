@@ -157,8 +157,30 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.recorder.B1 | Should -Be $expected
             }
 
-            It 'Should set and get Recorder.loop' {
-                $vmr.recorder.loop = $value
+            It 'Should set and get Recorder.armstrip[i]' -ForEach @(
+                @{ Index = $phys_in }, @{ Index = $virt_in }
+            ) {
+                $vmr.recorder.armstrip[$index].set($value)
+                $vmr.recorder.armstrip[$index].get() | Should -Be $value
+            }
+
+            It 'Should set and get Recorder.armbus[i]' -ForEach @(
+                @{ Index = $phys_out }, @{ Index = $virt_out }
+            ) {
+                $vmr.recorder.armbus[$index].set($value)
+                $vmr.recorder.armbus[$index].get() | Should -Be $value
+            }
+
+            Context 'Mode' {
+                It 'Should set and get Recorder.mode.multitrack' {
+                    $vmr.recorder.mode.multitrack = $value
+                    $vmr.recorder.mode.multitrack | Should -Be $expected
+                }
+
+                It 'Should set and get Recorder.mode.loop' {
+                    $vmr.recorder.mode.loop = $value
+                    $vmr.recorder.mode.loop | Should -Be $expected
+                }
             }
         }
 
@@ -603,6 +625,43 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 }
             }
         }
+
+        Context 'Recorder' -Skip:$ifBasic {
+            It 'Should set and get Recorder.armedbus' -ForEach @(
+                @{ Value = $phys_out }, @{ Value = $virt_out }
+            ) {
+                $vmr.recorder.armedbus = $value
+                $vmr.recorder.armedbus | Should -Be $value
+            }
+
+            It 'Should set and get Recorder.prerectime' -ForEach @(
+                @{ Value = 5 }, @{ Value = 20 }
+            ) {
+                $vmr.recorder.prerectime = $value
+                $vmr.recorder.prerectime | Should -Be $value
+            }
+
+            It 'Should set and get Recorder.samplerate' -ForEach @(
+                @{ Value = 44100 }, @{ Value = 48000 }
+            ) {
+                $vmr.recorder.samplerate = $value
+                $vmr.recorder.samplerate | Should -Be $value
+            }
+
+            It 'Should set and get Recorder.bitresolution' -ForEach @(
+                @{ Value = 24 }, @{ Value = 16 }
+            ) {
+                $vmr.recorder.bitresolution = $value
+                $vmr.recorder.bitresolution | Should -Be $value
+            }
+
+            It 'Should set and get Recorder.kbps' -ForEach @(
+                @{ Value = 96 }, @{ Value = 192 }
+            ) {
+                $vmr.recorder.kbps = $value
+                $vmr.recorder.kbps | Should -Be $value
+            }
+        }
     }
 
     Describe 'String Tests' -Tag 'string' {
@@ -843,6 +902,106 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                     $vmr.vban.outstream[$index].ip = $value
                     $vmr.vban.outstream[$index].ip | Should -Be $expected
                 }       
+            }
+        }
+
+        Context 'Recorder' -Skip:$ifBasic {
+            It 'Should record a test file, eject, and load it back' -Skip:$ifCustomDir {
+                try {
+                    $prefix = 'stringtest'
+                    $filetype = 'wav'
+                    $vmr.recorder.prefix = $prefix
+                    $vmr.recorder.filetype = $filetype
+
+                    $vmr.recorder.state = 'record'
+                    $stamp = '{0:yyyy-MM-dd} at {0:HH}h{0:mm}m{0:ss}s' -f (Get-Date)
+                    $vmr.recorder.state | Should -Be 'record'
+                    Start-Sleep -Milliseconds 2000
+
+                    $tmp = [System.IO.Path]::Combine($recDir, ("{0} {1}.{2}" -f $prefix, $stamp, $filetype))
+
+                    $vmr.recorder.state = 'stop'
+                    $vmr.recorder.eject()
+                    Start-Sleep -Milliseconds 500
+
+                    $vmr.recorder.state = 'play'
+                    $vmr.recorder.state | Should -Be 'stop'  # because no file is loaded
+
+                    $vmr.recorder.load($tmp)
+                    Start-Sleep -Milliseconds 500
+                    if (-not $vmr.recorder.mode.playonload) {
+                        $vmr.recorder.state = 'play'
+                    }
+                    $vmr.recorder.state | Should -Be 'play'
+                }
+                finally {
+                    $vmr.recorder.state = 'stop'
+                    $vmr.recorder.eject()
+                    Start-Sleep -Milliseconds 500
+                    
+                    if (Test-Path $tmp) {
+                        Remove-Item -Path $tmp -Force
+                    }
+                    else {
+                        throw "Recording file $tmp was not found."
+                    }
+                }
+            }
+        }
+    }
+
+    Describe 'Action Tests' -Tag 'action' {
+        Context 'Recorder' -Skip:$ifBasic {
+            Context 'Recording/Playback' -Skip:$ifCustomDir {
+                BeforeAll {
+                    $prefix = 'actiontest'
+                    $filetype = 'wav'
+                    $vmr.recorder.prefix = $prefix
+                    $vmr.recorder.filetype = $filetype
+                }
+
+                BeforeEach {
+                    $vmr.recorder.record()
+                    $stamp = '{0:yyyy-MM-dd} at {0:HH}h{0:mm}m{0:ss}s' -f (Get-Date)
+                    Start-Sleep -Milliseconds 2000
+
+                    $tmp = [System.IO.Path]::Combine($recDir, ("{0} {1}.{2}" -f $prefix, $stamp, $filetype))
+
+                    $vmr.recorder.pause()
+                    Start-Sleep -Milliseconds 500
+                }
+
+                AfterEach {
+                    $vmr.recorder.stop()
+                    $vmr.recorder.eject()
+                    Start-Sleep -Milliseconds 500
+                    
+                    if (Test-Path $tmp) {
+                        Remove-Item -Path $tmp -Force
+                    }
+                    else {
+                        throw "Recording file $tmp was not found."
+                    }
+                }
+            
+                It 'Should call Recorder.record()' {
+                    $vmr.recorder.record()
+                    $vmr.recorder.state | Should -Be 'record'
+                }
+
+                It 'Should call Recorder.pause()' {
+                    $vmr.recorder.record()
+                    Start-Sleep -Milliseconds 500
+                    $vmr.recorder.pause()
+                    $vmr.recorder.state | Should -Be 'pause'
+                }
+
+                It 'Should call Recorder.play()' {
+                    $vmr.recorder.stop()
+                    Start-Sleep -Milliseconds 500
+                    $vmr.recorder.play()
+                    $vmr.recorder.state | Should -Be 'play'
+                }
             }
         }
     }
