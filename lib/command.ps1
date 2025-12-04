@@ -40,6 +40,34 @@ class Special : IRemote {
     [void] Save ([string]$filename) {
         $this.Setter('save', $filename)
     }
+
+    [void] StorePreset () {
+        $this.Setter('updatepreset', '')
+    }
+
+    [void] StorePreset ([string]$name) {
+        $this.Setter('updatepreset', $name)
+    }
+
+    [void] StorePreset ([int]$index) {
+        $this.Setter('preset[{0}].store' -f $index, '')
+    }
+
+    [void] StorePreset ([int]$index, [string]$name) {
+        $this.Setter('preset[{0}].store' -f $index, $name)
+    }
+
+    [void] RecallPreset () {
+        $this.Setter('recallpreset', '')
+    }
+
+    [void] RecallPreset ([string]$name) {
+        $this.Setter('recallpreset', $name)
+    }
+
+    [void] RecallPreset ([int]$index) {
+        $this.Setter('preset[{0}].recall' -f $index, 1)
+    }
 }
 
 function Make_Command([Object]$remote) {
