@@ -244,94 +244,81 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
     }
 
-    Describe 'Float Tests' -Tag 'float' {
+    Describe 'Float Tests' -Tag 'float' -ForEach @(
+        @{ Gain = -24.63; Knob = 5.27; Slide = -7.51; Xy10 = 0.83; Xy05 = -0.42; MsHz = 196.57 }
+        @{ Gain = -12.48; Knob = 8.91; Slide = 3.14; Xy10 = 0.27; Xy05 = 0.69; MsHz = 142.13 }
+    ) {
         Context 'Strip, one physical one virtual' -ForEach @(
             @{ Index = $phys_in }, @{ Index = $virt_in }
         ) {
-            It "Should set Strip[$index].Gain to $value" -ForEach @(
-                @{ Value = 3.6; Expected = 3.6 }, @{ Value = -8.2; Expected = -8.2 }
-            ) {
-                $vmr.strip[$index].gain = $value
-                $vmr.strip[$index].gain | Should -Be $expected
+            It "Should set Strip[$index].Gain" {
+                $vmr.strip[$index].gain = $gain
+                $vmr.strip[$index].gain | Should -Be $gain
             }
         }
 
-        Context 'Strip, physical only' -Skip:$ifBasic -ForEach @(
+        Context 'Strip, physical only' -ForEach @(
             @{ Index = $phys_in }
         ) {
-            Context 'Knobs' -Skip:$ifBasic -ForEach @(
-                @{ Value = 8.3; Expected = 8.3 }, @{ Value = 5.1; Expected = 5.1 }
-            ) {
-                It "Should set Strip[$index].Comp to $value" {
-                    $vmr.strip[$index].comp.knob = $value
-                    $vmr.strip[$index].comp.knob | Should -Be $expected
+            Context 'Comp, Gate' -Skip:$ifBasic {
+                It "Should set Strip[$index].Comp" {
+                    $vmr.strip[$index].comp.knob = $knob
+                    $vmr.strip[$index].comp.knob | Should -Be $knob
                 }
 
-                It "Should set Strip[$index].Gate to $value" {
-                    $vmr.strip[$index].gate.knob = $value
-                    $vmr.strip[$index].gate.knob | Should -Be $expected
-                }
-
-                It "Should set Strip[$index].Denoiser to $value" -Skip:$ifNotPotato {
-                    $vmr.strip[$index].denoiser.knob = $value
-                    $vmr.strip[$index].denoiser.knob | Should -Be $expected
+                It "Should set Strip[$index].Gate" {
+                    $vmr.strip[$index].gate.knob = $knob
+                    $vmr.strip[$index].gate.knob | Should -Be $knob
                 }
             }
 
             Context 'Comp' -Skip:$ifNotPotato {
-                It "Should set Strip[$index].Comp.Attack" -ForEach @(
-                    @{ Value = 8.3; Expected = 8.3 }, @{ Value = 5.1; Expected = 5.1 }
-                ) {
-                    $vmr.strip[$index].comp.attack = $value
-                    $vmr.strip[$index].comp.attack | Should -Be $expected
+                It "Should set Strip[$index].Comp.Attack" {
+                    $vmr.strip[$index].comp.attack = $msHz
+                    $vmr.strip[$index].comp.attack | Should -Be $msHz
                 }
 
-                It "Should set Strip[$index].Comp.Knee" -ForEach @(
-                    @{ Value = 0.3; Expected = 0.3 }, @{ Value = 0.8; Expected = 0.8 }
-                ) {
-                    $vmr.strip[$index].comp.knee = $value
-                    $vmr.strip[$index].comp.knee | Should -Be $expected
+                It "Should set Strip[$index].Comp.Knee" {
+                    $vmr.strip[$index].comp.knee = $xy10
+                    $vmr.strip[$index].comp.knee | Should -Be $xy10
                 }
             }
 
             Context 'Gate' -Skip:$ifNotPotato {
-                It "Should set Strip[$index].Gate.BPSidechain" -ForEach @(
-                    @{ Value = 103.1; Expected = 103.1 }, @{ Value = 3800; Expected = 3800 }
-                ) {
-                    $vmr.strip[$index].gate.bpsidechain = $value
-                    $vmr.strip[$index].gate.bpsidechain | Should -Be $expected
+                It "Should set Strip[$index].Gate.BPSidechain" {
+                    $vmr.strip[$index].gate.bpsidechain = $msHz
+                    $vmr.strip[$index].gate.bpsidechain | Should -Be $msHz
                 }
 
-                It "Should set Strip[$index].Gate.Hold" -ForEach @(
-                    @{ Value = 0.3; Expected = 0.3 }, @{ Value = 5000; Expected = 5000 }
-                ) {
-                    $vmr.strip[$index].gate.hold = $value
-                    $vmr.strip[$index].gate.hold | Should -Be $expected
+                It "Should set Strip[$index].Gate.Hold" {
+                    $vmr.strip[$index].gate.hold = $msHz
+                    $vmr.strip[$index].gate.hold | Should -Be $msHz
+                }
+            }
+
+            Context 'Denoiser' -Skip:$ifNotPotato {
+                It "Should set Strip[$index].Denoiser" {
+                    $vmr.strip[$index].denoiser.knob = $knob
+                    $vmr.strip[$index].denoiser.knob | Should -Be $knob
                 }
             }
 
             Context 'EQ' -Skip:$ifNotPotato -ForEach @(
                 @{ Eq = $vmr.strip[$index].eq }
             ) {
-                It "Should set Strip[$index].EQ.Channel[$strip_ch].Cell[$cells].F" -ForEach @(
-                    @{ Value = 1234.6; Expected = 1234.6 }, @{ Value = 7500; Expected = 7500 }
-                ) {
-                    $eq.channel[$strip_ch].cell[$cells].f = $value
-                    $eq.channel[$strip_ch].cell[$cells].f | Should -Be $expected
+                It "Should set Strip[$index].EQ.Channel[$strip_ch].Cell[$cells].F" {
+                    $eq.channel[$strip_ch].cell[$cells].f = $msHz
+                    $eq.channel[$strip_ch].cell[$cells].f | Should -Be $msHz
                 }
 
-                It "Should set Strip[$index].EQ.Channel[$strip_ch].Cell[$cells].Gain" -ForEach @(
-                    @{ Value = 4.2; Expected = 4.2 }, @{ Value = -7.3; Expected = -7.3 }
-                ) {
-                    $eq.channel[$strip_ch].cell[$cells].gain = $value
-                    $eq.channel[$strip_ch].cell[$cells].gain | Should -Be $expected
+                It "Should set Strip[$index].EQ.Channel[$strip_ch].Cell[$cells].Gain" {
+                    $eq.channel[$strip_ch].cell[$cells].gain = $slide
+                    $eq.channel[$strip_ch].cell[$cells].gain | Should -Be $slide
                 }
 
-                It "Should set Strip[$index].EQ.Channel[$strip_ch].Cell[$cells].Q" -ForEach @(
-                    @{ Value = 1.2; Expected = 1.2 }, @{ Value = 5.6; Expected = 5.6 }
-                ) {
-                    $eq.channel[$strip_ch].cell[$cells].q = $value
-                    $eq.channel[$strip_ch].cell[$cells].q | Should -Be $expected
+                It "Should set Strip[$index].EQ.Channel[$strip_ch].Cell[$cells].Q" {
+                    $eq.channel[$strip_ch].cell[$cells].q = $knob
+                    $eq.channel[$strip_ch].cell[$cells].q | Should -Be $knob
                 }
             }
         }
@@ -339,47 +326,37 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         Context 'Bus, one physical one virtual' -ForEach @(
             @{ Index = $phys_out }, @{ Index = $virt_out }
         ) {
-            It "Should set Bus[$index].Gain" -ForEach @(
-                @{ Value = 5.2; Expected = 5.2 }, @{ Value = -38.2; Expected = -38.2 }
-            ) {
-                $vmr.bus[$index].gain = $value
-                $vmr.bus[$index].gain | Should -Be $expected
+            It "Should set Bus[$index].Gain" {
+                $vmr.bus[$index].gain = $gain
+                $vmr.bus[$index].gain | Should -Be $gain
             }
 
             Context 'EQ' -Skip:$ifBasic -ForEach @(
                 @{ Eq = $vmr.bus[$index].eq }
             ) {
-                It "Should set Bus[$index].EQ.Channel[$bus_ch].Cell[$cells].F" -ForEach @(
-                    @{ Value = 1234.6; Expected = 1234.6 }, @{ Value = 7500; Expected = 7500 }
-                ) {
-                    $eq.channel[$bus_ch].cell[$cells].f = $value
-                    $eq.channel[$bus_ch].cell[$cells].f | Should -Be $expected
+                It "Should set Bus[$index].EQ.Channel[$bus_ch].Cell[$cells].F" {
+                    $eq.channel[$bus_ch].cell[$cells].f = $msHz
+                    $eq.channel[$bus_ch].cell[$cells].f | Should -Be $msHz
                 }
 
-                It "Should set Bus[$index].EQ.Channel[$bus_ch].Cell[$cells].Gain" -ForEach @(
-                    @{ Value = 4.2; Expected = 4.2 }, @{ Value = -7.3; Expected = -7.3 }
-                ) {
-                    $eq.channel[$bus_ch].cell[$cells].gain = $value
-                    $eq.channel[$bus_ch].cell[$cells].gain | Should -Be $expected
+                It "Should set Bus[$index].EQ.Channel[$bus_ch].Cell[$cells].Gain" {
+                    $eq.channel[$bus_ch].cell[$cells].gain = $slide
+                    $eq.channel[$bus_ch].cell[$cells].gain | Should -Be $slide
                 }
 
-                It "Should set Bus[$index].EQ.Channel[$bus_ch].Cell[$cells].Q" -ForEach @(
-                    @{ Value = 1.2; Expected = 1.2 }, @{ Value = 5.6; Expected = 5.6 }
-                ) {
-                    $eq.channel[$bus_ch].cell[$cells].q = $value
-                    $eq.channel[$bus_ch].cell[$cells].q | Should -Be $expected
+                It "Should set Bus[$index].EQ.Channel[$bus_ch].Cell[$cells].Q" {
+                    $eq.channel[$bus_ch].cell[$cells].q = $knob
+                    $eq.channel[$bus_ch].cell[$cells].q | Should -Be $knob
                 }
             }
         }
         
         Context 'Option' {
-            It "Should set and get Option.delay[$phys_out]" -ForEach @(
-                @{ Value = 486.57 }, @{ Value = 26.41 }
-            ) {
-                $vmr.option.delay[$phys_out].set($value)
+            It "Should set and get Option.delay[$phys_out]" {
+                $vmr.option.delay[$phys_out].set($msHz)
                 $vmr.command.restart()
                 Start-Sleep -Milliseconds 2000
-                $vmr.option.delay[$phys_out].get() | Should -Be $value
+                $vmr.option.delay[$phys_out].get() | Should -Be $msHz
             }
         }
     }
