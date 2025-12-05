@@ -16,12 +16,13 @@ function AddBoolMembers () {
 
 function AddFloatMembers () {
     param(
-        [String[]]$PARAMS
+        [String[]]$PARAMS,
+        [int]$decimals = 2
     )
     [hashtable]$Signatures = @{}
     foreach ($param in $PARAMS) {
         # Define getter
-        $Signatures['Getter'] = "[math]::Round(`$this.Getter('{0}'), 1)" -f $param
+        $Signatures['Getter'] = "[math]::Round(`$this.Getter('{0}'), {1})" -f $param, $decimals
         # Define setter
         $Signatures['Setter'] = "param ( [Single]`$arg )`n`$this.Setter('{0}', `$arg)" `
             -f $param
