@@ -123,18 +123,18 @@ The following strip commands are available:
 - A1-A5: bool
 - B1-B3: bool
 - limit: int, from -40 to 12
-- gain: float, from -60.0 to 12.0
+- gain: float, from -60.00 to 12.00
 - label: string
-- reverb: float, from 0.0 to 10.0
-- delay: float, from 0.0 to 10.0
-- fx1: float, from 0.0 to 10.0
-- fx2: float, from 0.0 to 10.0
-- pan_x: float, from -0.5 to 0.5
-- pan_y: float, from 0.0 to 1.0
-- color_x: float, from -0.5 to 0.5
-- color_y: float, from 0.0 to 1.0
-- fx_x: float, from -0.5 to 0.5
-- fx_y: float, from 0.0 to 1.0
+- reverb: float, from 0.00 to 10.00
+- delay: float, from 0.00 to 10.00
+- fx1: float, from 0.00 to 10.00
+- fx2: float, from 0.00 to 10.00
+- pan_x: float, from -0.50 to 0.50
+- pan_y: float, from 0.00 to 1.00
+- color_x: float, from -0.50 to 0.50
+- color_y: float, from 0.00 to 1.00
+- fx_x: float, from -0.50 to 0.50
+- fx_y: float, from 0.00 to 1.00
 - postreverb: bool
 - postdelay: bool
 - postfx1: bool
@@ -157,14 +157,14 @@ mc, k for virtual strips only.
 
 The following strip.comp commands are available:
 
-- knob: float, from 0.0 to 10.0
-- gainin: float, from -24.0 to 24.0
-- ratio: float, from 1.0 to 8.0
-- threshold: float, from -40.0 to -3.0
-- attack: float, from 0.0 to 200.0
-- release: float, from 0.0 to 5000.0
-- knee: float, 0.0 to 1.0
-- gainout: float, from -24.0 to 24.0
+- knob: float, from 0.00 to 10.00
+- gainin: float, from -24.00 to 24.00
+- ratio: float, from 1.00 to 8.00
+- threshold: float, from -40.00 to -3.00
+- attack: float, from 0.00 to 200.00
+- release: float, from 0.00 to 5000.00
+- knee: float, 0.00 to 1.00
+- gainout: float, from -24.00 to 24.00
 - makeup: bool
 
 for example:
@@ -177,13 +177,13 @@ $vmr.strip[3].comp.attack = 8.5
 
 The following strip.gate commands are available:
 
-- knob: float, from 0.0 to 10.0
-- threshold: float, from -60.0 to -10.0
-- damping: float, from -60.0 to -10.0
+- knob: float, from 0.00 to 10.00
+- threshold: float, from -60.00 to -10.00
+- damping: float, from -60.00 to -10.00
 - bpsidechain: int, from 100 to 4000
-- attack: float, from 0.0 to 1000.0
-- hold: float, from 0.0 to 5000.0
-- release: float, from 0.0 to 5000.0
+- attack: float, from 0.00 to 1000.00
+- hold: float, from 0.00 to 5000.00
+- release: float, from 0.00 to 5000.00
 
 for example:
 
@@ -195,7 +195,7 @@ $vmr.strip[3].gate.threshold = -40.5
 
 The following strip.denoiser commands are available:
 
-- knob: float, from 0.0 to 10.0
+- knob: float, from 0.00 to 10.00
 
 for example:
 
@@ -238,12 +238,12 @@ The following bus commands are available:
 - monitor: bool
 - vaio: bool
 - mono: int, 0 off, 1 mono, 2 stereo reverse
-- gain: float, from -60.0 to 12.0
+- gain: float, from -60.00 to 12.00
 - label: string
-- returnreverb: float, from 0.0 to 10.0
-- returndelay: float, from 0.0 to 10.0
-- returnfx1: float, from 0.0 to 10.0
-- returnfx2: float, from 0.0 to 10.0
+- returnreverb: float, from 0.00 to 10.00
+- returndelay: float, from 0.00 to 10.00
+- returnfx1: float, from 0.00 to 10.00
+- returnfx2: float, from 0.00 to 10.00
 
 for example:
 
@@ -342,9 +342,9 @@ The following eq.channel.cell commands are available:
 
 - on: bool
 - type: int, from 0 to 6
-- f: float, from 20.0 to 20000.0
-- gain: float, from -12.0 to 12.0
-- q: float, from 0.3 to 100.0
+- f: float, from 20.00 to 20000.00
+- gain: float, from -12.00 to 12.00
+- q: float, from 0.30 to 100.00
 
 for example:
 
@@ -538,7 +538,7 @@ The following commands are available:
 
 - A1 - A5: bool
 - B1 - B3: bool
-- gain: float, from -60.0 to 12.0
+- gain: float, from -60.00 to 12.00
 - armedbus: int, from 0 to bus index
 - state: string, ('play', 'stop', 'record', 'pause')
 - prerectime: int, from 0 to 20 seconds
