@@ -12,7 +12,7 @@ function Test-RecDir ([object]$vmr, [string]$recDir) {
     
     try {
         $vmr.recorder.record()
-        Start-Sleep -Milliseconds 100
+        Start-Sleep -Milliseconds 10
         $stamp = '{0:yyyy-MM-dd} at {0:HH}h{0:mm}m{0:ss}s' -f (Get-Date)
         Start-Sleep -Milliseconds 2000
 

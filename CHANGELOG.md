@@ -57,6 +57,7 @@ Recorder.FileType changed from method to write-only property
 - Device: explicit $arg types for consistency
 - Recorder.Armstrip|Armbus -> BoolArrayMember: now have .Get()
 - Cast Recorder getters to types for consistency
+- Floats can now take up to two decimal places
 
 ### Fixed
 
