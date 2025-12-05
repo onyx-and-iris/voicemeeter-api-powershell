@@ -43,9 +43,15 @@ class FloatArrayMember : ArrayMember {
     [int]$decimals
     
     FloatArrayMember (
-        [int]$index, [string]$prefix, [Object]$parent, [int]$decimals = 1
+        [int]$index, [string]$prefix, [Object]$parent, [int]$decimals
     ) : base ($index, $prefix, $parent) {
         $this.decimals = $decimals
+    }
+
+    FloatArrayMember (
+        [int]$index, [string]$prefix, [Object]$parent
+    ) : base ($index, $prefix, $parent) {
+        $this.decimals = 2
     }
     
     [double] Get () {

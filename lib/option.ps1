@@ -14,7 +14,7 @@ class Option : IRemote {
         
         $this.delay = @()
         for ($i = 0; $i -lt $num_A; $i++) {
-            $this.delay.Add([FloatArrayMember]::new($i, 'delay', $this, 2))
+            $this.delay.Add([FloatArrayMember]::new($i, 'delay', $this))
         }
     }
     
