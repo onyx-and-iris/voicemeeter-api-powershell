@@ -205,14 +205,16 @@ $vmr.strip[3].denoiser.knob = 5
 
 #### AppGain | AppMute
 
-- `AppGain(amount, gain)` : string, float
-- `AppMute(amount, mutestate)` : string, bool
+- AppGain($appname or $appindex, $gain) : string or int, float, from 0.00 to 1.00
+- AppMute($appname or $appindex, $mutestate) : string or int, bool
 
 for example:
 
 ```powershell
 $vmr.strip[5].AppGain("Spotify", 0.5)
 $vmr.strip[5].AppMute("Spotify", $true)
+$vmr.strip[7].AppGain(0, 0.28)
+$vmr.strip[6].AppMute(2, $false)
 ```
 
 #### levels

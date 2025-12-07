@@ -182,8 +182,16 @@ class VirtualStrip : Strip {
         $this.Setter('AppGain', "(`"$appname`", $gain)")
     }
 
+    [void] AppGain ([int]$appindex, [single]$gain) {
+        $this.Setter("App[$appindex].Gain", $gain)
+    }
+
     [void] AppMute ([string]$appname, [bool]$mutestate) {
-        $this.Setter('AppMute', "(`"$appname`", $(if ($mutestate) { 1 } else { 0 })")
+        $this.Setter('AppMute', "(`"$appname`", $(if ($mutestate) { 1 } else { 0 }))")
+    }
+
+    [void] AppMute ([int]$appindex, [bool]$mutestate) {
+        $this.Setter("App[$appindex].Mute", $mutestate)
     }
 }
 

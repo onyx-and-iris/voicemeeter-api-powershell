@@ -61,6 +61,7 @@ Recorder.FileType changed from method to write-only property
 - Cast Recorder getters to types for consistency
 - Floats getters/setters now default to two decimal places.
 - Strip.Mono is now an alias for Strip.MC on virtual strips
+- Strip.AppMute|AppGain can now take an app index; see README for details
 
 ### Fixed
 
@@ -73,6 +74,7 @@ Recorder.FileType changed from method to write-only property
 - vban.stream.sr: $this._port -> $this._sr
 - Recorder.channel values: 1..8 -> (2, 4, 6, 8)
 - Strip.Limit type [int] -> [float]
+- Missing closing parenthesis in AppMute value string
 
 ## [3.3.0] - 2024-06-29
 
