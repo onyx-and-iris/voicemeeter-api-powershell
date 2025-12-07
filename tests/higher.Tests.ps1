@@ -342,6 +342,48 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             }
         }
 
+        Context 'Strip, virtual only' -ForEach @(
+            @{ Index = $virt_in }
+        ) {
+            Context 'EQ' {
+                BeforeEach {
+                    $vmr.strip[$index].eqgain1 = 0
+                    $vmr.strip[$index].eqgain2 = 0
+                    $vmr.strip[$index].eqgain3 = 0
+                }
+            
+                It "Should set Strip[$index].EQGain1 via alias 'bass'" {
+                    $vmr.strip[$index].bass = $slide
+                    $vmr.strip[$index].eqgain1 | Should -Be $slide
+                }
+
+                It "Should set Strip[$index].EQGain1 via alias 'low'" {
+                    $vmr.strip[$index].low = $slide
+                    $vmr.strip[$index].eqgain1 | Should -Be $slide
+                }
+
+                It "Should set Strip[$index].EQGain2 via alias 'mid'" {
+                    $vmr.strip[$index].mid = $slide
+                    $vmr.strip[$index].eqgain2 | Should -Be $slide
+                }
+
+                It "Should set Strip[$index].EQGain2 via alias 'med'" {
+                    $vmr.strip[$index].med = $slide
+                    $vmr.strip[$index].eqgain2 | Should -Be $slide
+                }
+
+                It "Should set Strip[$index].EQGain3 via alias 'treble'" {
+                    $vmr.strip[$index].treble = $slide
+                    $vmr.strip[$index].eqgain3 | Should -Be $slide
+                }
+
+                It "Should set Strip[$index].EQGain3 via alias 'high'" {
+                    $vmr.strip[$index].high = $slide
+                    $vmr.strip[$index].eqgain3 | Should -Be $slide
+                }
+            }
+        }
+
         Context 'Bus, one physical one virtual' -ForEach @(
             @{ Index = $phys_out }, @{ Index = $virt_out }
         ) {

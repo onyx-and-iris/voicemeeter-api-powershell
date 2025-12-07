@@ -174,8 +174,18 @@ class VirtualStrip : Strip {
     VirtualStrip ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddBoolMembers -PARAMS @('mc')
         AddIntMembers -PARAMS @('k')
+        AddFloatMembers -PARAMS @('eqgain1', 'eqgain2', 'eqgain3')
 
-        AddAliasMembers -MAP @{ mono = 'mc'; karaoke = 'k' }
+        AddAliasMembers -MAP @{ 
+            mono    = 'mc'
+            karaoke = 'k'
+            bass    = 'eqgain1'
+            low     = 'eqgain1'
+            mid     = 'eqgain2'
+            med     = 'eqgain2'
+            treble  = 'eqgain3'
+            high    = 'eqgain3'
+        }
     }
 
     [void] AppGain ([string]$appname, [single]$gain) {

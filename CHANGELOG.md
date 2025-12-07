@@ -45,6 +45,7 @@ Recorder.FileType changed from method to write-only property
 - Command.RecallPreset()
 - AddAliasMembers meta function takes a hashtable `-MAP` of `alias = property`
 - Strip.Karaoke alias for Strip.K
+- Strip.EQGain1|EQGain2|EQGain3 with bass/low, mid/med, treble/high aliases, respectively
 
 ### Changed
 

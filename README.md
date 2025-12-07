@@ -140,6 +140,9 @@ The following strip commands are available:
 - postfx1: bool
 - postfx2: bool
 - gainlayer0-gainlayer7: float
+- eqgain1/bass/low: float, from -12.00 to 12.00
+- eqgain2/mid/med: float, from -12.00 to 12.00
+- eqgain3/treble/high: float, from -12.00 to 12.00
 
 for example:
 
