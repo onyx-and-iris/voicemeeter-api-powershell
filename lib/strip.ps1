@@ -77,16 +77,18 @@ class PhysicalStrip : Strip {
     [Object]$denoiser
     [Object]$eq
     [Object]$device
+    [Object]$audibility
 
     PhysicalStrip ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddFloatMembers -PARAMS @('color_x', 'color_y', 'fx_x', 'fx_y')
         AddFloatMembers -PARAMS @('reverb', 'delay', 'fx1', 'fx2')
         AddBoolMembers -PARAMS @('postreverb', 'postdelay', 'postfx1', 'postfx2')
-        AddBoolMembers -PARAMS @('mono')
+        AddBoolMembers -PARAMS @('mono', 'vaio')
 
         $this.comp = [StripComp]::new($index, $remote)
         $this.gate = [StripGate]::new($index, $remote)
         $this.denoiser = [StripDenoiser]::new($index, $remote)
+        $this.audibility = [StripAudibility]::new($index, $remote)
         $this.eq = [StripEq]::new($index, $remote)
         $this.device = [StripDevice]::new($index, $remote)
     }
@@ -104,10 +106,10 @@ class StripComp : IRemote {
 
     hidden $_knob = $($this | Add-Member ScriptProperty 'knob' `
         {
-            $this.Getter_String('')
+            [math]::Round($this.Getter(''), 2)
         } `
         {
-            param($arg)
+            param([single]$arg)
             return $this.Setter('', $arg)
         }
     )
@@ -124,10 +126,10 @@ class StripGate : IRemote {
 
     hidden $_knob = $($this | Add-Member ScriptProperty 'knob' `
         {
-            $this.Getter_String('')
+            [math]::Round($this.Getter(''), 2)
         } `
         {
-            param($arg)
+            param([single]$arg)
             return $this.Setter('', $arg)
         }
     )
@@ -135,6 +137,7 @@ class StripGate : IRemote {
 
 class StripDenoiser : IRemote {
     StripDenoiser ([int]$index, [Object]$remote) : base ($index, $remote) {
+        AddFloatMembers -PARAMS @('threshold')
     }
 
     [string] identifier () {
@@ -143,10 +146,29 @@ class StripDenoiser : IRemote {
 
     hidden $_knob = $($this | Add-Member ScriptProperty 'knob' `
         {
-            $this.Getter_String('')
+            [math]::Round($this.Getter(''), 2)
         } `
         {
-            param($arg)
+            param([single]$arg)
+            return $this.Setter('', $arg)
+        }
+    )
+}
+
+class StripAudibility : IRemote {
+    StripAudibility ([int]$index, [Object]$remote) : base ($index, $remote) {
+    }
+
+    [string] identifier () {
+        return 'Strip[' + $this.index + '].Audibility'
+    }
+
+    hidden $_knob = $($this | Add-Member ScriptProperty 'knob' `
+        {
+            [math]::Round($this.Getter(''), 2)
+        } `
+        {
+            param([single]$arg)
             return $this.Setter('', $arg)
         }
     )

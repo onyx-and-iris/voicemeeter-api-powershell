@@ -46,6 +46,9 @@ Recorder.FileType changed from method to write-only property
 - AddAliasMembers meta function takes a hashtable `-MAP` of `alias = property`
 - Strip.Karaoke alias for Strip.K
 - Strip.EQGain1|EQGain2|EQGain3 with bass/low, mid/med, treble/high aliases, respectively
+- StripAudibility class with Strip.Audibility.Knob
+- Strip.Denoiser.Threshold
+- Strip.VAIO
 
 ### Changed
 
@@ -63,6 +66,7 @@ Recorder.FileType changed from method to write-only property
 - Floats getters/setters now default to two decimal places.
 - Strip.Mono is now an alias for Strip.MC on virtual strips
 - Strip.AppMute|AppGain can now take an app index; see README for details
+- Strip Knob setters: explicit $arg types for consistency
 
 ### Fixed
 
@@ -76,6 +80,7 @@ Recorder.FileType changed from method to write-only property
 - Recorder.channel values: 1..8 -> (2, 4, 6, 8)
 - Strip.Limit type [int] -> [float]
 - Missing closing parenthesis in AppMute value string
+- Strip Knob getters: `this.Getter_String('') -> [math]::Round($this.Getter(''), 2)`
 
 ## [3.3.0] - 2024-06-29
 

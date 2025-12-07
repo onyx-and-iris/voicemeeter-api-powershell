@@ -34,6 +34,11 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.strip[$index].mono = $value
                 $vmr.strip[$index].mono | Should -Be $expected
             }
+
+            It "Should set Strip[$index].VAIO" {
+                $vmr.strip[$index].vaio = $value
+                $vmr.strip[$index].vaio | Should -Be $expected
+            }
             
             Context 'Eq' -Skip:$ifNotPotato -ForEach @(
                 @{ Eq = $vmr.strip[$index].eq }
@@ -319,6 +324,18 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 It "Should set Strip[$index].Denoiser" {
                     $vmr.strip[$index].denoiser.knob = $knob
                     $vmr.strip[$index].denoiser.knob | Should -Be $knob
+                }
+
+                It "Should set Strip[$index].Denoiser.Threshold" {
+                    $vmr.strip[$index].denoiser.threshold = $knob
+                    $vmr.strip[$index].denoiser.threshold | Should -Be $knob
+                }
+            }
+
+            Context 'Audibility' -Skip:$ifNotBasic {
+                It "Should set Strip[$index].Audibility" {
+                    $vmr.strip[$index].audibility.knob = $knob
+                    $vmr.strip[$index].audibility.knob | Should -Be $knob
                 }
             }
 

@@ -122,6 +122,7 @@ The following strip commands are available:
 - solo: bool
 - A1-A5: bool
 - B1-B3: bool
+- vaio: bool
 - limit: float, from -40.00 to 12.00
 - gain: float, from -60.00 to 12.00
 - label: string
@@ -199,11 +200,24 @@ $vmr.strip[3].gate.threshold = -40.5
 The following strip.denoiser commands are available:
 
 - knob: float, from 0.00 to 10.00
+- threshold: float, from 0.00 to 10.00
 
 for example:
 
 ```powershell
 $vmr.strip[3].denoiser.knob = 5
+```
+
+#### audibility
+
+The following strip.audibility commands are available:
+
+- knob: float, from 0.00 to 10.00
+
+for example:
+
+```powershell
+$vmr.strip[1].audibility.knob = 2.66
 ```
 
 #### AppGain | AppMute
