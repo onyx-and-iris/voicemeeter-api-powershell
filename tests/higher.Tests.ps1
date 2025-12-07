@@ -39,6 +39,13 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.strip[$index].vaio = $value
                 $vmr.strip[$index].vaio | Should -Be $expected
             }
+
+            Context 'Pitch' -Skip:$ifNotPotato {
+                It "Should set Strip[$index].Pitch.On" {
+                    $vmr.strip[$index].pitch.on = $value
+                    $vmr.strip[$index].pitch.on | Should -Be $expected
+                }
+            }
             
             Context 'Eq' -Skip:$ifNotPotato -ForEach @(
                 @{ Eq = $vmr.strip[$index].eq }
@@ -329,6 +336,33 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 It "Should set Strip[$index].Denoiser.Threshold" {
                     $vmr.strip[$index].denoiser.threshold = $knob
                     $vmr.strip[$index].denoiser.threshold | Should -Be $knob
+                }
+            }
+
+            Context 'Pitch' -Skip:$ifNotPotato {
+                It "Should set Strip[$index].Pitch.drywet" {
+                    $vmr.strip[$index].pitch.drywet = $slide
+                    $vmr.strip[$index].pitch.drywet | Should -Be $slide
+                }
+
+                It "Should set Strip[$index].Pitch.pitchvalue" {
+                    $vmr.strip[$index].pitch.pitchvalue = $slide
+                    $vmr.strip[$index].pitch.pitchvalue | Should -Be $slide
+                }
+
+                It "Should set Strip[$index].Pitch.loformant" {
+                    $vmr.strip[$index].pitch.loformant = $slide
+                    $vmr.strip[$index].pitch.loformant | Should -Be $slide
+                }
+
+                It "Should set Strip[$index].Pitch.medformant" {
+                    $vmr.strip[$index].pitch.medformant = $slide
+                    $vmr.strip[$index].pitch.medformant | Should -Be $slide
+                }
+
+                It "Should set Strip[$index].Pitch.hiformant" {
+                    $vmr.strip[$index].pitch.hiformant = $slide
+                    $vmr.strip[$index].pitch.hiformant | Should -Be $slide
                 }
             }
 

@@ -208,6 +208,21 @@ for example:
 $vmr.strip[3].denoiser.knob = 5
 ```
 
+#### pitch
+
+The following strip.pitch commands are available:
+
+- on: bool
+- drywet: float, from -100.00 to 100.00
+- pitchvalue: float, from -12.00 to 12.00
+- loformant: float, from -12.00 to 12.00
+- medformant: float, from -12.00 to 12.00
+- hiformant: float, from -12.00 to 12.00
+
+The following strip.pitch methods are available:
+
+- RecallPreset($presetIndex) : int, from 0 to 7
+
 #### audibility
 
 The following strip.audibility commands are available:

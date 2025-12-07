@@ -49,6 +49,14 @@ Recorder.FileType changed from method to write-only property
 - StripAudibility class with Strip.Audibility.Knob
 - Strip.Denoiser.Threshold
 - Strip.VAIO
+- Strip.Pitch, StripPitch class
+  - on
+  - drywet
+  - pitchvalue
+  - loformant
+  - medformant
+  - hiformant
+  - recallpreset($presetIndex)
 
 ### Changed
 

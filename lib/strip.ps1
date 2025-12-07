@@ -78,6 +78,7 @@ class PhysicalStrip : Strip {
     [Object]$eq
     [Object]$device
     [Object]$audibility
+    [Object]$pitch
 
     PhysicalStrip ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddFloatMembers -PARAMS @('color_x', 'color_y', 'fx_x', 'fx_y')
@@ -88,6 +89,7 @@ class PhysicalStrip : Strip {
         $this.comp = [StripComp]::new($index, $remote)
         $this.gate = [StripGate]::new($index, $remote)
         $this.denoiser = [StripDenoiser]::new($index, $remote)
+        $this.pitch = [StripPitch]::new($index, $remote)
         $this.audibility = [StripAudibility]::new($index, $remote)
         $this.eq = [StripEq]::new($index, $remote)
         $this.device = [StripDevice]::new($index, $remote)
@@ -153,6 +155,21 @@ class StripDenoiser : IRemote {
             return $this.Setter('', $arg)
         }
     )
+}
+
+class StripPitch : IRemote {
+    StripPitch ([int]$index, [Object]$remote) : base ($index, $remote) {
+        AddBoolMembers -PARAMS @('on')
+        AddFloatMembers -PARAMS @('drywet', 'pitchvalue', 'loformant', 'medformant', 'hiformant')
+    }
+
+    [string] identifier () {
+        return 'Strip[' + $this.index + '].Pitch'
+    }
+
+    [void] RecallPreset ([int]$presetIndex) {
+        $this.Setter('RecallPreset', $presetIndex)
+    }
 }
 
 class StripAudibility : IRemote {
