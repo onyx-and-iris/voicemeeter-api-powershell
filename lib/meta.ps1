@@ -74,6 +74,16 @@ function AddActionMembers () {
     }
 }
 
+function AddAliasMembers () {
+    param(
+        [hashtable]$MAP
+    )
+    foreach ($alias in $MAP.Keys) {
+        $this | Add-Member -MemberType AliasProperty -Name $alias `
+            -Value $MAP[$alias] -Force
+    }
+}
+
 function AddChannelMembers () {
     $num_A = $this.remote.kind.p_out
     $num_B = $this.remote.kind.v_out

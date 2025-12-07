@@ -30,6 +30,11 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         Context 'Strip, physical only' -ForEach @(
             @{ Index = $phys_in }
         ) {
+            It "Should set Strip[$index].Mono" {
+                $vmr.strip[$index].mono = $value
+                $vmr.strip[$index].mono | Should -Be $expected
+            }
+            
             Context 'Eq' -Skip:$ifNotPotato -ForEach @(
                 @{ Eq = $vmr.strip[$index].eq }
             ) {
@@ -47,6 +52,15 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                     $eq.channel[$strip_ch].cell[$cells].on = $value
                     $eq.channel[$strip_ch].cell[$cells].on | Should -Be $value
                 }
+            }
+        }
+
+        Context 'Strip, first virtual' -ForEach @(
+            @{ Index = $phys_in + 1 }
+        ) {
+            It "Should set Strip[$index].MC via alias 'Mono'" {
+                $vmr.strip[$index].mono = $value
+                $vmr.strip[$index].mc | Should -Be $expected
             }
         }
 
@@ -255,6 +269,11 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.strip[$index].gain = $gain
                 $vmr.strip[$index].gain | Should -Be $gain
             }
+
+            It "Should set Strip[$index].Limit" -Skip:$ifBasic {
+                $vmr.strip[$index].limit = $gain
+                $vmr.strip[$index].limit | Should -Be $gain
+            }
         }
 
         Context 'Strip, physical only' -ForEach @(
@@ -362,18 +381,6 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
     }
 
     Describe 'Int Tests' -Tag 'int' {
-        Context 'Strip, one physical, one virtual' -ForEach @(
-            @{ Index = $phys_in }, @{ Index = $virt_in }
-        ) {
-            It "Should set and get Strip[$index].Limit" -Skip:$ifBasic -ForEach @(
-                @{ Value = 3; Expected = 3 }
-                @{ Value = -6; Expected = -6 }
-            ) {
-                $vmr.strip[$index].limit = $value
-                $vmr.strip[$index].limit | Should -Be $expected
-            }
-        }
-
         Context 'Strip, physical only' -ForEach @(
             @{ Index = $phys_in }
         ) {
@@ -392,6 +399,19 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                     $eq.channel[$strip_ch].cell[$cells].type = $value
                     $eq.channel[$strip_ch].cell[$cells].type | Should -Be $expected
                 }
+            }
+        }
+
+        Context 'Strip, second virtual' -Skip:$ifBasic -ForEach @(
+            @{ Index = $phys_in + 2 }
+        ) {
+            It "Should set Strip[$index].K via alias 'Karaoke'" -ForEach @(
+                @{ Value = 0; Expected = 0 }
+                @{ Value = 2; Expected = 2 }
+                @{ Value = 4; Expected = 4 }
+            ) { 
+                $vmr.strip[$index].karaoke = $value
+                $vmr.strip[$index].k | Should -Be $expected
             }
         }
 

@@ -2,9 +2,8 @@ class Strip : IRemote {
     [Object]$levels
 
     Strip ([int]$index, [Object]$remote) : base ($index, $remote) {
-        AddBoolMembers -PARAMS @('mono', 'solo', 'mute')
-        AddIntMembers -PARAMS @('limit')
-        AddFloatMembers -PARAMS @('gain', 'pan_x', 'pan_y')
+        AddBoolMembers -PARAMS @('solo', 'mute')
+        AddFloatMembers -PARAMS @('gain', 'limit', 'pan_x', 'pan_y')
         AddStringMembers -PARAMS @('label')
 
         AddChannelMembers
@@ -83,6 +82,7 @@ class PhysicalStrip : Strip {
         AddFloatMembers -PARAMS @('color_x', 'color_y', 'fx_x', 'fx_y')
         AddFloatMembers -PARAMS @('reverb', 'delay', 'fx1', 'fx2')
         AddBoolMembers -PARAMS @('postreverb', 'postdelay', 'postfx1', 'postfx2')
+        AddBoolMembers -PARAMS @('mono')
 
         $this.comp = [StripComp]::new($index, $remote)
         $this.gate = [StripGate]::new($index, $remote)
@@ -174,6 +174,8 @@ class VirtualStrip : Strip {
     VirtualStrip ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddBoolMembers -PARAMS @('mc')
         AddIntMembers -PARAMS @('k')
+
+        AddAliasMembers -MAP @{ mono = 'mc'; karaoke = 'k' }
     }
 
     [void] AppGain ([string]$appname, [single]$gain) {

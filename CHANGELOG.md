@@ -43,6 +43,8 @@ Recorder.FileType changed from method to write-only property
 - Command.Save($filepath)
 - Command.StorePreset()
 - Command.RecallPreset()
+- AddAliasMembers meta function takes a hashtable `-MAP` of `alias = property`
+- Strip.Karaoke alias for Strip.K
 
 ### Changed
 
@@ -58,6 +60,7 @@ Recorder.FileType changed from method to write-only property
 - Recorder.Armstrip|Armbus -> BoolArrayMember: now have .Get()
 - Cast Recorder getters to types for consistency
 - Floats getters/setters now default to two decimal places.
+- Strip.Mono is now an alias for Strip.MC on virtual strips
 
 ### Fixed
 
@@ -69,6 +72,7 @@ Recorder.FileType changed from method to write-only property
 - vban route range (API documentation is incorrect)
 - vban.stream.sr: $this._port -> $this._sr
 - Recorder.channel values: 1..8 -> (2, 4, 6, 8)
+- Strip.Limit type [int] -> [float]
 
 ## [3.3.0] - 2024-06-29
 
