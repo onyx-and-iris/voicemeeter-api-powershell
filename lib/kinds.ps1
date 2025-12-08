@@ -12,6 +12,7 @@ $KindMap = @{
         'vban'      = @{ 'in' = 4; 'out' = 4; 'midi' = 1; 'text' = 1 }
         'eq_ch'     = @{ 'strip' = 0; 'bus' = 0 }
         'cells'     = 0
+        'gainlayer' = 0
     };
     'banana' = @{
         'name'      = 'banana'
@@ -26,6 +27,7 @@ $KindMap = @{
         'vban'      = @{ 'in' = 8; 'out' = 8; 'midi' = 1; 'text' = 1 }
         'eq_ch'     = @{ 'strip' = 0; 'bus' = 8 }
         'cells'     = 6
+        'gainlayer' = 0
     };
     'potato' = @{
         'name'      = 'potato'
@@ -40,6 +42,7 @@ $KindMap = @{
         'vban'      = @{ 'in' = 8; 'out' = 8; 'midi' = 1; 'text' = 1 }
         'eq_ch'     = @{ 'strip' = 2; 'bus' = 8 }
         'cells'     = 6
+        'gainlayer' = 8
     };
 }
 

@@ -286,6 +286,15 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.strip[$index].limit = $gain
                 $vmr.strip[$index].limit | Should -Be $gain
             }
+
+            Context 'Gainlayers' -Skip:$ifNotPotato -ForEach @(
+                @{ Layer = $phys_out }, @{ Layer = $virt_out }
+            ) {
+                It "Should set Strip[$index].Gainlayer[$layer]" {
+                    $vmr.strip[$index].gainlayer[$layer].set($gain)
+                    $vmr.strip[$index].gainlayer[$layer].get() | Should -Be $gain
+                }
+            }
         }
 
         Context 'Strip, physical only' -ForEach @(

@@ -1,4 +1,5 @@
 class Strip : IRemote {
+    [System.Collections.ArrayList]$gainlayer
     [Object]$levels
 
     Strip ([int]$index, [Object]$remote) : base ($index, $remote) {
@@ -7,9 +8,13 @@ class Strip : IRemote {
         AddStringMembers -PARAMS @('label')
 
         AddChannelMembers
-        AddGainlayerMembers
 
         $this.levels = [StripLevels]::new($index, $remote)
+
+        $this.gainlayer = @()
+        for ($i = 0; $i -lt $remote.kind.gainlayer; $i++) {
+            $this.gainlayer.Add([FloatArrayMember]::new($i, 'gainlayer', $this))
+        }
     }
 
     [string] identifier () {

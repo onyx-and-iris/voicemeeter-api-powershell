@@ -18,6 +18,8 @@ AddActionMembers now adds ScriptMethods instead of ScriptProperties:
 Deprecated Recorder.Loop removed: use Recorder.Mode.Loop
 Recorder.FileType changed from method to write-only property
 
+Strip Gainlayers are now FloatArrayMember objects, see README for details
+
 ### Added
 
 - IRemote base class

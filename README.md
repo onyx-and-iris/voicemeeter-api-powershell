@@ -140,7 +140,6 @@ The following strip commands are available:
 - postdelay: bool
 - postfx1: bool
 - postfx2: bool
-- gainlayer0-gainlayer7: float
 - eqgain1/bass/low: float, from -12.00 to 12.00
 - eqgain2/mid/med: float, from -12.00 to 12.00
 - eqgain3/treble/high: float, from -12.00 to 12.00
@@ -148,7 +147,6 @@ The following strip commands are available:
 for example:
 
 ```powershell
-$vmr.strip[5].gainlayer1 = -8.3
 ```
 
 A,B commands depend on Voicemeeter type.
@@ -233,6 +231,19 @@ for example:
 
 ```powershell
 $vmr.strip[1].audibility.knob = 2.66
+```
+
+#### Gainlayer[i]
+
+The following strip.gainlayer[i] methods are available:
+
+- Set($val) : float, from -60.00 to 12.00
+- Get()
+
+for example:
+
+```powershell
+$vmr.strip[4].gainlayer[7].set(-26.81)
 ```
 
 #### AppGain | AppMute

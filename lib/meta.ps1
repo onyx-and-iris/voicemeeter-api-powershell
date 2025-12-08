@@ -96,21 +96,6 @@ function AddChannelMembers () {
     AddBoolMembers -PARAMS $channels
 }
 
-function AddGainlayerMembers () {
-    [hashtable]$Signatures = @{}
-    0..7 | ForEach-Object {
-        # Define getter
-        $Signatures['Getter'] = "`$this.Getter('gainlayer[{0}]')" -f $_
-        # Define setter
-        $Signatures['Setter'] = "param ( [Single]`$arg )`n`$this.Setter('gainlayer[{0}]', `$arg)" `
-            -f $_
-        $param = 'gainlayer{0}' -f $_
-        $null = $param
-
-        Addmember
-    }
-}
-
 function Addmember {
     $AddMemberParams = @{
         Name        = $param
