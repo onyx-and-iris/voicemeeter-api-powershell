@@ -272,7 +272,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
 
     Describe 'Float Tests' -Tag 'float' -ForEach @(
         @{ Gain = -24.63; Knob = 5.27; Slide = -7.51; Xy10 = 0.83; Xy05 = -0.42; MsHz = 196.57 }
-        @{ Gain = -12.48; Knob = 8.91; Slide = 3.14; Xy10 = 0.27; Xy05 = 0.69; MsHz = 142.13 }
+        @{ Gain = -12.48; Knob = 8.91; Slide = 3.14; Xy10 = 0.27; Xy05 = 0.29; MsHz = 142.13 }
     ) {
         Context 'Strip, one physical one virtual' -ForEach @(
             @{ Index = $phys_in }, @{ Index = $virt_in }
@@ -300,6 +300,11 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         Context 'Strip, physical only' -ForEach @(
             @{ Index = $phys_in }
         ) {
+            It "Should set Strip[$index].Pan_Y" {
+                $vmr.strip[$index].pan_y = $xy10
+                $vmr.strip[$index].pan_y | Should -Be $xy10
+            }
+            
             Context 'Comp, Gate' -Skip:$ifBasic {
                 It "Should set Strip[$index].Comp" {
                     $vmr.strip[$index].comp.knob = $knob
@@ -405,6 +410,11 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         Context 'Strip, virtual only' -ForEach @(
             @{ Index = $virt_in }
         ) {
+            It "Should set Strip[$index].Pan_Y" {
+                $vmr.strip[$index].pan_y = $xy05
+                $vmr.strip[$index].pan_y | Should -Be $xy05
+            }
+            
             Context 'EQ' {
                 BeforeEach {
                     $vmr.strip[$index].eqgain1 = 0

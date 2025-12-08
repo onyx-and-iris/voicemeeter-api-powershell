@@ -131,7 +131,7 @@ The following strip commands are available:
 - fx1: float, from 0.00 to 10.00
 - fx2: float, from 0.00 to 10.00
 - pan_x: float, from -0.50 to 0.50
-- pan_y: float, from 0.00 to 1.00
+- pan_y: float, physical: from 0.00 to 1.00, virtual: from -0.50 to 0.50
 - color_x: float, from -0.50 to 0.50
 - color_y: float, from 0.00 to 1.00
 - fx_x: float, from -0.50 to 0.50
@@ -147,6 +147,11 @@ The following strip commands are available:
 for example:
 
 ```powershell
+$vmr.strip[6].karaoke = 3
+$vmr.strip[0].limit = 4.5
+$vmr.strip[2].label = 'example'
+$vmr.stirp[7].pan_y = -0.38
+$vmr.strip[5].treble = -2.43
 ```
 
 A,B commands depend on Voicemeeter type.
