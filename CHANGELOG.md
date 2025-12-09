@@ -26,26 +26,32 @@ Strip Gainlayers are now FloatArrayMember objects, see README for details
 - ArrayMember classes for array-like properties
 - Patch class
 - Option class
-- Device classes
+- Device class
 - EQ class
 - FX class
+
+- AddAliasMembers meta function takes a hashtable `-MAP` of `alias = property`
+
 - Vban.port sets Vban.Instream[0].port
 - Vban Midi and Command streams
   - on, write-only
   - name, write-only
   - ip, write-only
-- Bus.Sel, Bus.Monitor, Bus.Vaio
-- Bus.Mode.Set($mode)
+
 - Recorder.Armedbus
 - Recorder.PreRecTime
 - Recorder.Prefix
 - Recorder.Eject() references 'Command.Eject'
 - Recorder.State
+
 - Command.Reset()
 - Command.Save($filepath)
 - Command.StorePreset()
 - Command.RecallPreset()
-- AddAliasMembers meta function takes a hashtable `-MAP` of `alias = property`
+
+- Bus.Sel, Bus.Monitor, Bus.Vaio
+- Bus.Mode.Set($mode)
+
 - Strip.Karaoke alias for Strip.K
 - Strip.EQGain1|EQGain2|EQGain3 with bass/low, mid/med, treble/high aliases, respectively
 - StripAudibility class with Strip.Audibility.Knob
@@ -62,17 +68,21 @@ Strip Gainlayers are now FloatArrayMember objects, see README for details
 
 ### Changed
 
+- Device: explicit $arg types for consistency
+- Meta: AddBoolMembers, AddIntMembers $arg types for consistency
+- Float getters/setters now default to two decimal places.
+
 - some vban.instream | vban.outstream commands now added with meta functions
   - on
   - name
   - ip
 - cast vban getters to types for consistency
-- Bus.Levels.Convert hidden and return type [float] -> [single] for naming consistency
-- Meta: AddBoolMembers, AddIntMembers $arg types for consistency
-- Device: explicit $arg types for consistency
+
 - Recorder.Armstrip|Armbus -> BoolArrayMember: now have .Get()
 - Cast Recorder getters to types for consistency
-- Floats getters/setters now default to two decimal places.
+
+- Bus.Levels.Convert hidden and return type [float] -> [single] for naming consistency
+
 - Strip.Mono is now an alias for Strip.MC on virtual strips
 - Strip.AppMute|AppGain can now take an app index; see README for details
 - Strip Knob setters: explicit $arg types for consistency
@@ -87,8 +97,11 @@ Strip Gainlayers are now FloatArrayMember objects, see README for details
 - vban.stream.port: [string]$arg -> [int]$arg
 - vban route range (API documentation is incorrect)
 - vban.stream.sr: $this._port -> $this._sr
-- Bus.Mono -> [int] for stereo reverse
+
 - Recorder.channel values: 1..8 -> (2, 4, 6, 8)
+
+- Bus.Mono -> [int] for stereo reverse
+
 - Strip.Limit type [int] -> [float]
 - Missing closing parenthesis in AppMute value string
 - Strip Knob getters: `this.Getter_String('') -> [math]::Round($this.Getter(''), 2)`
