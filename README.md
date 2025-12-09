@@ -150,13 +150,11 @@ for example:
 $vmr.strip[6].karaoke = 3
 $vmr.strip[0].limit = 4.5
 $vmr.strip[2].label = 'example'
-$vmr.stirp[7].pan_y = -0.38
+$vmr.strip[7].pan_y = -0.38
 $vmr.strip[5].treble = -2.43
 ```
 
 A,B commands depend on Voicemeeter type.
-
-gainlayers defined for Potato version only.
 
 mc, k for virtual strips only.
 
