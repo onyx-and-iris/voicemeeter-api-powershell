@@ -67,7 +67,6 @@ Strip Gainlayers are now FloatArrayMember objects, see README for details
   - name
   - ip
 - cast vban getters to types for consistency
-- Bus.Mono -> [int] for stereo reverse
 - Bus.Levels.Convert return type [float] -> [single] for naming consistency, no functional change
 - Meta: AddBoolMembers, AddIntMembers $arg types for consistency
 - Device: explicit $arg types for consistency
@@ -88,6 +87,7 @@ Strip Gainlayers are now FloatArrayMember objects, see README for details
 - vban.stream.port: [string]$arg -> [int]$arg
 - vban route range (API documentation is incorrect)
 - vban.stream.sr: $this._port -> $this._sr
+- Bus.Mono -> [int] for stereo reverse
 - Recorder.channel values: 1..8 -> (2, 4, 6, 8)
 - Strip.Limit type [int] -> [float]
 - Missing closing parenthesis in AppMute value string
