@@ -224,6 +224,14 @@ The following strip.pitch methods are available:
 
 - RecallPreset($presetIndex) : int, from 0 to 7
 
+for example:
+
+```powershell
+$vmr.strip[2].pitch.recallpreset(4)
+$vmr.strip[4].pitch.drywet = -22.86
+$vmr.strip[1].pitch.medformant = 2.1
+```
+
 #### audibility
 
 The following strip.audibility commands are available:
