@@ -46,7 +46,7 @@ class StripLevels : IRemote {
         }
     }
 
-    [float] Convert([float]$val) {
+    hidden [single] Convert([single]$val) {
         if ($val -gt 0) { 
             return [math]::Round(20 * [math]::Log10($val), 1) 
         } 
