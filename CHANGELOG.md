@@ -67,7 +67,7 @@ Strip Gainlayers are now FloatArrayMember objects, see README for details
   - name
   - ip
 - cast vban getters to types for consistency
-- Bus.Levels.Convert return type [float] -> [single] for naming consistency, no functional change
+- Bus.Levels.Convert hidden and return type [float] -> [single] for naming consistency
 - Meta: AddBoolMembers, AddIntMembers $arg types for consistency
 - Device: explicit $arg types for consistency
 - Recorder.Armstrip|Armbus -> BoolArrayMember: now have .Get()
