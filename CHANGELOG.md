@@ -77,6 +77,7 @@ Strip Gainlayers are now FloatArrayMember objects, see README for details
 - Strip.Mono is now an alias for Strip.MC on virtual strips
 - Strip.AppMute|AppGain can now take an app index; see README for details
 - Strip Knob setters: explicit $arg types for consistency
+- Strip.Levels.Convert hidden and return type [float] -> [single] for naming consistency
 
 ### Fixed
 
