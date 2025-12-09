@@ -75,65 +75,50 @@ class PhysicalStrip : Strip {
     }
 }
 
-class StripComp : IRemote {
+class StripKnob : IRemote {
+    StripKnob ([int]$index, [Object]$remote) : base ($index, $remote) {
+        AddFloatMembers -PARAMS @('threshold')
+    }
+
+    hidden $_knob = $($this | Add-Member ScriptProperty 'knob' `
+        {
+            [math]::Round($this.Getter(''), 2)
+        } `
+        {
+            param([single]$arg)
+            return $this.Setter('', $arg)
+        }
+    )
+}
+
+class StripComp : StripKnob {
     StripComp ([int]$index, [Object]$remote) : base ($index, $remote) {
-        AddFloatMembers -PARAMS @('gainin', 'ratio', 'threshold', 'attack', 'release', 'knee', 'gainout')
+        AddFloatMembers -PARAMS @('gainin', 'ratio', 'attack', 'release', 'knee', 'gainout')
         AddBoolMembers -PARAMS @('makeup')
     }
 
     [string] identifier () {
         return 'Strip[' + $this.index + '].Comp'
     }
-
-    hidden $_knob = $($this | Add-Member ScriptProperty 'knob' `
-        {
-            [math]::Round($this.Getter(''), 2)
-        } `
-        {
-            param([single]$arg)
-            return $this.Setter('', $arg)
-        }
-    )
 }
 
-class StripGate : IRemote {
+class StripGate : StripKnob {
     StripGate ([int]$index, [Object]$remote) : base ($index, $remote) {
-        AddFloatMembers -PARAMS @('threshold', 'damping', 'bpsidechain', 'attack', 'hold', 'release')
+        AddFloatMembers -PARAMS @('damping', 'bpsidechain', 'attack', 'hold', 'release')
     }
 
     [string] identifier () {
         return 'Strip[' + $this.index + '].Gate'
     }
-
-    hidden $_knob = $($this | Add-Member ScriptProperty 'knob' `
-        {
-            [math]::Round($this.Getter(''), 2)
-        } `
-        {
-            param([single]$arg)
-            return $this.Setter('', $arg)
-        }
-    )
 }
 
-class StripDenoiser : IRemote {
+class StripDenoiser : StripKnob {
     StripDenoiser ([int]$index, [Object]$remote) : base ($index, $remote) {
-        AddFloatMembers -PARAMS @('threshold')
     }
 
     [string] identifier () {
         return 'Strip[' + $this.index + '].Denoiser'
     }
-
-    hidden $_knob = $($this | Add-Member ScriptProperty 'knob' `
-        {
-            [math]::Round($this.Getter(''), 2)
-        } `
-        {
-            param([single]$arg)
-            return $this.Setter('', $arg)
-        }
-    )
 }
 
 class StripPitch : IRemote {
