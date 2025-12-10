@@ -404,14 +404,21 @@ $vmr.strip[0].eq.on = $true
 $vmr.bus[0].eq.ab = $false
 ```
 
-##### channel.cell
+##### channel
+
+The following bus.eq.channel.cell properties are available:
+
+- trim: float, from -24.00 to 24.00
+- delay: float, from 0.00 to 500.00
+
+###### cell
 
 The following eq.channel.cell properties are available:
 
 - on: bool
 - type: int, from 0 to 6
 - f: float, from 20.00 to 20000.00
-- gain: float, from -12.00 to 12.00
+- gain: float, from -36.00 to 18.00
 - q: float, from 0.30 to 100.00
 
 for example:

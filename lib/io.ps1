@@ -69,6 +69,8 @@ class EqChannel : IRemote {
     EqChannel ([int]$index, [Object]$remote, [string]$eqId) : base ($index, $remote) {
         $this.eqId = $eqId
 
+        AddFloatMembers -PARAMS @('trim', 'delay')
+
         $this.cell = @()
         $cellCount = $this.remote.kind.cells
         for ($c = 0; $c -lt $cellCount; $c++) {

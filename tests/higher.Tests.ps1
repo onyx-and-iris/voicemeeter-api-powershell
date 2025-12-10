@@ -465,19 +465,33 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             Context 'EQ' -Skip:$ifBasic -ForEach @(
                 @{ Eq = $vmr.bus[$index].eq }
             ) {
-                It "Should set Bus[$index].EQ.Channel[$bus_ch].Cell[$cells].F" {
-                    $eq.channel[$bus_ch].cell[$cells].f = $msHz
-                    $eq.channel[$bus_ch].cell[$cells].f | Should -Be $msHz
-                }
+                Context "Channel[$bus_ch]" {
+                    It "Should set Bus[$index].EQ.Channel[$bus_ch].Trim" {
+                        $eq.channel[$bus_ch].trim = $slide
+                        $eq.channel[$bus_ch].trim | Should -Be $slide
+                    }
 
-                It "Should set Bus[$index].EQ.Channel[$bus_ch].Cell[$cells].Gain" {
-                    $eq.channel[$bus_ch].cell[$cells].gain = $slide
-                    $eq.channel[$bus_ch].cell[$cells].gain | Should -Be $slide
-                }
+                    It "Should set Bus[$index].EQ.Channel[$bus_ch].Delay" {
+                        $eq.channel[$bus_ch].delay = $msHz
+                        $eq.channel[$bus_ch].delay | Should -Be $msHz
+                    }
+                    
+                    Context "Cell[$cells]" {
+                        It "Should set Bus[$index].EQ.Channel[$bus_ch].Cell[$cells].F" {
+                            $eq.channel[$bus_ch].cell[$cells].f = $msHz
+                            $eq.channel[$bus_ch].cell[$cells].f | Should -Be $msHz
+                        }
 
-                It "Should set Bus[$index].EQ.Channel[$bus_ch].Cell[$cells].Q" {
-                    $eq.channel[$bus_ch].cell[$cells].q = $knob
-                    $eq.channel[$bus_ch].cell[$cells].q | Should -Be $knob
+                        It "Should set Bus[$index].EQ.Channel[$bus_ch].Cell[$cells].Gain" {
+                            $eq.channel[$bus_ch].cell[$cells].gain = $slide
+                            $eq.channel[$bus_ch].cell[$cells].gain | Should -Be $slide
+                        }
+
+                        It "Should set Bus[$index].EQ.Channel[$bus_ch].Cell[$cells].Q" {
+                            $eq.channel[$bus_ch].cell[$cells].q = $knob
+                            $eq.channel[$bus_ch].cell[$cells].q | Should -Be $knob
+                        }
+                    }
                 }
             }
         }
