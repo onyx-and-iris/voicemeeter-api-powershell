@@ -99,22 +99,12 @@ class VirtualBus : Bus {
 class BusDevice : IODevice {
     BusDevice ([int]$index, [Object]$remote) : base ($index, $remote) {
         if ($this.index -eq 0) {
-            $this.AddASIO()
+            AddStringMembers -PARAMS @('asio') -WriteOnly
         }
     }
 
     [string] identifier () {
         return 'Bus[' + $this.index + '].Device'
-    }
-
-    hidden [void] AddASIO () {
-        Add-Member -InputObject $this -MemberType ScriptProperty -Name 'asio' `
-            -Value {
-            return Write-Warning ("ERROR: $($this.identifier()).asio is write only")
-        } -SecondValue {
-            param([string]$arg)
-            return $this.Setter('asio', $arg)
-        } -Force
     }
 }
 
