@@ -1,6 +1,6 @@
 function AddBoolMembers () {
     param(
-        [String[]]$PARAMS
+        [String[]]$PARAMS, [Switch]$readOnly, [Switch]$writeOnly
     )
     [hashtable]$Signatures = @{}
     foreach ($param in $PARAMS) {
@@ -10,13 +10,13 @@ function AddBoolMembers () {
         $Signatures['Setter'] = "param ( [bool]`$arg )`n`$this.Setter('{0}', `$arg)" `
             -f $param
 
-        Addmember
+        Addmember -ReadOnly:$readOnly -WriteOnly:$writeOnly
     }
 }
 
 function AddFloatMembers () {
     param(
-        [String[]]$PARAMS,
+        [String[]]$PARAMS, [Switch]$readOnly, [Switch]$writeOnly,
         [int]$decimals = 2
     )
     [hashtable]$Signatures = @{}
@@ -27,13 +27,13 @@ function AddFloatMembers () {
         $Signatures['Setter'] = "param ( [Single]`$arg )`n`$this.Setter('{0}', `$arg)" `
             -f $param
 
-        Addmember
+        Addmember -ReadOnly:$readOnly -WriteOnly:$writeOnly
     }
 }
 
 function AddIntMembers () {
     param(
-        [String[]]$PARAMS
+        [String[]]$PARAMS, [Switch]$readOnly, [Switch]$writeOnly
     )
     [hashtable]$Signatures = @{}
     foreach ($param in $PARAMS) {
@@ -43,13 +43,13 @@ function AddIntMembers () {
         $Signatures['Setter'] = "param ( [Int]`$arg )`n`$this.Setter('{0}', `$arg)" `
             -f $param
 
-        Addmember
+        Addmember -ReadOnly:$readOnly -WriteOnly:$writeOnly
     }
 }
 
 function AddStringMembers () {
     param(
-        [String[]]$PARAMS
+        [String[]]$PARAMS, [Switch]$readOnly, [Switch]$writeOnly
     )
     [hashtable]$Signatures = @{}
     foreach ($param in $PARAMS) {
@@ -59,7 +59,7 @@ function AddStringMembers () {
         $Signatures['Setter'] = "param ( [String]`$arg )`n`$this.Setter('{0}', `$arg)" `
             -f $param
 
-        Addmember
+        Addmember -ReadOnly:$readOnly -WriteOnly:$writeOnly
     }
 }
 
@@ -97,6 +97,24 @@ function AddChannelMembers () {
 }
 
 function Addmember {
+    param(
+        [Switch]$readOnly, [Switch]$writeOnly
+    )
+
+    if ($readOnly -and $writeOnly) {
+        throw "AddMember: cannot be both readOnly and writeOnly for '$param'"
+    }
+
+    # Override signatures based on mode
+    if ($readOnly) {
+        $Signatures['Setter'] = "return Write-Warning (`"ERROR: `$(`$this.identifier()).{0} is read only`")" `
+            -f $param
+    }
+    elseif ($writeOnly) {
+        $Signatures['Getter'] = "return Write-Warning (`"ERROR: `$(`$this.identifier()).{0} is write only`")" `
+            -f $param
+    }
+    
     $AddMemberParams = @{
         Name        = $param
         MemberType  = 'ScriptProperty'
