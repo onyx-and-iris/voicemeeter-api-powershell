@@ -198,7 +198,7 @@ The following Strip.gate properties are available:
 - knob: float, from 0.00 to 10.00
 - threshold: float, from -60.00 to -10.00
 - damping: float, from -60.00 to -10.00
-- bpsidechain: int, from 100 to 4000
+- bpsidechain: float, from 100.00 to 4000.00
 - attack: float, from 0.00 to 1000.00
 - hold: float, from 0.00 to 5000.00
 - release: float, from 0.00 to 5000.00
