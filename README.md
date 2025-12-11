@@ -465,21 +465,63 @@ The following Vban.instream | Vban.outstream properties are available:
 - on: bool
 - name: string
 - ip: string
-- sr: in, (11025, 16000, 22050, 24000, 32000, 44100, 48000, 64000, 88200, 96000)
-- channel: int from 1 to 8
-- bit: int, 16 or 24
-- quality: int, from 0 to 4
-- route: int, from 0 to 8
 
 for example:
 
 ```powershell
 $vmr.vban.instream[0].on = $true
-$vmr.vban.outstream[3].bit = 16
+$vmr.vban.outstream[9].ip = '192.168.1.154'
 ```
+
+##### audio
+
+The following audio Vban.instream | Vban.outstream properties are available:
+
+- sr: int, (11025, 16000, 22050, 24000, 32000, 44100, 48000, 64000, 88200, 96000)
+- channel: int, from 1 to 8
+- bit: int, 16 or 24
+- quality: int, from 0 to 4
+- route: int, from 0 to 8
 
 SR, channel and bit are defined as readonly for instreams. Attempting to write
 to those parameters will throw an error. They are read and write for outstreams.
+
+for example:
+
+```powershell
+$vmr.vban.instream[0].route = 4
+$vmr.vban.outstream[3].bit = 16
+```
+
+##### midi
+
+The following midi Vban.outstream[8] properties are available:
+
+- route: string, ('none', 'midi_in', 'aux_in', 'vban_in', 'all_in', 'midi_out')
+
+for example:
+
+```powershell
+$vmr.vban.outstream[8].route = 'aux_in'
+```
+
+##### video
+
+The following video Vban.outstream[9] properties are available:
+
+- vfps: int, from 1 to 30
+- vformat: string, ('png', 'jpg')
+- vquality: int, from 1 to 100
+- vcursor: bool
+- route: int, from 0 to 4
+
+for example:
+
+```powershell
+$vmr.vban.outstream[9].vformat = 'jpg'
+$vmr.vban.outstream[9].vquality = 85
+$vmr.vban.outstream[9].vcursor = $true
+```
 
 ### Command
 

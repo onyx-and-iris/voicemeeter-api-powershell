@@ -150,10 +150,10 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.vban.enable | Should -Be $expected
             }
         
-            Context 'Instream' -ForEach @(
+            Context 'Instream, audio, midi, text' -ForEach @(
                 @{ Index = $vban_inA }
-                # @{ Index = $vban_inM }
-                # @{ Index = $vban_inT }
+                @{ Index = $vban_inM }
+                @{ Index = $vban_inT }
             ) {
                 It "Should set vban.instream[$index].on" {
                     $vmr.vban.instream[$index].on = $value
@@ -161,13 +161,23 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 }
             }
 
-            Context 'Outstream' -ForEach @(
+            Context 'Outstream, audio, midi, video' -ForEach @(
                 @{ Index = $vban_outA }
-                # @{ Index = $vban_outM }
+                @{ Index = $vban_outM }
+                @{ Index = $vban_outV }
             ) {
                 It "Should set vban.outstream[$index].on" {
                     $vmr.vban.outstream[$index].on = $value
                     $vmr.vban.outstream[$index].on | Should -Be $expected
+                }
+            }
+
+            Context 'Outstream, video only' -ForEach @(
+                @{ Index = $vban_outV }
+            ) {
+                It "Should set vban.outstream[$index].vcursor" {
+                    $vmr.vban.outstream[$index].vcursor = $value
+                    $vmr.vban.outstream[$index].vcursor | Should -Be $expected
                 }
             }
         }
@@ -596,8 +606,10 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.vban.port | Should -Be $expected
             }
             
-            Context 'Instream' -ForEach @(
+            Context 'Instream, audio, midi, text' -ForEach @(
                 @{ Index = $vban_inA }
+                @{ Index = $vban_inM }
+                @{ Index = $vban_inT }
             ) {
                 It "Should set vban.instream[$index].port" -ForEach @(
                     @{ Value = 1024; Expected = 1024 }
@@ -608,16 +620,21 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                     Start-Sleep -Milliseconds 2000
                     $vmr.vban.instream[$index].port | Should -Be $expected
                 }
+            }
 
-                It "Should set vban.instream[$index].sr" {
+            Context 'Instream, audio only' -ForEach @(
+                @{ Index = $vban_inA }
+            ) {
+
+                It "Should get vban.instream[$index].sr" {
                     $vmr.vban.instream[$index].sr | Should -BeOfType [int]
                 }
 
-                It "Should set vban.instream[$index].channel" {
+                It "Should get vban.instream[$index].channel" {
                     $vmr.vban.instream[$index].channel | Should -BeOfType [int]
                 }
 
-                It "Should set vban.instream[$index].bit" {
+                It "Should get vban.instream[$index].bit" {
                     $vmr.vban.instream[$index].bit | Should -BeOfType [int]
                 }
 
@@ -639,8 +656,10 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 }
             }
             
-            Context 'Outstream' -ForEach @(
+            Context 'Outstream, audio, midi, video' -ForEach @(
                 @{ Index = $vban_outA }
+                @{ Index = $vban_outM }
+                @{ Index = $vban_outV }
             ) {
                 It "Should set vban.outstream[$index].port" -ForEach @(
                     @{ Value = 1024; Expected = 1024 }
@@ -651,6 +670,11 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                     Start-Sleep -Milliseconds 2000
                     $vmr.vban.outstream[$index].port | Should -Be $expected
                 }
+            }
+
+            Context 'Outstream, audio only' -ForEach @(
+                @{ Index = $vban_outA }
+            ) {
                 
                 It "Should set vban.outstream[$index].sr" -ForEach @(
                     @{ Value = 44100; Expected = 44100 }
@@ -688,6 +712,46 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 It "Should set vban.outstream[$index].route" -ForEach @(
                     @{ Value = $phys_out; Expected = $phys_out }
                     @{ Value = $virt_out; Expected = $virt_out }
+                ) {
+                    $vmr.vban.outstream[$index].route = $value
+                    $vmr.vban.outstream[$index].route | Should -Be $expected
+                }
+            }
+
+            Context 'Outstream, midi only' -ForEach @(
+                @{ Index = $vban_outM }
+            ) {
+                It "Should set vban.outstream[$index].route" -ForEach @(
+                    @{ Value = 7; Expected = 7 }
+                    @{ Value = 3; Expected = 3 }
+                ) {
+                    $vmr.vban.outstream[$index].route = $value
+                    $vmr.vban.outstream[$index].route | Should -Be $expected
+                }
+            }
+
+            Context 'Outstream, video only' -ForEach @(
+                @{ Index = $vban_outV }
+            ) {
+                It "Should set vban.outstream[$index].vfps" -ForEach @(
+                    @{ Value = 6; Expected = 6 }
+                    @{ Value = 24; Expected = 24 }
+                ) {
+                    $vmr.vban.outstream[$index].vfps = $value
+                    $vmr.vban.outstream[$index].vfps | Should -Be $expected
+                }
+
+                It "Should set vban.outstream[$index].vquality" -ForEach @(
+                    @{ Value = 80; Expected = 80 }
+                    @{ Value = 100; Expected = 100 }
+                ) {
+                    $vmr.vban.outstream[$index].vquality = $value
+                    $vmr.vban.outstream[$index].vquality | Should -Be $expected
+                }
+
+                It "Should set vban.outstream[$index].route" -ForEach @(
+                    @{ Value = 1; Expected = 1 }
+                    @{ Value = 4; Expected = 4 }
                 ) {
                     $vmr.vban.outstream[$index].route = $value
                     $vmr.vban.outstream[$index].route | Should -Be $expected
@@ -980,10 +1044,10 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
 
         Describe 'Vban' {
-            Context 'Instream' -ForEach @(
+            Context 'Instream, audio, midi, text' -ForEach @(
                 @{ Index = $vban_inA }
-                # @{ Index = $vban_inM }
-                # @{ Index = $vban_inT }
+                @{ Index = $vban_inM }
+                @{ Index = $vban_inT }
             ) {
                 It "Should set vban.instream[$index].name" -ForEach @(
                     @{ Value = 'TestIn0'; Expected = 'TestIn0' }
@@ -1001,9 +1065,10 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 }
             }
 
-            Context 'Outstream' -ForEach @(
+            Context 'Outstream, audio, midi, video' -ForEach @(
                 @{ Index = $vban_outA }
-                # @{ Index = $vban_outM }
+                @{ Index = $vban_outM }
+                @{ Index = $vban_outV }
             ) {
                 It "Should set vban.outstream[$index].name" -ForEach @(
                     @{ Value = 'TestOut0'; Expected = 'TestOut0' }
@@ -1019,6 +1084,18 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                     $vmr.vban.outstream[$index].ip = $value
                     $vmr.vban.outstream[$index].ip | Should -Be $expected
                 }       
+            }
+
+            Context 'Outstream, video only' -ForEach @(
+                @{ Index = $vban_outV }
+            ) {
+                It "Should set vban.outstream[$index].vformat" -ForEach @(
+                    @{ Value = 'png'; Expected = 'png' }
+                    @{ Value = 'jpg'; Expected = 'jpg' }
+                ) {
+                    $vmr.vban.outstream[$index].vformat = $value
+                    $vmr.vban.outstream[$index].vformat | Should -Be $expected
+                }
             }
         }
 

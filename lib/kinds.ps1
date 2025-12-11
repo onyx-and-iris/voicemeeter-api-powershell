@@ -9,7 +9,7 @@ $KindMap = @{
         'asio_out'  = 8
         'composite' = 0
         'insert'    = 0
-        'vban'      = @{ 'in' = 4; 'out' = 4; 'midi' = 1; 'text' = 1 }
+        'vban'      = @{ 'in' = 4; 'out' = 4; 'midi' = 1; 'text' = 1; 'video' = 1 }
         'eq_ch'     = @{ 'strip' = 0; 'bus' = 0 }
         'cells'     = 0
         'gainlayer' = 0
@@ -24,7 +24,7 @@ $KindMap = @{
         'asio_out'  = 8
         'composite' = 8
         'insert'    = 22
-        'vban'      = @{ 'in' = 8; 'out' = 8; 'midi' = 1; 'text' = 1 }
+        'vban'      = @{ 'in' = 8; 'out' = 8; 'midi' = 1; 'text' = 1; 'video' = 1 }
         'eq_ch'     = @{ 'strip' = 0; 'bus' = 8 }
         'cells'     = 6
         'gainlayer' = 0
@@ -39,7 +39,7 @@ $KindMap = @{
         'asio_out'  = 8
         'composite' = 8
         'insert'    = 34
-        'vban'      = @{ 'in' = 8; 'out' = 8; 'midi' = 1; 'text' = 1 }
+        'vban'      = @{ 'in' = 8; 'out' = 8; 'midi' = 1; 'text' = 1; 'video' = 1 }
         'eq_ch'     = @{ 'strip' = 2; 'bus' = 8 }
         'cells'     = 6
         'gainlayer' = 8

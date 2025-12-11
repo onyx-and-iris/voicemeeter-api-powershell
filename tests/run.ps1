@@ -53,6 +53,7 @@ function main() {
         $vban_inT = $vmr.kind.vban.in + $vmr.kind.vban.midi + $vmr.kind.vban.text - 1
         $vban_outA = $vmr.kind.vban.out - 1
         $vban_outM = $vmr.kind.vban.out + $vmr.kind.vban.midi - 1
+        $vban_outV = $vmr.kind.vban.out + $vmr.kind.vban.midi + $vmr.kind.vban.video - 1
         $insert = $vmr.kind.insert - 1
         $composite = $vmr.kind.composite - 1
         $strip_ch = $vmr.kind.eq_ch['strip'] - 1
