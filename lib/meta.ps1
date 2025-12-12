@@ -74,6 +74,16 @@ function AddActionMembers () {
     }
 }
 
+function AddAliasMembers () {
+    param(
+        [hashtable]$MAP
+    )
+    foreach ($alias in $MAP.Keys) {
+        $this | Add-Member -MemberType AliasProperty -Name $alias `
+            -Value $MAP[$alias] -Force
+    }
+}
+
 function AddChannelMembers () {
     $num_A = $this.remote.kind.p_out
     $num_B = $this.remote.kind.v_out
@@ -84,21 +94,6 @@ function AddChannelMembers () {
     }
 
     AddBoolMembers -PARAMS $channels
-}
-
-function AddGainlayerMembers () {
-    [hashtable]$Signatures = @{}
-    0..7 | ForEach-Object {
-        # Define getter
-        $Signatures['Getter'] = "`$this.Getter('gainlayer[{0}]')" -f $_
-        # Define setter
-        $Signatures['Setter'] = "param ( [Single]`$arg )`n`$this.Setter('gainlayer[{0}]', `$arg)" `
-            -f $_
-        $param = 'gainlayer{0}' -f $_
-        $null = $param
-
-        Addmember
-    }
 }
 
 function Addmember {

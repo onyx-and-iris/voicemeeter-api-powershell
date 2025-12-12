@@ -1,16 +1,20 @@
 class Strip : IRemote {
+    [System.Collections.ArrayList]$gainlayer
     [Object]$levels
 
     Strip ([int]$index, [Object]$remote) : base ($index, $remote) {
-        AddBoolMembers -PARAMS @('mono', 'solo', 'mute')
-        AddIntMembers -PARAMS @('limit')
-        AddFloatMembers -PARAMS @('gain', 'pan_x', 'pan_y')
+        AddBoolMembers -PARAMS @('solo', 'mute')
+        AddFloatMembers -PARAMS @('gain', 'limit', 'pan_x', 'pan_y')
         AddStringMembers -PARAMS @('label')
 
         AddChannelMembers
-        AddGainlayerMembers
 
         $this.levels = [StripLevels]::new($index, $remote)
+
+        $this.gainlayer = @()
+        for ($i = 0; $i -lt $remote.kind.gainlayer; $i++) {
+            $this.gainlayer.Add([FloatArrayMember]::new($i, 'gainlayer', $this))
+        }
     }
 
     [string] identifier () {
@@ -42,7 +46,7 @@ class StripLevels : IRemote {
         }
     }
 
-    [float] Convert([float]$val) {
+    hidden [single] Convert([single]$val) {
         if ($val -gt 0) { 
             return [math]::Round(20 * [math]::Log10($val), 1) 
         } 
@@ -78,15 +82,20 @@ class PhysicalStrip : Strip {
     [Object]$denoiser
     [Object]$eq
     [Object]$device
+    [Object]$audibility
+    [Object]$pitch
 
     PhysicalStrip ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddFloatMembers -PARAMS @('color_x', 'color_y', 'fx_x', 'fx_y')
         AddFloatMembers -PARAMS @('reverb', 'delay', 'fx1', 'fx2')
         AddBoolMembers -PARAMS @('postreverb', 'postdelay', 'postfx1', 'postfx2')
+        AddBoolMembers -PARAMS @('mono', 'vaio')
 
         $this.comp = [StripComp]::new($index, $remote)
         $this.gate = [StripGate]::new($index, $remote)
         $this.denoiser = [StripDenoiser]::new($index, $remote)
+        $this.pitch = [StripPitch]::new($index, $remote)
+        $this.audibility = [StripAudibility]::new($index, $remote)
         $this.eq = [StripEq]::new($index, $remote)
         $this.device = [StripDevice]::new($index, $remote)
     }
@@ -104,10 +113,10 @@ class StripComp : IRemote {
 
     hidden $_knob = $($this | Add-Member ScriptProperty 'knob' `
         {
-            $this.Getter_String('')
+            [math]::Round($this.Getter(''), 2)
         } `
         {
-            param($arg)
+            param([single]$arg)
             return $this.Setter('', $arg)
         }
     )
@@ -124,10 +133,10 @@ class StripGate : IRemote {
 
     hidden $_knob = $($this | Add-Member ScriptProperty 'knob' `
         {
-            $this.Getter_String('')
+            [math]::Round($this.Getter(''), 2)
         } `
         {
-            param($arg)
+            param([single]$arg)
             return $this.Setter('', $arg)
         }
     )
@@ -135,6 +144,7 @@ class StripGate : IRemote {
 
 class StripDenoiser : IRemote {
     StripDenoiser ([int]$index, [Object]$remote) : base ($index, $remote) {
+        AddFloatMembers -PARAMS @('threshold')
     }
 
     [string] identifier () {
@@ -143,10 +153,44 @@ class StripDenoiser : IRemote {
 
     hidden $_knob = $($this | Add-Member ScriptProperty 'knob' `
         {
-            $this.Getter_String('')
+            [math]::Round($this.Getter(''), 2)
         } `
         {
-            param($arg)
+            param([single]$arg)
+            return $this.Setter('', $arg)
+        }
+    )
+}
+
+class StripPitch : IRemote {
+    StripPitch ([int]$index, [Object]$remote) : base ($index, $remote) {
+        AddBoolMembers -PARAMS @('on')
+        AddFloatMembers -PARAMS @('drywet', 'pitchvalue', 'loformant', 'medformant', 'hiformant')
+    }
+
+    [string] identifier () {
+        return 'Strip[' + $this.index + '].Pitch'
+    }
+
+    [void] RecallPreset ([int]$presetIndex) {
+        $this.Setter('RecallPreset', $presetIndex)
+    }
+}
+
+class StripAudibility : IRemote {
+    StripAudibility ([int]$index, [Object]$remote) : base ($index, $remote) {
+    }
+
+    [string] identifier () {
+        return 'Strip[' + $this.index + '].Audibility'
+    }
+
+    hidden $_knob = $($this | Add-Member ScriptProperty 'knob' `
+        {
+            [math]::Round($this.Getter(''), 2)
+        } `
+        {
+            param([single]$arg)
             return $this.Setter('', $arg)
         }
     )
@@ -174,14 +218,34 @@ class VirtualStrip : Strip {
     VirtualStrip ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddBoolMembers -PARAMS @('mc')
         AddIntMembers -PARAMS @('k')
+        AddFloatMembers -PARAMS @('eqgain1', 'eqgain2', 'eqgain3')
+
+        AddAliasMembers -MAP @{ 
+            mono    = 'mc'
+            karaoke = 'k'
+            bass    = 'eqgain1'
+            low     = 'eqgain1'
+            mid     = 'eqgain2'
+            med     = 'eqgain2'
+            treble  = 'eqgain3'
+            high    = 'eqgain3'
+        }
     }
 
     [void] AppGain ([string]$appname, [single]$gain) {
         $this.Setter('AppGain', "(`"$appname`", $gain)")
     }
 
+    [void] AppGain ([int]$appindex, [single]$gain) {
+        $this.Setter("App[$appindex].Gain", $gain)
+    }
+
     [void] AppMute ([string]$appname, [bool]$mutestate) {
-        $this.Setter('AppMute', "(`"$appname`", $(if ($mutestate) { 1 } else { 0 })")
+        $this.Setter('AppMute', "(`"$appname`", $(if ($mutestate) { 1 } else { 0 }))")
+    }
+
+    [void] AppMute ([int]$appindex, [bool]$mutestate) {
+        $this.Setter("App[$appindex].Mute", $mutestate)
     }
 }
 

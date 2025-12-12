@@ -30,6 +30,23 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         Context 'Strip, physical only' -ForEach @(
             @{ Index = $phys_in }
         ) {
+            It "Should set Strip[$index].Mono" {
+                $vmr.strip[$index].mono = $value
+                $vmr.strip[$index].mono | Should -Be $expected
+            }
+
+            It "Should set Strip[$index].VAIO" {
+                $vmr.strip[$index].vaio = $value
+                $vmr.strip[$index].vaio | Should -Be $expected
+            }
+
+            Context 'Pitch' -Skip:$ifNotPotato {
+                It "Should set Strip[$index].Pitch.On" {
+                    $vmr.strip[$index].pitch.on = $value
+                    $vmr.strip[$index].pitch.on | Should -Be $expected
+                }
+            }
+            
             Context 'Eq' -Skip:$ifNotPotato -ForEach @(
                 @{ Eq = $vmr.strip[$index].eq }
             ) {
@@ -47,6 +64,15 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                     $eq.channel[$strip_ch].cell[$cells].on = $value
                     $eq.channel[$strip_ch].cell[$cells].on | Should -Be $value
                 }
+            }
+        }
+
+        Context 'Strip, first virtual' -ForEach @(
+            @{ Index = $phys_in + 1 }
+        ) {
+            It "Should set Strip[$index].MC via alias 'Mono'" {
+                $vmr.strip[$index].mono = $value
+                $vmr.strip[$index].mc | Should -Be $expected
             }
         }
 
@@ -246,7 +272,7 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
 
     Describe 'Float Tests' -Tag 'float' -ForEach @(
         @{ Gain = -24.63; Knob = 5.27; Slide = -7.51; Xy10 = 0.83; Xy05 = -0.42; MsHz = 196.57 }
-        @{ Gain = -12.48; Knob = 8.91; Slide = 3.14; Xy10 = 0.27; Xy05 = 0.69; MsHz = 142.13 }
+        @{ Gain = -12.48; Knob = 8.91; Slide = 3.14; Xy10 = 0.27; Xy05 = 0.29; MsHz = 142.13 }
     ) {
         Context 'Strip, one physical one virtual' -ForEach @(
             @{ Index = $phys_in }, @{ Index = $virt_in }
@@ -255,11 +281,30 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.strip[$index].gain = $gain
                 $vmr.strip[$index].gain | Should -Be $gain
             }
+
+            It "Should set Strip[$index].Limit" -Skip:$ifBasic {
+                $vmr.strip[$index].limit = $gain
+                $vmr.strip[$index].limit | Should -Be $gain
+            }
+
+            Context 'Gainlayers' -Skip:$ifNotPotato -ForEach @(
+                @{ Layer = $phys_out }, @{ Layer = $virt_out }
+            ) {
+                It "Should set Strip[$index].Gainlayer[$layer]" {
+                    $vmr.strip[$index].gainlayer[$layer].set($gain)
+                    $vmr.strip[$index].gainlayer[$layer].get() | Should -Be $gain
+                }
+            }
         }
 
         Context 'Strip, physical only' -ForEach @(
             @{ Index = $phys_in }
         ) {
+            It "Should set Strip[$index].Pan_Y" {
+                $vmr.strip[$index].pan_y = $xy10
+                $vmr.strip[$index].pan_y | Should -Be $xy10
+            }
+            
             Context 'Comp, Gate' -Skip:$ifBasic {
                 It "Should set Strip[$index].Comp" {
                     $vmr.strip[$index].comp.knob = $knob
@@ -301,6 +346,45 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                     $vmr.strip[$index].denoiser.knob = $knob
                     $vmr.strip[$index].denoiser.knob | Should -Be $knob
                 }
+
+                It "Should set Strip[$index].Denoiser.Threshold" {
+                    $vmr.strip[$index].denoiser.threshold = $knob
+                    $vmr.strip[$index].denoiser.threshold | Should -Be $knob
+                }
+            }
+
+            Context 'Pitch' -Skip:$ifNotPotato {
+                It "Should set Strip[$index].Pitch.drywet" {
+                    $vmr.strip[$index].pitch.drywet = $slide
+                    $vmr.strip[$index].pitch.drywet | Should -Be $slide
+                }
+
+                It "Should set Strip[$index].Pitch.pitchvalue" {
+                    $vmr.strip[$index].pitch.pitchvalue = $slide
+                    $vmr.strip[$index].pitch.pitchvalue | Should -Be $slide
+                }
+
+                It "Should set Strip[$index].Pitch.loformant" {
+                    $vmr.strip[$index].pitch.loformant = $slide
+                    $vmr.strip[$index].pitch.loformant | Should -Be $slide
+                }
+
+                It "Should set Strip[$index].Pitch.medformant" {
+                    $vmr.strip[$index].pitch.medformant = $slide
+                    $vmr.strip[$index].pitch.medformant | Should -Be $slide
+                }
+
+                It "Should set Strip[$index].Pitch.hiformant" {
+                    $vmr.strip[$index].pitch.hiformant = $slide
+                    $vmr.strip[$index].pitch.hiformant | Should -Be $slide
+                }
+            }
+
+            Context 'Audibility' -Skip:$ifNotBasic {
+                It "Should set Strip[$index].Audibility" {
+                    $vmr.strip[$index].audibility.knob = $knob
+                    $vmr.strip[$index].audibility.knob | Should -Be $knob
+                }
             }
 
             Context 'EQ' -Skip:$ifNotPotato -ForEach @(
@@ -319,6 +403,53 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 It "Should set Strip[$index].EQ.Channel[$strip_ch].Cell[$cells].Q" {
                     $eq.channel[$strip_ch].cell[$cells].q = $knob
                     $eq.channel[$strip_ch].cell[$cells].q | Should -Be $knob
+                }
+            }
+        }
+
+        Context 'Strip, virtual only' -ForEach @(
+            @{ Index = $virt_in }
+        ) {
+            It "Should set Strip[$index].Pan_Y" {
+                $vmr.strip[$index].pan_y = $xy05
+                $vmr.strip[$index].pan_y | Should -Be $xy05
+            }
+            
+            Context 'EQ' {
+                BeforeEach {
+                    $vmr.strip[$index].eqgain1 = 0
+                    $vmr.strip[$index].eqgain2 = 0
+                    $vmr.strip[$index].eqgain3 = 0
+                }
+            
+                It "Should set Strip[$index].EQGain1 via alias 'bass'" {
+                    $vmr.strip[$index].bass = $slide
+                    $vmr.strip[$index].eqgain1 | Should -Be $slide
+                }
+
+                It "Should set Strip[$index].EQGain1 via alias 'low'" {
+                    $vmr.strip[$index].low = $slide
+                    $vmr.strip[$index].eqgain1 | Should -Be $slide
+                }
+
+                It "Should set Strip[$index].EQGain2 via alias 'mid'" {
+                    $vmr.strip[$index].mid = $slide
+                    $vmr.strip[$index].eqgain2 | Should -Be $slide
+                }
+
+                It "Should set Strip[$index].EQGain2 via alias 'med'" {
+                    $vmr.strip[$index].med = $slide
+                    $vmr.strip[$index].eqgain2 | Should -Be $slide
+                }
+
+                It "Should set Strip[$index].EQGain3 via alias 'treble'" {
+                    $vmr.strip[$index].treble = $slide
+                    $vmr.strip[$index].eqgain3 | Should -Be $slide
+                }
+
+                It "Should set Strip[$index].EQGain3 via alias 'high'" {
+                    $vmr.strip[$index].high = $slide
+                    $vmr.strip[$index].eqgain3 | Should -Be $slide
                 }
             }
         }
@@ -362,18 +493,6 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
     }
 
     Describe 'Int Tests' -Tag 'int' {
-        Context 'Strip, one physical, one virtual' -ForEach @(
-            @{ Index = $phys_in }, @{ Index = $virt_in }
-        ) {
-            It "Should set and get Strip[$index].Limit" -Skip:$ifBasic -ForEach @(
-                @{ Value = 3; Expected = 3 }
-                @{ Value = -6; Expected = -6 }
-            ) {
-                $vmr.strip[$index].limit = $value
-                $vmr.strip[$index].limit | Should -Be $expected
-            }
-        }
-
         Context 'Strip, physical only' -ForEach @(
             @{ Index = $phys_in }
         ) {
@@ -392,6 +511,19 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                     $eq.channel[$strip_ch].cell[$cells].type = $value
                     $eq.channel[$strip_ch].cell[$cells].type | Should -Be $expected
                 }
+            }
+        }
+
+        Context 'Strip, second virtual' -Skip:$ifBasic -ForEach @(
+            @{ Index = $phys_in + 2 }
+        ) {
+            It "Should set Strip[$index].K via alias 'Karaoke'" -ForEach @(
+                @{ Value = 0; Expected = 0 }
+                @{ Value = 2; Expected = 2 }
+                @{ Value = 4; Expected = 4 }
+            ) { 
+                $vmr.strip[$index].karaoke = $value
+                $vmr.strip[$index].k | Should -Be $expected
             }
         }
 

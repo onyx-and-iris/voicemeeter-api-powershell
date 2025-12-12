@@ -118,11 +118,12 @@ The following strip commands are available:
 - mute: bool
 - mono: bool
 - mc: bool
-- k: int, from 0 to 4
+- k/karaoke: int, from 0 to 4
 - solo: bool
 - A1-A5: bool
 - B1-B3: bool
-- limit: int, from -40 to 12
+- vaio: bool
+- limit: float, from -40.00 to 12.00
 - gain: float, from -60.00 to 12.00
 - label: string
 - reverb: float, from 0.00 to 10.00
@@ -130,7 +131,7 @@ The following strip commands are available:
 - fx1: float, from 0.00 to 10.00
 - fx2: float, from 0.00 to 10.00
 - pan_x: float, from -0.50 to 0.50
-- pan_y: float, from 0.00 to 1.00
+- pan_y: float, physical: from 0.00 to 1.00, virtual: from -0.50 to 0.50
 - color_x: float, from -0.50 to 0.50
 - color_y: float, from 0.00 to 1.00
 - fx_x: float, from -0.50 to 0.50
@@ -139,17 +140,21 @@ The following strip commands are available:
 - postdelay: bool
 - postfx1: bool
 - postfx2: bool
-- gainlayer0-gainlayer7: float
+- eqgain1/bass/low: float, from -12.00 to 12.00
+- eqgain2/mid/med: float, from -12.00 to 12.00
+- eqgain3/treble/high: float, from -12.00 to 12.00
 
 for example:
 
 ```powershell
-$vmr.strip[5].gainlayer1 = -8.3
+$vmr.strip[6].karaoke = 3
+$vmr.strip[0].limit = 4.5
+$vmr.strip[2].label = 'example'
+$vmr.strip[7].pan_y = -0.38
+$vmr.strip[5].treble = -2.43
 ```
 
 A,B commands depend on Voicemeeter type.
-
-gainlayers defined for Potato version only.
 
 mc, k for virtual strips only.
 
@@ -196,6 +201,7 @@ $vmr.strip[3].gate.threshold = -40.5
 The following strip.denoiser commands are available:
 
 - knob: float, from 0.00 to 10.00
+- threshold: float, from 0.00 to 10.00
 
 for example:
 
@@ -203,16 +209,66 @@ for example:
 $vmr.strip[3].denoiser.knob = 5
 ```
 
+#### pitch
+
+The following strip.pitch commands are available:
+
+- on: bool
+- drywet: float, from -100.00 to 100.00
+- pitchvalue: float, from -12.00 to 12.00
+- loformant: float, from -12.00 to 12.00
+- medformant: float, from -12.00 to 12.00
+- hiformant: float, from -12.00 to 12.00
+
+The following strip.pitch methods are available:
+
+- RecallPreset($presetIndex) : int, from 0 to 7
+
+for example:
+
+```powershell
+$vmr.strip[2].pitch.recallpreset(4)
+$vmr.strip[4].pitch.drywet = -22.86
+$vmr.strip[1].pitch.medformant = 2.1
+```
+
+#### audibility
+
+The following strip.audibility commands are available:
+
+- knob: float, from 0.00 to 10.00
+
+for example:
+
+```powershell
+$vmr.strip[1].audibility.knob = 2.66
+```
+
+#### Gainlayer[i]
+
+The following strip.gainlayer[i] methods are available:
+
+- Set($val) : float, from -60.00 to 12.00
+- Get()
+
+for example:
+
+```powershell
+$vmr.strip[4].gainlayer[7].set(-26.81)
+```
+
 #### AppGain | AppMute
 
-- `AppGain(amount, gain)` : string, float
-- `AppMute(amount, mutestate)` : string, bool
+- AppGain($appname or $appindex, $gain) : string or int, float, from 0.00 to 1.00
+- AppMute($appname or $appindex, $mutestate) : string or int, bool
 
 for example:
 
 ```powershell
 $vmr.strip[5].AppGain("Spotify", 0.5)
 $vmr.strip[5].AppMute("Spotify", $true)
+$vmr.strip[7].AppGain(0, 0.28)
+$vmr.strip[6].AppMute(2, $false)
 ```
 
 #### levels
