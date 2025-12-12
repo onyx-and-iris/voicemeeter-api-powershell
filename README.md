@@ -113,7 +113,7 @@ $vmr.Logout()
 
 ### Strip
 
-The following strip commands are available:
+The following Strip properties are available:
 
 - mute: bool
 - mono: bool
@@ -154,13 +154,26 @@ $vmr.strip[7].pan_y = -0.38
 $vmr.strip[5].treble = -2.43
 ```
 
-A,B commands depend on Voicemeeter type.
+The following Strip methods are available:
 
+- AppGain($appname or $appindex, $gain) : string or int, float, from 0.00 to 1.00
+- AppMute($appname or $appindex, $mutestate) : string or int, bool
+
+for example:
+
+```powershell
+$vmr.strip[5].AppGain("Spotify", 0.5)
+$vmr.strip[5].AppMute("Spotify", $true)
+$vmr.strip[7].AppGain(0, 0.28)
+$vmr.strip[6].AppMute(2, $false)
+```
+
+A,B properties depend on Voicemeeter type.
 mc, k for virtual strips only.
 
 #### comp
 
-The following strip.comp commands are available:
+The following Strip.comp properties are available:
 
 - knob: float, from 0.00 to 10.00
 - gainin: float, from -24.00 to 24.00
@@ -180,12 +193,12 @@ $vmr.strip[3].comp.attack = 8.5
 
 #### gate
 
-The following strip.gate commands are available:
+The following Strip.gate properties are available:
 
 - knob: float, from 0.00 to 10.00
 - threshold: float, from -60.00 to -10.00
 - damping: float, from -60.00 to -10.00
-- bpsidechain: int, from 100 to 4000
+- bpsidechain: float, from 100.00 to 4000.00
 - attack: float, from 0.00 to 1000.00
 - hold: float, from 0.00 to 5000.00
 - release: float, from 0.00 to 5000.00
@@ -198,7 +211,7 @@ $vmr.strip[3].gate.threshold = -40.5
 
 #### denoiser
 
-The following strip.denoiser commands are available:
+The following Strip.denoiser properties are available:
 
 - knob: float, from 0.00 to 10.00
 - threshold: float, from 0.00 to 10.00
@@ -211,7 +224,7 @@ $vmr.strip[3].denoiser.knob = 5
 
 #### pitch
 
-The following strip.pitch commands are available:
+The following Strip.pitch properties are available:
 
 - on: bool
 - drywet: float, from -100.00 to 100.00
@@ -220,7 +233,7 @@ The following strip.pitch commands are available:
 - medformant: float, from -12.00 to 12.00
 - hiformant: float, from -12.00 to 12.00
 
-The following strip.pitch methods are available:
+The following Strip.pitch methods are available:
 
 - RecallPreset($presetIndex) : int, from 0 to 7
 
@@ -234,7 +247,7 @@ $vmr.strip[1].pitch.medformant = 2.1
 
 #### audibility
 
-The following strip.audibility commands are available:
+The following Strip.audibility properties are available:
 
 - knob: float, from 0.00 to 10.00
 
@@ -244,9 +257,9 @@ for example:
 $vmr.strip[1].audibility.knob = 2.66
 ```
 
-#### Gainlayer[i]
+#### gainlayer[i]
 
-The following strip.gainlayer[i] methods are available:
+The following Strip.gainlayer[i] methods are available:
 
 - Set($val) : float, from -60.00 to 12.00
 - Get()
@@ -257,23 +270,9 @@ for example:
 $vmr.strip[4].gainlayer[7].set(-26.81)
 ```
 
-#### AppGain | AppMute
-
-- AppGain($appname or $appindex, $gain) : string or int, float, from 0.00 to 1.00
-- AppMute($appname or $appindex, $mutestate) : string or int, bool
-
-for example:
-
-```powershell
-$vmr.strip[5].AppGain("Spotify", 0.5)
-$vmr.strip[5].AppMute("Spotify", $true)
-$vmr.strip[7].AppGain(0, 0.28)
-$vmr.strip[6].AppMute(2, $false)
-```
-
 #### levels
 
-The following strip.level commands are available:
+The following Strip.levels methods are available:
 
 - PreFader()
 - PostFader()
@@ -287,7 +286,7 @@ $vmr.strip[2].levels.PreFader() -Join ', ' | Write-Host
 
 ### Bus
 
-The following bus commands are available:
+The following Bus properties are available:
 
 - mute: bool
 - sel: bool
@@ -309,7 +308,7 @@ $vmr.bus[3].returnreverb = 5.7
 
 #### modes
 
-The following bus.mode members are available:
+The following Bus.mode members are available:
 
 - normal: bool
 - amix: bool
@@ -324,22 +323,21 @@ The following bus.mode members are available:
 - lfeonly: bool
 - rearonly: bool
 
-The following bus.mode commands are available:
+The following Bus.mode methods are available:
 
-- Set($mode): string, sets the current bus mode
-- Get(): returns the current bus mode.
+- Set($mode) : string, sets the current bus mode
+- Get() : returns the current bus mode
 
 for example:
 
 ```powershell
 $vmr.bus[0].mode.centeronly = $true
-
-$vmr.bus[0].mode.Get()
+$vmr.bus[0].mode.Set('tvmix')
 ```
 
 #### levels
 
-The following strip.level commands are available:
+The following Bus.levels methods are available:
 
 - All()
 
@@ -351,9 +349,23 @@ $vmr.bus[2].levels.All() -Join ', ' | Write-Host
 
 ### Strip|Bus
 
+The following Strip | Bus methods are available:
+
+- FadeTo(amount, time) : float, int
+- FadeBy(amount, time) : float, int
+
+Modify gain to or by the selected amount in db over a time interval in ms.
+
+for example:
+
+```powershell
+$vmr.strip[3].FadeTo(-18.75, 1000)
+$vmr.bus[0].FadeBy(-10, 500)
+```
+
 #### device
 
-The following strip.device | bus.device commands are available:
+The following Strip.device | Bus.device properties are available:
 
 - name: string
 - sr: int
@@ -366,7 +378,7 @@ for example:
 
 ```powershell
 $vmr.strip[0].device.wdm = "Mic|Line|Instrument 1 (Audient EVO4)"
-$vmr.bus[0].device.name
+$vmr.bus[0].device.name | Write-Host
 ```
 
 name, sr are defined as read only.
@@ -375,12 +387,12 @@ asio only defined for Bus[0].Device
 
 #### eq
 
-The following strip.eq | bus.eq commands are available:
+The following Strip.eq | Bus.eq properties are available:
 
 - on: bool
 - ab: bool
 
-The following strip.eq | bus.eq methods are available:
+The following Strip.eq | Bus.eq methods are available:
 
 - Load($filepath) : string
 - Save($filepath) : string
@@ -394,7 +406,7 @@ $vmr.bus[0].eq.ab = $false
 
 ##### channel.cell
 
-The following eq.channel.cell commands are available:
+The following eq.channel.cell properties are available:
 
 - on: bool
 - type: int, from 0 to 6
@@ -409,44 +421,39 @@ $vmr.strip[2].eq.channel[1].cell[4].type = 1
 $vmr.bus[5].eq.channel[6].cell[3].on = $false
 ```
 
-#### FadeTo | FadeBy
-
-- `FadeTo(amount, time)` : float, int
-- `FadeBy(amount, time)` : float, int
-
-Modify gain to or by the selected amount in db over a time interval in ms.
-
-for example:
-
-```powershell
-$vmr.strip[3].FadeTo(-18.7, 1000)
-$vmr.bus[0].FadeBy(-10, 500)
-```
-
 ### Macrobuttons
 
-Three modes defined: state, stateonly and trigger.
+The following Button properties are available:
 
-- State runs associated scripts
-- Stateonly does not run associated scripts
-- Index range (0, 69)
+- state: bool, runs associated scripts
+- stateonly: bool, does not run associated scripts
+- trigger: bool
 
 ```powershell
 $vmr.button[3].state = $true
-
 $vmr.button[4].stateonly = $false
-
 $vmr.button[5].trigger = $true
 ```
 
+Index range (0, 79)
+
 ### VBAN
 
-The following vban commands are available:
+The following Vban properties are available:
 
 - enable: bool
 - port: int, from 1024 - 65535
 
-For each vban in/out stream the following parameters are defined:
+for example:
+
+```powershell
+$vmr.vban.enable = $true
+$vmr.vban.port = 6990
+```
+
+#### instream[i]|outstream[i]
+
+The following Vban.instream | Vban.outstream properties are available:
 
 - on: bool
 - name: string
@@ -457,24 +464,21 @@ For each vban in/out stream the following parameters are defined:
 - quality: int, from 0 to 4
 - route: int, from 0 to 8
 
-SR, channel and bit are defined as readonly for instreams. Attempting to write
-to those parameters will throw an error. They are read and write for outstreams.
-
-example:
+for example:
 
 ```powershell
-$vmr.vban.enable = $true
-$vmr.vban.port = 6990
-
 $vmr.vban.instream[0].on = $true
 $vmr.vban.outstream[3].bit = 16
 ```
+
+SR, channel and bit are defined as readonly for instreams. Attempting to write
+to those parameters will throw an error. They are read and write for outstreams.
 
 ### Command
 
 Certain 'special' commands are defined by the API as performing actions rather than setting values.
 
-The following methods are available:
+The following Command methods are available:
 
 - Show()
 - Hide()
@@ -484,15 +488,15 @@ The following methods are available:
 - HideVBANChat()
 - Restart()
 - Shutdown()
-- Reset(): Reset all config
-- Save($filepath): string
-- Load($filepath): string
-- StorePreset($index, $name): (int, string)
-- RecallPreset($index or $name): (int or string)
-- RunMacrobuttons(): Launches the macrobuttons app
-- CloseMacrobuttons(): Closes the macrobuttons app
+- Reset() : Reset all config
+- Save($filepath) : string
+- Load($filepath) : string
+- StorePreset($index, $name) : (int, string)
+- RecallPreset($index or $name) : (int or string)
+- RunMacrobuttons() : Launches the macrobuttons app
+- CloseMacrobuttons() : Closes the macrobuttons app
 
-example:
+for example:
 
 ```powershell
 $vmr.command.Show()
@@ -514,7 +518,7 @@ StorePreset('') and RecallPreset('') interact with the 'selected' preset. This i
 
 ### Fx
 
-The following Fx commands are available:
+The following Fx properties are available:
 
 - Reverb.on: bool
 - Reverb.ab: bool
@@ -529,12 +533,12 @@ $vmr.fx.reverb.ab = $false
 
 ### Patch
 
-The following Patch commands are available:
+The following Patch properties are available:
 
 - postFaderComposite: bool
 - postFxInsert: bool
 
-The following Patch members have .Set($val) and .Get() available:
+The following Patch members have methods Set($val) | Get() available:
 
 - asio[i]: int, from 0 to ASIO input channels
 - OutA2[i]-OutA5[i]: int, from 0 to ASIO output channels
@@ -552,7 +556,7 @@ $vmr.patch.insert[4].get()
 
 ### Option
 
-The following Option commands are available:
+The following Option properties are available:
 
 - sr: int, (32000, 44100, 48000, 88200, 96000, 176400, 192000)
 - asiosr: bool
@@ -560,21 +564,15 @@ The following Option commands are available:
 - sliderMode: bool
 - monitoringBus: int, from 0 to bus index
 
-The following Option.delay[i] methods are available:
-
-- Set($val): float, from 0.00 to 500.00
-- Get()
-
 for example:
 
 ```powershell
-$vmr.Option.delay[2].set(30.26)   # sets the delay for the third (2) bus
 $vmr.Option.sliderMode = $false   # sets slider mode to absolute
 ```
 
 #### buffers
 
-The following Option.buffer commands are available:
+The following Option.buffer properties are available:
 
 - mme: int, (441, 480, 512, 576, 640, 704, 768, 896, 1024, 1536, 2048)
 - wdm: int, (128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 441, 448, 480, 512, 576, 640, 704, 768, 1024, 1536, 2048)
@@ -588,9 +586,22 @@ $vmr.Option.buffer.wdm = 512
 $vmr.Option.buffer.asio = 0    # to use default buffer size
 ```
 
+#### delay[i]
+
+The following Option.delay[i] methods are available:
+
+- Set($val) : float, from 0.00 to 500.00
+- Get()
+
+for example:
+
+```powershell
+$vmr.Option.delay[2].set(30.26)   # sets the delay for the third (2) bus
+```
+
 ### Recorder
 
-The following commands are available:
+The following Recorder properties are available:
 
 - A1 - A5: bool
 - B1 - B3: bool
@@ -605,7 +616,15 @@ The following commands are available:
 - channel: int, (2, 4, 6, 8)
 - kbps: int, (32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320)
 
-The following methods are available:
+for example:
+
+```powershell
+$vmr.recorder.A1 = $true
+$vmr.recorder.filetype = 'mp3'
+$vmr.recorder.kbps = 256
+```
+
+The following Recorder methods are available:
 
 - Play()
 - Stop()
@@ -615,41 +634,39 @@ The following methods are available:
 - Record()
 - Pause()
 - Eject()
-- Load($filepath): string
-- GoTo($timestring): string, must match the format 'hh:mm:ss'
+- Load($filepath) : string
+- GoTo($timestring) : string, must match the format 'hh:mm:ss'
 
-example:
+for example:
 
 ```powershell
 $vmr.recorder.play()
-$vmr.recorder.A1 = $true
-
 $vmr.recorder.GoTo("00:01:15")  # go to 1min 15sec into track
 ```
 
-#### Mode
+#### mode
 
-The following commands are available:
+The following Recorder.mode properties are available:
 
-- recbus
-- playonload
-- loop
-- multitrack
+- recbus: bool
+- playonload: bool
+- loop: bool
+- multitrack: bool
 
-example:
+for example:
 
 ```powershell
 $vmr.recorder.mode.loop = $true
 ```
 
-#### ArmStrip[i]|ArmBus[i]
+#### armstrip[i]|armbus[i]
 
-The following methods are available:
+The following Recorder.armstrip | Recorder.armbus methods are available:
 
-- Set($val): bool
+- Set($val) : bool
 - Get()
 
-example:
+for example:
 
 ```powershell
 $vmr.recorder.armstrip[0].Set($true)
