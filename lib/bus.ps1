@@ -1,13 +1,12 @@
-class Bus : IRemote {
+class Bus : IOControl {
     [Object]$mode
     [Object]$eq
     [Object]$levels
 
     Bus ([int]$index, [Object]$remote) : base ($index, $remote) {
-        AddBoolMembers -PARAMS @('mute', 'sel', 'monitor')
+        AddBoolMembers -PARAMS @('sel', 'monitor')
         AddIntMembers -PARAMS @('mono')
-        AddStringMembers -PARAMS @('label')
-        AddFloatMembers -PARAMS @('gain', 'returnreverb', 'returndelay', 'returnfx1', 'returnfx2')
+        AddFloatMembers -PARAMS @('returnreverb', 'returndelay', 'returnfx1', 'returnfx2')
 
         $this.mode = [BusMode]::new($index, $remote)
         $this.eq = [BusEq]::new($index, $remote)
@@ -17,40 +16,15 @@ class Bus : IRemote {
     [string] identifier () {
         return 'Bus[' + $this.index + ']'
     }
-
-    [void] FadeTo ([single]$target, [int]$time) {
-        $this.Setter('FadeTo', "($target, $time)")
-    }
-
-    [void] FadeBy ([single]$target, [int]$time) {
-        $this.Setter('FadeBy', "($target, $time)")
-    }
 }
 
-class BusLevels : IRemote {
+class BusLevels : IOLevels {
     [int]$init
     [int]$offset
 
     BusLevels ([int]$index, [Object]$remote) : base ($index, $remote) {
         $this.init = $index * 8
         $this.offset = 8            
-    }
-
-    hidden [single] Convert([single]$val) {
-        if ($val -gt 0) { 
-            return [math]::Round(20 * [math]::Log10($val), 1) 
-        } 
-        else { 
-            return - 200.0 
-        }
-    }
-
-    [System.Collections.ArrayList] Getter([int]$mode) {
-        [System.Collections.ArrayList]$vals = @()
-        $this.init..$($this.init + $this.offset - 1) | ForEach-Object {
-            $vals.Add($this.Convert($(Get_Level -MODE $mode -INDEX $_)))
-        }
-        return $vals
     }
 
     [System.Collections.ArrayList] All() {
@@ -93,7 +67,7 @@ class BusMode : IRemote {
     }
 }
 
-class BusEq : Eq {
+class BusEq : IOEq {
     BusEq ([int]$index, [Object]$remote) : base ($index, $remote, 'Bus') {
     }
 
@@ -122,7 +96,7 @@ class VirtualBus : Bus {
     }
 }
 
-class BusDevice : Device {
+class BusDevice : IODevice {
     BusDevice ([int]$index, [Object]$remote) : base ($index, $remote) {
         if ($this.index -eq 0) {
             $this.AddASIO()

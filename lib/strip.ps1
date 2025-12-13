@@ -1,11 +1,10 @@
-class Strip : IRemote {
+class Strip : IOControl {
     [System.Collections.ArrayList]$gainlayer
     [Object]$levels
 
     Strip ([int]$index, [Object]$remote) : base ($index, $remote) {
-        AddBoolMembers -PARAMS @('solo', 'mute')
-        AddFloatMembers -PARAMS @('gain', 'limit', 'pan_x', 'pan_y')
-        AddStringMembers -PARAMS @('label')
+        AddBoolMembers -PARAMS @('solo')
+        AddFloatMembers -PARAMS @('limit', 'pan_x', 'pan_y')
 
         AddChannelMembers
 
@@ -20,17 +19,9 @@ class Strip : IRemote {
     [string] identifier () {
         return 'Strip[' + $this.index + ']'
     }
-
-    [void] FadeTo ([single]$target, [int]$time) {
-        $this.Setter('FadeTo', "($target, $time)")
-    }
-
-    [void] FadeBy ([single]$target, [int]$time) {
-        $this.Setter('FadeBy', "($target, $time)")
-    }
 }
 
-class StripLevels : IRemote {
+class StripLevels : IOLevels {
     [int]$init
     [int]$offset
 
@@ -44,23 +35,6 @@ class StripLevels : IRemote {
             $this.init = ($p_in * 2) + (($index - $p_in) * 8)
             $this.offset = 8
         }
-    }
-
-    hidden [single] Convert([single]$val) {
-        if ($val -gt 0) { 
-            return [math]::Round(20 * [math]::Log10($val), 1) 
-        } 
-        else { 
-            return -200.0 
-        }
-    }
-
-    [System.Collections.ArrayList] Getter([int]$mode) {
-        [System.Collections.ArrayList]$vals = @()
-        $this.init..$($this.init + $this.offset - 1) | ForEach-Object {
-            $vals.Add($this.Convert($(Get_Level -MODE $mode -INDEX $_)))
-        }
-        return $vals
     }
 
     [System.Collections.ArrayList] PreFader() {
@@ -101,7 +75,22 @@ class PhysicalStrip : Strip {
     }
 }
 
-class StripComp : IRemote {
+class StripKnob : IRemote {
+    StripKnob ([int]$index, [Object]$remote) : base ($index, $remote) {
+    }
+
+    hidden $_knob = $($this | Add-Member ScriptProperty 'knob' `
+        {
+            [math]::Round($this.Getter(''), 2)
+        } `
+        {
+            param([single]$arg)
+            return $this.Setter('', $arg)
+        }
+    )
+}
+
+class StripComp : StripKnob {
     StripComp ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddFloatMembers -PARAMS @('gainin', 'ratio', 'threshold', 'attack', 'release', 'knee', 'gainout')
         AddBoolMembers -PARAMS @('makeup')
@@ -110,19 +99,9 @@ class StripComp : IRemote {
     [string] identifier () {
         return 'Strip[' + $this.index + '].Comp'
     }
-
-    hidden $_knob = $($this | Add-Member ScriptProperty 'knob' `
-        {
-            [math]::Round($this.Getter(''), 2)
-        } `
-        {
-            param([single]$arg)
-            return $this.Setter('', $arg)
-        }
-    )
 }
 
-class StripGate : IRemote {
+class StripGate : StripKnob {
     StripGate ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddFloatMembers -PARAMS @('threshold', 'damping', 'bpsidechain', 'attack', 'hold', 'release')
     }
@@ -130,19 +109,9 @@ class StripGate : IRemote {
     [string] identifier () {
         return 'Strip[' + $this.index + '].Gate'
     }
-
-    hidden $_knob = $($this | Add-Member ScriptProperty 'knob' `
-        {
-            [math]::Round($this.Getter(''), 2)
-        } `
-        {
-            param([single]$arg)
-            return $this.Setter('', $arg)
-        }
-    )
 }
 
-class StripDenoiser : IRemote {
+class StripDenoiser : StripKnob {
     StripDenoiser ([int]$index, [Object]$remote) : base ($index, $remote) {
         AddFloatMembers -PARAMS @('threshold')
     }
@@ -150,16 +119,6 @@ class StripDenoiser : IRemote {
     [string] identifier () {
         return 'Strip[' + $this.index + '].Denoiser'
     }
-
-    hidden $_knob = $($this | Add-Member ScriptProperty 'knob' `
-        {
-            [math]::Round($this.Getter(''), 2)
-        } `
-        {
-            param([single]$arg)
-            return $this.Setter('', $arg)
-        }
-    )
 }
 
 class StripPitch : IRemote {
@@ -177,26 +136,16 @@ class StripPitch : IRemote {
     }
 }
 
-class StripAudibility : IRemote {
+class StripAudibility : StripKnob {
     StripAudibility ([int]$index, [Object]$remote) : base ($index, $remote) {
     }
 
     [string] identifier () {
         return 'Strip[' + $this.index + '].Audibility'
     }
-
-    hidden $_knob = $($this | Add-Member ScriptProperty 'knob' `
-        {
-            [math]::Round($this.Getter(''), 2)
-        } `
-        {
-            param([single]$arg)
-            return $this.Setter('', $arg)
-        }
-    )
 }
 
-class StripEq : Eq {
+class StripEq : IOEq {
     StripEq ([int]$index, [Object]$remote) : base ($index, $remote, 'Strip') {
     }
 
@@ -205,7 +154,7 @@ class StripEq : Eq {
     }
 }
 
-class StripDevice : Device {
+class StripDevice : IODevice {
     StripDevice ([int]$index, [Object]$remote) : base ($index, $remote) {
     }
 

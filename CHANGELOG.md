@@ -26,8 +26,11 @@ Strip Gainlayers are now FloatArrayMember objects, see README for details
 - ArrayMember classes for array-like properties
 - Patch class
 - Option class
-- Device class
-- EQ class
+- IO classes to centralize controls common to both Strip and Bus
+  - IOControl
+  - IOLevels
+  - IOEq
+  - IODevice
 - FX class
 
 - AddAliasMembers meta function takes a hashtable `-MAP` of `alias = property`
@@ -55,6 +58,7 @@ Strip Gainlayers are now FloatArrayMember objects, see README for details
 - Strip.Karaoke alias for Strip.K
 - Strip.EQGain1|EQGain2|EQGain3 with bass/low, mid/med, treble/high aliases, respectively
 - StripAudibility class with Strip.Audibility.Knob
+- StripKnob base class for audibility knobs with `knob`
 - Strip.Denoiser.Threshold
 - Strip.VAIO
 - Strip.Pitch, StripPitch class
@@ -81,12 +85,9 @@ Strip Gainlayers are now FloatArrayMember objects, see README for details
 - Recorder.Armstrip|Armbus -> BoolArrayMember: now have .Get()
 - Cast Recorder getters to types for consistency
 
-- Bus.Levels.Convert hidden and return type [float] -> [single] for naming consistency
-
 - Strip.Mono is now an alias for Strip.MC on virtual strips
 - Strip.AppMute|AppGain can now take an app index; see README for details
 - Strip Knob setters: explicit $arg types for consistency
-- Strip.Levels.Convert hidden and return type [float] -> [single] for naming consistency
 
 ### Fixed
 

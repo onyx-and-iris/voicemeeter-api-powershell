@@ -4,8 +4,7 @@
 . $PSScriptRoot\kinds.ps1
 . $PSScriptRoot\iremote.ps1
 . $PSScriptRoot\arraymember.ps1
-. $PSScriptRoot\device.ps1
-. $PSScriptRoot\eq.ps1
+. $PSScriptRoot\io.ps1
 . $PSScriptRoot\strip.ps1
 . $PSScriptRoot\bus.ps1
 . $PSScriptRoot\macrobuttons.ps1
