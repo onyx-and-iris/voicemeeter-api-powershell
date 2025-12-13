@@ -58,7 +58,7 @@ Strip Gainlayers are now FloatArrayMember objects, see README for details
 - Strip.Karaoke alias for Strip.K
 - Strip.EQGain1|EQGain2|EQGain3 with bass/low, mid/med, treble/high aliases, respectively
 - StripAudibility class with Strip.Audibility.Knob
-- StripKnob base class for banana/potato audibility knobs with `knob` and `threshold`
+- StripKnob base class for audibility knobs with `knob`
 - Strip.Denoiser.Threshold
 - Strip.VAIO
 - Strip.Pitch, StripPitch class
