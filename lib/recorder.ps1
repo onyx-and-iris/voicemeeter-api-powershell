@@ -25,6 +25,7 @@ class Recorder : IRemote {
         AddActionMembers -PARAMS @('replay', 'ff', 'rew')
         AddFloatMembers -PARAMS @('gain')
         AddIntMembers -PARAMS @('prerectime')
+        AddStringMembers -PARAMS @('prefix') -WriteOnly
 
         AddChannelMembers
     }
@@ -114,16 +115,6 @@ class Recorder : IRemote {
             else {
                 "kbps got: $arg, expected one of $opts" | Write-Warning
             }
-        }
-    )
-
-    hidden $_prefix = $($this | Add-Member ScriptProperty 'prefix' `
-        {
-            return Write-Warning ("ERROR: $($this.identifier()).prefix is write only")
-        } `
-        {
-            param([string]$arg)
-            $this._prefix = $this.Setter('prefix', $arg)
         }
     )
 

@@ -72,9 +72,11 @@ Strip Gainlayers are now FloatArrayMember objects, see README for details
 
 ### Changed
 
-- Device: explicit $arg types for consistency
+- Meta functions can now take a -ReadOnly or -WriteOnly switch parameter
 - Meta: AddBoolMembers, AddIntMembers $arg types for consistency
 - Float getters/setters now default to two decimal places.
+- Device: explicit $arg types for consistency
+- Device members now added with meta functions
 
 - some vban.instream | vban.outstream commands now added with meta functions
   - on
@@ -84,6 +86,7 @@ Strip Gainlayers are now FloatArrayMember objects, see README for details
 
 - Recorder.Armstrip|Armbus -> BoolArrayMember: now have .Get()
 - Cast Recorder getters to types for consistency
+- Recorder.Prefix now added with AddStringMembers
 
 - Strip.Mono is now an alias for Strip.MC on virtual strips
 - Strip.AppMute|AppGain can now take an app index; see README for details
