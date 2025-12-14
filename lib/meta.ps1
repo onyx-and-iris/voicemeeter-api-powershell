@@ -4,9 +4,7 @@ function AddBoolMembers () {
     )
     [hashtable]$Signatures = @{}
     foreach ($param in $PARAMS) {
-        # Define getter
         $Signatures['Getter'] = "[bool]`$this.Getter('{0}')" -f $param
-        # Define setter
         $Signatures['Setter'] = "param ( [bool]`$arg )`n`$this.Setter('{0}', `$arg)" `
             -f $param
 
@@ -21,9 +19,7 @@ function AddFloatMembers () {
     )
     [hashtable]$Signatures = @{}
     foreach ($param in $PARAMS) {
-        # Define getter
         $Signatures['Getter'] = "[math]::Round(`$this.Getter('{0}'), {1})" -f $param, $decimals
-        # Define setter
         $Signatures['Setter'] = "param ( [Single]`$arg )`n`$this.Setter('{0}', `$arg)" `
             -f $param
 
@@ -37,9 +33,7 @@ function AddIntMembers () {
     )
     [hashtable]$Signatures = @{}
     foreach ($param in $PARAMS) {
-        # Define getter
         $Signatures['Getter'] = "[Int]`$this.Getter('{0}')" -f $param
-        # Define setter
         $Signatures['Setter'] = "param ( [Int]`$arg )`n`$this.Setter('{0}', `$arg)" `
             -f $param
 
@@ -53,9 +47,7 @@ function AddStringMembers () {
     )
     [hashtable]$Signatures = @{}
     foreach ($param in $PARAMS) {
-        # Define getter
         $Signatures['Getter'] = "[String]`$this.Getter_String('{0}')" -f $param
-        # Define setter
         $Signatures['Setter'] = "param ( [String]`$arg )`n`$this.Setter('{0}', `$arg)" `
             -f $param
 
