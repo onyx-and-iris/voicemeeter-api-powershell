@@ -15,11 +15,13 @@ You may pass the following optional flags:
 
 for example:
 
-`powershell.exe .\CLI.ps1 -o -k "banana" -s "strip[0].mute", "!strip[0].mute", "strip[0].mute", "bus[2].eq.on=1", "command.lock=1"`
+```powershell
+.\CLI.ps1 -o -k "banana" -s "strip[0].mute", "!strip[0].mute", "strip[0].mute", "bus[2].eq.on=1", "command.lock=1"
+```
 
 Expected output:
 
-```
+```powershell
 Getting strip[0].mute
 strip[0].mute = 0
 Toggling strip[0].mute

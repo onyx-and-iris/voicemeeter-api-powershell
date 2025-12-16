@@ -54,6 +54,10 @@ function main {
             read-hostuntilempty -vmr $vmr
             return
         }
+        if ($script.Count -eq 0) {
+            'No script provided, exiting' | Write-Host
+            return
+        }
         $script | ForEach-Object {
             msgHandler -vmr $vmr -line $_
         }
