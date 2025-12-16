@@ -5,70 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-Before any major/minor/patch is released all test units will be run to verify they pass.
+Before any major/minor/patch is released all unit tests will be run to verify they pass.
 
 ## [Unreleased] These changes have not been added to PSGallery yet
 
+
+## [4.0.0] - 2025-12-16
+
+This release introduces some breaking changes, the affected classes are Command, Recorder and Strip.
+
 ### Breaking Changes
 
-AddActionMembers now adds ScriptMethods instead of ScriptProperties:
-- See Command section of README for details on using special commands
-- See Recorder section of README for details on using playback/record actions
-
-Deprecated Recorder.Loop removed: use Recorder.Mode.Loop
-Recorder.FileType changed from method to write-only property
-
-Strip Gainlayers are now FloatArrayMember objects, see README for details
-
-### Added
-
-- IRemote base class
-- ArrayMember classes for array-like properties
-- Patch class
-- Option class
-- IO classes to centralize controls common to both Strip and Bus
-  - IOControl
-  - IOLevels
-  - IOEq
-  - IODevice
-- FX class
-
-- AddAliasMembers meta function takes a hashtable `-MAP` of `alias = property`
-
-- Vban.port sets Vban.Instream[0].port
-- Vban Midi and Command streams
-  - on, write-only
-  - name, write-only
-  - ip, write-only
-
-- Recorder.Armedbus
-- Recorder.PreRecTime
-- Recorder.Prefix
-- Recorder.Eject() references 'Command.Eject'
-- Recorder.State
-
-- Command.Reset()
-- Command.Save($filepath)
-- Command.StorePreset()
-- Command.RecallPreset()
-
-- Bus.Sel, Bus.Monitor, Bus.Vaio
-- Bus.Mode.Set($mode)
-
-- Strip.Karaoke alias for Strip.K
-- Strip.EQGain1|EQGain2|EQGain3 with bass/low, mid/med, treble/high aliases, respectively
-- StripAudibility class with Strip.Audibility.Knob
-- StripKnob base class for audibility knobs with `knob`
-- Strip.Denoiser.Threshold
-- Strip.VAIO
-- Strip.Pitch, StripPitch class
-  - on
-  - drywet
-  - pitchvalue
-  - loformant
-  - medformant
-  - hiformant
-  - recallpreset($presetIndex)
+- Some of the Command properties have been converted to methods. See Command section in README for more details.
+- Recorder.FileType changed from method to write-only property.
+- Strip Gainlayers are now defined by their own class and may be accessed through {Strip}.Gainlayer[i]. 
+  - The previous {Strip}.gainlayer{i} properties have been removed.
 
 ### Changed
 
@@ -92,6 +43,56 @@ Strip Gainlayers are now FloatArrayMember objects, see README for details
 - Strip.AppMute|AppGain can now take an app index; see README for details
 - Strip Knob setters: explicit $arg types for consistency
 
+### Added
+
+- IRemote abstract base class serves as a launching point for the higher classes.
+- ArrayMember classes offer a common interface for array-like properties
+- Patch class
+- Option class
+- IO classes to centralize controls common to both Strip and Bus
+  - IOControl
+  - IOLevels
+  - IOEq
+  - IODevice
+- FX class
+
+- AddAliasMembers meta function takes a hashtable `-MAP` of `alias = property`
+
+- Vban.port sets Vban.Instream[0].port
+- Vban Midi and Command streams
+  - on, write-only
+  - name, write-only
+  - ip, write-only
+
+- Recorder.Armedbus
+- Recorder.PreRecTime
+- Recorder.Prefix
+- Recorder.State
+- Recorder.Eject()
+
+- Command.Reset()
+- Command.Save($filepath)
+- Command.StorePreset()
+- Command.RecallPreset()
+
+- Bus.Sel, Bus.Monitor, Bus.Vaio
+- Bus.Mode.Set($mode)
+
+- Strip.Karaoke alias for Strip.K
+- Strip.EQGain1|EQGain2|EQGain3 with bass/low, mid/med, treble/high aliases, respectively
+- StripKnob base class which defines a knob property.
+- StripAudbility class which represents the audibility knob for basic kind, it subclasses StripKnob.
+- Strip.Denoiser.Threshold
+- Strip.VAIO.
+- Strip.Pitch, StripPitch class
+  - on
+  - drywet
+  - pitchvalue
+  - loformant
+  - medformant
+  - hiformant
+  - recallpreset($presetIndex)
+
 ### Fixed
 
 - some vban commands incorrectly read-only/write-only
@@ -104,7 +105,8 @@ Strip Gainlayers are now FloatArrayMember objects, see README for details
 
 - Recorder.channel values: 1..8 -> (2, 4, 6, 8)
 
-- Bus.Mono -> [int] for stereo reverse
+- Bus.Mono -> [int]
+  - This gives the user access to set stereo reverse.
 
 - Strip.Limit type [int] -> [float]
 - Missing closing parenthesis in AppMute value string
