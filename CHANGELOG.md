@@ -17,6 +17,7 @@ This release introduces some breaking changes, the affected classes are Command,
 ### Breaking Changes
 
 - Some of the Command properties have been converted to methods. See Command section in README for more details.
+- Recorder.loop removed, it can be accessed through {Recorder}.{Mode}.loop.
 - Recorder.FileType changed from method to write-only property.
 - Strip Gainlayers are now defined by their own class and may be accessed through {Strip}.Gainlayer[i]. 
   - The previous {Strip}.gainlayer{i} properties have been removed.
