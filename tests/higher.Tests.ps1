@@ -1108,13 +1108,19 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                     $vmr.recorder.prefix = $prefix
                     $vmr.recorder.filetype = $filetype
 
+                    $start = Get-Date
                     $vmr.recorder.state = 'record'
-                    Start-Sleep -Milliseconds 10
-                    $stamp = '{0:yyyy-MM-dd} at {0:HH}h{0:mm}m{0:ss}s' -f (Get-Date)
                     $vmr.recorder.state | Should -Be 'record'
                     Start-Sleep -Milliseconds 2000
 
-                    $tmp = [System.IO.Path]::Combine($recDir, ("{0} {1}.{2}" -f $prefix, $stamp, $filetype))
+                    $tmp = Get-ChildItem -Path $recDir -Filter ("{0}*.{1}" -f $prefix, $filetype) -ErrorAction SilentlyContinue |
+                    Where-Object { $_.LastWriteTime -gt $start } |
+                    Sort-Object LastWriteTime -Descending |
+                    Select-Object -First 1
+                    
+                    if (-not $tmp) {
+                        throw "'$filetype' file with prefix '$prefix' was not found in '$recDir'."
+                    }
 
                     $vmr.recorder.state = 'stop'
                     $vmr.recorder.eject()
@@ -1202,12 +1208,18 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 }
 
                 BeforeEach {
+                    $start = Get-Date
                     $vmr.recorder.record()
-                    Start-Sleep -Milliseconds 10
-                    $stamp = '{0:yyyy-MM-dd} at {0:HH}h{0:mm}m{0:ss}s' -f (Get-Date)
                     Start-Sleep -Milliseconds 2000
 
-                    $tmp = [System.IO.Path]::Combine($recDir, ("{0} {1}.{2}" -f $prefix, $stamp, $filetype))
+                    $tmp = Get-ChildItem -Path $recDir -Filter ("{0}*.{1}" -f $prefix, $filetype) -ErrorAction SilentlyContinue |
+                    Where-Object { $_.LastWriteTime -gt $start } |
+                    Sort-Object LastWriteTime -Descending |
+                    Select-Object -First 1
+
+                    if (-not $tmp) {
+                        throw "'$filetype' file with prefix '$prefix' was not found in '$recDir'."
+                    }
 
                     $vmr.recorder.pause()
                     Start-Sleep -Milliseconds 500

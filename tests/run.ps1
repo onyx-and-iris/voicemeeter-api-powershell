@@ -11,12 +11,18 @@ function Test-RecDir ([object]$vmr, [string]$recDir) {
 
     
     try {
+        $start = Get-Date
         $vmr.recorder.record()
-        Start-Sleep -Milliseconds 10
-        $stamp = '{0:yyyy-MM-dd} at {0:HH}h{0:mm}m{0:ss}s' -f (Get-Date)
         Start-Sleep -Milliseconds 2000
 
-        $tmp = Join-Path $recDir ("{0} {1}.{2}" -f $prefix, $stamp, $filetype)
+        $tmp = Get-ChildItem -Path $recDir -Filter ("{0}*.{1}" -f $prefix, $filetype) -ErrorAction SilentlyContinue |
+        Where-Object { $_.LastWriteTime -gt $start } |
+        Sort-Object LastWriteTime -Descending |
+        Select-Object -First 1
+
+        if (-not $tmp) {
+            throw "'$filetype' file with prefix '$prefix' was not found in '$recDir'."
+        }
 
         $vmr.recorder.stop()
         $vmr.recorder.eject()

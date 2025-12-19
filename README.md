@@ -8,9 +8,9 @@ For past/future changes to this project refer to: [CHANGELOG](CHANGELOG.md)
 
 ## Tested against
 
-- Basic 1.1.1.9
-- Banana 2.1.1.9
-- Potato 3.1.1.9
+- Basic 1.1.2.2
+- Banana 2.1.2.2
+- Potato 3.1.2.2
 
 ## Requirements
 
@@ -495,7 +495,7 @@ $vmr.vban.outstream[3].bit = 16
 
 ##### midi
 
-The following midi Vban.outstream[8] properties are available:
+The following midi Vban.outstream properties are available:
 
 - route: string, ('none', 'midi_in', 'aux_in', 'vban_in', 'all_in', 'midi_out')
 
@@ -507,7 +507,7 @@ $vmr.vban.outstream[8].route = 'aux_in'
 
 ##### video
 
-The following video Vban.outstream[9] properties are available:
+The following video Vban.outstream properties are available:
 
 - vfps: int, from 1 to 30
 - vformat: string, ('png', 'jpg')
