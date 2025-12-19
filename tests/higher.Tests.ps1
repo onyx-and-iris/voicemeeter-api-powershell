@@ -718,18 +718,6 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 }
             }
 
-            Context 'Outstream, midi only' -ForEach @(
-                @{ Index = $vban_outM }
-            ) {
-                It "Should set vban.outstream[$index].route" -ForEach @(
-                    @{ Value = 7; Expected = 7 }
-                    @{ Value = 3; Expected = 3 }
-                ) {
-                    $vmr.vban.outstream[$index].route = $value
-                    $vmr.vban.outstream[$index].route | Should -Be $expected
-                }
-            }
-
             Context 'Outstream, video only' -ForEach @(
                 @{ Index = $vban_outV }
             ) {
@@ -749,13 +737,13 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                     $vmr.vban.outstream[$index].vquality | Should -Be $expected
                 }
 
-                It "Should set vban.outstream[$index].route" -ForEach @(
+                <# It "Should set vban.outstream[$index].route" -ForEach @(
                     @{ Value = 1; Expected = 1 }
                     @{ Value = 4; Expected = 4 }
                 ) {
                     $vmr.vban.outstream[$index].route = $value
                     $vmr.vban.outstream[$index].route | Should -Be $expected
-                }
+                } #>
             }
         }
         
@@ -1084,6 +1072,19 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                     $vmr.vban.outstream[$index].ip = $value
                     $vmr.vban.outstream[$index].ip | Should -Be $expected
                 }       
+            }
+
+            Context 'Outstream, midi only' -ForEach @(
+                @{ Index = $vban_outM }
+            ) {
+                It "Should set vban.outstream[$index].route" -ForEach @(
+                    @{ Value = 'aux_in'; Expected = 'aux_in' }
+                    @{ Value = 'all_in'; Expected = 'all_in' }
+                    @{ Value = 'midi_out'; Expected = 'midi_out' }
+                ) {
+                    $vmr.vban.outstream[$index].route = $value
+                    $vmr.vban.outstream[$index].route | Should -Be $expected
+                }
             }
 
             Context 'Outstream, video only' -ForEach @(

@@ -515,6 +515,8 @@ The following video Vban.outstream[9] properties are available:
 - vcursor: bool
 - route: int, from 0 to 4
 
+Route is currently write-only. This is a VMR bug.
+
 for example:
 
 ```powershell

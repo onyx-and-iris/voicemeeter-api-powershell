@@ -150,7 +150,8 @@ class VbanOutMidi : VbanMidi {
 
 class VbanOutVideo : VbanVideo {
     VbanOutVideo ([int]$index, [Object]$remote) : base ($index, $remote, 'out') {
-        AddIntMembers -PARAMS @('vfps', 'vquality', 'route')
+        AddIntMembers -PARAMS @('vfps', 'vquality')
+        AddIntMembers -WriteOnly -PARAMS @('route')
         AddBoolMembers -PARAMS @('vcursor')
     }
 
