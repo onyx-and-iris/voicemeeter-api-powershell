@@ -9,6 +9,28 @@ Before any major/minor/patch is released all unit tests will be run to verify th
 
 ## [Unreleased] These changes have not been added to PSGallery yet
 
+### Added
+
+- Bus.EQ.Channel.Trim
+- Bus.EQ.Channel.Delay
+
+- MIDI Vban.Outstream.Route: 'none', 'midi_in', 'aux_in', 'vban_in', 'all_in', 'midi_out'
+- Video Vban.Outstream
+  - Vban.Outstream.Vfps
+  - Vban.Outstream.Vformat: 'png', 'jpg'
+  - Vban.Outstream.Vquality
+  - Vban.Outstream.Vcursor
+  - Vban.Outstream.Route (VMR bug: currently write-only)
+
+### Changed
+
+- `on`, `name`, `ip` now read/write on all streams
+- Simple ranges of consecutive integers moved to `AddIntMembers`
+  - Retained warning for `sr` and anything with atypical behavior, consistent with the rest of the module
+  - Retained warning for `port` because Voicemeeter will allow this to be set below 1024
+- Audio instream/outstream divergent behavior via 'if' dropped in favor of explicit separation in derived classes
+
+- Updated EQ.Channel.Cell.Gain range in README
 
 ## [4.0.0] - 2025-12-16
 
