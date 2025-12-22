@@ -47,7 +47,7 @@ class IOEq : IRemote {
 
         $this.channel = @()
         for ($ch = 0; $ch -lt $remote.kind.eq_ch[$this.kindOfEq]; $ch++) {
-            $this.channel.Add([EqChannel]::new($ch, $remote, $this.identifier()))
+            $this.channel.Add([EqChannel]::new($ch, $this))
         }
     }
 
@@ -66,15 +66,15 @@ class EqChannel : IRemote {
     [System.Collections.ArrayList]$cell
     [string]$eqId
     
-    EqChannel ([int]$index, [Object]$remote, [string]$eqId) : base ($index, $remote) {
-        $this.eqId = $eqId
+    EqChannel ([int]$index, [Object]$eq) : base ($index, $eq.remote) {
+        $this.eqId = $eq.identifier()
 
-        AddFloatMembers -PARAMS @('trim', 'delay')
+        if ($eq.kindOfEq -eq 'Bus') { AddFloatMembers -PARAMS @('trim', 'delay') }
 
         $this.cell = @()
         $cellCount = $this.remote.kind.cells
         for ($c = 0; $c -lt $cellCount; $c++) {
-            $this.cell.Add([EqCell]::new($c, $remote, $this.identifier()))
+            $this.cell.Add([EqCell]::new($c, $this.remote, $this.identifier()))
         }
     }
 
