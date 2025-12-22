@@ -3,17 +3,13 @@ class Vban : IRemote {
     
     Vban ([int]$index, [Object]$remote, [string]$direction) : base ($index, $remote) {
         $this.direction = $direction
+
+        AddBoolMembers -PARAMS @('on')
+        AddStringMembers -PARAMS @('name', 'ip')
     }
 
     [string] identifier () {
         return 'vban.' + $this.direction + 'stream[' + $this.index + ']'
-    }
-}
-
-class VbanAudio : Vban {
-    VbanAudio ([int]$index, [Object]$remote, [string]$direction) : base ($index, $remote, $direction) {
-        AddBoolMembers -PARAMS @('on')
-        AddStringMembers -PARAMS @('name', 'ip')
     }
 
     hidden $_port = $($this | Add-Member ScriptProperty 'port' `
@@ -30,43 +26,33 @@ class VbanAudio : Vban {
             }
         }
     )
+}
 
-    hidden $_sr = $($this | Add-Member ScriptProperty 'sr' `
-        {
-            [int]$this.Getter('sr')
-        } `
-        {
-            param([int]$arg)
-            if ($this.direction -eq 'in') { Write-Warning ('Error, read only value') }
-            else {
-                $opts = @(11025, 16000, 22050, 24000, 32000, 44100, 48000, 64000, 88200, 96000)
-                if ($opts.Contains($arg)) {
-                    $this._sr = $this.Setter('sr', $arg)
-                }
-                else {
-                    Write-Warning ('Expected one of', $opts)
-                }
-            }
-        }
-    )
+class VbanAudio : Vban {
+    VbanAudio ([int]$index, [Object]$remote, [string]$direction) : base ($index, $remote, $direction) {
+        AddIntMembers -PARAMS @('quality', 'route')
+    }
+}
 
-    hidden $_channel = $($this | Add-Member ScriptProperty 'channel' `
-        {
-            [int]$this.Getter('channel')
-        } `
-        {
-            param([int]$arg)
-            if ($this.direction -eq 'in') { Write-Warning ('Error, read only value') }
-            else {
-                if ($arg -ge 1 -and $arg -le 8) {
-                    $this._channel = $this.Setter('channel', $arg)
-                }
-                else {
-                    Write-Warning ('Expected value from 1 to 8')
-                }
-            }
-        }
-    )
+class VbanMidi : Vban {
+    VbanMidi ([int]$index, [Object]$remote, [string]$direction) : base ($index, $remote, $direction) {
+    }
+}
+
+class VbanText : Vban {
+    VbanText ([int]$index, [Object]$remote, [string]$direction) : base ($index, $remote, $direction) {
+    }
+}
+
+class VbanVideo : Vban {
+    VbanVideo ([int]$index, [Object]$remote, [string]$direction) : base ($index, $remote, $direction) {
+    }
+}
+
+class VbanInAudio : VbanAudio {
+    VbanInAudio ([int]$index, [Object]$remote) : base ($index, $remote, 'in') {
+        AddIntMembers -ReadOnly -PARAMS @('sr', 'channel')
+    }
 
     hidden $_bit = $($this | Add-Member ScriptProperty 'bit' `
         {
@@ -74,125 +60,9 @@ class VbanAudio : Vban {
             return $val
         } `
         {
-            param([int]$arg)
-            if ($this.direction -eq 'in') { Write-Warning ('Error, read only value') }
-            else {
-                if (@(16, 24).Contains($arg)) {
-                    $val = if ($arg -eq 16) { 1 } else { 2 }
-                    $this._bit = $this.Setter('bit', $val)
-                }
-                else {
-                    Write-Warning ('Expected value 16 or 24')
-                }
-            }
+            Write-Warning ("ERROR: $($this.identifier()).bit is read only")
         }
     )
-
-    hidden $_quality = $($this | Add-Member ScriptProperty 'quality' `
-        {
-            [int]$this.Getter('quality')
-        } `
-        {
-            param([int]$arg)
-            if ($arg -ge 0 -and $arg -le 4) {
-                $this._quality = $this.Setter('quality', $arg)
-            }
-            else {
-                Write-Warning ('Expected value from 0 to 4')
-            }
-        }
-    )
-
-    hidden $_route = $($this | Add-Member ScriptProperty 'route' `
-        {
-            [int]$this.Getter('route')
-        } `
-        {
-            param([int]$arg)
-            $rt = $this.remote.kind['p_' + $this.direction] + $this.remote.kind['v_' + $this.direction] - 1
-            if ($arg -ge 0 -and $arg -le $rt) {
-                $this._route = $this.Setter('route', $arg)
-            }
-            else {
-                Write-Warning ("Expected value from 0 to $rt")
-            }
-        }
-    )
-}
-
-class VbanMidi : Vban {
-    VbanMidi ([int]$index, [Object]$remote, [string]$direction) : base ($index, $remote, $direction) {
-    }
-
-    hidden $_on = $($this | Add-Member ScriptProperty 'on' `
-        {
-            return Write-Warning ("ERROR: $($this.identifier()).on is write only")
-        } `
-        {
-            param([bool]$arg)
-            $this._on = $this.Setter('on', $arg)
-        }
-    )
-
-    hidden $_name = $($this | Add-Member ScriptProperty 'name' `
-        {
-            return Write-Warning ("ERROR: $($this.identifier()).name is write only")
-        } `
-        {
-            param([string]$arg)
-            $this._name = $this.Setter('name', $arg)
-        }
-    )
-
-    hidden $_ip = $($this | Add-Member ScriptProperty 'ip' `
-        {
-            return Write-Warning ("ERROR: $($this.identifier()).ip is write only")
-        } `
-        {
-            param([string]$arg)
-            $this._ip = $this.Setter('ip', $arg)
-        }
-    )
-}
-
-class VbanText : Vban {
-    VbanText ([int]$index, [Object]$remote, [string]$direction) : base ($index, $remote, $direction) {
-    }
-
-    hidden $_on = $($this | Add-Member ScriptProperty 'on' `
-        {
-            return Write-Warning ("ERROR: $($this.identifier()).on is write only")
-        } `
-        {
-            param([bool]$arg)
-            $this._on = $this.Setter('on', $arg)
-        }
-    )
-
-    hidden $_name = $($this | Add-Member ScriptProperty 'name' `
-        {
-            return Write-Warning ("ERROR: $($this.identifier()).name is write only")
-        } `
-        {
-            param([string]$arg)
-            $this._name = $this.Setter('name', $arg)
-        }
-    )
-
-    hidden $_ip = $($this | Add-Member ScriptProperty 'ip' `
-        {
-            return Write-Warning ("ERROR: $($this.identifier()).ip is write only")
-        } `
-        {
-            param([string]$arg)
-            $this._ip = $this.Setter('ip', $arg)
-        }
-    )
-}
-
-class VbanInAudio : VbanAudio {
-    VbanInAudio ([int]$index, [Object]$remote) : base ($index, $remote, 'in') {
-    }
 }
 
 class VbanInMidi : VbanMidi {
@@ -207,12 +77,104 @@ class VbanInText : VbanText {
 
 class VbanOutAudio : VbanAudio {
     VbanOutAudio ([int]$index, [Object]$remote) : base ($index, $remote, 'out') {
+        AddIntMembers -PARAMS @('channel')
     }
+
+    hidden $_sr = $($this | Add-Member ScriptProperty 'sr' `
+        {
+            [int]$this.Getter('sr')
+        } `
+        {
+            param([int]$arg)
+            $opts = @(11025, 16000, 22050, 24000, 32000, 44100, 48000, 64000, 88200, 96000)
+            if ($opts.Contains($arg)) {
+                $this._sr = $this.Setter('sr', $arg)
+            }
+            else {
+                Write-Warning ('Expected one of', $opts)
+            }
+        }
+    )
+
+    hidden $_bit = $($this | Add-Member ScriptProperty 'bit' `
+        {
+            $val = if ($this.Getter('bit') -eq 1) { 16 } else { 24 }
+            return $val
+        } `
+        {
+            param([int]$arg)
+            if (@(16, 24).Contains($arg)) {
+                $val = if ($arg -eq 16) { 1 } else { 2 }
+                $this._bit = $this.Setter('bit', $val)
+            }
+            else {
+                Write-Warning ('Expected value 16 or 24')
+            }
+        }
+    )
 }
 
 class VbanOutMidi : VbanMidi {
     VbanOutMidi ([int]$index, [Object]$remote) : base ($index, $remote, 'out') {
     }
+
+    hidden $_route = $($this | Add-Member ScriptProperty 'route' `
+        {
+            [string]$val = ''
+            switch ($this.Getter('route')) {
+                0 { $val = 'none' }
+                1 { $val = 'midi_in' }
+                2 { $val = 'aux_in' }
+                4 { $val = 'vban_in' }
+                7 { $val = 'all_in' }
+                8 { $val = 'midi_out' }
+            }
+            return $val
+        } `
+        {
+            param([string]$arg)
+            [int]$val = 0
+            switch ($arg) {
+                'none' { $val = 0 }
+                'midi_in' { $val = 1 }
+                'aux_in' { $val = 2 }
+                'vban_in' { $val = 4 }
+                'all_in' { $val = 7 }
+                'midi_out' { $val = 8 }
+                default { Write-Warning ("route got: $arg, expected one of 'none', 'midi_in', 'aux_in', 'vban_in', 'all_in', 'midi_out'") }
+            }
+            $this._route = $this.Setter('route', $val)
+        }
+    )
+}
+
+class VbanOutVideo : VbanVideo {
+    VbanOutVideo ([int]$index, [Object]$remote) : base ($index, $remote, 'out') {
+        AddIntMembers -PARAMS @('vfps', 'vquality')
+        AddIntMembers -WriteOnly -PARAMS @('route')
+        AddBoolMembers -PARAMS @('vcursor')
+    }
+
+    hidden $_vformat = $($this | Add-Member ScriptProperty 'vformat' `
+        {
+            [string]$val = ''
+            switch ($this.Getter('vformat')) {
+                1 { $val = 'png' }
+                2 { $val = 'jpg' }
+            }
+            return $val
+        } `
+        {
+            param([string]$arg)
+            [int]$val = 0
+            switch ($arg) {
+                'png' { $val = 1 }
+                'jpg' { $val = 2 }
+                default { Write-Warning ("vformat got: $arg, expected one of 'png', 'jpg'") }
+            }
+            $this._vformat = $this.Setter('vformat', $val)
+        }
+    )
 }
 
 function Make_Vban ([Object]$remote) {
@@ -220,7 +182,7 @@ function Make_Vban ([Object]$remote) {
     [System.Collections.ArrayList]$outstream = @()
 
     $totalInstreams = $remote.kind.vban.in + $remote.kind.vban.midi + $remote.kind.vban.text
-    $totalOutstreams = $remote.kind.vban.out + $remote.kind.vban.midi
+    $totalOutstreams = $remote.kind.vban.out + $remote.kind.vban.midi + $remote.kind.vban.video
 
     for ($i = 0; $i -lt $totalInstreams; $i++) {
         if ($i -lt $remote.kind.vban.in) {
@@ -237,8 +199,11 @@ function Make_Vban ([Object]$remote) {
         if ($i -lt $remote.kind.vban.out) {
             [void]$outstream.Add([VbanOutAudio]::new($i, $remote))
         }
-        else {
+        elseif ($i -lt ($remote.kind.vban.out + $remote.kind.vban.midi)) {
             [void]$outstream.Add([VbanOutMidi]::new($i, $remote))
+        }
+        else {
+            [void]$outstream.Add([VbanOutVideo]::new($i, $remote))
         }
     }
 

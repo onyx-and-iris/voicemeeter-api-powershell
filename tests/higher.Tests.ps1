@@ -150,10 +150,10 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.vban.enable | Should -Be $expected
             }
         
-            Context 'Instream' -ForEach @(
+            Context 'Instream, audio, midi, text' -ForEach @(
                 @{ Index = $vban_inA }
-                # @{ Index = $vban_inM }
-                # @{ Index = $vban_inT }
+                @{ Index = $vban_inM }
+                @{ Index = $vban_inT }
             ) {
                 It "Should set vban.instream[$index].on" {
                     $vmr.vban.instream[$index].on = $value
@@ -161,13 +161,23 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 }
             }
 
-            Context 'Outstream' -ForEach @(
+            Context 'Outstream, audio, midi, video' -ForEach @(
                 @{ Index = $vban_outA }
-                # @{ Index = $vban_outM }
+                @{ Index = $vban_outM }
+                @{ Index = $vban_outV }
             ) {
                 It "Should set vban.outstream[$index].on" {
                     $vmr.vban.outstream[$index].on = $value
                     $vmr.vban.outstream[$index].on | Should -Be $expected
+                }
+            }
+
+            Context 'Outstream, video only' -ForEach @(
+                @{ Index = $vban_outV }
+            ) {
+                It "Should set vban.outstream[$index].vcursor" {
+                    $vmr.vban.outstream[$index].vcursor = $value
+                    $vmr.vban.outstream[$index].vcursor | Should -Be $expected
                 }
             }
         }
@@ -465,19 +475,33 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             Context 'EQ' -Skip:$ifBasic -ForEach @(
                 @{ Eq = $vmr.bus[$index].eq }
             ) {
-                It "Should set Bus[$index].EQ.Channel[$bus_ch].Cell[$cells].F" {
-                    $eq.channel[$bus_ch].cell[$cells].f = $msHz
-                    $eq.channel[$bus_ch].cell[$cells].f | Should -Be $msHz
-                }
+                Context "Channel[$bus_ch]" {
+                    It "Should set Bus[$index].EQ.Channel[$bus_ch].Trim" {
+                        $eq.channel[$bus_ch].trim = $slide
+                        $eq.channel[$bus_ch].trim | Should -Be $slide
+                    }
 
-                It "Should set Bus[$index].EQ.Channel[$bus_ch].Cell[$cells].Gain" {
-                    $eq.channel[$bus_ch].cell[$cells].gain = $slide
-                    $eq.channel[$bus_ch].cell[$cells].gain | Should -Be $slide
-                }
+                    It "Should set Bus[$index].EQ.Channel[$bus_ch].Delay" {
+                        $eq.channel[$bus_ch].delay = $msHz
+                        $eq.channel[$bus_ch].delay | Should -Be $msHz
+                    }
+                    
+                    Context "Cell[$cells]" {
+                        It "Should set Bus[$index].EQ.Channel[$bus_ch].Cell[$cells].F" {
+                            $eq.channel[$bus_ch].cell[$cells].f = $msHz
+                            $eq.channel[$bus_ch].cell[$cells].f | Should -Be $msHz
+                        }
 
-                It "Should set Bus[$index].EQ.Channel[$bus_ch].Cell[$cells].Q" {
-                    $eq.channel[$bus_ch].cell[$cells].q = $knob
-                    $eq.channel[$bus_ch].cell[$cells].q | Should -Be $knob
+                        It "Should set Bus[$index].EQ.Channel[$bus_ch].Cell[$cells].Gain" {
+                            $eq.channel[$bus_ch].cell[$cells].gain = $slide
+                            $eq.channel[$bus_ch].cell[$cells].gain | Should -Be $slide
+                        }
+
+                        It "Should set Bus[$index].EQ.Channel[$bus_ch].Cell[$cells].Q" {
+                            $eq.channel[$bus_ch].cell[$cells].q = $knob
+                            $eq.channel[$bus_ch].cell[$cells].q | Should -Be $knob
+                        }
+                    }
                 }
             }
         }
@@ -582,8 +606,10 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 $vmr.vban.port | Should -Be $expected
             }
             
-            Context 'Instream' -ForEach @(
+            Context 'Instream, audio, midi, text' -ForEach @(
                 @{ Index = $vban_inA }
+                @{ Index = $vban_inM }
+                @{ Index = $vban_inT }
             ) {
                 It "Should set vban.instream[$index].port" -ForEach @(
                     @{ Value = 1024; Expected = 1024 }
@@ -594,16 +620,21 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                     Start-Sleep -Milliseconds 2000
                     $vmr.vban.instream[$index].port | Should -Be $expected
                 }
+            }
 
-                It "Should set vban.instream[$index].sr" {
+            Context 'Instream, audio only' -ForEach @(
+                @{ Index = $vban_inA }
+            ) {
+
+                It "Should get vban.instream[$index].sr" {
                     $vmr.vban.instream[$index].sr | Should -BeOfType [int]
                 }
 
-                It "Should set vban.instream[$index].channel" {
+                It "Should get vban.instream[$index].channel" {
                     $vmr.vban.instream[$index].channel | Should -BeOfType [int]
                 }
 
-                It "Should set vban.instream[$index].bit" {
+                It "Should get vban.instream[$index].bit" {
                     $vmr.vban.instream[$index].bit | Should -BeOfType [int]
                 }
 
@@ -625,8 +656,10 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 }
             }
             
-            Context 'Outstream' -ForEach @(
+            Context 'Outstream, audio, midi, video' -ForEach @(
                 @{ Index = $vban_outA }
+                @{ Index = $vban_outM }
+                @{ Index = $vban_outV }
             ) {
                 It "Should set vban.outstream[$index].port" -ForEach @(
                     @{ Value = 1024; Expected = 1024 }
@@ -637,6 +670,11 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                     Start-Sleep -Milliseconds 2000
                     $vmr.vban.outstream[$index].port | Should -Be $expected
                 }
+            }
+
+            Context 'Outstream, audio only' -ForEach @(
+                @{ Index = $vban_outA }
+            ) {
                 
                 It "Should set vban.outstream[$index].sr" -ForEach @(
                     @{ Value = 44100; Expected = 44100 }
@@ -678,6 +716,34 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                     $vmr.vban.outstream[$index].route = $value
                     $vmr.vban.outstream[$index].route | Should -Be $expected
                 }
+            }
+
+            Context 'Outstream, video only' -ForEach @(
+                @{ Index = $vban_outV }
+            ) {
+                It "Should set vban.outstream[$index].vfps" -ForEach @(
+                    @{ Value = 6; Expected = 6 }
+                    @{ Value = 24; Expected = 24 }
+                ) {
+                    $vmr.vban.outstream[$index].vfps = $value
+                    $vmr.vban.outstream[$index].vfps | Should -Be $expected
+                }
+
+                It "Should set vban.outstream[$index].vquality" -ForEach @(
+                    @{ Value = 80; Expected = 80 }
+                    @{ Value = 100; Expected = 100 }
+                ) {
+                    $vmr.vban.outstream[$index].vquality = $value
+                    $vmr.vban.outstream[$index].vquality | Should -Be $expected
+                }
+
+                <# It "Should set vban.outstream[$index].route" -ForEach @(
+                    @{ Value = 1; Expected = 1 }
+                    @{ Value = 4; Expected = 4 }
+                ) {
+                    $vmr.vban.outstream[$index].route = $value
+                    $vmr.vban.outstream[$index].route | Should -Be $expected
+                } #>
             }
         }
         
@@ -966,10 +1032,10 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
         }
 
         Describe 'Vban' {
-            Context 'Instream' -ForEach @(
+            Context 'Instream, audio, midi, text' -ForEach @(
                 @{ Index = $vban_inA }
-                # @{ Index = $vban_inM }
-                # @{ Index = $vban_inT }
+                @{ Index = $vban_inM }
+                @{ Index = $vban_inT }
             ) {
                 It "Should set vban.instream[$index].name" -ForEach @(
                     @{ Value = 'TestIn0'; Expected = 'TestIn0' }
@@ -987,9 +1053,10 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 }
             }
 
-            Context 'Outstream' -ForEach @(
+            Context 'Outstream, audio, midi, video' -ForEach @(
                 @{ Index = $vban_outA }
-                # @{ Index = $vban_outM }
+                @{ Index = $vban_outM }
+                @{ Index = $vban_outV }
             ) {
                 It "Should set vban.outstream[$index].name" -ForEach @(
                     @{ Value = 'TestOut0'; Expected = 'TestOut0' }
@@ -1006,6 +1073,31 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                     $vmr.vban.outstream[$index].ip | Should -Be $expected
                 }       
             }
+
+            Context 'Outstream, midi only' -ForEach @(
+                @{ Index = $vban_outM }
+            ) {
+                It "Should set vban.outstream[$index].route" -ForEach @(
+                    @{ Value = 'aux_in'; Expected = 'aux_in' }
+                    @{ Value = 'all_in'; Expected = 'all_in' }
+                    @{ Value = 'midi_out'; Expected = 'midi_out' }
+                ) {
+                    $vmr.vban.outstream[$index].route = $value
+                    $vmr.vban.outstream[$index].route | Should -Be $expected
+                }
+            }
+
+            Context 'Outstream, video only' -ForEach @(
+                @{ Index = $vban_outV }
+            ) {
+                It "Should set vban.outstream[$index].vformat" -ForEach @(
+                    @{ Value = 'png'; Expected = 'png' }
+                    @{ Value = 'jpg'; Expected = 'jpg' }
+                ) {
+                    $vmr.vban.outstream[$index].vformat = $value
+                    $vmr.vban.outstream[$index].vformat | Should -Be $expected
+                }
+            }
         }
 
         Context 'Recorder' -Skip:$ifBasic {
@@ -1016,13 +1108,19 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                     $vmr.recorder.prefix = $prefix
                     $vmr.recorder.filetype = $filetype
 
+                    $start = Get-Date
                     $vmr.recorder.state = 'record'
-                    Start-Sleep -Milliseconds 10
-                    $stamp = '{0:yyyy-MM-dd} at {0:HH}h{0:mm}m{0:ss}s' -f (Get-Date)
                     $vmr.recorder.state | Should -Be 'record'
                     Start-Sleep -Milliseconds 2000
 
-                    $tmp = [System.IO.Path]::Combine($recDir, ("{0} {1}.{2}" -f $prefix, $stamp, $filetype))
+                    $tmp = Get-ChildItem -Path $recDir -Filter ("{0}*.{1}" -f $prefix, $filetype) -ErrorAction SilentlyContinue |
+                    Where-Object { $_.LastWriteTime -gt $start } |
+                    Sort-Object LastWriteTime -Descending |
+                    Select-Object -First 1
+                    
+                    if (-not $tmp) {
+                        throw "'$filetype' file with prefix '$prefix' was not found in '$recDir'."
+                    }
 
                     $vmr.recorder.state = 'stop'
                     $vmr.recorder.eject()
@@ -1110,12 +1208,18 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 }
 
                 BeforeEach {
+                    $start = Get-Date
                     $vmr.recorder.record()
-                    Start-Sleep -Milliseconds 10
-                    $stamp = '{0:yyyy-MM-dd} at {0:HH}h{0:mm}m{0:ss}s' -f (Get-Date)
                     Start-Sleep -Milliseconds 2000
 
-                    $tmp = [System.IO.Path]::Combine($recDir, ("{0} {1}.{2}" -f $prefix, $stamp, $filetype))
+                    $tmp = Get-ChildItem -Path $recDir -Filter ("{0}*.{1}" -f $prefix, $filetype) -ErrorAction SilentlyContinue |
+                    Where-Object { $_.LastWriteTime -gt $start } |
+                    Sort-Object LastWriteTime -Descending |
+                    Select-Object -First 1
+
+                    if (-not $tmp) {
+                        throw "'$filetype' file with prefix '$prefix' was not found in '$recDir'."
+                    }
 
                     $vmr.recorder.pause()
                     Start-Sleep -Milliseconds 500
