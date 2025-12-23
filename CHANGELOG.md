@@ -9,6 +9,9 @@ Before any major/minor/patch is released all unit tests will be run to verify th
 
 ## [Unreleased] These changes have not been added to PSGallery yet
 
+
+## [4.1.0] - 2025-12-23
+
 ### Added
 
 - Bus.EQ.Channel.Trim
