@@ -64,30 +64,30 @@ class IOEq : IRemote {
 
 class EqChannel : IRemote {
     [System.Collections.ArrayList]$cell
-    [string]$eqId
+    [Object]$eq
     
     EqChannel ([int]$index, [Object]$eq) : base ($index, $eq.remote) {
-        $this.eqId = $eq.identifier()
+        $this.eq = $eq
 
         if ($eq.kindOfEq -eq 'Bus') { AddFloatMembers -PARAMS @('trim', 'delay') }
 
         $this.cell = @()
         $cellCount = $this.remote.kind.cells
         for ($c = 0; $c -lt $cellCount; $c++) {
-            $this.cell.Add([EqCell]::new($c, $this.remote, $this.identifier()))
+            $this.cell.Add([EqCell]::new($c, $this))
         }
     }
 
     [string] identifier () {
-        return '{0}.Channel[{1}]' -f $this.eqId, $this.index
+        return '{0}.Channel[{1}]' -f $this.eq.identifier(), $this.index
     }
 }
 
 class EqCell : IRemote {
-    [string]$channelId
+    [Object]$channel
     
-    EqCell ([int]$index, [Object]$remote, [string]$channelId) : base ($index, $remote) {
-        $this.channelId = $channelId
+    EqCell ([int]$index, [Object]$channel) : base ($index, $channel.remote) {
+        $this.channel = $channel
 
         AddBoolMembers -PARAMS @('on')
         AddIntMembers -PARAMS @('type')
@@ -95,7 +95,7 @@ class EqCell : IRemote {
     }
 
     [string] identifier () {
-        return '{0}.Cell[{1}]' -f $this.channelId, $this.index
+        return '{0}.Cell[{1}]' -f $this.channel.identifier(), $this.index
     }
 }
 
