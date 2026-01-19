@@ -37,7 +37,7 @@ class BusRotator {
         return $this.Buses[$this.CurrentIndex]
     }
 
-    [object] MuteNextBus() {
+    [object] UnmuteNextBus() {
         $nextBus = $this.GetNextBus()
         $nextBus.mute = $false
         return $nextBus
@@ -62,7 +62,7 @@ try {
 
     $rotator = [BusRotator]::new($vmr, $busesToRotate)
     while ((Read-Host "Press Enter to rotate buses or type 'Q' to quit.") -ne 'Q') {
-        $nextBus = $rotator.MuteNextBus()
+        $nextBus = $rotator.UnmuteNextBus()
         Write-Host "Bus $nextBus is now unmuted."
     }
 }
