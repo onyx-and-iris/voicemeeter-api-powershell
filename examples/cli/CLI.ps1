@@ -96,9 +96,9 @@ function Start-VoicemeeterCLI {
     )
 
     Write-Host "Connected to Voicemeeter. Type 'Q' to quit." -ForegroundColor Green
-    while (($input = Read-Host "command") -ne 'Q') {
+    while (($CommandFromInput = Read-Host 'command') -ne 'Q') {
         try {
-            Invoke-VoicemeeterCLICommand -vmr $vmr -Command $input
+            Invoke-VoicemeeterCLICommand -vmr $vmr -Command $CommandFromInput
         }
         catch {
             Write-Host "Error: $_" -ForegroundColor Red
