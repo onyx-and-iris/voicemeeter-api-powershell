@@ -32,7 +32,7 @@ if ($help -or ($script.Count -eq 0 -and -not $interactive)) {
     Write-Host ''
     Write-Host 'Options:'
     Write-Host '  -interactive        Start in interactive mode.'
-    Write-Host '  -kind <type>       Specify the Voicemeeter type (banana or potato). Default is banana.'
+    Write-Host '  -kind <type>       Specify the Voicemeeter type (basic, banana or potato). Default is banana.'
     Write-Host '  -script <commands> Provide a list of commands to execute in sequence.'
     Write-Host ''
     Write-Host 'Commands can be of the form:'
