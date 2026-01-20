@@ -4,7 +4,7 @@ A basic command-line interface
 
 ## Use
 
-```
+```console
 Voicemeeter CLI
 
 Usage:
