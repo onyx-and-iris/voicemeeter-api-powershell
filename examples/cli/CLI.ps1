@@ -95,8 +95,8 @@ function Start-VoicemeeterCLI {
         [object]$vmr
     )
 
-    Write-Host "Voicemeeter CLI Interactive Mode. Type 'exit' to quit."
-    while (($input = Read-Host "Press Enter to rotate buses or type 'Q' to quit.") -ne 'Q') {
+    Write-Host "Connected to Voicemeeter. Type 'Q' to quit." -ForegroundColor Green
+    while (($input = Read-Host "command") -ne 'Q') {
         try {
             Invoke-VoicemeeterCLICommand -vmr $vmr -Command $input
         }
