@@ -12,10 +12,11 @@ param()
 
 Import-Module ..\..\lib\Voicemeeter.psm1
 
-<#  
-    A class that accepts a list of Voicemeeter buses and unmutes them one at a time in a round-robin fashion
-#>
 class BusRotator {
+    <#
+    .SYNOPSIS
+        Class to manage rotating through Voicemeeter buses.
+    #>
     [object]$vmr = $null
     [int]$CurrentIndex = -1
     [object[]]$Buses
