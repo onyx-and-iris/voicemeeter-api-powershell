@@ -11,14 +11,15 @@ Usage:
   CLI.ps1 [-interactive] [-kind <basic|banana|potato>] [-script <command1>, <command2>, ...]
 
 Options:
+  -help               Display this help message.
   -interactive        Start in interactive mode.
-  -kind <type>       Specify the Voicemeeter type (basic, banana or potato). Default is banana.
-  -script <commands> Provide a list of commands to execute in sequence.
+  -kind <type>        Specify the Voicemeeter type (basic, banana or potato). Default is banana.
+  -script <commands>  Provide a list of commands to execute in sequence.
 
 Commands can be of the form:
   Parameter=Value     Set a parameter to a specific value.
-  !Parameter         Toggle a boolean parameter.
-  Parameter          Get the current value of a parameter.
+  !Parameter          Toggle a boolean parameter.
+  Parameter           Get the current value of a parameter.
 ```
 
 for example:

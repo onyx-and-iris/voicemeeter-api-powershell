@@ -31,14 +31,15 @@ if ($help -or ($script.Count -eq 0 -and -not $interactive)) {
     Write-Host '  CLI.ps1 [-interactive] [-kind <basic|banana|potato>] [-script <command1>, <command2>, ...]'
     Write-Host ''
     Write-Host 'Options:'
+    Write-Host '  -help               Display this help message.'
     Write-Host '  -interactive        Start in interactive mode.'
-    Write-Host '  -kind <type>       Specify the Voicemeeter type (basic, banana or potato). Default is banana.'
-    Write-Host '  -script <commands> Provide a list of commands to execute in sequence.'
+    Write-Host '  -kind <type>        Specify the Voicemeeter type (basic, banana or potato). Default is banana.'
+    Write-Host '  -script <commands>  Provide a list of commands to execute in sequence.'
     Write-Host ''
     Write-Host 'Commands can be of the form:'
     Write-Host '  Parameter=Value     Set a parameter to a specific value.'
-    Write-Host '  !Parameter         Toggle a boolean parameter.'
-    Write-Host '  Parameter          Get the current value of a parameter.'
+    Write-Host '  !Parameter          Toggle a boolean parameter.'
+    Write-Host '  Parameter           Get the current value of a parameter.'
     exit 0
 }
 
