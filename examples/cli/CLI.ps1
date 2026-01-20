@@ -18,6 +18,7 @@
 param(
     [switch]$help,
     [switch]$interactive,
+    [ValidateSet('basic', 'banana', 'potato')]
     [String]$kind = 'banana',
     [String[]]$script = @()
 )
