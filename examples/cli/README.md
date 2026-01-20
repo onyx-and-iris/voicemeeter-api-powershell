@@ -12,7 +12,7 @@ Usage:
 
 Options:
   -interactive        Start in interactive mode.
-  -kind <type>       Specify the Voicemeeter type (banana or potato). Default is banana.
+  -kind <type>       Specify the Voicemeeter type (basic, banana or potato). Default is banana.
   -script <commands> Provide a list of commands to execute in sequence.
 
 Commands can be of the form:
