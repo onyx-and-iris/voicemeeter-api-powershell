@@ -12,6 +12,12 @@
     Specifies the type of Voicemeeter to connect to (banana or potato). Default is 'banana'.
 .PARAMETER script
     A list of commands to execute in sequence.
+.EXAMPLE
+    .\CLI.ps1 -interactive -kind banana
+    Starts the CLI in interactive mode for Voicemeeter Banana.
+.EXAMPLE
+    .\CLI.ps1 -script "Strip[0].Gain=3", "!Bus[1].Mute", "Bus[0].Gain"
+    Executes a series of commands: sets Strip 0 Gain to 3, toggles Bus 1 Mute, and retrieves Bus 0 Gain.
 #>
 
 [cmdletbinding()]
