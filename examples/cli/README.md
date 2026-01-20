@@ -1,34 +1,38 @@
 ## About
 
-A simple voicemeeter-cli script. Offers ability to toggle, get and set parameters.
+A basic command-line interface
 
 ## Use
 
-Toggle with `!` prefix, get by excluding `=` and set by including `=`. Mix and match arguments.
+```
+Voicemeeter CLI
 
-You may pass the following optional flags:
+Usage:
+  CLI.ps1 [-interactive] [-kind <basic|banana|potato>] [-script <command1>, <command2>, ...]
 
--   -o: (-output) to toggle console output.
--   -i: (-interactive) to toggle interactive mode.
--   -k: (-kind) to set the kind of Voicemeeter. Defaults to banana.
--   -s: (script) a string array, one string for each command.
+Options:
+  -interactive        Start in interactive mode.
+  -kind <type>       Specify the Voicemeeter type (banana or potato). Default is banana.
+  -script <commands> Provide a list of commands to execute in sequence.
+
+Commands can be of the form:
+  Parameter=Value     Set a parameter to a specific value.
+  !Parameter         Toggle a boolean parameter.
+  Parameter          Get the current value of a parameter.
+```
 
 for example:
 
 ```powershell
-.\CLI.ps1 -o -k "banana" -s "strip[0].mute", "!strip[0].mute", "strip[0].mute", "bus[2].eq.on=1", "command.lock=1"
+.\CLI.ps1 -script strip[0].mute, !strip[0].mute, strip[0].mute, bus[2].eq.on=1, command.lock=1
 ```
 
-Expected output:
+should produce the output:
 
-```powershell
-Getting strip[0].mute
-strip[0].mute = 0
-Toggling strip[0].mute
-Getting strip[0].mute
+```console
 strip[0].mute = 1
-Setting bus[2].eq.on=1
-Setting command.lock=1
+Toggled strip[0].mute to 0
+strip[0].mute = 0
+Set bus[2].eq.on=1
+Set command.lock=1
 ```
-
-If running in interactive mode press `<Enter>` to exit.
