@@ -226,3 +226,58 @@ function Get_Level {
     }
     [float]$ptr
 }
+
+function Device_Count {
+    param(
+        [bool]$IS_OUT = $false
+    )
+    if ($IS_OUT) {
+        $retval = [int][Voicemeeter.Remote]::VBVMR_Output_GetDeviceNumber()
+        if ($retval -lt 0) { 
+            throw [CAPIError]::new($retval, 'VBVMR_Output_GetDeviceNumber') 
+        }
+    }
+    else {
+        $retval = [int][Voicemeeter.Remote]::VBVMR_Input_GetDeviceNumber()
+        if ($retval -lt 0) { 
+            throw [CAPIError]::new($retval, 'VBVMR_Input_GetDeviceNumber') 
+        }
+    }
+    $retval
+}
+
+function Device_Desc {
+    param(
+        [int]$INDEX, [bool]$IS_OUT = $false
+    )
+    $driver = 0
+    $name = [System.Byte[]]::new(512)
+    $hardwareid = [System.Byte[]]::new(512)
+
+    if ($IS_OUT) {
+        $retval = [int][Voicemeeter.Remote]::VBVMR_Output_GetDeviceDescA($INDEX, [ref]$driver, $name, $hardwareid)
+        if ($retval -notin @(0)) { 
+            throw [CAPIError]::new($retval, 'VBVMR_Output_GetDeviceDescA') 
+        }
+    }
+    else {
+        $retval = [int][Voicemeeter.Remote]::VBVMR_Input_GetDeviceDescA($INDEX, [ref]$driver, $name, $hardwareid)
+        if ($retval -notin @(0)) { 
+            throw [CAPIError]::new($retval, 'VBVMR_Input_GetDeviceDescA') 
+        }
+    }
+
+    $drivers = @{
+        1 = 'MME'
+        3 = 'WDM'
+        4 = 'KS'
+        5 = 'ASIO'
+    }
+
+    [PSCustomObject]@{
+        Driver     = $drivers[$driver]
+        Name       = [System.Text.Encoding]::ASCII.GetString($name).Trim([char]0)
+        HardwareID = [System.Text.Encoding]::ASCII.GetString($hardwareid).Trim([char]0)
+        IsOutput   = $IS_OUT
+    }
+}

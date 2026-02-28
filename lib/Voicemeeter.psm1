@@ -75,6 +75,22 @@ class Remote {
     [void] PDirty() { P_Dirty }
 
     [void] MDirty() { M_Dirty }
+
+    [int] GetOutputCount() {
+        return Device_Count -IS_OUT $true
+    }
+
+    [int] GetInputCount() {
+        return Device_Count
+    }
+
+    [PSObject] GetOutputDevice([int]$index) {
+        return Device_Desc -INDEX $index -IS_OUT $true
+    }
+
+    [PSObject] GetInputDevice([int]$index) {
+        return Device_Desc -INDEX $index
+    }
 }
 
 class RemoteBasic : Remote {
