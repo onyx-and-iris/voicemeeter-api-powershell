@@ -97,7 +97,7 @@ class VirtualBus : Bus {
 }
 
 class BusDevice : IODevice {
-    BusDevice ([int]$index, [Object]$remote) : base ($index, $remote) {
+    BusDevice ([int]$index, [Object]$remote) : base ($index, $remote, 'Output') {
         if ($this.index -eq 0) {
             AddStringMembers -PARAMS @('asio') -WriteOnly
         }

@@ -983,24 +983,16 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             @{ Index = $phys_out }
         ) {
             Context 'Device' -ForEach @(
-                @{ Value = 'testOutput' }, @{ Value = '' }
+                @{ Driver = 'mme'; Value = 'testMme'; Expected = 'mme' }
+                @{ Driver = 'wdm'; Value = 'testWdm'; Expected = 'wdm' }
+                @{ Driver = 'ks'; Value = 'testKs'; Expected = 'ks' }
+                @{ Driver = 'mme'; Value = ''; Expected = 'none' }
             ) {
-                It "Should set Bus[$index].Device.wdm" {
-                    $vmr.bus[$index].device.wdm = $value
+                It "Should set Bus[$index].Device.$($driver)" {
+                    $vmr.bus[$index].device.$($driver) = $value
                     Start-Sleep -Milliseconds 800
                     $vmr.bus[$index].device.name | Should -Be $value
-                }
-
-                It "Should set Bus[$index].Device.ks" {
-                    $vmr.bus[$index].device.ks = $value
-                    Start-Sleep -Milliseconds 800
-                    $vmr.bus[$index].device.name | Should -Be $value
-                }
-            
-                It "Should set Bus[$index].Device.mme" {
-                    $vmr.bus[$index].device.mme = $value
-                    Start-Sleep -Milliseconds 800
-                    $vmr.bus[$index].device.name | Should -Be $value
+                    $vmr.bus[$index].device.driver | Should -Be $expected
                 }
             }
         }
@@ -1009,24 +1001,16 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             @{ Index = $virt_out }
         ) {
             Context 'Device' -Skip:$ifNotBasic -ForEach @(
-                @{ Value = 'testOutput' }, @{ Value = '' }
+                @{ Driver = 'mme'; Value = 'testMme'; Expected = 'mme' }
+                @{ Driver = 'wdm'; Value = 'testWdm'; Expected = 'wdm' }
+                @{ Driver = 'ks'; Value = 'testKs'; Expected = 'ks' }
+                @{ Driver = 'mme'; Value = ''; Expected = 'none' }
             ) {
-                It "Should set Bus[$index].Device.wdm" {
-                    $vmr.bus[$index].device.wdm = $value
+                It "Should set Bus[$index].Device.$($driver)" {
+                    $vmr.bus[$index].device.$($driver) = $value
                     Start-Sleep -Milliseconds 800
                     $vmr.bus[$index].device.name | Should -Be $value
-                }
-
-                It "Should set Bus[$index].Device.ks" {
-                    $vmr.bus[$index].device.ks = $value
-                    Start-Sleep -Milliseconds 800
-                    $vmr.bus[$index].device.name | Should -Be $value
-                }
-
-                It "Should set Bus[$index].Device.mme" {
-                    $vmr.bus[$index].device.mme = $value
-                    Start-Sleep -Milliseconds 800
-                    $vmr.bus[$index].device.name | Should -Be $value
+                    $vmr.bus[$index].device.driver | Should -Be $expected
                 }
             }
         }

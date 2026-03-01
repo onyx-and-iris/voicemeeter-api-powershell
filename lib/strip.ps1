@@ -155,7 +155,7 @@ class StripEq : IOEq {
 }
 
 class StripDevice : IODevice {
-    StripDevice ([int]$index, [Object]$remote) : base ($index, $remote) {
+    StripDevice ([int]$index, [Object]$remote) : base ($index, $remote, 'Input') {
     }
 
     [string] identifier () {

@@ -100,9 +100,57 @@ class EqCell : IRemote {
 }
 
 class IODevice : IRemote {
-    IODevice ([int]$index, [Object]$remote) : base ($index, $remote) {
+    [string]$kindOfDevice
+    
+    IODevice ([int]$index, [Object]$remote, [string]$kindOfDevice) : base ($index, $remote) {
+        $this.kindOfDevice = $kindOfDevice
+        
         AddStringMembers -WriteOnly -PARAMS @('wdm', 'ks', 'mme')
         AddStringMembers -ReadOnly -PARAMS @('name')
         AddIntMembers -ReadOnly -PARAMS @('sr')
     }
+
+    hidden $_driver = $($this | Add-Member ScriptProperty 'driver' `
+        {
+            $path = $this.remote.workingconfig
+            $oldTime = if (Test-Path $path) { (Get-Item $path).LastWriteTime } else { [DateTime]::MinValue }
+
+            $this.remote.Setter('Command.Save', $path)
+
+            $timeout = New-TimeSpan -Seconds 2
+            $sw = [Diagnostics.Stopwatch]::StartNew()
+            $line = $null
+            do {
+                if (Test-Path $path) {
+                    $newTime = (Get-Item $path).LastWriteTime
+                    if ($newTime -gt $oldTime) {
+                        try {
+                            $line = Get-Content $path | Select-String -Pattern "<$($this.kindOfDevice)Dev index='$($this.index + 1)'"
+                            if ($line) { break }
+                        }
+                        catch {}
+                    }
+                }
+                Start-Sleep -Milliseconds 20
+            } while ($sw.elapsed -lt $timeout)
+            
+            if (-not $line) { return 'unknown' }
+
+            $type = $null
+            if ($line.ToString() -match "type='(?<type>\d+)'") {
+                $type = $matches['type']
+            }
+
+            switch ($type) {
+                '1' { return 'mme' }
+                '4' { return 'wdm' }
+                '8' { return 'ks' }
+                '256' { return 'asio' }
+                default { return 'none' }
+            }
+        } `
+        {
+            Write-Warning ("ERROR: $($this.identifier()).driver is read only")
+        }
+    )
 }
