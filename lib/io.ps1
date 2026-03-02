@@ -125,7 +125,7 @@ class IODevice : IRemote {
                     $newTime = (Get-Item $path).LastWriteTime
                     if ($newTime -gt $oldTime) {
                         try {
-                            $line = Get-Content $path | Select-String -Pattern "<$($this.kindOfDevice)Dev index='$($this.index + 1)'"
+                            $line = Get-Content $path | Select-String -Pattern "<$($this.kindOfDevice)Dev index='$($this.index + 1)'" -List
                             if ($line) { break }
                         }
                         catch {}
