@@ -101,6 +101,7 @@ class EqCell : IRemote {
 
 class IODevice : IRemote {
     [string]$kindOfDevice
+    [Hashtable]$drivers
     
     IODevice ([int]$index, [Object]$remote, [string]$kindOfDevice) : base ($index, $remote) {
         $this.kindOfDevice = $kindOfDevice
@@ -108,6 +109,13 @@ class IODevice : IRemote {
         AddStringMembers -WriteOnly -PARAMS @('wdm', 'ks', 'mme')
         AddStringMembers -ReadOnly -PARAMS @('name')
         AddIntMembers -ReadOnly -PARAMS @('sr')
+
+        $this.drivers = @{
+            '1'   = 'mme'
+            '4'   = 'wdm'
+            '8'   = 'ks'
+            '256' = 'asio'
+        }
     }
 
     hidden $_driver = $($this | Add-Member ScriptProperty 'driver' `
@@ -141,13 +149,9 @@ class IODevice : IRemote {
                 $type = $matches['type']
             }
 
-            switch ($type) {
-                '1' { return 'mme' }
-                '4' { return 'wdm' }
-                '8' { return 'ks' }
-                '256' { return 'asio' }
-                default { return 'none' }
-            }
+            if ($null -eq $type) { return 'none' }
+            if ($type -notin $this.drivers.Keys) { return 'unknown' }
+            return $this.drivers[$type]
         } `
         {
             Write-Warning ("ERROR: $($this.identifier()).driver is read only")
