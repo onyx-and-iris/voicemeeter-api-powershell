@@ -268,10 +268,10 @@ function Device_Desc {
     }
 
     $drivers = @{
-        1 = 'MME'
-        3 = 'WDM'
-        4 = 'KS'
-        5 = 'ASIO'
+        1 = 'mme'
+        3 = 'wdm'
+        4 = 'ks'
+        5 = 'asio'
     }
 
     [PSCustomObject]@{
