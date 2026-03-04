@@ -106,6 +106,14 @@ class BusDevice : IODevice {
     [string] identifier () {
         return 'Bus[' + $this.index + '].Device'
     }
+
+    [int] EnumCount () {
+        return $this.remote.GetOutputCount()
+    }
+
+    [PSObject] EnumDevice ([int]$eIndex) {
+        return $this.remote.GetOutputDevice($eIndex)
+    }
 }
 
 function Make_Buses ([Object]$remote) {

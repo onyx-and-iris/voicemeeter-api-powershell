@@ -850,24 +850,47 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
             @{ Index = $phys_in }
         ) {
             Context 'Device' -ForEach @(
-                @{ Value = 'testInput' }, @{ Value = '' }
+                @{ Driver = 'mme'; Value = 'testMme'; Expected = 'mme' }
+                @{ Driver = 'wdm'; Value = 'testWdm'; Expected = 'wdm' }
+                @{ Driver = 'ks'; Value = 'testKs'; Expected = 'ks' }
+                @{ Driver = 'mme'; Value = ''; Expected = '' }
             ) {
-                It "Should set Strip[$index].Device.wdm" {
-                    $vmr.strip[$index].device.wdm = $value
+                BeforeEach {
+                    $vmr.strip[$index].device.Clear()
+                    Start-Sleep -Milliseconds 800
+                }
+                
+                It "Should set Strip[$index].Device.$($driver)" {
+                    $vmr.strip[$index].device.name | Should -Be ''
+                    $vmr.strip[$index].device.driver | Should -Be ''
+                    
+                    $vmr.strip[$index].device.$($driver) = $value
                     Start-Sleep -Milliseconds 800
                     $vmr.strip[$index].device.name | Should -Be $value
+                    $vmr.strip[$index].device.driver | Should -Be $expected
                 }
 
-                It "Should set Strip[$index].Device.ks" {
-                    $vmr.strip[$index].device.ks = $value
+                It "Should set Strip[$index].Device" -ForEach @(
+                    @{
+                        Clear  = [PSCustomObject]@{ Driver = ''; Name = ''; HardwareId = ''; IsOutput = $false }
+                        Device = [PSCustomObject]@{ Driver = $expected; Name = $value; HardwareId = ''; IsOutput = $false }
+                    }
+                ) {
+                    $initial = $vmr.strip[$index].device.Get()
+                    
+                    $initial.Driver | Should -Be $clear.Driver
+                    $initial.Name | Should -Be $clear.Name
+                    $initial.HardwareId | Should -Be $clear.HardwareId
+                    $initial.IsOutput | Should -Be $clear.IsOutput
+                    
+                    $vmr.strip[$index].device.Set($device)
                     Start-Sleep -Milliseconds 800
-                    $vmr.strip[$index].device.name | Should -Be $value
-                }
-            
-                It "Should set Strip[$index].Device.mme" {
-                    $vmr.strip[$index].device.mme = $value
-                    Start-Sleep -Milliseconds 800
-                    $vmr.strip[$index].device.name | Should -Be $value
+                    $result = $vmr.strip[$index].device.Get()
+                    
+                    $result.Driver | Should -Be $device.Driver
+                    $result.Name | Should -Be $device.Name
+                    $result.HardwareId | Should -Be $device.HardwareId
+                    $result.IsOutput | Should -Be $device.IsOutput
                 }
             }
 
@@ -986,13 +1009,44 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 @{ Driver = 'mme'; Value = 'testMme'; Expected = 'mme' }
                 @{ Driver = 'wdm'; Value = 'testWdm'; Expected = 'wdm' }
                 @{ Driver = 'ks'; Value = 'testKs'; Expected = 'ks' }
-                @{ Driver = 'mme'; Value = ''; Expected = 'none' }
+                @{ Driver = 'mme'; Value = ''; Expected = '' }
             ) {
+                BeforeEach {
+                    $vmr.bus[$index].device.Clear()
+                    Start-Sleep -Milliseconds 800
+                }
+                
                 It "Should set Bus[$index].Device.$($driver)" {
+                    $vmr.bus[$index].device.name | Should -Be ''
+                    $vmr.bus[$index].device.driver | Should -Be ''
+                    
                     $vmr.bus[$index].device.$($driver) = $value
                     Start-Sleep -Milliseconds 800
                     $vmr.bus[$index].device.name | Should -Be $value
                     $vmr.bus[$index].device.driver | Should -Be $expected
+                }
+
+                It "Should set Bus[$index].Device" -ForEach @(
+                    @{
+                        Clear  = [PSCustomObject]@{ Driver = ''; Name = ''; HardwareId = ''; IsOutput = $true }
+                        Device = [PSCustomObject]@{ Driver = $expected; Name = $value; HardwareId = ''; IsOutput = $true }
+                    }
+                ) {
+                    $initial = $vmr.bus[$index].device.Get()
+                    
+                    $initial.Driver | Should -Be $clear.Driver
+                    $initial.Name | Should -Be $clear.Name
+                    $initial.HardwareId | Should -Be $clear.HardwareId
+                    $initial.IsOutput | Should -Be $clear.IsOutput
+                    
+                    $vmr.bus[$index].device.Set($device)
+                    Start-Sleep -Milliseconds 800
+                    $result = $vmr.bus[$index].device.Get()
+                    
+                    $result.Driver | Should -Be $device.Driver
+                    $result.Name | Should -Be $device.Name
+                    $result.HardwareId | Should -Be $device.HardwareId
+                    $result.IsOutput | Should -Be $device.IsOutput
                 }
             }
         }
@@ -1004,13 +1058,44 @@ Describe -Tag 'higher', -TestName 'All Higher Tests' {
                 @{ Driver = 'mme'; Value = 'testMme'; Expected = 'mme' }
                 @{ Driver = 'wdm'; Value = 'testWdm'; Expected = 'wdm' }
                 @{ Driver = 'ks'; Value = 'testKs'; Expected = 'ks' }
-                @{ Driver = 'mme'; Value = ''; Expected = 'none' }
+                @{ Driver = 'mme'; Value = ''; Expected = '' }
             ) {
+                BeforeEach {
+                    $vmr.bus[$index].device.Clear()
+                    Start-Sleep -Milliseconds 800
+                }
+                
                 It "Should set Bus[$index].Device.$($driver)" {
+                    $vmr.bus[$index].device.name | Should -Be ''
+                    $vmr.bus[$index].device.driver | Should -Be ''
+                    
                     $vmr.bus[$index].device.$($driver) = $value
                     Start-Sleep -Milliseconds 800
                     $vmr.bus[$index].device.name | Should -Be $value
                     $vmr.bus[$index].device.driver | Should -Be $expected
+                }
+
+                It "Should set Bus[$index].Device" -ForEach @(
+                    @{
+                        Clear  = [PSCustomObject]@{ Driver = ''; Name = ''; HardwareId = ''; IsOutput = $true }
+                        Device = [PSCustomObject]@{ Driver = $expected; Name = $value; HardwareId = ''; IsOutput = $true }
+                    }
+                ) {
+                    $initial = $vmr.bus[$index].device.Get()
+                    
+                    $initial.Driver | Should -Be $clear.Driver
+                    $initial.Name | Should -Be $clear.Name
+                    $initial.HardwareId | Should -Be $clear.HardwareId
+                    $initial.IsOutput | Should -Be $clear.IsOutput
+                    
+                    $vmr.bus[$index].device.Set($device)
+                    Start-Sleep -Milliseconds 800
+                    $result = $vmr.bus[$index].device.Get()
+                    
+                    $result.Driver | Should -Be $device.Driver
+                    $result.Name | Should -Be $device.Name
+                    $result.HardwareId | Should -Be $device.HardwareId
+                    $result.IsOutput | Should -Be $device.IsOutput
                 }
             }
         }

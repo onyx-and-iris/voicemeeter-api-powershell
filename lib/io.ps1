@@ -118,30 +118,79 @@ class IODevice : IRemote {
         }
     }
 
+    [int] EnumCount () {
+        throw [System.NotImplementedException]::new("$($this.GetType().Name) must override EnumCount()")
+    }
+
+    [PSObject] EnumDevice ([int]$eIndex) {
+        throw [System.NotImplementedException]::new("$($this.GetType().Name) must override EnumDevice()")
+    }
+
+    [PSObject] Get () {
+        $device = [PSCustomObject]@{
+            Driver     = $this.driver
+            Name       = $this.name
+            HardwareId = ''
+            IsOutput   = $this.kindOfDevice -eq 'Output'
+        }
+        if (-not [string]::IsNullOrEmpty($device.Name)) {
+            for ($i = 0; $i -lt $this.EnumCount(); $i++) {
+                $eDevice = $this.EnumDevice($i)
+                if ($eDevice.Name -eq $device.Name -and $eDevice.Driver -eq $device.Driver) {
+                    $device = $eDevice
+                    break
+                }
+            }
+        }
+        return $device
+    }
+
+    [void] Set ([PSObject]$device) {
+        $v = $device.IsOutput -eq ($this.kindOfDevice -eq 'Output')
+        $d = $device.Driver
+        $n = $device.Name
+
+        if ($v -and $d -is [string] -and $n -is [string]) {
+            if ($d -eq '' -and $n -eq '') {
+                $this.Clear()
+                return
+            }
+            if ($d -in $this.drivers.Values) {
+                $this.Setter($d, $n)
+                return
+            }
+        }
+        Write-Warning "Invalid device object provided to Set method."
+    }
+
+    [void] Clear () {
+        $this.Setter('mme', '')
+    }
+
     hidden $_driver = $($this | Add-Member ScriptProperty 'driver' `
         {
             if ([string]::IsNullOrEmpty($this.name)) { return '' }
-
+            
             $type = $null
             try {
                 $tmp = [System.IO.Path]::Combine([System.IO.Path]::GetTempPath(), "vmrtmp-$(New-Guid).xml")
                 $this.remote.Setter('Command.Save', $tmp)
 
-            $timeout = New-TimeSpan -Seconds 2
-            $sw = [Diagnostics.Stopwatch]::StartNew()
-            $line = $null
-            do {
+                $timeout = New-TimeSpan -Seconds 2
+                $sw = [Diagnostics.Stopwatch]::StartNew()
+                $line = $null
+                do {
                     if (Test-Path $tmp) {
                         try {
                             $line = Get-Content $tmp | Select-String -Pattern "<$($this.kindOfDevice)Dev index='$($this.index + 1)'" -List
                             if ($line) { break }
                         }
                         catch {}
-                }
-                Start-Sleep -Milliseconds 20
-            } while ($sw.elapsed -lt $timeout)
-            if ($line -and $line.ToString() -match "type='(?<type>\d+)'") {
-                $type = $matches['type']
+                    }
+                    Start-Sleep -Milliseconds 20
+                } while ($sw.elapsed -lt $timeout)
+                if ($line -and $line.ToString() -match "type='(?<type>\d+)'") {
+                    $type = $matches['type']
                 }
             }
             finally {

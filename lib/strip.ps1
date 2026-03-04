@@ -161,6 +161,14 @@ class StripDevice : IODevice {
     [string] identifier () {
         return 'Strip[' + $this.index + '].Device'
     }
+
+    [int] EnumCount () {
+        return $this.remote.GetInputCount()
+    }
+
+    [PSObject] EnumDevice ([int]$eIndex) {
+        return $this.remote.GetInputDevice($eIndex)
+    }
 }
 
 class VirtualStrip : Strip {
