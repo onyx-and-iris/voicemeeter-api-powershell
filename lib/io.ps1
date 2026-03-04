@@ -120,6 +120,8 @@ class IODevice : IRemote {
 
     hidden $_driver = $($this | Add-Member ScriptProperty 'driver' `
         {
+            if ([string]::IsNullOrEmpty($this.name)) { return '' }
+
             $path = $this.remote.workingconfig
             $oldTime = if (Test-Path $path) { (Get-Item $path).LastWriteTime } else { [DateTime]::MinValue }
 
@@ -141,15 +143,12 @@ class IODevice : IRemote {
                 }
                 Start-Sleep -Milliseconds 20
             } while ($sw.elapsed -lt $timeout)
-            
-            if (-not $line) { return 'unknown' }
 
             $type = $null
-            if ($line.ToString() -match "type='(?<type>\d+)'") {
+            if ($line -and $line.ToString() -match "type='(?<type>\d+)'") {
                 $type = $matches['type']
             }
 
-            if ($null -eq $type) { return 'none' }
             if ($type -notin $this.drivers.Keys) { return 'unknown' }
             return $this.drivers[$type]
         } `
