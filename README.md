@@ -377,7 +377,7 @@ The following Strip.device | Bus.device properties are available:
 
 The following Strip.device | Bus.device methods are available:
 
-- Set($device) : PSObject, where device is a PSObject with properties Driver and Name
+- Set($device) : PSObject, where device is a PSObject with properties Driver, Name, and IsOutput
 - Get() : PSObject, returns a PSObject with properties Driver, Name, HardwareId, and IsOutput
 - Clear() : Clears the currently selected device
 
