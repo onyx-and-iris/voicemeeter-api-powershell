@@ -368,20 +368,32 @@ $vmr.bus[0].FadeBy(-10, 500)
 The following Strip.device | Bus.device properties are available:
 
 - name: string
+- driver: string
 - sr: int
 - wdm: string
 - ks: string
 - mme: string
 - asio: string
 
+The following Strip.device | Bus.device methods are available:
+
+- Set($device) : PSObject, where device is a PSObject with properties Driver and Name
+- Get() : PSObject, returns a PSObject with properties Driver, Name, HardwareId, and IsOutput
+- Clear() : Clears the currently selected device
+
 for example:
 
 ```powershell
 $vmr.strip[0].device.wdm = "Mic|Line|Instrument 1 (Audient EVO4)"
 $vmr.bus[0].device.name | Write-Host
+
+$device = $vmr.strip[3].device.Get()
+$vmr.strip[1].device.Set($device)    # moves the device selected for strip 4 to strip 2
+
+$vmr.bus[2].device.Clear()
 ```
 
-name, sr are defined as read only.
+name, driver, sr are defined as read only.
 wdm, ks, mme, asio are defined as write only.
 asio only defined for Bus[0].Device
 
@@ -792,6 +804,21 @@ Access to lower level polling functions are provided with these functions:
 
 - `$vmr.PDirty`: Returns true if a parameter has been updated.
 - `$vmr.MDirty`: Returns true if a macrobutton has been updated.
+
+Access to lower level device enumeration functions are provided with these functions:
+
+- `$vmr.GetInputCount()`: Returns the number of available input devices.
+- `$vmr.GetOutputCount()`: Returns the number of available output devices.
+- `$vmr.GetInputDevice($index)`: Returns a PSObject with properties Driver, Name, HardwareId, and IsOutput for the input device at the given index.
+- `$vmr.GetOutputDevice($index)`: Returns a PSObject with properties Driver, Name, HardwareId, and IsOutput for the output device at the given index.
+
+```powershell
+$count = $vmr.GetInputCount()
+for ($i = 0; $i -lt $count; $i++) {
+    $device = $vmr.GetInputDevice($i)
+    Write-Host "Input Device $i: $($device.Driver) - $($device.Name)"
+}
+```
 
 ### Errors
 

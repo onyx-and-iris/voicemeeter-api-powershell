@@ -9,6 +9,20 @@ Before any major/minor/patch is released all unit tests will be run to verify th
 
 ## [Unreleased] These changes have not been added to PSGallery yet
 
+### Added
+
+- New Remote methods for device enumeration:
+  - GetInputCount()
+  - GetOutputCount()
+  - GetInputDevice($index)
+  - GetOutputDevice($index)
+
+- New IODevice property `driver` to get the driver type of the current device (e.g. 'WDM', 'MME', etc.)
+
+- New IODevice methods to get, set, or clear the current device for a strip or bus:
+  - Get(): returns a PSObject with properties Driver, Name, HardwareId, and IsOutput
+  - Set($device): accepts a PSObject with properties Driver, Name, and IsOutput
+  - Clear()
 
 ## [4.1.0] - 2025-12-23
 
