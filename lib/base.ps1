@@ -277,7 +277,7 @@ function Device_Desc {
     [PSCustomObject]@{
         Driver     = $drivers[$driver]
         Name       = [System.Text.Encoding]::ASCII.GetString($name).Trim([char]0)
-        HardwareID = [System.Text.Encoding]::ASCII.GetString($hardwareid).Trim([char]0)
+        HardwareId = [System.Text.Encoding]::ASCII.GetString($hardwareid).Trim([char]0)
         IsOutput   = $IS_OUT
     }
 }
