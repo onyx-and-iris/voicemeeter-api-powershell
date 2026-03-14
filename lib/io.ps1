@@ -146,21 +146,34 @@ class IODevice : IRemote {
     }
 
     [void] Set ([PSObject]$device) {
-        $v = $device.IsOutput -eq ($this.kindOfDevice -eq 'Output')
+        $required = 'IsOutput', 'Driver', 'Name'
+        $missing = $required | Where-Object { $null -eq $device.PSObject.Properties[$_] }
+
+        if ($missing) {
+            throw [System.ArgumentException]::new(("Invalid device object. Missing member(s): {0}" -f ($missing -join ', ')), 'device')
+        }
+
+        $expectsOutput = ($this.kindOfDevice -eq 'Output')
+        if ([bool]$device.IsOutput -ne $expectsOutput) {
+            throw [System.ArgumentException]::new(("Device direction mismatch. Expected IsOutput={0}." -f $expectsOutput), 'device')
+        }
+
         $d = $device.Driver
         $n = $device.Name
 
-        if ($v -and $d -is [string] -and $n -is [string]) {
-            if ($d -eq '' -and $n -eq '') {
-                $this.Clear()
-                return
-            }
-            if ($d -in $this.drivers.Values) {
-                $this.Setter($d, $n)
-                return
-            }
+        if (-not ($d -is [string])) {
+            throw [System.ArgumentException]::new('Invalid device object. Driver must be a string.', 'device')
         }
-        Write-Warning "Invalid device object provided to Set method."
+        if (-not ($n -is [string])) {
+            throw [System.ArgumentException]::new('Invalid device object. Name must be a string.', 'device')
+        }
+
+        if ($d -eq '' -and $n -eq '') { $this.Clear(); return }
+        if ($d -notin $this.drivers.Values) {
+            throw [System.ArgumentOutOfRangeException]::new('device.Driver', $d, 'Invalid device driver provided to Set method.')
+        }
+
+        $this.Setter($d, $n)
     }
 
     [void] Clear () {
