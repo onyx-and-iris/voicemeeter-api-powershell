@@ -20,15 +20,11 @@ class Remote {
     [String]$vmpath
     [Hashtable]$kind
     [Object]$profiles
-    [String]$userpath
-    [String]$workingconfig
 
     Remote ([String]$kindId) {
         $this.vmpath = Setup_DLL
         $this.kind = GetKind($kindId)
         $this.profiles = Get_Profiles($this.kind.name)
-        $this.userpath = Join-Path ([Environment]::GetFolderPath('MyDocuments')) 'Voicemeeter'
-        $this.workingconfig = Join-Path $this.userpath ('vm' + $this.kind.name + '_working.xml')
     }
 
     [string] ToString() {

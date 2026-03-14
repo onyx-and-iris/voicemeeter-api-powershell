@@ -170,31 +170,33 @@ class IODevice : IRemote {
     hidden $_driver = $($this | Add-Member ScriptProperty 'driver' `
         {
             if ([string]::IsNullOrEmpty($this.name)) { return '' }
+            
+            $type = $null
+            try {
+                $tmp = [System.IO.Path]::Combine([System.IO.Path]::GetTempPath(), "vmrtmp-$(New-Guid).xml")
+                $this.remote.Setter('Command.Save', $tmp)
 
-            $path = $this.remote.workingconfig
-            $oldTime = if (Test-Path $path) { (Get-Item $path).LastWriteTime } else { [DateTime]::MinValue }
-            $this.remote.Setter('Command.Save', $path)
-
-            $timeout = New-TimeSpan -Seconds 2
-            $sw = [Diagnostics.Stopwatch]::StartNew()
-            $line = $null
-            do {
-                if (Test-Path $path) {
-                    $newTime = (Get-Item $path).LastWriteTime
-                    if ($newTime -gt $oldTime) {
+                $timeout = New-TimeSpan -Seconds 2
+                $sw = [Diagnostics.Stopwatch]::StartNew()
+                $line = $null
+                do {
+                    if (Test-Path $tmp) {
                         try {
-                            $line = Get-Content $path | Select-String -Pattern "<$($this.kindOfDevice)Dev index='$($this.index + 1)'" -List
+                            $line = Get-Content $tmp | Select-String -Pattern "<$($this.kindOfDevice)Dev index='$($this.index + 1)'" -List
                             if ($line) { break }
                         }
                         catch {}
                     }
+                    Start-Sleep -Milliseconds 20
+                } while ($sw.elapsed -lt $timeout)
+                if ($line -and $line.ToString() -match "type='(?<type>\d+)'") {
+                    $type = $matches['type']
                 }
-                Start-Sleep -Milliseconds 20
-            } while ($sw.elapsed -lt $timeout)
-            
-            $type = $null
-            if ($line -and $line.ToString() -match "type='(?<type>\d+)'") {
-                $type = $matches['type']
+            }
+            finally {
+                if (Test-Path $tmp) {
+                    Remove-Item $tmp -Force
+                }
             }
 
             if ($type -notin $this.drivers.Keys) { return 'unknown' }
