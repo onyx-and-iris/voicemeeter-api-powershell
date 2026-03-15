@@ -43,6 +43,15 @@ function Setup_DLL {
 
     [DllImport(@"$dll")]
     public static extern int VBVMR_GetLevel(Int64 mode, Int64 index, ref float ptr);
+
+    [DllImport(@"$dll")]
+    public static extern int VBVMR_Output_GetDeviceNumber();
+    [DllImport(@"$dll")]
+    public static extern int VBVMR_Input_GetDeviceNumber();
+    [DllImport(@"$dll")]
+    public static extern int VBVMR_Output_GetDeviceDescA(Int64 index, ref int type, byte[] name, byte[] hardwareid);
+    [DllImport(@"$dll")]
+    public static extern int VBVMR_Input_GetDeviceDescA(Int64 index, ref int type, byte[] name, byte[] hardwareid);
 "@
 
     Add-Type -MemberDefinition $Signature -Name Remote -Namespace Voicemeeter -PassThru | Out-Null

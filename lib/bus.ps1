@@ -97,7 +97,7 @@ class VirtualBus : Bus {
 }
 
 class BusDevice : IODevice {
-    BusDevice ([int]$index, [Object]$remote) : base ($index, $remote) {
+    BusDevice ([int]$index, [Object]$remote) : base ($index, $remote, 'Output') {
         if ($this.index -eq 0) {
             AddStringMembers -PARAMS @('asio') -WriteOnly
         }
@@ -105,6 +105,14 @@ class BusDevice : IODevice {
 
     [string] identifier () {
         return 'Bus[' + $this.index + '].Device'
+    }
+
+    [int] EnumCount () {
+        return $this.remote.GetOutputCount()
+    }
+
+    [PSObject] EnumDevice ([int]$eIndex) {
+        return $this.remote.GetOutputDevice($eIndex)
     }
 }
 

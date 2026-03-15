@@ -100,9 +100,123 @@ class EqCell : IRemote {
 }
 
 class IODevice : IRemote {
-    IODevice ([int]$index, [Object]$remote) : base ($index, $remote) {
+    [string]$kindOfDevice
+    [Hashtable]$drivers
+    
+    IODevice ([int]$index, [Object]$remote, [string]$kindOfDevice) : base ($index, $remote) {
+        $this.kindOfDevice = $kindOfDevice
+        
         AddStringMembers -WriteOnly -PARAMS @('wdm', 'ks', 'mme')
         AddStringMembers -ReadOnly -PARAMS @('name')
         AddIntMembers -ReadOnly -PARAMS @('sr')
+
+        $this.drivers = @{
+            '1'   = 'mme'
+            '4'   = 'wdm'
+            '8'   = 'ks'
+            '256' = 'asio'
+        }
     }
+
+    [int] EnumCount () {
+        throw [System.NotImplementedException]::new("$($this.GetType().Name) must override EnumCount()")
+    }
+
+    [PSObject] EnumDevice ([int]$eIndex) {
+        throw [System.NotImplementedException]::new("$($this.GetType().Name) must override EnumDevice()")
+    }
+
+    [PSObject] Get () {
+        $device = [PSCustomObject]@{
+            Driver     = $this.driver
+            Name       = $this.name
+            HardwareId = ''
+            IsOutput   = $this.kindOfDevice -eq 'Output'
+        }
+        if (-not [string]::IsNullOrEmpty($device.Name)) {
+            for ($i = 0; $i -lt $this.EnumCount(); $i++) {
+                $eDevice = $this.EnumDevice($i)
+                if ($eDevice.Name -eq $device.Name -and $eDevice.Driver -eq $device.Driver) {
+                    $device = $eDevice
+                    break
+                }
+            }
+        }
+        return $device
+    }
+
+    [void] Set ([PSObject]$device) {
+        $required = 'IsOutput', 'Driver', 'Name'
+        $missing = $required | Where-Object { $null -eq $device.PSObject.Properties[$_] }
+
+        if ($missing) {
+            throw [System.ArgumentException]::new(("Invalid device object. Missing member(s): {0}" -f ($missing -join ', ')), 'device')
+        }
+
+        $expectsOutput = ($this.kindOfDevice -eq 'Output')
+        if ([bool]$device.IsOutput -ne $expectsOutput) {
+            throw [System.ArgumentException]::new(("Device direction mismatch. Expected IsOutput={0}." -f $expectsOutput), 'device')
+        }
+
+        $d = $device.Driver
+        $n = $device.Name
+
+        if (-not ($d -is [string])) {
+            throw [System.ArgumentException]::new('Invalid device object. Driver must be a string.', 'device')
+        }
+        if (-not ($n -is [string])) {
+            throw [System.ArgumentException]::new('Invalid device object. Name must be a string.', 'device')
+        }
+
+        if ($d -eq '' -and $n -eq '') { $this.Clear(); return }
+        if ($d -notin $this.drivers.Values) {
+            throw [System.ArgumentOutOfRangeException]::new('device.Driver', $d, 'Invalid device driver provided to Set method.')
+        }
+
+        $this.Setter($d, $n)
+    }
+
+    [void] Clear () {
+        $this.Setter('mme', '')
+    }
+
+    hidden $_driver = $($this | Add-Member ScriptProperty 'driver' `
+        {
+            if ([string]::IsNullOrEmpty($this.name)) { return '' }
+            
+            $type = $null
+            try {
+                $tmp = [System.IO.Path]::Combine([System.IO.Path]::GetTempPath(), "vmrtmp-$(New-Guid).xml")
+                $this.remote.Setter('Command.Save', $tmp)
+
+                $timeout = New-TimeSpan -Seconds 2
+                $sw = [Diagnostics.Stopwatch]::StartNew()
+                $line = $null
+                do {
+                    if (Test-Path $tmp) {
+                        try {
+                            $line = Get-Content $tmp | Select-String -Pattern "<$($this.kindOfDevice)Dev index='$($this.index + 1)'" -List
+                            if ($line) { break }
+                        }
+                        catch {}
+                    }
+                    Start-Sleep -Milliseconds 20
+                } while ($sw.elapsed -lt $timeout)
+                if ($line -and $line.ToString() -match "type='(?<type>\d+)'") {
+                    $type = $matches['type']
+                }
+            }
+            finally {
+                if (Test-Path $tmp) {
+                    Remove-Item $tmp -Force
+                }
+            }
+
+            if ($type -notin $this.drivers.Keys) { return 'unknown' }
+            return $this.drivers[$type]
+        } `
+        {
+            Write-Warning ("ERROR: $($this.identifier()).driver is read only")
+        }
+    )
 }

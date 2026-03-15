@@ -155,11 +155,19 @@ class StripEq : IOEq {
 }
 
 class StripDevice : IODevice {
-    StripDevice ([int]$index, [Object]$remote) : base ($index, $remote) {
+    StripDevice ([int]$index, [Object]$remote) : base ($index, $remote, 'Input') {
     }
 
     [string] identifier () {
         return 'Strip[' + $this.index + '].Device'
+    }
+
+    [int] EnumCount () {
+        return $this.remote.GetInputCount()
+    }
+
+    [PSObject] EnumDevice ([int]$eIndex) {
+        return $this.remote.GetInputDevice($eIndex)
     }
 }
 
