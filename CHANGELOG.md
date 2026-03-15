@@ -9,6 +9,8 @@ Before any major/minor/patch is released all unit tests will be run to verify th
 
 ## [Unreleased] These changes have not been added to PSGallery yet
 
+## [4.2.0] - 2026-03-15
+
 ### Added
 
 - New Remote methods for device enumeration:
