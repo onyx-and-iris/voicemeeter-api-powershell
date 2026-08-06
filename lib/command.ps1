@@ -7,6 +7,11 @@ class Special : IRemote {
         return 'Command'
     }
 
+    [void] Launch() {
+        'Launching Voicemeeter audio engine and GUI' | Write-Verbose
+        RunVm -kindId $this.kind.name
+    }
+
     [void] RunMacrobuttons() {
         'Launching the MacroButtons app' | Write-Verbose
         Start-Process -FilePath $(Join-Path -Path $this.remote.vmpath -ChildPath 'VoicemeeterMacroButtons.exe')
