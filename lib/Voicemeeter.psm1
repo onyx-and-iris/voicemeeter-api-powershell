@@ -40,6 +40,15 @@ class Remote {
         Logout
     }
 
+    [Remote] RunVoicemeeter([String]$kindId) {
+        RunVm -kindId $kindId
+        return Make_Remote -kindId $kindId
+    }
+
+    [void] RunApplication([String]$appId) {
+        RunApp -appId $appId
+    }
+
     [string] GetType() {
         return VmType
     }
@@ -156,6 +165,26 @@ class RemotePotato : Remote {
         $this.patch = Make_Patch($this)
         $this.option = Make_Option($this)
         $this.recorder = Make_Recorder($this)
+    }
+}
+
+function Make_Remote {
+    param(
+        [String]$kindId
+    )
+    switch ($kindId) {
+        'basic' {
+            [RemoteBasic]::new()
+        }
+        'banana' {
+            [RemoteBanana]::new()
+        }
+        'potato' {
+            [RemotePotato]::new()
+        }
+        default { 
+            throw [VMRemoteError]::new("Unknown Voicemeeter kind `"$kindId`"")
+        }
     }
 }
 
