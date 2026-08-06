@@ -11,22 +11,32 @@ function Login {
     }
 
     switch ($retval) {
+        0 {
+            WaitForConnection
+        }
         1 {
-            'Voicemeeter Engine running but GUI not launched. Launching GUI now.' | Write-Verbose
-            RunVoicemeeter -kindId $kindId
+            if ($kindId -eq 'none') {
+                'Logged in to Voicemeeter Remote.' | Write-Verbose
+            }
+            else {
+                'Logged in to Voicemeeter Remote but audio engine and GUI not launched. Launching engine now.' | Write-Verbose
+                RunVm -kindId $kindId
+            }
         }
         -2 {
             throw [LoginError]::new('Login may only be called once per session.')
         }
     }
+}
 
+function WaitForConnection {
     $timeout = New-TimeSpan -Seconds 2
     $sw = [diagnostics.stopwatch]::StartNew()
     $exception = $null
     do {
         Start-Sleep -m 100
         try {
-            'Successfully logged into Voicemeeter [' + $(VmType).ToUpper() + '] Version ' + $(VmVersion) | Write-Verbose
+            'Successfully connected to Voicemeeter [' + $(VmType).ToUpper() + '] Version ' + $(VmVersion) | Write-Verbose
             $exception = $null
             break
         }
@@ -37,7 +47,7 @@ function Login {
     } while ($sw.elapsed -lt $timeout)
 
     if ($null -ne $exception) {
-        throw [VMRemoteError]::new('Timeout logging into the API.')
+        throw [VMRemoteError]::new('Timeout waiting to connect to Voicemeeter.')
     }
 
     while (P_Dirty -or M_Dirty) { Start-Sleep -m 1 }
@@ -52,7 +62,17 @@ function Logout {
     if ($retval -eq 0) { 'Sucessfully logged out' | Write-Verbose }
 }
 
-function RunVoicemeeter {
+function Run {
+    param(
+        [int]$id
+    )
+    $retval = [int][Voicemeeter.Remote]::VBVMR_RunVoicemeeter([Int64]$id)
+    if ($retval -notin @(0)) {
+        throw [CAPIError]::new($retval, 'VBVMR_RunVoicemeeter') 
+    }
+}
+
+function RunVm {
     param(
         [string]$kindId
     )
@@ -61,11 +81,27 @@ function RunVoicemeeter {
         'banana' = $(if ([Environment]::Is64BitOperatingSystem) { 5 } else { 2 })
         'potato' = $(if ([Environment]::Is64BitOperatingSystem) { 6 } else { 3 })
     }
+    Run -id $kinds[$kindId]
+    WaitForConnection
+}
 
-    $retval = [int][Voicemeeter.Remote]::VBVMR_RunVoicemeeter([int64]$kinds[$kindId])
-    if ($retval -notin @(0)) {
-        throw [CAPIError]::new($retval, 'VBVMR_RunVoicemeeter') 
+function RunApp {
+    param(
+        [string]$appId
+    )
+    $apps = @{
+        'devicecheck'       = 10
+        'macrobuttons'      = 11
+        'streamerview'      = 12
+        'busmatrix8'        = 13
+        'busgeq15'          = 14
+        'vban2midi'         = 15
+        'cablecontrolpanel' = 20
+        'auxcontrolpanel'   = 21
+        'vaio3controlpanel' = 22
+        'vaiocontrolpanel'  = 23
     }
+    Run -id $apps[$appId]
 }
 
 function P_Dirty {
