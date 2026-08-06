@@ -1,4 +1,7 @@
 $KindMap = @{
+    'none'   = @{
+        'name' = 'none'
+    }
     'basic'  = @{
         'name'      = 'basic'
         'p_in'      = 2
