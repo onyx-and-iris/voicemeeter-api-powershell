@@ -188,6 +188,10 @@ function Make_Remote {
     }
 }
 
+Function Get-Remote {
+    [Remote]::new('none').Login()
+}
+
 Function Get-RemoteBasic {
     [RemoteBasic]::new().Login()
 }
@@ -222,4 +226,4 @@ Function Disconnect-Voicemeeter {
     Logout
 }
 
-Export-ModuleMember -Function Get-RemoteBasic, Get-RemoteBanana, Get-RemotePotato, Connect-Voicemeeter, Disconnect-Voicemeeter
+Export-ModuleMember -Function Get-Remote, Get-RemoteBasic, Get-RemoteBanana, Get-RemotePotato, Connect-Voicemeeter, Disconnect-Voicemeeter
