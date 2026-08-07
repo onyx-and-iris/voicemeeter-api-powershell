@@ -9,7 +9,7 @@ class Special : IRemote {
 
     [void] Launch() {
         'Launching Voicemeeter audio engine and GUI' | Write-Verbose
-        RunVm -kindId $this.kind.name
+        RunVm -kindId $this.remote.kind.name
     }
 
     [void] RunMacrobuttons() {
