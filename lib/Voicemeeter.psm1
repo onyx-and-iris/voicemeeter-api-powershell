@@ -40,6 +40,11 @@ class Remote {
         Logout
     }
 
+    [Remote] GetVoicemeeter([String]$kindId) {
+        WaitForConnection
+        return Make_Remote -kindId $kindId
+    }
+
     [Remote] RunVoicemeeter([String]$kindId) {
         RunVm -kindId $kindId
         return Make_Remote -kindId $kindId
