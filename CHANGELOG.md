@@ -9,6 +9,15 @@ Before any major/minor/patch is released all unit tests will be run to verify th
 
 ## [Unreleased] These changes have not been added to PSGallery yet
 
+### Added
+
+- Get-Remote factory function to log in and return a base Remote instance without launching Voicemeeter
+- Command.Launch() method to launch Voicemeeter based on `$this.kind.name`, useful for re-launch after Command.Shutdown()
+- Remote.GetVoicemeeter($kindId) to confirm a connection to Voicemeeter and return the requested Remote instance
+- Remote.RunVoicemeeter($kindId) to launch Voicemeeter and return an appropriate Remote instance
+- Remote.RunApplication($appId) to launch VB-Audio applications
+- Remote.GetType(), Remote.GetVersion() to README
+
 ## [4.2.0] - 2026-03-15
 
 ### Added

@@ -40,6 +40,20 @@ class Remote {
         Logout
     }
 
+    [Remote] GetVoicemeeter([String]$kindId) {
+        WaitForConnection
+        return Make_Remote -kindId $kindId
+    }
+
+    [Remote] RunVoicemeeter([String]$kindId) {
+        RunVm -kindId $kindId
+        return Make_Remote -kindId $kindId
+    }
+
+    [void] RunApplication([String]$appId) {
+        RunApp -appId $appId
+    }
+
     [string] GetType() {
         return VmType
     }
@@ -159,6 +173,30 @@ class RemotePotato : Remote {
     }
 }
 
+function Make_Remote {
+    param(
+        [String]$kindId
+    )
+    switch ($kindId) {
+        'basic' {
+            [RemoteBasic]::new()
+        }
+        'banana' {
+            [RemoteBanana]::new()
+        }
+        'potato' {
+            [RemotePotato]::new()
+        }
+        default { 
+            throw [VMRemoteError]::new("Unknown Voicemeeter kind `"$kindId`"")
+        }
+    }
+}
+
+Function Get-Remote {
+    [Remote]::new('none').Login()
+}
+
 Function Get-RemoteBasic {
     [RemoteBasic]::new().Login()
 }
@@ -193,4 +231,4 @@ Function Disconnect-Voicemeeter {
     Logout
 }
 
-Export-ModuleMember -Function Get-RemoteBasic, Get-RemoteBanana, Get-RemotePotato, Connect-Voicemeeter, Disconnect-Voicemeeter
+Export-ModuleMember -Function Get-Remote, Get-RemoteBasic, Get-RemoteBanana, Get-RemotePotato, Connect-Voicemeeter, Disconnect-Voicemeeter

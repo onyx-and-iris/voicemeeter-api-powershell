@@ -78,6 +78,7 @@ Voicemeeter factory function can be:
 - Get-RemoteBasic
 - Get-RemoteBanana
 - Get-RemotePotato
+- Get-Remote : if only lower-level Remote methods are needed
 
 Added in `v3` you may also use the following entry/exit points:
 
@@ -551,6 +552,7 @@ The following Command methods are available:
 - HideVBANChat()
 - Restart()
 - Shutdown()
+- Launch() : launches the current Voicemeeter kind
 - Reset() : Reset all config
 - Save($filepath) : string
 - Load($filepath) : string
@@ -575,6 +577,21 @@ $vmr.command.StorePreset()                  # same as StorePreset(''), overwrite
 $vmr.command.RecallPreset('example')
 $vmr.command.RecallPreset(63)
 $vmr.command.RecallPreset()                 # same as RecallPreset(''), recalls last recalled
+
+try {
+    $vmr = Connect-Voicemeeter -Kind 'potato'
+
+    if ($vmr.GetType() -ne 'potato') {
+        $vmr.command.Shutdown()             # shuts down whatever was running
+        Start-Sleep -Seconds 3
+        $vmr.command.Launch()               # launches Voicemeeter Potato
+    }
+
+    # perform operations with Voicemeeter Potato
+}
+finally {
+    Disconnect-Voicemeeter
+}
 ```
 
 StorePreset('') and RecallPreset('') interact with the 'selected' preset. This is highlighted green in the GUI. Recalling a preset selects it. Storing a preset via GUI also selects it. Storing a preset with StorePreset does not select it.
@@ -780,6 +797,63 @@ finally { $vmr.Logout() }
 will load a config file at profiles/banana/config.psd1 for Voicemeeter Banana.
 
 ### Remote class
+
+`$vmr.GetType()` : returns current Voicemeeter kind ('basic', 'banana', 'potato')
+`$vmr.GetVersion()` : returns current Voicemeeter version string (e.g. '2.1.2.2')
+`$vmr.GetVoicemeeter($kindId)` : string, ('basic', 'banana', 'potato'), confirms connection and returns requested Remote instance
+`$vmr.RunVoicemeeter($kindId)` : string, ('basic', 'banana', 'potato'), launches Voicemeeter and returns appropriate Remote instance
+
+example:
+
+```powershell
+try {
+    $vmr = Get-Remote
+
+    $kind = 'none'
+    try {
+        $kind = $vmr.GetType()
+        $vmr = $vmr.GetVoicemeeter($kind)
+    }
+    catch { }
+
+    switch ($kind) {
+        'potato' {
+            break
+        }
+        'basic' {
+            # perform final operations with Voicemeeter Basic
+        }
+        'banana' {
+            # perform final operations with Voicemeeter Banana
+        }
+        { $_ -in 'basic', 'banana'} {
+            $vmr.Command.Shutdown()
+            Start-Sleep -Seconds 3
+        }
+        { $_ -ne 'potato' } {
+            $vmr = $vmr.RunVoicemeeter('potato')
+        }
+    }
+
+    # perform operations with Voicemeeter Potato
+}
+finally {
+    Disconnect-Voicemeeter
+}
+```
+
+`$vmr.RunApplication($appId)` : string, launches VB-Audio applications
+
+- 'devicecheck'
+- 'macrobuttons'
+- 'streamerview'
+- 'busmatrix8'
+- 'busgeq15'
+- 'vban2midi'
+- 'cablecontrolpanel'
+- 'auxcontrolpanel'
+- 'vaio3controlpanel'
+- 'vaiocontrolpanel'
 
 Access to lower level Getters and Setters are provided with these functions:
 
