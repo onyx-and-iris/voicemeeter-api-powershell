@@ -818,7 +818,7 @@ try {
 
     switch ($kind) {
         'potato' {
-            break;
+            break
         }
         'basic' {
             # perform final operations with Voicemeeter Basic
